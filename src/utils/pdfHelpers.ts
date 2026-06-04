@@ -32,7 +32,7 @@ export function setGStateOpacity(doc: unknown, opacity: number) {
     }
     // Fallback: try calling with any available constructor
     if (d && typeof d.setGState === 'function') {
-      d.setGState(new (d as any).GState ? new (d as any).GState({ opacity }) : { opacity });
+      d.setGState(new (d as any).GState() ? new (d as any).GState({ opacity }) : { opacity });
     }
   } catch (e) {
     // best-effort; non-fatal

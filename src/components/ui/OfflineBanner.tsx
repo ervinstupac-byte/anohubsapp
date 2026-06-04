@@ -179,7 +179,9 @@ export const OfflineBanner: React.FC = () => {
                     </ul>
                   </div>
                   <div>
-                    <div className="text-slate-400 font-bold uppercase tracking-wider mb-1">Storage Status</div>
+                    <div className="text-slate-400 font-bold uppercase tracking-wider mb-1">
+                      Storage Status
+                    </div>
                     <div className="space-y-1">
                       <div className="flex justify-between">
                         <span className="text-slate-500">Local DB</span>

@@ -100,7 +100,8 @@ export async function saveTelemetryBatch(data: Record<string, unknown>): Promise
       if (t === 'object') {
         // Detect Decimal.js instances by constructor name to avoid importing Decimal here
         const maybeObj = input as Record<string, unknown>;
-        const ctorName = maybeObj && (maybeObj as any).constructor && (maybeObj as any).constructor.name;
+        const ctorName =
+          maybeObj && (maybeObj as any).constructor && (maybeObj as any).constructor.name;
         if (ctorName && /decimal/i.test(String(ctorName))) {
           try {
             return String(maybeObj);
@@ -260,7 +261,10 @@ export async function saveLog(entry: {
       metric_value: entry.metric_value,
       metric_unit: entry.metric_unit,
       active_protection: entry.active_protection,
-      details: entry.details === null ? undefined : (entry.details as string | Record<string, unknown> | undefined),
+      details:
+        entry.details === null
+          ? undefined
+          : (entry.details as string | Record<string, unknown> | undefined),
       global_context: (globalContext as GlobalContext) || null,
     };
 

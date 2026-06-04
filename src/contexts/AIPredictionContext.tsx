@@ -249,7 +249,9 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
         if (value) {
           const newDiameter = 1000 + value * 10; // Convert percentage to diameter adjustment
           // Route to canonical ProjectStateManager
-          ProjectStateManager.setState({ penstock: { diameter: newDiameter } } as unknown as Partial<import('../core/TechnicalSchema').TechnicalProjectState>);
+          ProjectStateManager.setState({
+            penstock: { diameter: newDiameter },
+          } as unknown as Partial<import('../core/TechnicalSchema').TechnicalProjectState>);
         }
         break;
       case 'REDUCE_LOAD':
@@ -259,7 +261,11 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
           const currentSetpoint = 100; // Would come from canonical state in production
           const newSetpoint = currentSetpoint - value;
           ProjectStateManager.setState({
-            specializedState: { sensors: { wicketGateSetpoint: newSetpoint } } as unknown as Partial<import('../core/TechnicalSchema').TechnicalProjectState>['specializedState'],
+            specializedState: {
+              sensors: { wicketGateSetpoint: newSetpoint },
+            } as unknown as Partial<
+              import('../core/TechnicalSchema').TechnicalProjectState
+            >['specializedState'],
           } as unknown as Partial<import('../core/TechnicalSchema').TechnicalProjectState>);
         }
         break;

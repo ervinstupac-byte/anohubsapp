@@ -271,7 +271,7 @@ export class AutoReportService {
       },
     });
 
-      yPos = getLastAutoTableFinalY(newDoc) + 15;
+    yPos = getLastAutoTableFinalY(newDoc) + 15;
 
     // === SECTION 2: AI INSIGHTS ===
     newDoc.setFontSize(12);

@@ -209,7 +209,10 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
 
   useEffect(() => {
     // Only enable Supabase realtime subscription when real telemetry is enabled
-    const sb = supabase as unknown as { channel?: (name: string) => any; removeChannel?: (c: any) => void };
+    const sb = supabase as unknown as {
+      channel?: (name: string) => any;
+      removeChannel?: (c: any) => void;
+    };
     if (!ENABLE_REAL_TELEMETRY || !supabase || typeof sb.channel !== 'function') {
       // No realtime in build/CI environment - try load from DB first, then simulate
       loadLatestTelemetry().then(snapshot => {
@@ -276,8 +279,16 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                     /* swallow */
                   }
                   try {
-                    const errObj = p.error as unknown as { flatten?: () => any; format?: () => any };
-                    const errors = typeof errObj.flatten === 'function' ? errObj.flatten() : errObj.format ? errObj.format() : errObj;
+                    const errObj = p.error as unknown as {
+                      flatten?: () => any;
+                      format?: () => any;
+                    };
+                    const errors =
+                      typeof errObj.flatten === 'function'
+                        ? errObj.flatten()
+                        : errObj.format
+                          ? errObj.format()
+                          : errObj;
                     EventJournal.append('TELEMETRY_VALIDATION_FAILURE', {
                       assetId: rawId,
                       ts: Date.now(),
@@ -302,9 +313,15 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                       timestamp: Date.now(),
                       status: (prev[storageKey] as TelemetryData | undefined)?.status || 'OPTIMAL',
                       vibration: (prev[storageKey] as TelemetryData | undefined)?.vibration || 0.02,
-                      temperature: mapped.pelton.generatorCooling?.bearingTempC ?? ((prev[storageKey] as TelemetryData | undefined)?.temperature || 50),
-                      efficiency: mapped.recommended?.efficiency ?? ((prev[storageKey] as TelemetryData | undefined)?.efficiency || 92),
-                      output: mapped.recommended?.output ?? ((prev[storageKey] as TelemetryData | undefined)?.output || 0),
+                      temperature:
+                        mapped.pelton.generatorCooling?.bearingTempC ??
+                        ((prev[storageKey] as TelemetryData | undefined)?.temperature || 50),
+                      efficiency:
+                        mapped.recommended?.efficiency ??
+                        ((prev[storageKey] as TelemetryData | undefined)?.efficiency || 92),
+                      output:
+                        mapped.recommended?.output ??
+                        ((prev[storageKey] as TelemetryData | undefined)?.output || 0),
                       // attach hierarchical pelton payload for operator screens and worker clients
                       pelton: mapped.pelton,
                     },
@@ -630,7 +647,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
       return next;
     });
     // Batch non-blocking journal appends for generated telemetry
-        try {
+    try {
       Object.keys(newTelemetry).forEach(k => {
         const t = newTelemetry[k] as TelemetryData;
         setTimeout(() => {
@@ -652,10 +669,12 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
     }
   }, [assets]);
 
-    const updatePipeDiameter = (assetId: number, diameter: number) => {
+  const updatePipeDiameter = (assetId: number, diameter: number) => {
     // Route canonical penstock diameter change through ProjectStateManager
     try {
-      ProjectStateManager.setState({ penstock: { diameter } } as unknown as Partial<TechnicalProjectState>);
+      ProjectStateManager.setState({
+        penstock: { diameter },
+      } as unknown as Partial<TechnicalProjectState>);
       loggingService.logAction(assetId, 'PIPE_DIAMETER_CHANGE', { newDiameter: diameter });
     } catch (e) {
       // Fallback to local telemetry change if manager unavailable
@@ -674,7 +693,9 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
     // Preferred: update ProjectState canonical flags via ProjectStateManager
     try {
       ProjectStateManager.setState({
-        specializedState: { sensors: { excitationActive: false } } as unknown as Partial<TechnicalProjectState>['specializedState'],
+        specializedState: {
+          sensors: { excitationActive: false },
+        } as unknown as Partial<TechnicalProjectState>['specializedState'],
       } as unknown as Partial<TechnicalProjectState>);
       loggingService.logAction(assetId, 'EXCITATION_SHUTDOWN', {
         cause: 'METAL_SCRAPING_DETECTED',
@@ -698,7 +719,9 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
     try {
       // Represent as specializedState.sensor wicket gate setpoint in canonical state
       ProjectStateManager.setState({
-        specializedState: { sensors: { wicketGateSetpoint: setpoint } } as unknown as Partial<TechnicalProjectState>['specializedState'],
+        specializedState: {
+          sensors: { wicketGateSetpoint: setpoint },
+        } as unknown as Partial<TechnicalProjectState>['specializedState'],
       } as unknown as Partial<TechnicalProjectState>);
       loggingService.logAction(assetId, 'WICKET_GATE_COMMAND', { setpoint });
     } catch (e) {
@@ -717,7 +740,11 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
 
   const resetFatigue = (assetId: number) => {
     try {
-      ProjectStateManager.setState({ specializedState: { sensors: { fatiguePoints: 0 } } as unknown as Partial<TechnicalProjectState>['specializedState'] } as unknown as Partial<TechnicalProjectState>);
+      ProjectStateManager.setState({
+        specializedState: {
+          sensors: { fatiguePoints: 0 },
+        } as unknown as Partial<TechnicalProjectState>['specializedState'],
+      } as unknown as Partial<TechnicalProjectState>);
       loggingService.logAction(assetId, 'FATIGUE_RESET', { cause: 'NDT_COMPLETED' });
     } catch (e) {
       const key = idAdapter.toStorage(assetId);

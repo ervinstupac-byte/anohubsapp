@@ -163,7 +163,10 @@ export const DiagnosticProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         }
 
         // Field-Incident Safeguard: Metal Scraping check
-        const spectrum = Array.isArray(tv.vibrationSpectrum) && tv.vibrationSpectrum.length > 0 ? tv.vibrationSpectrum : [0];
+        const spectrum =
+          Array.isArray(tv.vibrationSpectrum) && tv.vibrationSpectrum.length > 0
+            ? tv.vibrationSpectrum
+            : [0];
         const maxMag = Math.max(...spectrum);
         if (maxMag > 0.7) {
           results.push({
@@ -174,7 +177,9 @@ export const DiagnosticProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         }
 
         // Vibration threshold check (mm/s) - default 4.5
-        const latestVib = Number(tv?.francis_data?.stay_ring_vibration ?? tv.vibration ?? tv.rotorHeadVibration ?? 0);
+        const latestVib = Number(
+          tv?.francis_data?.stay_ring_vibration ?? tv.vibration ?? tv.rotorHeadVibration ?? 0
+        );
         const thresh = thresholdsMap[String(assetId)] ?? 4.5;
         if (!Number.isNaN(latestVib) && latestVib > thresh) {
           results.push({

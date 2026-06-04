@@ -53,16 +53,63 @@ const SECTIONS: SidebarSection[] = [
     icon: <Zap className="w-3.5 h-3.5" />,
     statusColor: 'bg-emerald-500',
     modules: [
-      { id: 'scada', title: 'SCADA Core', path: '/scada/core', icon: <Activity className="w-3 h-3" /> },
-      { id: 'master', title: 'Master Dashboard', path: '/master', icon: <LayoutDashboard className="w-3 h-3" /> },
-      { id: 'francisHub', title: 'Francis Turbine Hub', path: '/francis/hub', icon: <Zap className="w-3 h-3" /> },
+      {
+        id: 'scada',
+        title: 'SCADA Core',
+        path: '/scada/core',
+        icon: <Activity className="w-3 h-3" />,
+      },
+      {
+        id: 'master',
+        title: 'Master Dashboard',
+        path: '/master',
+        icon: <LayoutDashboard className="w-3 h-3" />,
+      },
+      {
+        id: 'francisHub',
+        title: 'Francis Turbine Hub',
+        path: '/francis/hub',
+        icon: <Zap className="w-3 h-3" />,
+      },
       { id: 'fleet', title: 'Fleet Overview', path: '/fleet', icon: <Map className="w-3 h-3" /> },
-      { id: 'alerts', title: 'Active Alarms', path: '/alerts', icon: <AlertTriangle className="w-3 h-3" />, badge: 'LIVE', badgeColor: 'text-red-400 bg-red-500/10 border-red-500/20' },
-      { id: 'mounterCard', title: 'Mounter Quick Card', path: `/maintenance/${ROUTES.MAINTENANCE.MOUNTER_CARD}`, icon: <Gauge className="w-3 h-3" /> },
-      { id: 'damageCard', title: 'Damage Diagnosis', path: `/maintenance/${ROUTES.MAINTENANCE.DAMAGE_CARD}`, icon: <AlertTriangle className="w-3 h-3" /> },
-      { id: 'assetPassportCard', title: 'Asset Passport', path: `/maintenance/${ROUTES.MAINTENANCE.ASSET_PASSPORT_CARD}`, icon: <FileText className="w-3 h-3" /> },
-      { id: 'onboarding', title: 'Asset Onboarding', path: '/asset-onboarding', icon: <Cpu className="w-3 h-3" /> },
-      { id: 'alignmentWizard', title: 'Alignment Wizard', path: '/francis/sop-shaft-alignment', icon: <Activity className="w-3 h-3" /> },
+      {
+        id: 'alerts',
+        title: 'Active Alarms',
+        path: '/alerts',
+        icon: <AlertTriangle className="w-3 h-3" />,
+        badge: 'LIVE',
+        badgeColor: 'text-red-400 bg-red-500/10 border-red-500/20',
+      },
+      {
+        id: 'mounterCard',
+        title: 'Mounter Quick Card',
+        path: `/maintenance/${ROUTES.MAINTENANCE.MOUNTER_CARD}`,
+        icon: <Gauge className="w-3 h-3" />,
+      },
+      {
+        id: 'damageCard',
+        title: 'Damage Diagnosis',
+        path: `/maintenance/${ROUTES.MAINTENANCE.DAMAGE_CARD}`,
+        icon: <AlertTriangle className="w-3 h-3" />,
+      },
+      {
+        id: 'assetPassportCard',
+        title: 'Asset Passport',
+        path: `/maintenance/${ROUTES.MAINTENANCE.ASSET_PASSPORT_CARD}`,
+        icon: <FileText className="w-3 h-3" />,
+      },
+      {
+        id: 'onboarding',
+        title: 'Asset Onboarding',
+        path: '/asset-onboarding',
+        icon: <Cpu className="w-3 h-3" />,
+      },
+      {
+        id: 'alignmentWizard',
+        title: 'Alignment Wizard',
+        path: '/francis/sop-shaft-alignment',
+        icon: <Activity className="w-3 h-3" />,
+      },
     ],
   },
   {
@@ -71,10 +118,30 @@ const SECTIONS: SidebarSection[] = [
     icon: <Microscope className="w-3.5 h-3.5" />,
     statusColor: 'bg-amber-500',
     modules: [
-      { id: 'riskReport', title: 'Full Risk Dossier', path: '/risk-report', icon: <FileText className="w-3 h-3" /> },
-      { id: 'lab', title: 'Forensic Lab', path: '/forensics', icon: <Microscope className="w-3 h-3" /> },
-      { id: 'audio', title: 'Audio Spectrum', path: '/forensics/audio', icon: <Activity className="w-3 h-3" /> },
-      { id: 'vision', title: 'Vision Analyzer', path: '/forensics/vision', icon: <Target className="w-3 h-3" /> },
+      {
+        id: 'riskReport',
+        title: 'Full Risk Dossier',
+        path: '/risk-report',
+        icon: <FileText className="w-3 h-3" />,
+      },
+      {
+        id: 'lab',
+        title: 'Forensic Lab',
+        path: '/forensics',
+        icon: <Microscope className="w-3 h-3" />,
+      },
+      {
+        id: 'audio',
+        title: 'Audio Spectrum',
+        path: '/forensics/audio',
+        icon: <Activity className="w-3 h-3" />,
+      },
+      {
+        id: 'vision',
+        title: 'Vision Analyzer',
+        path: '/forensics/vision',
+        icon: <Target className="w-3 h-3" />,
+      },
       { id: 'logs', title: 'Event Logs', path: '/logs', icon: <FileText className="w-3 h-3" /> },
     ],
   },
@@ -85,10 +152,30 @@ const SECTIONS: SidebarSection[] = [
     statusColor: 'bg-blue-500',
     modules: [
       { id: 'audit', title: 'Audit Trail', path: '/audit', icon: <FileText className="w-3 h-3" /> },
-      { id: 'knowledge', title: 'Knowledge Bank', path: '/knowledge/capture', icon: <BookOpen className="w-3 h-3" /> },
-      { id: 'constitution', title: 'AI Constitution', path: '/docs/constitution', icon: <BookOpen className="w-3 h-3" /> },
-      { id: 'admin', title: 'Admin Health', path: '/admin/health', icon: <Lock className="w-3 h-3" /> },
-      { id: 'settings', title: 'System Settings', path: '/settings', icon: <Settings className="w-3 h-3" /> },
+      {
+        id: 'knowledge',
+        title: 'Knowledge Bank',
+        path: '/knowledge/capture',
+        icon: <BookOpen className="w-3 h-3" />,
+      },
+      {
+        id: 'constitution',
+        title: 'AI Constitution',
+        path: '/docs/constitution',
+        icon: <BookOpen className="w-3 h-3" />,
+      },
+      {
+        id: 'admin',
+        title: 'Admin Health',
+        path: '/admin/health',
+        icon: <Lock className="w-3 h-3" />,
+      },
+      {
+        id: 'settings',
+        title: 'System Settings',
+        path: '/settings',
+        icon: <Settings className="w-3 h-3" />,
+      },
     ],
   },
 ];
@@ -102,7 +189,13 @@ interface SidebarProps {
   onRegisterAsset?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onToggleMap, onRegisterAsset }) => {
+export const Sidebar: React.FC<SidebarProps> = ({
+  isOpen,
+  onClose,
+  showMap,
+  onToggleMap,
+  onRegisterAsset,
+}) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -157,11 +250,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
     return 'bg-red-500';
   };
 
-  const healthGlow = healthScore >= 90
-    ? 'shadow-[0_0_8px_rgba(16,185,129,0.4)]'
-    : healthScore >= 70
-    ? 'shadow-[0_0_8px_rgba(245,158,11,0.4)]'
-    : 'shadow-[0_0_8px_rgba(239,68,68,0.4)]';
+  const healthGlow =
+    healthScore >= 90
+      ? 'shadow-[0_0_8px_rgba(16,185,129,0.4)]'
+      : healthScore >= 70
+        ? 'shadow-[0_0_8px_rgba(245,158,11,0.4)]'
+        : 'shadow-[0_0_8px_rgba(239,68,68,0.4)]';
 
   const totalResults = filteredSections.reduce((sum, s) => sum + s.modules.length, 0);
 
@@ -171,7 +265,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
       animate={{ x: isOpen ? 0 : -280 }}
       transition={{ type: 'spring', stiffness: 320, damping: 32 }}
       className="fixed inset-y-0 left-0 w-64 flex flex-col z-40 overflow-hidden"
-      style={{ background: 'rgba(2, 6, 23, 0.97)', borderRight: '1px solid rgba(255,255,255,0.05)' }}
+      style={{
+        background: 'rgba(2, 6, 23, 0.97)',
+        borderRight: '1px solid rgba(255,255,255,0.05)',
+      }}
     >
       {/* Subtle inner glow */}
       <div className="absolute inset-0 pointer-events-none">
@@ -191,7 +288,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
             </div>
             <div>
               <div className="text-[11px] font-black tracking-[0.25em] text-white">SOVEREIGN</div>
-              <div className="text-[8px] font-mono text-slate-600 uppercase tracking-wider">HPP Operating System</div>
+              <div className="text-[8px] font-mono text-slate-600 uppercase tracking-wider">
+                HPP Operating System
+              </div>
             </div>
           </div>
           {/* Close button (mobile) */}
@@ -205,15 +304,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
 
         {/* Health banner */}
         <div className="flex items-center gap-2 mb-3 px-2 py-1.5 bg-white/3 rounded-lg border border-white/5">
-          <div className={`w-2 h-2 rounded-full shrink-0 ${getHealthColor(healthScore)} ${healthGlow}`} />
+          <div
+            className={`w-2 h-2 rounded-full shrink-0 ${getHealthColor(healthScore)} ${healthGlow}`}
+          />
           <div className="flex-1 min-w-0">
-            <div className="text-[9px] font-mono text-slate-500 uppercase tracking-wider">System Health</div>
-            <div className="text-xs font-bold text-white font-mono tabular-nums">{healthScore.toFixed(0)}%</div>
+            <div className="text-[9px] font-mono text-slate-500 uppercase tracking-wider">
+              System Health
+            </div>
+            <div className="text-xs font-bold text-white font-mono tabular-nums">
+              {healthScore.toFixed(0)}%
+            </div>
           </div>
           <div className="h-6 w-px bg-white/8" />
           <div className="text-right">
             <div className="text-[9px] font-mono text-slate-500">EFF</div>
-            <div className="text-xs font-bold text-cyan-400 font-mono">{efficiency.toFixed(1)}%</div>
+            <div className="text-xs font-bold text-cyan-400 font-mono">
+              {efficiency.toFixed(1)}%
+            </div>
           </div>
         </div>
 
@@ -251,12 +358,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
             >
               <div className="px-3 py-1.5 flex items-center gap-2 border-b border-amber-500/10">
                 <BookOpen className="w-3 h-3 text-amber-500" />
-                <span className="text-[9px] font-black text-amber-500 uppercase tracking-widest">Ancestral Oracle</span>
+                <span className="text-[9px] font-black text-amber-500 uppercase tracking-widest">
+                  Ancestral Oracle
+                </span>
               </div>
               <div className="p-1 max-h-32 overflow-y-auto">
                 {safeOracleResults.map((res: any) => (
-                  <div key={res.id} className="p-2 hover:bg-amber-500/10 rounded cursor-pointer transition-colors group">
-                    <div className="text-[10px] font-bold text-amber-200 group-hover:text-white">{res.title}</div>
+                  <div
+                    key={res.id}
+                    className="p-2 hover:bg-amber-500/10 rounded cursor-pointer transition-colors group"
+                  >
+                    <div className="text-[10px] font-bold text-amber-200 group-hover:text-white">
+                      {res.title}
+                    </div>
                     <div className="text-[9px] text-amber-500/60 truncate">{res.excerpt}</div>
                   </div>
                 ))}
@@ -272,7 +386,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
             animate={{ opacity: 1 }}
             className="mt-2 p-3 bg-slate-900/50 border border-white/5 rounded-lg text-center"
           >
-            <div className="text-[10px] text-slate-500 font-mono">No modules match "{searchQuery}"</div>
+            <div className="text-[10px] text-slate-500 font-mono">
+              No modules match "{searchQuery}"
+            </div>
             <div className="text-[9px] text-slate-600 mt-1">Try: SCADA, Fleet, Forensics…</div>
           </motion.div>
         )}
@@ -295,7 +411,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="text-[8px] font-mono text-slate-700">{section.modules.length}</span>
+                <span className="text-[8px] font-mono text-slate-700">
+                  {section.modules.length}
+                </span>
                 {expandedSections[section.id] || searchQuery ? (
                   <ChevronDown className="w-3 h-3 text-slate-600" />
                 ) : (
@@ -315,7 +433,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                 >
                   <div className="py-0.5">
                     {section.modules.map((module, idx) => {
-                      const isActive = location.pathname === module.path ||
+                      const isActive =
+                        location.pathname === module.path ||
                         (module.path !== '/' && location.pathname.startsWith(module.path));
                       return (
                         <motion.button
@@ -327,9 +446,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                           className={`
                             w-full text-left px-3 py-2 pl-8 flex items-center gap-2.5 text-[11px] font-mono
                             transition-all duration-150 relative group
-                            ${isActive
-                              ? 'text-cyan-300 bg-cyan-500/8 border-r-2 border-cyan-400'
-                              : 'text-slate-500 hover:text-slate-200 hover:bg-white/4'
+                            ${
+                              isActive
+                                ? 'text-cyan-300 bg-cyan-500/8 border-r-2 border-cyan-400'
+                                : 'text-slate-500 hover:text-slate-200 hover:bg-white/4'
                             }
                           `}
                         >
@@ -338,14 +458,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                             <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.6)]" />
                           )}
 
-                          <span className={`shrink-0 transition-colors ${isActive ? 'text-cyan-400' : 'text-slate-600 group-hover:text-slate-400'}`}>
+                          <span
+                            className={`shrink-0 transition-colors ${isActive ? 'text-cyan-400' : 'text-slate-600 group-hover:text-slate-400'}`}
+                          >
                             {module.icon}
                           </span>
                           <span className="flex-1 truncate">{module.title}</span>
 
                           {/* Badge */}
                           {module.badge && (
-                            <span className={`text-[8px] px-1.5 py-0.5 rounded border font-bold uppercase tracking-wider ${module.badgeColor}`}>
+                            <span
+                              className={`text-[8px] px-1.5 py-0.5 rounded border font-bold uppercase tracking-wider ${module.badgeColor}`}
+                            >
                               {module.badge}
                             </span>
                           )}
@@ -381,20 +505,44 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
       {/* 3. PINNED METRICS FOOTER */}
       <div className="p-3 border-t border-white/5 bg-slate-950/80 shrink-0 relative">
         <div className="flex items-center justify-between mb-2.5">
-          <span className="text-[8px] font-black uppercase tracking-widest text-slate-600">LIVE METRICS</span>
+          <span className="text-[8px] font-black uppercase tracking-widest text-slate-600">
+            LIVE METRICS
+          </span>
           <Settings className="w-3 h-3 text-slate-700 cursor-pointer hover:text-cyan-400 transition-colors" />
         </div>
 
         <div className="grid grid-cols-3 gap-1.5">
           {[
-            { label: 'RPM', value: rpm.toFixed(0), icon: <Gauge className="w-3 h-3 text-cyan-500" />, color: 'text-cyan-300' },
-            { label: 'MW', value: power.toFixed(1), icon: <Zap className="w-3 h-3 text-amber-500" />, color: 'text-amber-300' },
-            { label: 'EFF', value: `${efficiency.toFixed(1)}%`, icon: <Target className="w-3 h-3 text-emerald-500" />, color: 'text-emerald-300' },
+            {
+              label: 'RPM',
+              value: rpm.toFixed(0),
+              icon: <Gauge className="w-3 h-3 text-cyan-500" />,
+              color: 'text-cyan-300',
+            },
+            {
+              label: 'MW',
+              value: power.toFixed(1),
+              icon: <Zap className="w-3 h-3 text-amber-500" />,
+              color: 'text-amber-300',
+            },
+            {
+              label: 'EFF',
+              value: `${efficiency.toFixed(1)}%`,
+              icon: <Target className="w-3 h-3 text-emerald-500" />,
+              color: 'text-emerald-300',
+            },
           ].map(metric => (
-            <div key={metric.label} className="bg-slate-950 p-2 rounded-lg border border-white/5 flex flex-col items-center gap-1">
+            <div
+              key={metric.label}
+              className="bg-slate-950 p-2 rounded-lg border border-white/5 flex flex-col items-center gap-1"
+            >
               {metric.icon}
-              <span className={`text-[11px] font-mono font-bold tabular-nums ${metric.color}`}>{metric.value}</span>
-              <span className="text-[8px] text-slate-600 uppercase tracking-wider">{metric.label}</span>
+              <span className={`text-[11px] font-mono font-bold tabular-nums ${metric.color}`}>
+                {metric.value}
+              </span>
+              <span className="text-[8px] text-slate-600 uppercase tracking-wider">
+                {metric.label}
+              </span>
             </div>
           ))}
         </div>
@@ -403,7 +551,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
         <div className="mt-2.5 pt-2 border-t border-white/5 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_4px_rgba(16,185,129,0.6)]" />
-            <span className="text-[8px] font-mono text-slate-600 uppercase tracking-wider">ONLINE</span>
+            <span className="text-[8px] font-mono text-slate-600 uppercase tracking-wider">
+              ONLINE
+            </span>
           </div>
           <span className="text-[8px] font-mono text-slate-700">v2.0.0-NC</span>
         </div>

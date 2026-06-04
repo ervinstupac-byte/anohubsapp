@@ -19,10 +19,30 @@ const DEFAULT_FEATURES = [
 ];
 
 const RELATED_SECTIONS = [
-  { label: 'Fleet Overview', path: '/fleet', icon: <Activity className="w-4 h-4" />, color: 'text-cyan-400' },
-  { label: 'Maintenance', path: '/maintenance/dashboard', icon: <Zap className="w-4 h-4" />, color: 'text-amber-400' },
-  { label: 'Forensics Lab', path: '/forensics', icon: <Shield className="w-4 h-4" />, color: 'text-emerald-400' },
-  { label: 'Knowledge Bank', path: '/knowledge/capture', icon: <BookOpen className="w-4 h-4" />, color: 'text-blue-400' },
+  {
+    label: 'Fleet Overview',
+    path: '/fleet',
+    icon: <Activity className="w-4 h-4" />,
+    color: 'text-cyan-400',
+  },
+  {
+    label: 'Maintenance',
+    path: '/maintenance/dashboard',
+    icon: <Zap className="w-4 h-4" />,
+    color: 'text-amber-400',
+  },
+  {
+    label: 'Forensics Lab',
+    path: '/forensics',
+    icon: <Shield className="w-4 h-4" />,
+    color: 'text-emerald-400',
+  },
+  {
+    label: 'Knowledge Bank',
+    path: '/knowledge/capture',
+    icon: <BookOpen className="w-4 h-4" />,
+    color: 'text-blue-400',
+  },
 ];
 
 /**
@@ -129,7 +149,7 @@ export const UnderConstruction: React.FC<UnderConstructionProps> = ({
         {/* Back button */}
         <div className="flex justify-center">
           <button
-            onClick={() => returnPath ? navigate(returnPath) : navigate(-1)}
+            onClick={() => (returnPath ? navigate(returnPath) : navigate(-1))}
             className="flex items-center gap-2 px-6 py-3 bg-slate-800/50 hover:bg-slate-700/50 border border-white/8 hover:border-white/15 rounded-xl text-sm text-slate-400 hover:text-white transition-all group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />

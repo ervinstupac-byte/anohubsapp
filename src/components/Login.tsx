@@ -107,12 +107,14 @@ export const Login: React.FC = () => {
 
   return (
     <div className="min-h-screen flex bg-[#020617] relative overflow-hidden">
-
       {/* ── ANIMATED BACKGROUND ── */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Deep glow orbs */}
         <div className="absolute top-[-20%] left-[-15%] w-[70%] h-[70%] bg-cyan-600/8 rounded-full blur-[100px] animate-pulse-glow" />
-        <div className="absolute bottom-[-25%] right-[-15%] w-[60%] h-[60%] bg-blue-700/8 rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: '2.5s' }} />
+        <div
+          className="absolute bottom-[-25%] right-[-15%] w-[60%] h-[60%] bg-blue-700/8 rounded-full blur-[100px] animate-pulse-glow"
+          style={{ animationDelay: '2.5s' }}
+        />
         <div className="absolute top-[40%] left-[30%] w-[40%] h-[40%] bg-indigo-800/5 rounded-full blur-[80px]" />
 
         {/* Grid overlay */}
@@ -146,11 +148,41 @@ export const Login: React.FC = () => {
                 >
                   <circle cx="20" cy="20" r="3" fill="#06b6d4" />
                   <ellipse cx="20" cy="10" rx="3" ry="8" fill="#06b6d4" opacity="0.8" />
-                  <ellipse cx="20" cy="10" rx="3" ry="8" fill="#06b6d4" opacity="0.8" transform="rotate(120 20 20)" />
-                  <ellipse cx="20" cy="10" rx="3" ry="8" fill="#06b6d4" opacity="0.8" transform="rotate(240 20 20)" />
+                  <ellipse
+                    cx="20"
+                    cy="10"
+                    rx="3"
+                    ry="8"
+                    fill="#06b6d4"
+                    opacity="0.8"
+                    transform="rotate(120 20 20)"
+                  />
+                  <ellipse
+                    cx="20"
+                    cy="10"
+                    rx="3"
+                    ry="8"
+                    fill="#06b6d4"
+                    opacity="0.8"
+                    transform="rotate(240 20 20)"
+                  />
                 </motion.g>
-                <circle cx="20" cy="20" r="18" fill="none" stroke="rgba(6,182,212,0.2)" strokeWidth="1" />
-                <circle cx="20" cy="20" r="12" fill="none" stroke="rgba(6,182,212,0.1)" strokeWidth="1" />
+                <circle
+                  cx="20"
+                  cy="20"
+                  r="18"
+                  fill="none"
+                  stroke="rgba(6,182,212,0.2)"
+                  strokeWidth="1"
+                />
+                <circle
+                  cx="20"
+                  cy="20"
+                  r="12"
+                  fill="none"
+                  stroke="rgba(6,182,212,0.1)"
+                  strokeWidth="1"
+                />
               </svg>
               {/* Outer ring */}
               <motion.div
@@ -161,7 +193,9 @@ export const Login: React.FC = () => {
             </div>
             <div>
               <div className="text-2xl font-black text-white tracking-tighter">AnoHUB</div>
-              <div className="text-[10px] font-mono text-cyan-500/70 uppercase tracking-[0.3em]">Sovereign HPP OS</div>
+              <div className="text-[10px] font-mono text-cyan-500/70 uppercase tracking-[0.3em]">
+                Sovereign HPP OS
+              </div>
             </div>
           </div>
         </div>
@@ -174,8 +208,10 @@ export const Login: React.FC = () => {
             transition={{ delay: 0.3, duration: 0.6 }}
             className="text-4xl font-black text-white leading-tight tracking-tighter mb-4"
           >
-            Engineering<br />
-            <span className="text-gradient-cyan">Intelligence</span><br />
+            Engineering
+            <br />
+            <span className="text-gradient-cyan">Intelligence</span>
+            <br />
             at Scale.
           </motion.h2>
           <motion.p
@@ -208,10 +244,13 @@ export const Login: React.FC = () => {
                 {stat.icon}
               </div>
               <div className="text-2xl font-black text-white font-mono tabular-nums">
-                {i === 0 ? animatedStats[0] :
-                  i === 1 ? `${animatedStats[1]}%` :
-                  i === 2 ? stat.value :
-                  `${animatedStats[3]}%`}
+                {i === 0
+                  ? animatedStats[0]
+                  : i === 1
+                    ? `${animatedStats[1]}%`
+                    : i === 2
+                      ? stat.value
+                      : `${animatedStats[3]}%`}
               </div>
               <div className="text-[10px] text-slate-500 uppercase tracking-wider font-mono mt-1">
                 {stat.label}
@@ -321,15 +360,15 @@ export const Login: React.FC = () => {
                   {mode === 'login'
                     ? t('login.title', 'Secure Access')
                     : mode === 'signup'
-                    ? t('login.signupTitle', 'Create Account')
-                    : t('login.resetTitle', 'Reset Password')}
+                      ? t('login.signupTitle', 'Create Account')
+                      : t('login.resetTitle', 'Reset Password')}
                 </h2>
                 <p className={`${TYPOGRAPHY.bodyXs} mt-1`}>
                   {mode === 'login'
                     ? t('login.instructions', 'Please verify your credentials.')
                     : mode === 'signup'
-                    ? t('login.signupInstructions', 'Join the AnoHUB engineering community.')
-                    : t('login.resetInstructions', 'Enter your email to reset your password.')}
+                      ? t('login.signupInstructions', 'Join the AnoHUB engineering community.')
+                      : t('login.resetInstructions', 'Enter your email to reset your password.')}
                 </p>
               </motion.div>
             </AnimatePresence>
@@ -380,15 +419,17 @@ export const Login: React.FC = () => {
                   {mode === 'login'
                     ? t('login.signInButton', 'Authenticate')
                     : mode === 'signup'
-                    ? t('login.signUpButton', 'Create Account')
-                    : t('login.resetButton', 'Send Reset Email')}
+                      ? t('login.signUpButton', 'Create Account')
+                      : t('login.resetButton', 'Send Reset Email')}
                 </ModernButton>
 
                 {mode === 'login' && (
                   <>
                     <div className="relative flex py-2 items-center">
                       <div className="flex-grow border-t border-white/8" />
-                      <span className={`flex-shrink-0 mx-4 ${TYPOGRAPHY.bodyXs} uppercase text-slate-600`}>
+                      <span
+                        className={`flex-shrink-0 mx-4 ${TYPOGRAPHY.bodyXs} uppercase text-slate-600`}
+                      >
                         {t('login.or', 'Or')}
                       </span>
                       <div className="flex-grow border-t border-white/8" />
@@ -396,7 +437,17 @@ export const Login: React.FC = () => {
 
                     {/* Guest button — glowing when offline */}
                     <motion.div
-                      animate={isOffline ? { boxShadow: ['0 0 0 0 rgba(245,158,11,0.3)', '0 0 16px 4px rgba(245,158,11,0.1)', '0 0 0 0 rgba(245,158,11,0.3)'] } : {}}
+                      animate={
+                        isOffline
+                          ? {
+                              boxShadow: [
+                                '0 0 0 0 rgba(245,158,11,0.3)',
+                                '0 0 16px 4px rgba(245,158,11,0.1)',
+                                '0 0 0 0 rgba(245,158,11,0.3)',
+                              ],
+                            }
+                          : {}
+                      }
                       transition={{ repeat: Infinity, duration: 2 }}
                       className="rounded-xl"
                     >
@@ -418,7 +469,9 @@ export const Login: React.FC = () => {
             </form>
 
             <div className="mt-6 pt-5 border-t border-white/5 text-center">
-              <p className={`${TYPOGRAPHY.bodyXs} uppercase tracking-widest font-semibold text-slate-600`}>
+              <p
+                className={`${TYPOGRAPHY.bodyXs} uppercase tracking-widest font-semibold text-slate-600`}
+              >
                 {t('login.footer', 'Secured by Blockchain Identity')}
               </p>
             </div>

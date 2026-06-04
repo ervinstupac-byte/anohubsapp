@@ -21,7 +21,10 @@ const cloneDeep = <T>(v: T): T => {
 // Safely shallow-merge a partial delta into a base object (top-level keys only)
 const shallowMergeDelta = <T>(base: T, delta?: Partial<T>): T => {
   if (!delta || typeof delta !== 'object') return base;
-  return { ...(base as unknown as Record<string, unknown>), ...(delta as unknown as Record<string, unknown>) } as T;
+  return {
+    ...(base as unknown as Record<string, unknown>),
+    ...(delta as unknown as Record<string, unknown>),
+  } as T;
 };
 
 type JournalPayload = {
@@ -35,8 +38,10 @@ const toJournalPayload = (p: unknown): JournalPayload => {
   if (!p || typeof p !== 'object') return {};
   const obj = p as Record<string, unknown>;
   const out: JournalPayload = {};
-  if ('snapshot' in obj && typeof obj.snapshot === 'object') out.snapshot = obj.snapshot as TechnicalProjectState;
-  if ('stateDelta' in obj && typeof obj.stateDelta === 'object') out.stateDelta = obj.stateDelta as Partial<TechnicalProjectState>;
+  if ('snapshot' in obj && typeof obj.snapshot === 'object')
+    out.snapshot = obj.snapshot as TechnicalProjectState;
+  if ('stateDelta' in obj && typeof obj.stateDelta === 'object')
+    out.stateDelta = obj.stateDelta as Partial<TechnicalProjectState>;
   if ('id' in obj && typeof obj.id === 'string') out.id = obj.id as string;
   if ('stateId' in obj && typeof obj.stateId === 'string') out.stateId = obj.stateId as string;
   return out;
@@ -141,18 +146,18 @@ class ProjectStateManagerClass {
       let found = false;
 
       EventJournal.fetchOlderEvents(oldest.ts, rec => {
+        try {
+          if (found) return; // ignore further streamed events once found
+          processed += 1;
           try {
-            if (found) return; // ignore further streamed events once found
-            processed += 1;
-            try {
-              dispatch.reconstructionProgress({ processed });
-            } catch (e) {}
-            const p = toJournalPayload(rec.payload);
-            if (p.snapshot) {
-              reconstructed = cloneDeep(p.snapshot);
-            } else if (p.stateDelta) {
-              reconstructed = shallowMergeDelta(reconstructed, p.stateDelta);
-            }
+            dispatch.reconstructionProgress({ processed });
+          } catch (e) {}
+          const p = toJournalPayload(rec.payload);
+          if (p.snapshot) {
+            reconstructed = cloneDeep(p.snapshot);
+          } else if (p.stateDelta) {
+            reconstructed = shallowMergeDelta(reconstructed, p.stateDelta);
+          }
 
           // check if this streamed event matches the requested id
           if (rec.id === id || (p && (p.id === id || p.stateId === id))) {

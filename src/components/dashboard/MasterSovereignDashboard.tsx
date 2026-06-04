@@ -583,7 +583,11 @@ export const MasterSovereignDashboard: React.FC = () => {
               {/* Mini sparkline decoration */}
               <div className="mt-3 flex items-end gap-0.5 h-6">
                 {[0.6, 0.8, 0.7, 0.9, 0.75, 1.0, 0.85, currentPower / 120].map((v, i) => (
-                  <div key={i} className="flex-1 bg-cyan-500/30 rounded-sm transition-all" style={{ height: `${Math.min(100, v * 100)}%` }} />
+                  <div
+                    key={i}
+                    className="flex-1 bg-cyan-500/30 rounded-sm transition-all"
+                    style={{ height: `${Math.min(100, v * 100)}%` }}
+                  />
                 ))}
               </div>
             </div>

@@ -77,13 +77,15 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
     const moduleTimers: ReturnType<typeof setTimeout>[] = [];
     BOOT_MODULES.forEach((_, idx) => {
       const delay = 300 + idx * 380;
-      moduleTimers.push(setTimeout(() => {
-        setModules(prev => prev.map((m, i) => i === idx ? { ...m, status: 'loading' } : m));
-        setCurrentModuleIdx(idx);
+      moduleTimers.push(
         setTimeout(() => {
-          setModules(prev => prev.map((m, i) => i === idx ? { ...m, status: 'ready' } : m));
-        }, 300);
-      }, delay));
+          setModules(prev => prev.map((m, i) => (i === idx ? { ...m, status: 'loading' } : m)));
+          setCurrentModuleIdx(idx);
+          setTimeout(() => {
+            setModules(prev => prev.map((m, i) => (i === idx ? { ...m, status: 'ready' } : m)));
+          }, 300);
+        }, delay)
+      );
     });
 
     return () => {
@@ -120,7 +122,9 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
               {[80, 140, 200, 260, 300].map((r, i) => (
                 <circle
                   key={r}
-                  cx="300" cy="300" r={r}
+                  cx="300"
+                  cy="300"
+                  r={r}
                   fill="none"
                   stroke="rgba(6,182,212,0.4)"
                   strokeWidth="0.5"
@@ -128,8 +132,22 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
                 />
               ))}
               {/* Cross hairs */}
-              <line x1="300" y1="0" x2="300" y2="600" stroke="rgba(6,182,212,0.2)" strokeWidth="0.5" />
-              <line x1="0" y1="300" x2="600" y2="300" stroke="rgba(6,182,212,0.2)" strokeWidth="0.5" />
+              <line
+                x1="300"
+                y1="0"
+                x2="300"
+                y2="600"
+                stroke="rgba(6,182,212,0.2)"
+                strokeWidth="0.5"
+              />
+              <line
+                x1="0"
+                y1="300"
+                x2="600"
+                y2="300"
+                stroke="rgba(6,182,212,0.2)"
+                strokeWidth="0.5"
+              />
               {/* Rotating sweep */}
               <motion.g
                 animate={{ rotate: 360 }}
@@ -137,7 +155,14 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
                 style={{ transformOrigin: '300px 300px' }}
               >
                 {/* Sweep line */}
-                <line x1="300" y1="300" x2="300" y2="0" stroke="rgba(6,182,212,0.8)" strokeWidth="1.5" />
+                <line
+                  x1="300"
+                  y1="300"
+                  x2="300"
+                  y2="0"
+                  stroke="rgba(6,182,212,0.8)"
+                  strokeWidth="1.5"
+                />
                 {/* Fade arc */}
                 <path
                   d="M 300 300 L 300 0 A 300 300 0 0 0 0 300 Z"
@@ -169,15 +194,32 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
               <div className="relative mb-4">
                 <motion.svg
                   viewBox="0 0 60 60"
-                  width="60" height="60"
+                  width="60"
+                  height="60"
                   animate={{ rotate: 360 }}
                   transition={{ repeat: Infinity, duration: 6, ease: 'linear' }}
                   style={{ transformOrigin: '30px 30px' }}
                 >
                   <circle cx="30" cy="30" r="4" fill="#06b6d4" />
                   <ellipse cx="30" cy="14" rx="4" ry="12" fill="#06b6d4" opacity="0.85" />
-                  <ellipse cx="30" cy="14" rx="4" ry="12" fill="#06b6d4" opacity="0.85" transform="rotate(120 30 30)" />
-                  <ellipse cx="30" cy="14" rx="4" ry="12" fill="#06b6d4" opacity="0.85" transform="rotate(240 30 30)" />
+                  <ellipse
+                    cx="30"
+                    cy="14"
+                    rx="4"
+                    ry="12"
+                    fill="#06b6d4"
+                    opacity="0.85"
+                    transform="rotate(120 30 30)"
+                  />
+                  <ellipse
+                    cx="30"
+                    cy="14"
+                    rx="4"
+                    ry="12"
+                    fill="#06b6d4"
+                    opacity="0.85"
+                    transform="rotate(240 30 30)"
+                  />
                 </motion.svg>
                 {/* Outer ring */}
                 <motion.div
@@ -235,8 +277,8 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
                     mod.status === 'ready'
                       ? 'border-emerald-500/20 bg-emerald-500/5'
                       : mod.status === 'loading'
-                      ? 'border-cyan-500/30 bg-cyan-500/5'
-                      : 'border-white/5 bg-transparent'
+                        ? 'border-cyan-500/30 bg-cyan-500/5'
+                        : 'border-white/5 bg-transparent'
                   }`}
                 >
                   {/* Status icon */}
@@ -249,11 +291,15 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
                       <div className="w-2 h-2 rounded-full bg-slate-700" />
                     )}
                   </div>
-                  <span className={`text-[9px] font-mono uppercase tracking-wider ${
-                    mod.status === 'ready' ? 'text-emerald-400' :
-                    mod.status === 'loading' ? 'text-cyan-400' :
-                    'text-slate-600'
-                  }`}>
+                  <span
+                    className={`text-[9px] font-mono uppercase tracking-wider ${
+                      mod.status === 'ready'
+                        ? 'text-emerald-400'
+                        : mod.status === 'loading'
+                          ? 'text-cyan-400'
+                          : 'text-slate-600'
+                    }`}
+                  >
                     {mod.name}
                   </span>
                 </motion.div>

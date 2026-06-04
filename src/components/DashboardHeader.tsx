@@ -240,7 +240,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
             {/* 3. SYNC SEGMENT */}
             <div
               className="flex items-center gap-2"
-              title={hiveStatus?.connected ? 'Online & Synced' : 'Offline Mode — Running on local data'}
+              title={
+                hiveStatus?.connected ? 'Online & Synced' : 'Offline Mode — Running on local data'
+              }
             >
               <div
                 className={`w-2 h-2 rounded-full ${hiveStatus?.connected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500 animate-offline-pulse'}`}
