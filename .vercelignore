@@ -2,7 +2,7 @@
 # Exclude non-production artifacts from Vercel deployment
 
 _SOVEREIGN_ARCHIVE/
-docs/
+/docs/
 *.log
 temp/
 coverage/
