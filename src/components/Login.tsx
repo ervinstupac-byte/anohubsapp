@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LanguageSelector } from './LanguageSelector';
 import { GlassCard } from '../shared/components/ui/GlassCard';
+import { TYPOGRAPHY } from '../shared/design-tokens';
 import { ModernInput } from '../shared/components/ui/ModernInput';
 import { ModernButton } from '../shared/components/ui/ModernButton';
 
@@ -58,10 +59,11 @@ export const Login: React.FC = () => {
             <div className="w-full max-w-md relative z-10 animate-fade-in-up">
 
                 <div className="text-center mb-8">
-                    <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-2 tracking-tighter drop-shadow-sm">
+                    <h1 aria-hidden="true" className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-2 tracking-tighter drop-shadow-sm">
                         AnoHUB
                     </h1>
-                    <p className="text-slate-400 text-sm font-medium tracking-wide">
+                    <span className="sr-only">AnoHUB</span>
+                    <p className={`${TYPOGRAPHY.bodySm} font-medium tracking-wide`}>
                         {t('login.subtitle', 'Global Operating System for Hydropower Excellence.')}
                     </p>
                 </div>
@@ -69,7 +71,7 @@ export const Login: React.FC = () => {
                 <GlassCard className="shadow-2xl shadow-cyan-900/20">
                     <div className="mb-6 text-center">
                         <h2 className="text-xl font-bold text-white tracking-tight">{t('login.title', 'Secure Access')}</h2>
-                        <p className="text-xs text-slate-500 mt-1">{t('login.instructions', 'Please verify your credentials.')}</p>
+                        <p className={`${TYPOGRAPHY.bodyXs} mt-1`}>{t('login.instructions', 'Please verify your credentials.')}</p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-5">
@@ -107,7 +109,7 @@ export const Login: React.FC = () => {
                             {/* GUEST BUTTON */}
                             <div className="relative flex py-2 items-center">
                                 <div className="flex-grow border-t border-slate-700"></div>
-                                <span className="flex-shrink-0 mx-4 text-slate-500 text-[10px] uppercase">
+                                <span className={`flex-shrink-0 mx-4 ${TYPOGRAPHY.bodyXs} uppercase`}>
                                     {t('login.or', 'Or')}
                                 </span>
                                 <div className="flex-grow border-t border-slate-700"></div>
@@ -126,7 +128,7 @@ export const Login: React.FC = () => {
                     </form>
 
                     <div className="mt-6 pt-6 border-t border-white/5 text-center">
-                        <p className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">
+                        <p className={`${TYPOGRAPHY.bodyXs} uppercase tracking-widest font-semibold`}>
                             {t('login.footer', 'Secured by Blockchain Identity')}
                         </p>
                     </div>

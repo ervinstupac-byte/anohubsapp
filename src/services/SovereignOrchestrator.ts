@@ -161,10 +161,18 @@ export class SovereignOrchestrator {
      */
     private static wireKernelObservers(): void {
         // Wire ROI monitor to kernel
+        let lastVibWarn = 0;
+        const VIB_WARN_COOLDOWN = 8000; // ms
         SovereignKernel.subscribe((telemetry: EnrichedTelemetry) => {
-            // Check for critical anomalies
-            if (telemetry.mechanical.vibration > 0.15) {
-                console.warn('[SovereignKernel] ⚠️ HIGH VIBRATION DETECTED:', telemetry.mechanical.vibration);
+            try {
+                const vib = (telemetry && telemetry.mechanical && typeof telemetry.mechanical.vibration === 'number') ? telemetry.mechanical.vibration : 0;
+                const now = Date.now();
+                if (vib > 0.15 && (now - lastVibWarn) > VIB_WARN_COOLDOWN) {
+                    lastVibWarn = now;
+                    console.warn('[SovereignKernel] ⚠️ HIGH VIBRATION DETECTED:', vib);
+                }
+            } catch (e) {
+                // ignore
             }
         });
     }

@@ -39,6 +39,18 @@ export interface TurbineSpecs {
     numberOfBlades?: number; // Kaplan specific
     hubSealMaterial?: string; // Kaplan specific
     type?: string; // Turbine type classification
+    // Pelton-specific nozzle configuration
+    nozzles?: Array<{
+        index: number;
+        needlePositionMM?: number;
+        deflectorOpen?: boolean;
+    }>;
+    // Generator cooling / bearing cooling telemetry hints
+    generatorCooling?: {
+        bearingTempC?: number;
+        coolantFlowLps?: number;
+        bearingCoolingPresent?: boolean;
+    };
 }
 
 export interface PenstockLossParams {

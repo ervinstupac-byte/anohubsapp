@@ -2,6 +2,11 @@ import React, { useMemo } from 'react';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 // EfficiencyMonitor component path unavailable in this build; placeholder panel provided below
 import { ScenarioController } from './ScenarioController';
+import { useAssetContext } from '../../contexts/AssetContext';
+import { useTelemetry } from '../../contexts/TelemetryContext';
+import idAdapter from '../../utils/idAdapter';
+import PeltonScadaPanel from './PeltonScadaPanel';
+import usePeltonSimulator from '../../hooks/usePeltonSimulator';
 import { Globe, ChevronUp, ChevronDown, LayoutDashboard, ShieldCheck, Activity, Zap, TrendingUp, DollarSign } from 'lucide-react';
 import { EfficiencyOptimizer } from '../../services/EfficiencyOptimizer';
 import { SovereignPulse } from './SovereignPulse';
@@ -79,6 +84,17 @@ export const MasterControlRoom: React.FC = () => {
         const family = variantToFamily(selectedVariant);
         dispatch.setTurbineType({ family, variant: selectedVariant });
     }, [selectedVariant]);
+
+    // Selected asset and telemetry for Pelton panel
+    const { selectedAsset } = useAssetContext();
+    const { telemetry } = useTelemetry();
+    const peltonTelemetry = React.useMemo(() => {
+        if (!selectedAsset) return null;
+        const key = idAdapter.toStorage(selectedAsset.id);
+        return telemetry ? (telemetry as Record<string, any>)[key] ?? null : null;
+    }, [selectedAsset, telemetry]);
+
+    const simTelem = usePeltonSimulator(selectedAsset?.id ?? null);
 
     return (
         <div className="flex flex-col h-screen bg-slate-950 text-slate-100 overflow-hidden font-sans relative">
@@ -181,6 +197,12 @@ export const MasterControlRoom: React.FC = () => {
                             </h4>
                             <div className="mt-4">
                                 <SovereignPulse />
+                            </div>
+                            {/* Mount Pelton SCADA Panel when a Pelton asset is selected */}
+                            <div className="mt-6">
+                                {selectedAsset && ((selectedAsset.turbine_type || selectedAsset.type) === 'PELTON') && (
+                                    <PeltonScadaPanel telemetry={peltonTelemetry ?? simTelem} />
+                                )}
                             </div>
                         </div>
                     </div>

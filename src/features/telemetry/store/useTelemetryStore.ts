@@ -45,6 +45,39 @@ const vibrationForensics = new VibrationForensics();
 
 const SCHEMA_VERSION = 2;
 
+// Quick log deduplication to reduce console spam from repeated sensor warnings
+const LOG_DEDUP_INTERVAL_MS = 1000; // 1s
+const _lastLogTimestamps: Map<string, number> = new Map();
+function dedupWarn(msg: string) {
+    try {
+        const now = Date.now();
+        const last = _lastLogTimestamps.get(msg) || 0;
+        if (now - last > LOG_DEDUP_INTERVAL_MS) {
+            console.warn(msg);
+            _lastLogTimestamps.set(msg, now);
+        }
+
+        // If a fallback warning is emitted, set a short-lived global flag and fire an event
+        if (msg.includes('using fallback')) {
+            try {
+                (window as any).__sensorFallbackActive = true;
+                window.dispatchEvent(new CustomEvent('sensorFallback', { detail: { message: msg, timestamp: now } }));
+                if ((window as any).__sensorFallbackClearTimer) clearTimeout((window as any).__sensorFallbackClearTimer);
+                (window as any).__sensorFallbackClearTimer = setTimeout(() => {
+                    (window as any).__sensorFallbackActive = false;
+                    window.dispatchEvent(new CustomEvent('sensorFallbackCleared'));
+                    (window as any).__sensorFallbackClearTimer = null;
+                }, 5000);
+            } catch (e) {
+                // ignore browser event errors in non-browser environments
+            }
+        }
+    } catch (e) {
+        // Fallback to plain warn if anything goes wrong
+        try { console.warn(msg); } catch (_) { }
+    }
+}
+
 /**
  * BASELINE STATE
  * "Born Perfect" measurements from commissioning wizard.
@@ -791,7 +824,7 @@ export const useTelemetryStore = create<TelemetryState>()(
                         state.sensorValidation.head.lastTimestamp
                     );
                     if (headVerdict.action === 'USE_FALLBACK') {
-                        console.warn('TruthJudge: Head sensor unreliable, using fallback');
+                        dedupWarn('TruthJudge: Head sensor unreliable, using fallback');
                         payload.hydraulic!.head = state.hydraulic.head;
                     }
 
@@ -824,7 +857,7 @@ export const useTelemetryStore = create<TelemetryState>()(
                         state.sensorValidation.vibrationX.lastTimestamp
                     );
                     if (vibXVerdict.action === 'USE_FALLBACK') {
-                        console.warn('TruthJudge: VibrationX sensor unreliable, using fallback');
+                        dedupWarn('TruthJudge: VibrationX sensor unreliable, using fallback');
                         payload.mechanical!.vibrationX = state.mechanical.vibrationX;
                     }
                     set((s) => ({
@@ -851,7 +884,7 @@ export const useTelemetryStore = create<TelemetryState>()(
                         state.sensorValidation.vibrationY.lastTimestamp
                     );
                     if (vibYVerdict.action === 'USE_FALLBACK') {
-                        console.warn('TruthJudge: VibrationY sensor unreliable, using fallback');
+                        dedupWarn('TruthJudge: VibrationY sensor unreliable, using fallback');
                         payload.mechanical!.vibrationY = state.mechanical.vibrationY;
                     }
                     set((s) => ({
@@ -878,7 +911,7 @@ export const useTelemetryStore = create<TelemetryState>()(
                         state.sensorValidation.bearingTemp.lastTimestamp
                     );
                     if (tempVerdict.action === 'USE_FALLBACK') {
-                        console.warn('TruthJudge: Bearing temp sensor unreliable, using fallback');
+                        dedupWarn('TruthJudge: Bearing temp sensor unreliable, using fallback');
                         payload.mechanical!.bearingTemp = state.mechanical.bearingTemp;
                     }
                     set((s) => ({
@@ -905,7 +938,7 @@ export const useTelemetryStore = create<TelemetryState>()(
                         state.sensorValidation.flow.lastTimestamp
                     );
                     if (flowVerdict.action === 'USE_FALLBACK') {
-                        console.warn('TruthJudge: Flow sensor unreliable, using fallback');
+                        dedupWarn('TruthJudge: Flow sensor unreliable, using fallback');
                         payload.hydraulic!.flow = state.hydraulic.flow;
                     }
                     set((s) => ({

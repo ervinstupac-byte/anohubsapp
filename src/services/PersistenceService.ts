@@ -89,9 +89,43 @@ export async function saveTelemetryBatch(
 ): Promise<void> {
     try {
         const now = Date.now();
+
+        // Sanitize data for IndexedDB (remove functions, convert Decimal and other non-cloneable types)
+        const sanitize = (input: any): any => {
+            if (input === null || input === undefined) return input;
+            const t = typeof input;
+            if (t === 'number' || t === 'string' || t === 'boolean') return input;
+            if (input instanceof Date) return input.toISOString();
+            if (Array.isArray(input)) return input.map(sanitize);
+            if (t === 'object') {
+                // Detect Decimal.js instances by constructor name to avoid importing Decimal here
+                const ctorName = input && input.constructor && input.constructor.name;
+                if (ctorName && /decimal/i.test(ctorName)) {
+                    try { return input.toString(); } catch { return String(input); }
+                }
+
+                const out: Record<string, any> = {};
+                for (const k of Object.keys(input)) {
+                    try {
+                        const v = (input as any)[k];
+                        // Skip functions
+                        if (typeof v === 'function') continue;
+                        out[k] = sanitize(v);
+                    } catch (e) {
+                        out[k] = String((input as any)[k]);
+                    }
+                }
+                return out;
+            }
+            // Fallback to string
+            try { return String(input); } catch { return null; }
+        };
+
+        const cleaned = sanitize(data);
+
         await db.telemetrySnapshots.add({
             timestamp: now,
-            dataBlob: data
+            dataBlob: cleaned
         });
 
         // Auto-purge older than 24h
