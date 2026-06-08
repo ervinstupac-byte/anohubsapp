@@ -287,7 +287,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 grid grid-cols-12 gap-6 p-6">
-      <div className="col-span-8 bg-slate-900 border border-slate-600 rounded-none relative">
+      <div className="col-span-8 bg-slate-900 border border-slate-600 rounded-lg relative">
         {!focusMode && (
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
             <div className="flex items-center gap-2">
@@ -328,7 +328,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
               {forensicMode && (
                 <button
                   onClick={() => setShowThermalOverlay(!showThermalOverlay)}
-                  className={`flex items-center gap-2 px-3 py-1 rounded-none text-[10px] font-bold uppercase tracking-widest border transition-colors ${showThermalOverlay ? 'bg-red-500/20 text-red-400 border-red-500/50' : 'bg-slate-800 text-slate-400 border-slate-700'}`}
+                  className={`flex items-center gap-2 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest border transition-colors ${showThermalOverlay ? 'bg-red-500/20 text-red-400 border-red-500/50' : 'bg-slate-800 text-slate-400 border-slate-700'}`}
                 >
                   {showThermalOverlay ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
                   Thermal Stress
@@ -849,7 +849,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
 
         {showPreStartModal && (
             <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
-                <div className="bg-slate-900 border border-slate-700 rounded-none w-[600px] shadow-none">
+                <div className="bg-slate-900 border border-slate-700 rounded-lg w-[600px] shadow-none">
                     <div className="flex items-center justify-between p-4 border-b border-slate-700 bg-slate-950/50">
                         <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
                             <Activity className="w-4 h-4 text-brand-400" />
@@ -859,7 +859,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                     </div>
                     <div className="p-4 max-h-[60vh] overflow-y-auto space-y-2">
                         {preStartChecks.map(check => (
-                            <div key={check.id} className={`p-3 rounded-none border flex justify-between items-center ${
+                            <div key={check.id} className={`p-3 rounded-lg border flex justify-between items-center ${
                                 check.status === 'CRITICAL' ? 'bg-red-950/30 border-red-500/50' :
                                 check.status === 'WARNING' ? 'bg-amber-950/30 border-amber-500/50' :
                                 'bg-slate-800/50 border-slate-700'
@@ -874,12 +874,12 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                                     </div>
                                     <div className="text-[10px] text-slate-400 mt-1">{check.value}</div>
                                     {check.actionRequired && (
-                                        <div className="text-[10px] text-red-300 mt-1 font-mono bg-red-900/20 px-1 py-0.5 rounded-none inline-block">
+                                        <div className="text-[10px] text-red-300 mt-1 font-mono bg-red-900/20 px-1 py-0.5 rounded-lg inline-block">
                                             ACTION: {check.actionRequired}
                                         </div>
                                     )}
                                 </div>
-                                <div className={`text-[10px] font-black px-2 py-1 rounded-none ${
+                                <div className={`text-[10px] font-black px-2 py-1 rounded-lg ${
                                     check.status === 'OK' ? 'bg-emerald-900/30 text-emerald-400' :
                                     check.status === 'WARNING' ? 'bg-amber-900/30 text-amber-400' :
                                     'bg-red-900/30 text-red-400 animate-pulse'
@@ -892,7 +892,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                     <div className="p-4 border-t border-slate-700 bg-slate-950/50 flex justify-end">
                         <button 
                             onClick={() => setShowPreStartModal(false)}
-                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded-none uppercase tracking-wider"
+                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded-lg uppercase tracking-wider"
                         >
                             Acknowledge
                         </button>
@@ -902,7 +902,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
         )}
 
         {starting && (
-          <div className="absolute top-4 right-4 bg-slate-900/90 border border-slate-700 rounded-none p-4">
+          <div className="absolute top-4 right-4 bg-slate-900/90 border border-slate-700 rounded-lg p-4">
             <div className="text-[10px] text-slate-400 uppercase font-mono tracking-widest mb-2">Grid Synchroscope</div>
             <div className="relative w-36 h-36 rounded-full border-4 border-slate-600 bg-slate-800 shadow-none">
               <div className="absolute inset-3 rounded-full border-2 border-slate-700" />
@@ -910,7 +910,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                 <div key={i} className="absolute w-0.5 h-4 bg-slate-600 left-1/2 top-0 origin-bottom" style={{ transform: `translateX(-50%) rotate(${i * 30}deg)` }} />
               ))}
               <div className="absolute left-1/2 top-1/2 w-0.5 h-14 bg-emerald-400 origin-bottom shadow-[0_0_10px_rgba(16,185,129,0.5)]" style={{ transform: `translate(-50%, -100%) rotate(0deg)` }} />
-              <div className="absolute left-1/2 top-1/2 w-3 h-3 -translate-x-1/2 -translate-y-1/2 rounded-none bg-slate-300" />
+              <div className="absolute left-1/2 top-1/2 w-3 h-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-300" />
               <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] text-slate-400 font-mono uppercase">Starting</div>
             </div>
           </div>
@@ -918,15 +918,15 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
 
         {hotspot && (
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-40">
-            <div className="w-[520px] bg-slate-900 border border-slate-700 rounded-none shadow-none">
+            <div className="w-[520px] bg-slate-900 border border-slate-700 rounded-lg shadow-none">
               <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700">
                 <div className="text-[10px] text-slate-400 uppercase font-mono tracking-widest">{hotspot.label} Control Overlay</div>
-                <button className="text-xs px-2 py-1 rounded-none bg-slate-800 border border-slate-700" onClick={() => setHotspot(null)}>Close</button>
+                <button className="text-xs px-2 py-1 rounded-lg bg-slate-800 border border-slate-700" onClick={() => setHotspot(null)}>Close</button>
               </div>
               <div className="p-4">
                 <div className="mb-3 flex items-center gap-2">
                   <button
-                    className="text-xs px-2 py-1 rounded-none bg-slate-800 border border-slate-700"
+                    className="text-xs px-2 py-1 rounded-lg bg-slate-800 border border-slate-700"
                     onClick={() => {
                       toggleCommanderMode?.();
                       toggleInvestigation?.(hotspot.key);
@@ -937,7 +937,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                     Manual Override
                   </button>
                   <button
-                    className="text-xs px-2 py-1 rounded-none bg-slate-800 border border-slate-700"
+                    className="text-xs px-2 py-1 rounded-lg bg-slate-800 border border-slate-700"
                     onClick={() => selectDiagnostic?.(`DX_${hotspot.key}`)}
                   >
                     Diagnostic View
@@ -970,7 +970,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
         )}
       </div>
 
-      <div className="col-span-4 bg-[#0c0c0c] border border-[#222222] rounded-none p-6 space-y-6">
+      <div className="col-span-4 bg-[#0c0c0c] border border-[#222222] rounded-lg p-6 space-y-6">
         <div>
           <div className="text-[10px] text-slate-300 uppercase font-mono tracking-widest mb-2">Project Parameters</div>
           <div className="grid grid-cols-2 gap-3">
@@ -978,7 +978,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
               <div className="text-[10px] text-slate-400 font-mono mb-1">Rated Head (Hₙ)</div>
               <div className="flex items-center gap-2">
                 <input
-                  className="flex-1 bg-[#0a0a0a] border border-[#2a2a2a] rounded-none px-3 py-2 text-slate-200 text-xs font-mono"
+                  className="flex-1 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg px-3 py-2 text-slate-200 text-xs font-mono"
                   type="number"
                   value={Number(cfgStore.getConfig(family)?.ratedHeadHn ?? 0)}
                   onChange={(e) => {
@@ -996,7 +996,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                     }
                   }}
                 />
-                <div className="px-2 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-none text-[10px] font-mono text-slate-400">m</div>
+                <div className="px-2 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-[10px] font-mono text-slate-400">m</div>
               </div>
             </div>
             <div className="col-span-2">
@@ -1045,7 +1045,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
           <div className="flex items-center gap-2">
               <button
                   onClick={() => setShowPreStartModal(true)}
-                  className={`text-xs px-3 py-2 rounded-none border font-bold uppercase tracking-wider ${
+                  className={`text-xs px-3 py-2 rounded-lg border font-bold uppercase tracking-wider ${
                       preStartChecks.some(c => c.status === 'CRITICAL') 
                           ? 'bg-red-900/50 border-red-500 text-red-400 animate-pulse'
                           : 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700'
@@ -1121,13 +1121,13 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
       </div>
       {/* Alarm banner - SCADA Standard: Integrated, not Floating */}
       <div className="col-span-12 mt-4">
-        <div className="bg-slate-900 border border-slate-700 rounded-none">
+        <div className="bg-slate-900 border border-slate-700 rounded-lg">
           <div className="flex items-center justify-between px-4 py-2 bg-slate-800/50 border-b border-slate-700">
             <div className="flex items-center gap-2">
               <span className="text-[10px] text-slate-400 uppercase font-mono tracking-widest">Active Alarms</span>
               <span className={`w-2 h-2 rounded-full ${activeAlarms?.length ? 'bg-red-500 animate-pulse' : 'bg-emerald-500'}`} />
             </div>
-            <button className="text-xs px-2 py-1 rounded-none bg-slate-800 border border-slate-600 hover:bg-slate-700 text-slate-300 font-mono" onClick={() => { EventLogger.log('ACKNOWLEDGE', null, null, 'ALL'); acknowledgeAllAlarms?.(); }}>ACK ALL</button>
+            <button className="text-xs px-2 py-1 rounded-lg bg-slate-800 border border-slate-600 hover:bg-slate-700 text-slate-300 font-mono" onClick={() => { EventLogger.log('ACKNOWLEDGE', null, null, 'ALL'); acknowledgeAllAlarms?.(); }}>ACK ALL</button>
           </div>
           <div className="px-4 py-2 space-y-1 max-h-32 overflow-y-auto">
             {(activeAlarms ?? []).length === 0 && <div className="text-xs font-mono text-slate-500 italic">No active alarms</div>}
@@ -1153,12 +1153,12 @@ const HistorianPanel: React.FC = () => {
   const [open, setOpen] = useState(false);
   return (
     <div className="mt-4">
-      <div className="bg-slate-900 border border-slate-700 rounded-none">
+      <div className="bg-slate-900 border border-slate-700 rounded-lg">
         <div className="flex items-center justify-between px-4 py-2 bg-slate-800/50 border-b border-slate-700">
           <div className="flex items-center gap-2">
             <span className="text-[10px] text-slate-400 uppercase font-mono tracking-widest">Event Historian</span>
           </div>
-          <button className="text-xs px-2 py-1 rounded-none bg-slate-800 border border-slate-600 hover:bg-slate-700 text-slate-300 font-mono" onClick={() => setOpen(!open)}>{open ? 'HIDE' : 'SHOW'}</button>
+          <button className="text-xs px-2 py-1 rounded-lg bg-slate-800 border border-slate-600 hover:bg-slate-700 text-slate-300 font-mono" onClick={() => setOpen(!open)}>{open ? 'HIDE' : 'SHOW'}</button>
         </div>
         {open && (
           <div className="px-4 py-2 space-y-1 max-h-48 overflow-y-auto">
