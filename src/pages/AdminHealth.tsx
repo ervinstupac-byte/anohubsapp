@@ -5,6 +5,7 @@ import { persistCenturyPlanForAsset } from '../services/CenturyPlanner';
 import { supabase } from '../services/supabaseClient';
 import { useConfirm } from '../contexts/ConfirmContext';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
+import { ShieldCheck, Database, Gauge, FlaskConical, TrendingDown, CheckCircle2, XCircle } from 'lucide-react';
 
 export default function AdminHealth() {
   const [report, setReport] = useState<IntegrityReport | null>(null);
@@ -12,7 +13,7 @@ export default function AdminHealth() {
   const [backfillRunning, setBackfillRunning] = useState(false);
   const [backfillMessage, setBackfillMessage] = useState<string | null>(null);
   const { confirm } = useConfirm();
-  // SCADA Grid Sync
+  // Grid sync read-out
   // @ts-ignore
   const { gridFrequency = 50.0 } = useTelemetryStore() as any;
   const phaseAligned = true;
@@ -84,25 +85,36 @@ export default function AdminHealth() {
     });
   };
 
-  if (loading) return <div className="p-6">Running health checks…</div>;
-  if (!report) return <div className="p-6">No report available.</div>;
+  if (loading) return <div className="w-full p-8 text-sm font-mono text-slate-400">Running health checks…</div>;
+  if (!report) return <div className="w-full p-8 text-sm font-mono text-slate-400">No report available.</div>;
+
+  const tables = Object.entries(report.tableStatuses);
+  const healthyTables = tables.filter(([, s]) => s.exists).length;
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Admin Health — System Integrity</h1>
+    <div className="w-full">
+      <div className="mb-6 flex items-start gap-4">
+        <div className="p-3 rounded-xl bg-brand-500/10 border border-brand-500/20">
+          <ShieldCheck className="w-6 h-6 text-brand-300" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold text-white">Admin Health — System Integrity</h1>
+          <p className="text-slate-400 max-w-2xl mt-1">Live integrity sweep across data persistence, physics invariants, and grid synchronization.</p>
+        </div>
+      </div>
 
-      {/* SCADA Grid Sync */}
+      {/* Grid synchronization */}
       <section className="mb-6">
-        <h2 className="font-semibold">SCADA Grid Synchronization</h2>
-        <div className="mt-3 grid grid-cols-12 gap-6">
-          <div className="col-span-12 md:col-span-6 p-4 bg-slate-900 border border-slate-700 rounded-lg">
+        <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2"><Gauge className="w-4 h-4 text-[#2dd4bf]" /> Grid Synchronization</h2>
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-12 md:col-span-6 p-5 glass border border-white/10 rounded-xl">
             <div className="text-[10px] text-slate-400 uppercase font-mono tracking-widest mb-2">Grid Frequency</div>
             <div className="text-4xl font-black text-white tabular-nums">
               {gridFrequency.toFixed(2)} <span className="text-sm text-slate-500 font-normal">Hz</span>
             </div>
             <div className="mt-2 text-xs text-emerald-400 font-mono">Synchronized</div>
           </div>
-          <div className="col-span-12 md:col-span-6 p-4 bg-slate-900 border border-slate-700 rounded-lg flex items-center justify-center">
+          <div className="col-span-12 md:col-span-6 p-5 glass border border-white/10 rounded-xl flex items-center justify-center">
             <div className="relative w-40 h-40 rounded-full border-4 border-slate-600 bg-slate-800 shadow-inner">
               <div className="absolute inset-3 rounded-full border-2 border-slate-700" />
               {/* Tick marks */}
@@ -127,54 +139,59 @@ export default function AdminHealth() {
       </section>
 
       <section className="mb-6">
-        <h2 className="font-semibold">Table Statuses</h2>
-        <ul className="mt-2 space-y-1">
-          {Object.entries(report.tableStatuses).map(([table, status]) => (
-            <li key={table} className="flex items-center space-x-3">
-              <div className={`w-3 h-3 rounded-full ${status.exists ? 'bg-emerald-500' : 'bg-red-500'}`} />
-              <div className="font-mono">{table}</div>
-              <div className="text-sm text-slate-400">{status.count != null ? `sample_count=${status.count}` : ''}</div>
-            </li>
+        <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+          <Database className="w-4 h-4 text-[#2dd4bf]" /> Table Statuses
+          <span className="ml-2 text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-slate-400">{healthyTables}/{tables.length} online</span>
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+          {tables.map(([table, status]) => (
+            <div key={table} className="flex items-center gap-3 px-3 py-2 glass border border-white/10 rounded-lg">
+              <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${status.exists ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'}`} />
+              <div className="font-mono text-sm text-slate-200 truncate">{table}</div>
+              {status.count != null && <div className="ml-auto text-[11px] font-mono text-slate-500">{status.count}</div>}
+            </div>
           ))}
-        </ul>
+        </div>
       </section>
 
-      <div className="mb-6">
-        <h2 className="font-semibold">Backfill & Century Planning</h2>
-        <div className="mt-2 flex items-center gap-3">
-          <button onClick={confirmBackfill} disabled={backfillRunning} className="px-3 py-1 bg-slate-700 rounded">
+      <section className="mb-6 p-5 glass border border-white/10 rounded-xl">
+        <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-3">Backfill & Century Planning</h2>
+        <div className="flex flex-wrap items-center gap-3">
+          <button onClick={confirmBackfill} disabled={backfillRunning} className="px-4 py-2 rounded-lg bg-brand-500/90 hover:bg-brand-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors">
             {backfillRunning ? 'Backfilling…' : 'Trigger Historical Backfill (30d)'}
           </button>
           {backfillRunning && <div className="text-sm text-slate-400">Processing historical telemetry — this may take a few minutes.</div>}
         </div>
-        {backfillMessage && <div className="mt-2 text-sm text-slate-300">{backfillMessage}</div>}
+        {backfillMessage && <div className="mt-3 text-sm text-slate-300 font-mono">{backfillMessage}</div>}
+      </section>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <section className="p-5 glass border border-white/10 rounded-xl">
+          <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2"><FlaskConical className="w-4 h-4 text-[#2dd4bf]" /> Physics Check (η invariant)</h2>
+          {report.physicsCheck ? (
+            <div className="space-y-1 text-sm">
+              <div className="flex justify-between"><span className="text-slate-400">Expected η</span><span className="font-mono text-slate-200">{report.physicsCheck.expected}</span></div>
+              <div className="flex justify-between"><span className="text-slate-400">Actual η (DB RPC)</span><span className="font-mono text-slate-200">{report.physicsCheck.actual}</span></div>
+              <div className="flex justify-between items-center pt-1"><span className="text-slate-400">Status</span>{report.physicsCheck.ok ? <span className="flex items-center gap-1 text-emerald-400 font-semibold"><CheckCircle2 className="w-4 h-4" /> OK</span> : <span className="flex items-center gap-1 text-red-400 font-semibold"><XCircle className="w-4 h-4" /> FAIL</span>}</div>
+            </div>
+          ) : <div className="text-sm text-slate-500">No physics check performed.</div>}
+        </section>
+
+        <section className="p-5 glass border border-white/10 rounded-xl">
+          <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2"><TrendingDown className="w-4 h-4 text-[#2dd4bf]" /> Financial Check</h2>
+          {report.financialCheck ? (
+            <div className="space-y-1 text-sm">
+              <div className="flex justify-between"><span className="text-slate-400">Aggregated Loss</span><span className="font-mono text-slate-200">{report.financialCheck.aggregatedLoss}</span></div>
+              <div className="flex justify-between items-center pt-1"><span className="text-slate-400">Status</span>{report.financialCheck.ok ? <span className="flex items-center gap-1 text-emerald-400 font-semibold"><CheckCircle2 className="w-4 h-4" /> Triggered</span> : <span className="text-slate-400 font-semibold">Not Triggered</span>}</div>
+            </div>
+          ) : <div className="text-sm text-slate-500">No financial check performed.</div>}
+        </section>
       </div>
 
-      <section className="mb-6">
-        <h2 className="font-semibold">Physics Check (η invariant)</h2>
-        {report.physicsCheck ? (
-          <div>
-            <div>Expected η: {report.physicsCheck.expected}</div>
-            <div>Actual η (DB RPC): {report.physicsCheck.actual}</div>
-            <div>Status: {report.physicsCheck.ok ? <span className="text-emerald-500">OK</span> : <span className="text-red-500">FAIL</span>}</div>
-          </div>
-        ) : <div>No physics check performed.</div>}
-      </section>
-
-      <section>
-        <h2 className="font-semibold">Financial Check</h2>
-        {report.financialCheck ? (
-          <div>
-            <div>Aggregated Loss: {report.financialCheck.aggregatedLoss}</div>
-            <div>Status: {report.financialCheck.ok ? <span className="text-emerald-500">Triggered</span> : <span className="text-red-500">Not Triggered</span>}</div>
-          </div>
-        ) : <div>No financial check performed.</div>}
-      </section>
-
       {report.errors && report.errors.length > 0 && (
-        <section className="mt-6">
-          <h3 className="font-semibold">Errors</h3>
-          <pre className="bg-black/40 p-3 mt-2 rounded">{report.errors.join('\n')}</pre>
+        <section className="mb-6 p-5 glass border border-red-500/20 rounded-xl">
+          <h3 className="text-sm font-semibold text-red-400 uppercase tracking-wider mb-2">Errors</h3>
+          <pre className="bg-black/40 p-3 rounded-lg text-xs text-red-200 overflow-auto">{report.errors.join('\n')}</pre>
         </section>
       )}
     </div>
