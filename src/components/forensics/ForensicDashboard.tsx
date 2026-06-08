@@ -35,7 +35,7 @@ const PacketTrafficVisualizer: React.FC<{ history: any[] }> = ({ history }) => {
         <div className="relative h-48 w-full bg-slate-950/50 rounded-xl overflow-hidden border border-slate-800">
             {/* Grid Lines */}
             <div className="absolute inset-0 grid grid-cols-6 grid-rows-4 opacity-10 pointer-events-none">
-                {[...Array(24)].map((_, i) => <div key={i} className="border-r border-b border-cyan-500/30"></div>)}
+                {[...Array(24)].map((_, i) => <div key={i} className="border-r border-b border-brand-500/30"></div>)}
             </div>
 
             <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full preserve-3d">
@@ -68,7 +68,7 @@ export const ForensicDashboard: React.FC = () => {
     }, [status]);
 
     return (
-        <div className={`min-h-screen bg-[#050505] text-slate-200 p-8 font-sans transition-colors duration-1000 ${status === 'ATTACK_IN_PROGRESS' ? 'shadow-[inset_0_0_100px_rgba(220,38,38,0.2)]' : ''}`}>
+        <div className={`min-h-screen bg-scada-bg text-slate-200 p-8 font-sans transition-colors duration-1000 ${status === 'ATTACK_IN_PROGRESS' ? 'shadow-[inset_0_0_100px_rgba(220,38,38,0.2)]' : ''}`}>
 
             {/* CRITICAL OVERLAY */}
             <AnimatePresence>
@@ -78,7 +78,7 @@ export const ForensicDashboard: React.FC = () => {
                         className="fixed inset-0 pointer-events-none z-50 flex items-center justify-center"
                     >
                         <div className="w-full h-full border-[__20px] border-red-500/10 animate-pulse"></div>
-                        <div className="absolute top-10 bg-red-600 text-white px-6 py-2 rounded-none font-black tracking-widest uppercase shadow-none animate-bounce">
+                        <div className="absolute top-10 bg-rose-600 text-white px-6 py-2 rounded-lg font-black tracking-widest uppercase shadow-lg shadow-rose-500/30 animate-bounce">
                             ⚠️ {t('forensics.critical_alert', 'CRITICAL SECURITY ALERT: DATA EXFILTRATION')}
                         </div>
                     </motion.div>
@@ -88,7 +88,7 @@ export const ForensicDashboard: React.FC = () => {
             <header className="mb-8 border-b border-white/10 pb-6 flex justify-between items-end relative z-10">
                 <div>
                     <h1 className="text-3xl font-black text-white uppercase tracking-tighter mb-2 flex items-center gap-3">
-                        <div className={`p-2 rounded-none transition-colors ${status === 'ATTACK_IN_PROGRESS' ? 'bg-red-500 animate-pulse' : 'bg-[#2dd4bf] text-black'}`}>
+                        <div className={`p-2 rounded-xl transition-colors ${status === 'ATTACK_IN_PROGRESS' ? 'bg-rose-500 animate-pulse' : 'bg-accent-400 text-black'}`}>
                             {status === 'ATTACK_IN_PROGRESS' ? <ShieldAlert className="w-8 h-8 text-white" /> : <Microscope className="w-8 h-8" />}
                         </div>
                         {t('forensics.title', 'Diagnostic Forensics')}
@@ -118,10 +118,10 @@ export const ForensicDashboard: React.FC = () => {
 
                 {/* 1. NETWORK TRAFFIC & SECURITY (Left Column) */}
                 <div className="col-span-12 lg:col-span-4 space-y-6">
-                    <GlassCard className="p-0 overflow-hidden border-t-4 border-t-cyan-500">
-                        <div className="p-4 bg-slate-900/50 flex justify-between items-center border-b border-white/5">
-                            <h3 className="font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                                <Globe className="w-4 h-4 text-cyan-400" />
+                    <GlassCard className="p-0 overflow-hidden border-t-4 border-t-brand-500">
+                        <div className="p-4 bg-white/5 flex justify-between items-center border-b border-white/5">
+                            <h3 className="font-header font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                <Globe className="w-4 h-4 text-brand-300" />
                                 {t('forensics.network_traffic', 'Network Traffic')}
                             </h3>
                             {status === 'ATTACK_IN_PROGRESS' && <span className="text-[10px] bg-red-500 text-white px-2 py-0.5 rounded animate-pulse">SPIKE DETECTED</span>}

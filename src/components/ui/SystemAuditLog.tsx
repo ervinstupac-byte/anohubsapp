@@ -21,7 +21,7 @@ interface LogEntry {
 
 const sourceConfig = {
     SYSTEM: { color: 'text-slate-400', icon: Terminal },
-    PLC: { color: 'text-cyan-400', icon: Cpu },
+    PLC: { color: 'text-brand-300', icon: Cpu },
     RCA: { color: 'text-purple-400', icon: Zap },
     DNA: { color: 'text-emerald-400', icon: Database },
     FILTER: { color: 'text-amber-400', icon: AlertCircle }
@@ -139,7 +139,7 @@ export const SystemAuditLog: React.FC<{ maxEntries?: number; className?: string 
     }, [logs]);
 
     return (
-        <div className={`bg-slate-950 border border-slate-800 rounded-none overflow-hidden ${className}`}>
+        <div className={`glass-strong rounded-2xl border border-white/10 overflow-hidden ${className}`}>
             {/* Header */}
             <div className="px-3 py-2 bg-slate-900/50 border-b border-slate-800 flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -151,12 +151,12 @@ export const SystemAuditLog: React.FC<{ maxEntries?: number; className?: string 
                 <div className="flex items-center gap-2">
                     <button 
                         onClick={() => setShowFullLog(true)}
-                        className="text-slate-500 hover:text-cyan-400 transition-colors"
+                        className="text-slate-500 hover:text-brand-300 transition-colors"
                         title="Expand Forensic View"
                     >
                         <Maximize2 className="w-3 h-3" />
                     </button>
-                    <div className="w-1.5 h-1.5 rounded-none bg-emerald-400 animate-pulse" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent-400 animate-pulse" />
                     <span className="text-[9px] text-slate-600 font-mono">
                         {logs.length} entries
                     </span>
@@ -200,7 +200,7 @@ export const SystemAuditLog: React.FC<{ maxEntries?: number; className?: string 
                 <div className="flex items-center gap-3">
                     {['SYSTEM', 'PLC', 'RCA', 'DNA'].map(source => (
                         <div key={source} className="flex items-center gap-1">
-                            <div className={`w-1 h-1 rounded-none ${sourceConfig[source as keyof typeof sourceConfig].color.replace('text-', 'bg-')}`} />
+                            <div className={`w-1 h-1 rounded-full ${sourceConfig[source as keyof typeof sourceConfig].color.replace('text-', 'bg-')}`} />
                             <span className="text-[8px] text-slate-600">{source}</span>
                         </div>
                     ))}
