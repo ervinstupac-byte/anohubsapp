@@ -47,7 +47,7 @@ export const Penstock: React.FC = () => {
         return (
             <div className="min-h-screen bg-slate-950 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-none mx-auto mb-4" />
+                    <div className="animate-spin w-12 h-12 border-4 border-brand-500 border-t-transparent rounded-none mx-auto mb-4" />
                     <p className="text-slate-400 text-sm font-medium">Loading Penstock Data...</p>
                 </div>
             </div>
@@ -91,7 +91,7 @@ export const Penstock: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
                         <div className="p-6 bg-black/60 rounded-none border border-white/5">
                             <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
-                                <Activity className="w-3 h-3 text-cyan-400" /> Hoop Stress
+                                <Activity className="w-3 h-3 text-brand-400" /> Hoop Stress
                             </p>
                             <p className="text-3xl font-black text-white font-mono tracking-tighter">
                                 {hoopStress.toFixed(1)} <span className="text-xs text-slate-500 uppercase ml-1">MPa</span>
@@ -118,7 +118,7 @@ export const Penstock: React.FC = () => {
 
                 {/* 2. Configuration Specs (from AssetConfig - STATIC DATA) */}
                 <GlassCard title="Penstock Configuration" className="relative overflow-hidden">
-                    <div className="absolute top-4 right-4 px-2 py-0.5 rounded-none bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 text-[9px] font-black uppercase tracking-widest">
+                    <div className="absolute top-4 right-4 px-2 py-0.5 rounded-none bg-brand-500/20 border border-brand-500/40 text-brand-400 text-[9px] font-black uppercase tracking-widest">
                         From AssetConfig
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
@@ -173,7 +173,7 @@ export const Penstock: React.FC = () => {
                                 <div className="relative h-6 bg-slate-800 rounded-none overflow-hidden border border-white/5 shadow-none">
                                     <div className="absolute top-0 bottom-0 w-1 bg-red-500 z-10" style={{ left: '80%' }} />
                                     <div
-                                        className={`h-full transition-all duration-1000 shadow-none ${isDanger ? 'bg-gradient-to-r from-red-600 to-amber-500' : 'bg-gradient-to-r from-cyan-600 to-blue-500'}`}
+                                        className={`h-full transition-all duration-1000 shadow-none ${isDanger ? 'bg-gradient-to-r from-red-600 to-amber-500' : 'bg-gradient-to-r from-brand-600 to-blue-500'}`}
                                         style={{ width: `${Math.min((surgePressure / 25) * 100, 100)}%` }}
                                     />
                                 </div>

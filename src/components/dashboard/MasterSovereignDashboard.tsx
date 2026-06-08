@@ -201,7 +201,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                     <div className="flex items-center gap-4">
                         <button
                             onClick={() => navigate('/')}
-                            className="p-2 hover:bg-scada-panel rounded-none text-scada-muted hover:text-scada-text transition-colors"
+                            className="p-2 hover:bg-scada-panel rounded-lg text-scada-muted hover:text-scada-text transition-colors"
                             title="Back to Hub"
                         >
                             <Home className="w-6 h-6" />
@@ -213,7 +213,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                         {/* Strategic View Tab */}
                         <button
                             onClick={() => setActiveTab(activeTab === 'strategic' ? 'dashboard' : 'strategic')}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors ${activeTab === 'strategic'
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'strategic'
                                 ? 'bg-status-info/20 text-status-info border border-status-info/50'
                                 : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
                                 }`}
@@ -225,7 +225,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                         {/* Energy Hub Tab */}
                         <button
                             onClick={() => setActiveTab(activeTab === 'energy' ? 'dashboard' : 'energy')}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors ${activeTab === 'energy'
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'energy'
                                 ? 'bg-status-info/20 text-status-info border border-status-info/50'
                                 : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
                                 }`}
@@ -237,7 +237,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                         {/* NC-10070: Forensic Mode Toggle */}
                         <button
                             onClick={() => setIsForensicMode(!isForensicMode)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors ${isForensicMode
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${isForensicMode
                                 ? 'bg-status-ok/20 text-status-ok border border-status-ok/50'
                                 : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
                                 }`}
@@ -249,7 +249,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                         {/* NC-11400: Education Mode Toggle */}
                         <button
                             onClick={toggleEducationMode}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors ${educationMode
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${educationMode
                                 ? 'bg-status-info/20 text-status-info border border-status-info/50'
                                 : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
                                 }`}
@@ -261,7 +261,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                         {/* Commander Mode Toggle - ALWAYS VISIBLE */}
                         <button
                             onClick={toggleCommanderMode}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors ${isCommanderMode
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${isCommanderMode
                                 ? 'bg-status-warning/20 text-status-warning border border-status-warning/50'
                                 : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
                                 }`}
@@ -273,7 +273,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                         {/* NC-9200: Tactical Layout Launcher */}
                         <button
                             onClick={launchTacticalLayout}
-                            className="flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors bg-scada-panel text-status-info border border-status-info/50 hover:bg-scada-panel/80"
+                            className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors bg-scada-panel text-status-info border border-status-info/50 hover:bg-scada-panel/80"
                             title="Open all modules across screens"
                         >
                             <Layout className="w-4 h-4" />
@@ -314,12 +314,12 @@ export const MasterSovereignDashboard: React.FC = () => {
                     {/* Commander Mode Setpoint Controls */}
                     {isCommanderMode && (
                         <div className="mb-6 animate-in slide-in-from-top-4 duration-300">
-                            <div className="p-6 bg-scada-panel border border-status-warning rounded-sm shadow-scada-card">
+                            <div className="p-6 bg-scada-panel border border-status-warning rounded-xl shadow-scada-card">
                                 <div className="flex items-center gap-3 mb-4">
                                     <Sliders className="w-5 h-5 text-status-warning" />
                                     <h2 className="text-xl font-bold text-status-warning uppercase tracking-tight font-header">Commander Setpoint Control</h2>
                                     {boundaryViolation && (
-                                        <div className="px-3 py-1 bg-status-error/20 border border-status-error/30 rounded-sm">
+                                        <div className="px-3 py-1 bg-status-error/20 border border-status-error/30 rounded-lg">
                                             <span className="text-xs text-status-error font-mono font-bold uppercase">⚠ BOUNDARY VIOLATION</span>
                                         </div>
                                     )}
@@ -327,7 +327,7 @@ export const MasterSovereignDashboard: React.FC = () => {
 
                                 {/* Boundary Violation Warning */}
                                 {boundaryViolation && (
-                                    <div className="mb-4 p-3 bg-status-error/10 border border-status-error/20 rounded-sm">
+                                    <div className="mb-4 p-3 bg-status-error/10 border border-status-error/20 rounded-lg">
                                         <p className="text-sm text-status-error font-mono">{boundaryViolation}</p>
                                     </div>
                                 )}
@@ -346,7 +346,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                                             step="0.5"
                                             value={flowSetpoint}
                                             onChange={(e) => setFlowSetpoint(parseFloat(e.target.value))}
-                                            className="w-full h-2 bg-scada-bg rounded-none appearance-none cursor-pointer accent-status-warning"
+                                            className="w-full h-2 bg-scada-bg rounded-full appearance-none cursor-pointer accent-status-warning"
                                         />
                                         <div className="flex justify-between text-[10px] text-scada-muted font-mono mt-1">
                                             <span>0</span>
@@ -368,7 +368,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                                             step="10"
                                             value={loadSetpoint}
                                             onChange={(e) => setLoadSetpoint(parseFloat(e.target.value))}
-                                            className="w-full h-2 bg-scada-bg rounded-none appearance-none cursor-pointer accent-status-warning"
+                                            className="w-full h-2 bg-scada-bg rounded-full appearance-none cursor-pointer accent-status-warning"
                                         />
                                         <div className="flex justify-between text-[10px] text-scada-muted font-mono mt-1">
                                             <span>300</span>
@@ -378,7 +378,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                                     </div>
 
                                     {/* Predicted Pulse Impact */}
-                                    <div className="bg-scada-bg border border-scada-border rounded-sm p-3">
+                                    <div className="bg-scada-bg border border-scada-border rounded-lg p-3">
                                         <div className="text-[10px] uppercase font-mono text-scada-muted mb-1">Predicted Pulse Index</div>
                                         <div className={`text-2xl font-bold font-mono tabular-nums ${(predictedPulse || 100) > 90 ? 'text-status-ok' :
                                             (predictedPulse || 100) > 70 ? 'text-status-warning' : 'text-status-error'
@@ -394,7 +394,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                                     <div className="flex items-end">
                                         <button
                                             onClick={applySetpoints}
-                                            className="w-full py-3 bg-status-warning/20 hover:bg-status-warning/30 border border-status-warning/50 rounded-sm text-status-warning font-semibold font-mono uppercase tracking-wider flex items-center justify-center gap-2 transition-all active:scale-95"
+                                            className="w-full py-3 bg-status-warning/20 hover:bg-status-warning/30 border border-status-warning/50 rounded-lg text-status-warning font-semibold font-mono uppercase tracking-wider flex items-center justify-center gap-2 transition-all active:scale-95"
                                         >
                                             <Shield className="w-4 h-4" />
                                             Apply Commander Setpoints
@@ -408,7 +408,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                     {/* Top Row: 4 Metric Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         {/* Active Power */}
-                        <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
+                        <div className="p-4 bg-scada-panel border border-scada-border rounded-xl shadow-scada-card">
                             <div className="flex items-center gap-2 mb-2">
                                 <Zap className="w-4 h-4 text-status-info" />
                                 <span className="text-xs font-mono uppercase text-scada-muted">Active Power</span>
@@ -420,7 +420,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                         </div>
 
                         {/* Efficiency */}
-                        <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
+                        <div className="p-4 bg-scada-panel border border-scada-border rounded-xl shadow-scada-card">
                             <div className="flex items-center gap-2 mb-2">
                                 <Activity className="w-4 h-4 text-status-ok" />
                                 <span className="text-xs font-mono uppercase text-scada-muted">Efficiency</span>
@@ -440,9 +440,9 @@ export const MasterSovereignDashboard: React.FC = () => {
                                         {cavitationRisk.toFixed(0)}%
                                     </span>
                                 </div>
-                                <div className="w-full bg-scada-bg border border-scada-border rounded-sm h-1.5">
+                                <div className="w-full bg-scada-bg border border-scada-border rounded-full h-1.5">
                                     <div
-                                        className={`h-full rounded-sm transition-all duration-300 ${cavitationRisk > 70 ? 'bg-status-error' :
+                                        className={`h-full rounded-lg transition-all duration-300 ${cavitationRisk > 70 ? 'bg-status-error' :
                                             cavitationRisk > 40 ? 'bg-status-warning' : 'bg-status-ok'
                                             }`}
                                         style={{ width: `${cavitationRisk}%` }}
@@ -452,7 +452,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                         </div>
 
                         {/* Sovereign Pulse Index */}
-                        <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
+                        <div className="p-4 bg-scada-panel border border-scada-border rounded-xl shadow-scada-card">
                             <div className="flex items-center gap-2 mb-2">
                                 <AlertCircle className="w-4 h-4 text-status-info" />
                                 <span className="text-xs font-mono uppercase text-scada-muted">Sovereign Pulse</span>
@@ -464,7 +464,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                         </div>
 
                         {/* Hourly Loss */}
-                        <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
+                        <div className="p-4 bg-scada-panel border border-scada-border rounded-xl shadow-scada-card">
                             <div className="flex items-center gap-2 mb-2">
                                 <TrendingDown className="w-4 h-4 text-status-error" />
                                 <span className="text-xs font-mono uppercase text-scada-muted">Hourly Loss</span>
@@ -480,10 +480,10 @@ export const MasterSovereignDashboard: React.FC = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                         {/* ScadaCore - 2 columns */}
                         <div className="lg:col-span-2">
-                            <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
+                            <div className="p-4 bg-scada-panel border border-scada-border rounded-xl shadow-scada-card">
                                 <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-bold text-scada-text font-header uppercase tracking-tight">SCADA Core</h3>
-                                    <div className="px-2 py-1 bg-status-info/20 border border-status-info/30 rounded-sm">
+                                    <h3 className="text-lg font-bold text-scada-text font-header uppercase tracking-tight">Insight Core</h3>
+                                    <div className="px-2 py-1 bg-status-info/20 border border-status-info/30 rounded-lg">
                                         <span className="text-xs text-status-info font-black uppercase tracking-widest">LIVE</span>
                                     </div>
                                 </div>
@@ -509,10 +509,10 @@ export const MasterSovereignDashboard: React.FC = () => {
                                     <FinancialHealthPanel />
                                     
                                     {/* Sandbox Trigger (Moved here) */}
-                                    <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
+                                    <div className="p-4 bg-scada-panel border border-scada-border rounded-xl shadow-scada-card">
                                          <button
                                             onClick={() => setIsSandboxOpen(true)}
-                                            className="w-full py-3 bg-scada-bg border border-scada-border rounded-sm flex items-center justify-center gap-2 hover:bg-scada-panel transition-colors group"
+                                            className="w-full py-3 bg-scada-bg border border-scada-border rounded-lg flex items-center justify-center gap-2 hover:bg-scada-panel transition-colors group"
                                         >
                                             <Sliders className="w-4 h-4 text-status-ok group-hover:rotate-180 transition-transform duration-500" />
                                             <span className="text-xs font-black uppercase tracking-widest text-scada-muted group-hover:text-status-ok">
@@ -566,7 +566,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                             </p>
                         </div>
 
-                        <div className="bg-status-error/10 border border-status-error/50 rounded-sm p-6 text-left">
+                        <div className="bg-status-error/10 border border-status-error/50 rounded-lg p-6 text-left">
                             <h3 className="text-status-error font-bold mb-2 uppercase tracking-widest text-sm">Active Protections</h3>
                             <ul className="space-y-2">
                                 {executiveResult?.activeProtections.map((p, i) => (

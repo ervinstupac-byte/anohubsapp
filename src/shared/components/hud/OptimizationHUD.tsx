@@ -53,7 +53,7 @@ export const OptimizationHUD: React.FC<OptimizationHUDProps> = ({ variant = 'ove
     >
       <div className="pointer-events-auto bg-black/60 border border-slate-700 rounded-xl shadow-2xl backdrop-blur-xl">
         <div className="px-4 py-3 flex items-center gap-2">
-          <Activity className="w-4 h-4 text-cyan-400" />
+          <Activity className="w-4 h-4 text-brand-400" />
           <div className="text-xs font-bold uppercase text-slate-300">Optimization HUD</div>
         </div>
         <div className="grid grid-cols-3 gap-4 px-4 pb-4">

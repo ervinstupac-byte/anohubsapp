@@ -88,7 +88,7 @@ export const MaintenanceDashboard: React.FC = () => {
                 </div>
                 <div>
                     <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4 uppercase">
-                        Maintenance <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Engine</span>
+                        Maintenance <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-brand-500">Engine</span>
                     </h2>
                     <p className="text-slate-400 text-lg max-w-2xl mx-auto font-light">
                         Service intervals and operational integrity ledger.
@@ -133,7 +133,7 @@ export const MaintenanceDashboard: React.FC = () => {
                                 </div>
                                 <div className="bg-slate-900/40 p-4 rounded-2xl border border-white/5">
                                     <p className="text-[9px] text-slate-500 uppercase font-black mb-1">Node Integrity</p>
-                                    <p className="text-xs text-cyan-400 font-bold">VERIFIED</p>
+                                    <p className="text-xs text-brand-400 font-bold">VERIFIED</p>
                                 </div>
                             </div>
 
@@ -195,7 +195,7 @@ export const MaintenanceDashboard: React.FC = () => {
                                                                     </div>
                                                                     <button
                                                                         onClick={handleGenerateOrder}
-                                                                        className="text-[9px] font-black text-cyan-400 hover:text-white underline decoration-cyan-500/30 underline-offset-2 uppercase tracking-widest"
+                                                                        className="text-[9px] font-black text-brand-400 hover:text-white underline decoration-brand-500/30 underline-offset-2 uppercase tracking-widest"
                                                                     >
                                                                         Download Order Draft
                                                                     </button>
@@ -214,7 +214,7 @@ export const MaintenanceDashboard: React.FC = () => {
                                                                         showToast("SYSTEM ALERT: Bearing Overheat likely. Initializing Work Order...", "info");
                                                                         await startWorkOrder('seeded-id-placeholder');
                                                                     }}
-                                                                    className="px-3 py-1 bg-cyan-500/20 border border-cyan-500/50 rounded text-[9px] font-black text-cyan-400 hover:bg-cyan-500 hover:text-white transition-all uppercase tracking-widest"
+                                                                    className="px-3 py-1 bg-brand-500/20 border border-brand-500/50 rounded text-[9px] font-black text-brand-400 hover:bg-brand-500 hover:text-white transition-all uppercase tracking-widest"
                                                                 >
                                                                     Initiate Tactical Maintenance
                                                                 </button>

@@ -77,7 +77,7 @@ export const InfoTooltip: React.FC<InfoTooltipProps> = React.memo(({
             <button
                 ref={triggerRef}
                 type="button"
-                className="text-slate-500 hover:text-cyan-400 transition-colors duration-200 focus:outline-none"
+                className="text-slate-500 hover:text-brand-400 transition-colors duration-200 focus:outline-none"
                 onMouseEnter={() => !isTouchDevice && setIsVisible(true)}
                 onMouseLeave={() => !isTouchDevice && setIsVisible(false)}
                 onClick={handleInteraction}

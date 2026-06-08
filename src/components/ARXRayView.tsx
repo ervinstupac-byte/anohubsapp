@@ -39,7 +39,7 @@ export const ARXRayView: React.FC<ARXRayViewProps> = ({ asset, compact = false }
                 <div>
                     <h3 className="text-xl font-black uppercase tracking-tighter">
                         <span className="text-white">AR X-Ray</span>
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 ml-2">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-purple-400 ml-2">
                             Internal View
                         </span>
                     </h3>
@@ -57,12 +57,12 @@ export const ARXRayView: React.FC<ARXRayViewProps> = ({ asset, compact = false }
                         onChange={(e) => setXrayDepth(parseInt(e.target.value))}
                         className="w-24"
                     />
-                    <span className="text-sm font-bold text-cyan-400">{xrayDepth}%</span>
+                    <span className="text-sm font-bold text-brand-400">{xrayDepth}%</span>
                 </div>
             </div>
 
             {/* 3D Visualization Area */}
-            <div className="relative bg-gradient-to-br from-slate-950 to-slate-900 rounded-xl border border-cyan-500/20 overflow-hidden flex-1">
+            <div className="relative bg-gradient-to-br from-slate-950 to-slate-900 rounded-xl border border-brand-500/20 overflow-hidden flex-1">
                 {/* Grid background */}
                 <div className="absolute inset-0 opacity-10">
                     <svg width="100%" height="100%">
@@ -104,17 +104,17 @@ export const ARXRayView: React.FC<ARXRayViewProps> = ({ asset, compact = false }
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => setRotation(r => r - 15)}
-                        className="w-10 h-10 rounded-full bg-cyan-500/20 border border-cyan-500/50 flex items-center justify-center hover:bg-cyan-500/30 transition-colors"
+                        className="w-10 h-10 rounded-full bg-brand-500/20 border border-brand-500/50 flex items-center justify-center hover:bg-brand-500/30 transition-colors"
                     >
-                        <RotateCw className="w-5 h-5 text-cyan-400 transform rotate-180" />
+                        <RotateCw className="w-5 h-5 text-brand-400 transform rotate-180" />
                     </motion.button>
                     <motion.button
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => setRotation(r => r + 15)}
-                        className="w-10 h-10 rounded-full bg-cyan-500/20 border border-cyan-500/50 flex items-center justify-center hover:bg-cyan-500/30 transition-colors"
+                        className="w-10 h-10 rounded-full bg-brand-500/20 border border-brand-500/50 flex items-center justify-center hover:bg-brand-500/30 transition-colors"
                     >
-                        <RotateCw className="w-5 h-5 text-cyan-400" />
+                        <RotateCw className="w-5 h-5 text-brand-400" />
                     </motion.button>
                 </div>
             </div>
@@ -126,7 +126,7 @@ export const ARXRayView: React.FC<ARXRayViewProps> = ({ asset, compact = false }
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 20 }}
-                        className="mt-4 p-4 bg-slate-800/50 border border-cyan-500/30 rounded-lg"
+                        className="mt-4 p-4 bg-slate-800/50 border border-brand-500/30 rounded-lg"
                     >
                         <div className="flex items-center justify-between mb-2">
                             <h4 className="text-lg font-bold text-white">{formatComponentName(selectedComponent)}</h4>
@@ -282,7 +282,7 @@ const ComponentLabel: React.FC<ComponentLabelProps> = ({ component, status, posi
             onClick={onClick}
         >
             <div className={`px-2 py-1 rounded-lg backdrop-blur-md border transition-all ${isSelected
-                ? 'bg-cyan-500/30 border-cyan-500'
+                ? 'bg-brand-500/30 border-brand-500'
                 : 'bg-slate-900/70 border-white/20 hover:bg-slate-800/70'
                 }`}>
                 <div className="flex items-center gap-1">

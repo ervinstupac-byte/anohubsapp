@@ -60,7 +60,7 @@ export const SystemResponseAnalytics: React.FC = () => {
                     </div>
                     <div className="bg-black/20 p-3 rounded-xl border border-white/5">
                         <p className="text-[10px] text-slate-500 uppercase font-black mb-1">Actual Feedback</p>
-                        <p className="text-2xl font-mono font-black text-cyan-400">{analysis.actual}%</p>
+                        <p className="text-2xl font-mono font-black text-brand-400">{analysis.actual}%</p>
                     </div>
                 </div>
 
@@ -106,14 +106,14 @@ export const SystemResponseAnalytics: React.FC = () => {
                             max="100"
                             value={testValue}
                             onChange={(e) => setTestValue(parseInt(e.target.value))}
-                            className="flex-grow accent-cyan-500"
+                            className="flex-grow accent-brand-500"
                         />
                         <button
                             onClick={() => {
                                 const numeric = idAdapter.toNumber(selectedAsset.id);
                                 if (numeric !== null) updateWicketGateSetpoint(numeric, testValue);
                             }}
-                            className="px-4 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-black rounded uppercase tracking-widest transition-all"
+                            className="px-4 py-1.5 bg-brand-600 hover:bg-brand-500 text-white text-[10px] font-black rounded uppercase tracking-widest transition-all"
                         >
                             Execute Move
                         </button>

@@ -37,10 +37,10 @@ export const MultiSensorCorrelation: React.FC = () => {
     const hydraulicPos = getPointPosition(hydraulicAngle, triggers.hydraulic ? 1 : 0.3);
 
     return (
-        <GlassCard className={`border-l-4 ${detected ? 'border-l-red-500 bg-red-950/20' : 'border-l-cyan-500 bg-slate-900/40'}`}>
+        <GlassCard className={`border-l-4 ${detected ? 'border-l-red-500 bg-red-950/20' : 'border-l-brand-500 bg-slate-900/40'}`}>
             <div className="flex items-start justify-between mb-4">
                 <div>
-                    <h3 className="text-xs font-black text-cyan-400 uppercase tracking-widest mb-1">
+                    <h3 className="text-xs font-black text-brand-400 uppercase tracking-widest mb-1">
                         🕷️ Multi-Sensor Correlation (Spider Logic)
                     </h3>
                     <p className="text-[10px] text-slate-500">

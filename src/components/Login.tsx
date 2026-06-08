@@ -43,11 +43,11 @@ export const Login: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-[#020617] p-4 relative overflow-hidden">
+        <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
             {/* Background Effects */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-cyan-500/10 rounded-full blur-[120px] animate-pulse-glow"></div>
-                <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-blue-600/10 rounded-full blur-[120px] animate-pulse-glow" style={{ animationDelay: '2s' }}></div>
+                <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-brand-500/15 rounded-full blur-[120px] animate-pulse-glow"></div>
+                <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-accent-500/12 rounded-full blur-[120px] animate-pulse-glow" style={{ animationDelay: '2s' }}></div>
             </div>
 
             {/* Language Selector - Top Right */}
@@ -58,7 +58,7 @@ export const Login: React.FC = () => {
             <div className="w-full max-w-md relative z-10 animate-fade-in-up">
 
                 <div className="text-center mb-8">
-                    <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-2 tracking-tighter drop-shadow-sm">
+                    <h1 className="text-6xl font-header font-bold text-gradient-brand mb-2 tracking-tight drop-shadow-sm">
                         AnoHUB
                     </h1>
                     <p className="text-slate-400 text-sm font-medium tracking-wide">
@@ -66,7 +66,7 @@ export const Login: React.FC = () => {
                     </p>
                 </div>
 
-                <GlassCard className="shadow-2xl shadow-cyan-900/20">
+                <GlassCard className="shadow-2xl shadow-brand-900/20">
                     <div className="mb-6 text-center">
                         <h2 className="text-xl font-bold text-white tracking-tight">{t('login.title', 'Secure Access')}</h2>
                         <p className="text-xs text-slate-500 mt-1">{t('login.instructions', 'Please verify your credentials.')}</p>
@@ -99,7 +99,7 @@ export const Login: React.FC = () => {
                                 fullWidth
                                 variant="primary"
                                 isLoading={loading}
-                                className="shadow-lg shadow-cyan-500/20"
+                                className="shadow-lg shadow-brand-500/20"
                             >
                                 {t('login.signInButton', 'Authenticate')}
                             </ModernButton>

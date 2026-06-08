@@ -106,14 +106,14 @@ export const KineticPolarView: React.FC = () => {
                         step="1"
                         value={magnification} 
                         onChange={(e) => setMagnification(parseInt(e.target.value))}
-                        className="w-32 accent-cyan-500"
+                        className="w-32 accent-brand-500"
                     />
                 </div>
                 
                 {/* Data Stats */}
                 <div className="bg-slate-900/80 backdrop-blur border border-slate-700 p-3 rounded-lg shadow-xl space-y-1">
                     <div className="text-[10px] text-slate-500 uppercase">Eccentricity</div>
-                    <div className="text-sm font-mono font-bold text-cyan-400">{alignment.eccentricity.toFixed(3)} mm</div>
+                    <div className="text-sm font-mono font-bold text-brand-400">{alignment.eccentricity.toFixed(3)} mm</div>
                     <div className="text-[10px] text-slate-500 uppercase mt-2">Phase</div>
                     <div className="text-sm font-mono font-bold text-purple-400">{alignment.phase.toFixed(1)}°</div>
                     <div className="text-[10px] text-slate-500 uppercase mt-2">Fit Quality</div>

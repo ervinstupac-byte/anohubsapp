@@ -194,7 +194,7 @@ export function GlobalHealthMapCard({ healthMap, onSystemClick }: GlobalHealthMa
                     <div className="space-y-2">
                         {healthMap.recommendations.map((rec, index) => (
                             <div key={index} className="flex items-start gap-2 text-sm">
-                                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xs font-bold mt-0.5">
+                                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center text-xs font-bold mt-0.5">
                                     {index + 1}
                                 </div>
                                 <div className="text-slate-300">{rec}</div>

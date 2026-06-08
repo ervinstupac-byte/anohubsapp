@@ -41,11 +41,11 @@ export const LoadingShimmer: React.FC<LoadingShimmerProps> = ({ className = '' }
             </div>
 
             <div className="mt-12 flex flex-col items-center gap-3">
-                <div className="text-[10px] font-mono font-black text-cyan-500 tracking-[0.5em]">
+                <div className="text-[10px] font-mono font-black text-brand-500 tracking-[0.5em]">
                     SYNCHRONIZING NEURAL ASSET DATA
                 </div>
                 <div className="w-64 h-1 bg-slate-900 rounded-none overflow-hidden">
-                    <div className="h-full bg-cyan-500/50 w-full animate-[shimmer_2s_infinite]"></div>
+                    <div className="h-full bg-brand-500/50 w-full animate-[shimmer_2s_infinite]"></div>
                 </div>
             </div>
         </div>

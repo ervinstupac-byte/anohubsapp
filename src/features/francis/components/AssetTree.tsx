@@ -30,7 +30,7 @@ export const AssetTree: React.FC = () => {
 
     return (
         <div className="flex flex-col gap-2 p-4 bg-slate-900/40 backdrop-blur-md border-r border-white/5 h-full overflow-y-auto">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-cyan-500/50 mb-4 px-2">Surgical Index</h3>
+            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-500/50 mb-4 px-2">Surgical Index</h3>
 
             <div className="space-y-1">
                 {assets.map((asset) => {
@@ -42,12 +42,12 @@ export const AssetTree: React.FC = () => {
                             whileTap={{ scale: 0.98 }}
                             onClick={() => handleAssetClick(asset)}
                             className={`w-full flex items-center justify-between p-3 rounded-md transition-all border group ${isActive
-                                ? 'bg-cyan-900/30 border-cyan-500/40 text-cyan-400 shadow-[0_0_15px_-3px_rgba(6,182,212,0.3)]'
+                                ? 'bg-brand-900/30 border-brand-500/40 text-brand-400 shadow-[0_0_15px_-3px_rgba(6,182,212,0.3)]'
                                 : 'bg-transparent border-transparent text-slate-400 hover:bg-white/5 hover:text-white'
                                 }`}
                         >
                             <div className="flex items-center gap-3">
-                                <div className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-cyan-400' : 'bg-slate-600 group-hover:bg-slate-400'}`} />
+                                <div className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-brand-400' : 'bg-slate-600 group-hover:bg-slate-400'}`} />
                                 <span className="text-xs font-bold tracking-tight uppercase">{asset.label}</span>
                             </div>
                             <span className="text-[10px] font-mono opacity-30 group-hover:opacity-60 transition-opacity">{asset.surgicalId}</span>
@@ -57,8 +57,8 @@ export const AssetTree: React.FC = () => {
             </div>
 
             <div className="mt-auto pt-6 px-2">
-                <div className="p-3 bg-cyan-950/20 border border-cyan-500/10 rounded-xl">
-                    <p className="text-[9px] text-cyan-500/60 font-mono leading-relaxed">
+                <div className="p-3 bg-brand-950/20 border border-brand-500/10 rounded-xl">
+                    <p className="text-[9px] text-brand-500/60 font-mono leading-relaxed">
                         MANUAL_OVERRIDE: ACTIVE<br />
                         PROTOCOL: NC-4.6
                     </p>

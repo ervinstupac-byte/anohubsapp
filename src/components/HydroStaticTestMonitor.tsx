@@ -79,7 +79,7 @@ export const HydroStaticTestMonitor: React.FC<HydroStaticTestMonitorProps> = ({ 
             <div className="mb-6">
                 <h3 className="text-2xl font-black uppercase tracking-tighter mb-2">
                     <span className="text-white">Hydro-Static</span>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 ml-2">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-purple-400 ml-2">
                         Test Logger
                     </span>
                 </h3>
@@ -102,7 +102,7 @@ export const HydroStaticTestMonitor: React.FC<HydroStaticTestMonitorProps> = ({ 
                                 value={initialPressure}
                                 onChange={(e) => setInitialPressure(parseFloat(e.target.value) || 150)}
                                 step="10"
-                                className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white text-lg font-bold focus:outline-none focus:border-cyan-500"
+                                className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white text-lg font-bold focus:outline-none focus:border-brand-500"
                             />
                         </div>
                     )}
@@ -115,7 +115,7 @@ export const HydroStaticTestMonitor: React.FC<HydroStaticTestMonitorProps> = ({ 
                                 whileTap={{ scale: 0.98 }}
                                 onClick={startTest}
                                 disabled={readings.length > 0}
-                                className="w-full px-4 py-3 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-lg font-black uppercase text-white flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-cyan-500/50 transition-all"
+                                className="w-full px-4 py-3 bg-gradient-to-r from-brand-500 to-purple-500 rounded-lg font-black uppercase text-white flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-brand-500/50 transition-all"
                             >
                                 <Play className="w-5 h-5" />
                                 Start Test
@@ -207,7 +207,7 @@ const MetricCard: React.FC<{
     isLive?: boolean;
 }> = ({ label, value, color, isLive }) => {
     const colorClasses = {
-        cyan: 'text-cyan-400',
+        cyan: 'text-brand-400',
         purple: 'text-purple-400',
         emerald: 'text-emerald-400',
         orange: 'text-orange-400',

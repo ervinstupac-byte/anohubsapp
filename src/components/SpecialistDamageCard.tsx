@@ -43,7 +43,7 @@ export const SpecialistDamageCard: React.FC<DamageDialogProps> = ({
 
     return (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm">
-            <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-slate-900 border-2 border-cyan-500/30 rounded-2xl shadow-2xl">
+            <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-slate-900 border-2 border-brand-500/30 rounded-2xl shadow-2xl">
                 {/* Header */}
                 <div className={`bg-gradient-to-r ${damageColors[diagnosis.damageType]} p-6`}>
                     <div className="flex items-center justify-between">
@@ -74,7 +74,7 @@ export const SpecialistDamageCard: React.FC<DamageDialogProps> = ({
                                 {diagnosis.damageType === DamageType.UNKNOWN && '❓ UNKNOWN DAMAGE'}
                             </h3>
                             <p className="text-slate-300 text-sm">
-                                Location: <span className="text-cyan-400 font-mono">{location}</span>
+                                Location: <span className="text-brand-400 font-mono">{location}</span>
                             </p>
                         </div>
 
@@ -169,7 +169,7 @@ export const SpecialistDamageCard: React.FC<DamageDialogProps> = ({
                 <div className="sticky bottom-0 bg-slate-900 border-t border-slate-700 p-4">
                     <button
                         onClick={onClose}
-                        className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded-lg transition-colors"
+                        className="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-lg transition-colors"
                     >
                         Close Diagnosis
                     </button>

@@ -147,7 +147,7 @@ export const CommandPalette = React.memo(() => {
             id: 'sys-print',
             label: 'Print Dossier',
             type: 'action',
-            icon: <Printer className="text-cyan-400" />,
+            icon: <Printer className="text-brand-400" />,
             subtitle: 'Generate technical report PDF',
             action: () => {
                 dispatch.triggerForensicExport();
@@ -193,7 +193,7 @@ export const CommandPalette = React.memo(() => {
                 id: `asset-${idAdapter.toStorage(a.id)}`,
                 label: a.name,
                 type: 'asset',
-                icon: <Box className="text-cyan-400" />,
+                icon: <Box className="text-brand-400" />,
                 subtitle: `${(a.type || '—').toUpperCase()} • ${a.capacity || '-'} MW`,
                 status: 'nominal', // In real app, derived from telemetry
                 action: () => {
@@ -292,20 +292,20 @@ export const CommandPalette = React.memo(() => {
                                                 onClick={() => { result.action(); }}
                                                 onMouseEnter={() => setSelectedIndex(index)}
                                                 className={`w-full flex items-center gap-3 px-3 py-3 rounded-none text-left transition-colors group ${
-                                                    index === selectedIndex ? 'bg-cyan-500/10' : 'hover:bg-slate-800'
+                                                    index === selectedIndex ? 'bg-brand-500/10' : 'hover:bg-slate-800'
                                                 }`}
                                             >
                                                 <div className={`p-2 rounded-none ${
                                                     result.variant === 'danger' ? 'bg-red-500/20 text-red-400' :
                                                     result.variant === 'warning' ? 'bg-amber-500/20 text-amber-400' :
-                                                    index === selectedIndex ? 'bg-cyan-500/20 text-cyan-400' : 'bg-slate-800 text-slate-400'
+                                                    index === selectedIndex ? 'bg-brand-500/20 text-brand-400' : 'bg-slate-800 text-slate-400'
                                                 }`}>
                                                     {result.icon}
                                                 </div>
                                                 <div className="flex-1 min-w-0">
                                                     <div className={`font-medium truncate ${
                                                         result.variant === 'danger' ? 'text-red-400' :
-                                                        index === selectedIndex ? 'text-cyan-100' : 'text-slate-200'
+                                                        index === selectedIndex ? 'text-brand-100' : 'text-slate-200'
                                                     }`}>
                                                         {result.label}
                                                     </div>
@@ -314,7 +314,7 @@ export const CommandPalette = React.memo(() => {
                                                     )}
                                                 </div>
                                                 {index === selectedIndex && (
-                                                    <ChevronRight className="w-4 h-4 text-cyan-500" />
+                                                    <ChevronRight className="w-4 h-4 text-brand-500" />
                                                 )}
                                             </button>
                                         ))}

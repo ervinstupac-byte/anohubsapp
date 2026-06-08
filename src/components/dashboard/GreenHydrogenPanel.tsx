@@ -147,9 +147,9 @@ export const GreenHydrogenPanel: React.FC = () => {
     <div className="space-y-4">
       {/* Header Stats */}
       <div className="grid grid-cols-4 gap-4">
-        <div className="p-4 bg-scada-panel border border-scada-border rounded-none shadow-none">
+        <div className="p-4 bg-scada-panel border border-scada-border rounded-lg shadow-none">
           <div className="flex items-center gap-2 mb-2">
-            <Gauge className="w-4 h-4 text-cyan-400" />
+            <Gauge className="w-4 h-4 text-brand-400" />
             <span className="text-xs text-scada-muted uppercase font-mono">Storage Level</span>
           </div>
           <div className={`text-2xl font-bold font-mono tabular-nums ${getStatusColor(state.storage.fillLevel)}`}>
@@ -158,7 +158,7 @@ export const GreenHydrogenPanel: React.FC = () => {
           <div className="text-xs text-scada-muted font-mono">{state.storage.volume.toFixed(0)} / {state.storage.capacity} Nm³</div>
         </div>
 
-        <div className="p-4 bg-scada-panel border border-scada-border rounded-none shadow-none">
+        <div className="p-4 bg-scada-panel border border-scada-border rounded-lg shadow-none">
           <div className="flex items-center gap-2 mb-2">
             <Activity className="w-4 h-4 text-blue-400" />
             <span className="text-xs text-scada-muted uppercase font-mono">Pressure</span>
@@ -169,7 +169,7 @@ export const GreenHydrogenPanel: React.FC = () => {
           <div className="text-xs text-scada-muted font-mono">99.999% purity</div>
         </div>
 
-        <div className="p-4 bg-scada-panel border border-scada-border rounded-none shadow-none">
+        <div className="p-4 bg-scada-panel border border-scada-border rounded-lg shadow-none">
           <div className="flex items-center gap-2 mb-2">
             <Zap className="w-4 h-4 text-yellow-400" />
             <span className="text-xs text-scada-muted uppercase font-mono">Electrolyzer</span>
@@ -180,7 +180,7 @@ export const GreenHydrogenPanel: React.FC = () => {
           <div className="text-xs text-scada-muted font-mono">100 kW capacity</div>
         </div>
 
-        <div className="p-4 bg-scada-panel border border-scada-border rounded-none shadow-none">
+        <div className="p-4 bg-scada-panel border border-scada-border rounded-lg shadow-none">
           <div className="flex items-center gap-2 mb-2">
             <Battery className="w-4 h-4 text-green-400" />
             <span className="text-xs text-scada-muted uppercase font-mono">Fuel Cells</span>
@@ -193,11 +193,11 @@ export const GreenHydrogenPanel: React.FC = () => {
       </div>
 
       {/* Island Mode Toggle */}
-      <div className="p-4 bg-scada-panel border border-scada-border rounded-none shadow-none">
+      <div className="p-4 bg-scada-panel border border-scada-border rounded-lg shadow-none">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-none ${state.isIslandMode ? 'bg-cyan-500/20' : 'bg-scada-bg'}`}>
-              <Power className={`w-5 h-5 ${state.isIslandMode ? 'text-cyan-400' : 'text-scada-muted'}`} />
+            <div className={`p-2 rounded-lg ${state.isIslandMode ? 'bg-brand-500/20' : 'bg-scada-bg'}`}>
+              <Power className={`w-5 h-5 ${state.isIslandMode ? 'text-brand-400' : 'text-scada-muted'}`} />
             </div>
             <div>
               <div className="font-bold text-scada-text uppercase font-mono">Island Mode</div>
@@ -211,7 +211,7 @@ export const GreenHydrogenPanel: React.FC = () => {
           <button
             onClick={toggleIslandMode}
             className={`relative w-14 h-8 rounded-full transition-colors ${
-              state.isIslandMode ? 'bg-cyan-500' : 'bg-slate-700'
+              state.isIslandMode ? 'bg-brand-500' : 'bg-slate-700'
             }`}
           >
             <motion.div
@@ -223,13 +223,13 @@ export const GreenHydrogenPanel: React.FC = () => {
       </div>
 
       {/* Electrolysis Control */}
-      <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
+      <div className="p-4 bg-scada-panel border border-scada-border rounded-xl shadow-scada-card">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Droplets className="w-5 h-5 text-cyan-400" />
+            <Droplets className="w-5 h-5 text-brand-400" />
             <span className="font-bold text-scada-text uppercase font-mono">Electrolysis Control</span>
           </div>
-          <div className={`px-3 py-1 rounded-sm text-xs font-bold font-mono ${
+          <div className={`px-3 py-1 rounded-lg text-xs font-bold font-mono ${
             state.isRunning ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-scada-bg text-scada-muted border border-scada-border'
           }`}>
             {state.isRunning ? 'RUNNING' : 'IDLE'}
@@ -237,17 +237,17 @@ export const GreenHydrogenPanel: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-4">
-          <div className="bg-scada-bg border border-scada-border p-3 rounded-sm">
+          <div className="bg-scada-bg border border-scada-border p-3 rounded-lg">
             <div className="text-xs text-scada-muted uppercase font-mono">Power Input</div>
             <div className="text-xl font-bold text-scada-text font-mono tabular-nums">{state.isRunning ? '100' : '0'} kW</div>
           </div>
-          <div className="bg-scada-bg border border-scada-border p-3 rounded-sm">
+          <div className="bg-scada-bg border border-scada-border p-3 rounded-lg">
             <div className="text-xs text-scada-muted uppercase font-mono">H2 Production</div>
-            <div className="text-xl font-bold text-cyan-400 font-mono tabular-nums">
+            <div className="text-xl font-bold text-brand-400 font-mono tabular-nums">
               {state.isRunning ? '21.7' : '0'} Nm³/h
             </div>
           </div>
-          <div className="bg-scada-bg border border-scada-border p-3 rounded-sm">
+          <div className="bg-scada-bg border border-scada-border p-3 rounded-lg">
             <div className="text-xs text-scada-muted uppercase font-mono">Session Status</div>
             <div className="text-xl font-bold text-scada-text font-mono tabular-nums">
               {state.currentSession?.status || 'STANDBY'}
@@ -259,7 +259,7 @@ export const GreenHydrogenPanel: React.FC = () => {
           <button
             onClick={startElectrolysis}
             disabled={state.isRunning || state.storage.fillLevel >= 95}
-            className="flex-1 py-2 bg-green-500/20 hover:bg-green-500/30 disabled:opacity-50 disabled:cursor-not-allowed border border-green-500/50 rounded-sm text-green-400 font-bold uppercase font-mono flex items-center justify-center gap-2"
+            className="flex-1 py-2 bg-green-500/20 hover:bg-green-500/30 disabled:opacity-50 disabled:cursor-not-allowed border border-green-500/50 rounded-lg text-green-400 font-bold uppercase font-mono flex items-center justify-center gap-2"
           >
             <Power className="w-4 h-4" />
             Start Electrolysis
@@ -267,7 +267,7 @@ export const GreenHydrogenPanel: React.FC = () => {
           <button
             onClick={stopElectrolysis}
             disabled={!state.isRunning}
-            className="flex-1 py-2 bg-red-500/20 hover:bg-red-500/30 disabled:opacity-50 disabled:cursor-not-allowed border border-red-500/50 rounded-sm text-red-400 font-bold uppercase font-mono flex items-center justify-center gap-2"
+            className="flex-1 py-2 bg-red-500/20 hover:bg-red-500/30 disabled:opacity-50 disabled:cursor-not-allowed border border-red-500/50 rounded-lg text-red-400 font-bold uppercase font-mono flex items-center justify-center gap-2"
           >
             <Power className="w-4 h-4" />
             Stop Electrolysis
@@ -276,7 +276,7 @@ export const GreenHydrogenPanel: React.FC = () => {
       </div>
 
       {/* Robotic Refueling */}
-      <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
+      <div className="p-4 bg-scada-panel border border-scada-border rounded-xl shadow-scada-card">
         <div className="flex items-center gap-2 mb-4">
           <Truck className="w-5 h-5 text-amber-400" />
           <span className="font-bold text-scada-text uppercase font-mono">Robotic Refueling</span>
@@ -285,7 +285,7 @@ export const GreenHydrogenPanel: React.FC = () => {
         <div className="grid grid-cols-2 gap-4 mb-4">
           <button
             onClick={() => setSelectedUnit('ROV-001')}
-            className={`p-3 rounded-sm border text-left transition-colors ${
+            className={`p-3 rounded-lg border text-left transition-colors ${
               selectedUnit === 'ROV-001' 
                 ? 'border-amber-500/50 bg-amber-500/10' 
                 : 'border-scada-border bg-scada-bg hover:bg-scada-panel'
@@ -300,7 +300,7 @@ export const GreenHydrogenPanel: React.FC = () => {
 
           <button
             onClick={() => setSelectedUnit('UAV-THERMAL-01')}
-            className={`p-3 rounded-sm border text-left transition-colors ${
+            className={`p-3 rounded-lg border text-left transition-colors ${
               selectedUnit === 'UAV-THERMAL-01' 
                 ? 'border-amber-500/50 bg-amber-500/10' 
                 : 'border-scada-border bg-scada-bg hover:bg-scada-panel'
@@ -317,7 +317,7 @@ export const GreenHydrogenPanel: React.FC = () => {
         <button
           onClick={() => refuelUnit(selectedUnit)}
           disabled={state.storage.volume < 4}
-          className="w-full py-2 bg-amber-500/20 hover:bg-amber-500/30 disabled:opacity-50 disabled:cursor-not-allowed border border-amber-500/50 rounded-sm text-amber-400 font-bold uppercase font-mono flex items-center justify-center gap-2"
+          className="w-full py-2 bg-amber-500/20 hover:bg-amber-500/30 disabled:opacity-50 disabled:cursor-not-allowed border border-amber-500/50 rounded-lg text-amber-400 font-bold uppercase font-mono flex items-center justify-center gap-2"
         >
           <RefreshCw className="w-4 h-4" />
           Refuel {selectedUnit} ({selectedUnit === 'ROV-001' ? '4' : '1.8'} Nm³)

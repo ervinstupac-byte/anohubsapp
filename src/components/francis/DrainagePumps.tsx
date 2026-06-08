@@ -68,7 +68,7 @@ export const DrainagePumps: React.FC = () => {
                         </div>
                         <div className="p-6 bg-black/60 rounded-none border border-white/5">
                             <p className="text-[10px] text-blue-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
-                                <Cpu className="w-3 h-3 text-cyan-400" /> OWS Integrity
+                                <Cpu className="w-3 h-3 text-brand-400" /> OWS Integrity
                             </p>
                             <p className="text-3xl font-black text-white font-mono tracking-tighter uppercase tabular-nums">
                                 Nominal

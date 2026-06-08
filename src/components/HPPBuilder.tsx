@@ -41,10 +41,10 @@ const TurbineChart: React.FC<{ head: number; flow: number }> = ({ head, flow }) 
             <div className="absolute top-[15%] left-[10%] text-slate-600/50 text-xs font-black tracking-[0.2em] rotate-[-15deg] pointer-events-none">{t('hppBuilder.chart.peltonZone')}</div>
             <div className="absolute top-[50%] left-[40%] text-slate-600/50 text-xs font-black tracking-[0.2em] rotate-[-15deg] pointer-events-none">{t('hppBuilder.chart.francisZone')}</div>
             <div className="absolute bottom-[20%] right-[20%] text-slate-600/50 text-xs font-black tracking-[0.2em] rotate-[-15deg] pointer-events-none">{t('hppBuilder.chart.kaplanZone')}</div>
-            <div className="absolute left-3 top-3 text-[10px] text-cyan-500/80 font-mono font-bold">{t('hppBuilder.chart.headAxis')} ▲</div>
-            <div className="absolute right-3 bottom-3 text-[10px] text-cyan-500/80 font-mono font-bold">{t('hppBuilder.chart.flowAxis')} ►</div>
-            <div className="absolute w-4 h-4 bg-cyan-400 rounded-full border-[3px] border-white/20 shadow-[0_0_20px_cyan] transition-all duration-700 cubic-bezier(0.34, 1.56, 0.64, 1) z-10" style={{ top: `${topPos}%`, left: `${leftPos}%`, transform: 'translate(-50%, -50%)' }}>
-                <div className="absolute w-full h-full rounded-full bg-cyan-400/50 animate-ping"></div>
+            <div className="absolute left-3 top-3 text-[10px] text-brand-500/80 font-mono font-bold">{t('hppBuilder.chart.headAxis')} ▲</div>
+            <div className="absolute right-3 bottom-3 text-[10px] text-brand-500/80 font-mono font-bold">{t('hppBuilder.chart.flowAxis')} ►</div>
+            <div className="absolute w-4 h-4 bg-brand-400 rounded-full border-[3px] border-white/20 shadow-[0_0_20px_cyan] transition-all duration-700 cubic-bezier(0.34, 1.56, 0.64, 1) z-10" style={{ top: `${topPos}%`, left: `${leftPos}%`, transform: 'translate(-50%, -50%)' }}>
+                <div className="absolute w-full h-full rounded-full bg-brand-400/50 animate-ping"></div>
             </div>
         </div>
     );
@@ -490,7 +490,7 @@ export const HPPBuilder: React.FC = () => {
                 {/* HEADER */}
                 <div className="flex justify-between items-center pt-6 px-4">
                     <div>
-                        <h2 className="text-4xl font-black text-white tracking-tighter">HPP <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{t('hppStudio.title').split(' ')[2]}</span></h2>
+                        <h2 className="text-4xl font-black text-white tracking-tighter">HPP <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-blue-500">{t('hppStudio.title').split(' ')[2]}</span></h2>
                         <p className="text-slate-400 text-xs font-mono uppercase tracking-widest mt-1">{t('hppStudio.subtitle')}</p>
                     </div>
                     <div className="flex items-center gap-4">
@@ -509,8 +509,8 @@ export const HPPBuilder: React.FC = () => {
                 {/* STEPPER NAV */}
                 <div className="flex justify-center gap-4 border-b border-white/5 pb-8">
                     {steps.map((label, idx) => (
-                        <div key={idx} className={`flex items-center gap-3 px-6 py-3 rounded-full border transition-all ${step === idx + 1 ? 'bg-cyan-950/40 border-cyan-500/50 text-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.15)]' : 'bg-slate-900/40 border-white/5 text-slate-500'}`}>
-                            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black ${step === idx + 1 ? 'bg-cyan-500 text-black' : 'bg-slate-700 text-slate-300'}`}>{idx + 1}</span>
+                        <div key={idx} className={`flex items-center gap-3 px-6 py-3 rounded-full border transition-all ${step === idx + 1 ? 'bg-brand-950/40 border-brand-500/50 text-brand-400 shadow-[0_0_20px_rgba(6,182,212,0.15)]' : 'bg-slate-900/40 border-white/5 text-slate-500'}`}>
+                            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black ${step === idx + 1 ? 'bg-brand-500 text-black' : 'bg-slate-700 text-slate-300'}`}>{idx + 1}</span>
                             <span className="text-xs font-bold uppercase tracking-wide">{label}</span>
                         </div>
                     ))}
@@ -524,16 +524,16 @@ export const HPPBuilder: React.FC = () => {
                                 <div>
                                     <div className="flex justify-between text-xs font-bold text-slate-400 uppercase mb-2">
                                         <span>{t('hppStudio.labels.grossHead')}</span>
-                                        <span className="text-cyan-400 font-mono bg-cyan-950/20 px-2 py-0.5 rounded border border-cyan-500/20">{settings.head} m</span>
+                                        <span className="text-brand-400 font-mono bg-brand-950/20 px-2 py-0.5 rounded border border-brand-500/20">{settings.head} m</span>
                                     </div>
-                                    <input type="range" min="2" max="1000" step="1" value={settings.head} onChange={(e) => updateSettings('head', parseInt(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
+                                    <input type="range" min="2" max="1000" step="1" value={settings.head} onChange={(e) => updateSettings('head', parseInt(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-500" />
                                 </div>
                                 <div>
                                     <div className="flex justify-between text-xs font-bold text-slate-400 uppercase mb-2">
                                         <span>{t('hppStudio.labels.flowRate')}</span>
-                                        <span className="text-cyan-400 font-mono bg-cyan-950/20 px-2 py-0.5 rounded border border-cyan-500/20">{settings.flow} m³/s</span>
+                                        <span className="text-brand-400 font-mono bg-brand-950/20 px-2 py-0.5 rounded border border-brand-500/20">{settings.flow} m³/s</span>
                                     </div>
-                                    <input type="range" min="0.1" max="200" step="0.1" value={settings.flow} onChange={(e) => updateSettings('flow', parseFloat(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
+                                    <input type="range" min="0.1" max="200" step="0.1" value={settings.flow} onChange={(e) => updateSettings('flow', parseFloat(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-500" />
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <ModernInput label={t('hppStudio.labels.waterType')} as="select" value={settings.waterQuality} onChange={(e: any) => updateSettings('waterQuality', e.target.value)}>
@@ -638,7 +638,7 @@ export const HPPBuilder: React.FC = () => {
                                             value={configName}
                                             onChange={(e) => setConfigName(e.target.value)}
                                             placeholder={t('hppStudio.placeholders.configName')}
-                                            className="flex-1 bg-transparent border-b border-white/20 text-xl font-bold text-white focus:outline-none focus:border-cyan-500 pb-2 placeholder:text-slate-700"
+                                            className="flex-1 bg-transparent border-b border-white/20 text-xl font-bold text-white focus:outline-none focus:border-brand-500 pb-2 placeholder:text-slate-700"
                                         />
                                     </div>
                                 </div>

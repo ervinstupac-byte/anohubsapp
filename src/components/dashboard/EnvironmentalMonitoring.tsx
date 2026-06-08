@@ -23,16 +23,16 @@ export const EnvironmentalMonitoring: React.FC<EnvironmentalMonitoringProps> = (
     return (
         <div className="w-full bg-slate-950 p-6">
             <div className="text-2xl font-bold mb-4 flex items-center gap-2">
-                <Eye className="w-6 h-6 text-cyan-400" />
+                <Eye className="w-6 h-6 text-brand-400" />
                 Environmental & Safety Monitoring
             </div>
 
             <div className="grid grid-cols-2 gap-6">
                 {/* Water Quality */}
-                <div className="bg-slate-900 border border-cyan-500 rounded-lg p-4">
+                <div className="bg-slate-900 border border-brand-500 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-4">
-                        <Thermometer className="w-5 h-5 text-cyan-400" />
-                        <div className="text-lg font-bold text-cyan-300">Water Quality</div>
+                        <Thermometer className="w-5 h-5 text-brand-400" />
+                        <div className="text-lg font-bold text-brand-300">Water Quality</div>
                     </div>
 
                     <div className="space-y-3">
@@ -96,7 +96,7 @@ export const EnvironmentalMonitoring: React.FC<EnvironmentalMonitoringProps> = (
 
                         <div className="bg-slate-800 rounded p-3">
                             <div className="text-xs text-slate-400 mb-1">Humidity</div>
-                            <div className="text-3xl font-bold text-cyan-300 font-mono">
+                            <div className="text-3xl font-bold text-brand-300 font-mono">
                                 {environmental.humidity.toFixed(0)}
                             </div>
                             <div className="text-xs text-slate-500">%</div>

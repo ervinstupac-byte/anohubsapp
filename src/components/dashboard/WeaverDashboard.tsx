@@ -30,16 +30,16 @@ export const WeaverDashboard: React.FC<WeaverDashboardProps> = ({ v2g, demandRes
 
             <div className="grid grid-cols-3 gap-6">
                 {/* V2G Fleet */}
-                <div className="bg-slate-900 border border-cyan-500 rounded-lg p-4">
+                <div className="bg-slate-900 border border-brand-500 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-4">
-                        <Battery className="w-5 h-5 text-cyan-400" />
-                        <div className="text-lg font-bold text-cyan-300">Virtual Battery (V2G)</div>
+                        <Battery className="w-5 h-5 text-brand-400" />
+                        <div className="text-lg font-bold text-brand-300">Virtual Battery (V2G)</div>
                     </div>
 
                     <div className="space-y-3">
                         <div className="bg-slate-800 rounded p-3">
                             <div className="text-xs text-slate-400 mb-1">Fleet Size</div>
-                            <div className="text-3xl font-bold text-cyan-300">
+                            <div className="text-3xl font-bold text-brand-300">
                                 {v2g.vehicles}
                             </div>
                             <div className="text-xs text-slate-500">vehicles</div>
@@ -138,7 +138,7 @@ export const WeaverDashboard: React.FC<WeaverDashboardProps> = ({ v2g, demandRes
                     <div className="grid grid-cols-3 gap-4 text-sm">
                         <div className="bg-slate-800 rounded p-3">
                             <div className="text-slate-400 mb-1">Virtual Storage</div>
-                            <div className="text-xl font-bold text-cyan-400">
+                            <div className="text-xl font-bold text-brand-400">
                                 {(v2g.energyMWh + v2g.capacityMW * 0.5).toFixed(1)} MWh
                             </div>
                         </div>
@@ -161,7 +161,7 @@ export const WeaverDashboard: React.FC<WeaverDashboardProps> = ({ v2g, demandRes
             </div>
 
             {/* Philosophy */}
-            <div className="mt-6 p-4 bg-gradient-to-r from-purple-950 to-cyan-950 border border-purple-500 rounded-lg">
+            <div className="mt-6 p-4 bg-gradient-to-r from-purple-950 to-brand-950 border border-purple-500 rounded-lg">
                 <div className="text-sm font-bold text-purple-300">
                     🕸️ THE WEAVER: From centralized power plant to decentralized orchestrator. Every EV, every solar panel, every smart meter - woven into one resilient grid.
                 </div>

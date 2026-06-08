@@ -83,8 +83,8 @@ export const SystemIntegrityCertificate: React.FC = () => {
             SYSTEM INTEGRITY CERTIFICATE
           </h1>
           <div className="flex items-center justify-center space-x-2">
-            <Shield className="w-8 h-8 text-cyan-400" />
-            <span className="text-cyan-300 text-sm font-mono">NC-2200</span>
+            <Shield className="w-8 h-8 text-brand-400" />
+            <span className="text-brand-300 text-sm font-mono">NC-2200</span>
           </div>
         </motion.div>
 
@@ -98,7 +98,7 @@ export const SystemIntegrityCertificate: React.FC = () => {
           {/* Glassmorphism Card */}
           <div className="relative backdrop-blur-xl bg-white/10 bg-gradient-to-br from-white/20 to-white/5 rounded-3xl p-8 border border border-white/20 shadow-2xl">
             {/* Glow Effect */}
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-cyan-500/20 via-blue-500/10 to-purple-500/20 blur-3xl -z-10" />
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-brand-500/20 via-blue-500/10 to-purple-500/20 blur-3xl -z-10" />
             
             {/* Certificate Content */}
             <div className="relative z-10">
@@ -165,7 +165,7 @@ export const SystemIntegrityCertificate: React.FC = () => {
               <div className="bg-black/30 rounded-2xl p-6 border border-white/10">
                 <div className="mb-4">
                   <h3 className="text-white font-semibold mb-2 flex items-center">
-                    <Activity className="w-5 h-5 mr-2 text-cyan-400" />
+                    <Activity className="w-5 h-5 mr-2 text-brand-400" />
                     INTEGRITY METER
                   </h3>
                   <div className="relative">
@@ -238,7 +238,7 @@ export const SystemIntegrityCertificate: React.FC = () => {
               <div className="mt-6 pt-6 border-t border-white/10">
                 <div className="text-center">
                   <div className="text-gray-400 text-sm">Last Verification</div>
-                  <div className="text-cyan-300 font-mono text-xs mt-1">
+                  <div className="text-brand-300 font-mono text-xs mt-1">
                     {new Date(metrics.lastVerification).toLocaleString()}
                   </div>
                 </div>

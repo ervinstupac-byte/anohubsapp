@@ -61,15 +61,15 @@ export const MounterQuickCard: React.FC<MounterQuickCardProps> = ({ asset, onClo
                     exit={{ scale: 0.95, opacity: 0, y: 20 }}
                     className="relative w-full max-w-2xl max-h-[90vh] flex flex-col"
                 >
-                    <GlassCard className="flex-1 flex flex-col overflow-hidden border-cyan-500/30 shadow-[0_0_60px_rgba(6,182,212,0.2)] p-0">
+                    <GlassCard className="flex-1 flex flex-col overflow-hidden border-brand-500/30 shadow-[0_0_60px_rgba(6,182,212,0.2)] p-0">
                         {/* Header */}
-                        <div className="bg-gradient-to-r from-cyan-900/80 to-blue-900/80 p-5 border-b border-cyan-500/30 flex justify-between items-center shrink-0">
+                        <div className="bg-gradient-to-r from-brand-900/80 to-blue-900/80 p-5 border-b border-brand-500/30 flex justify-between items-center shrink-0">
                             <div>
                                 <h2 className="text-xl font-black text-white uppercase tracking-wide flex items-center gap-3">
-                                    <Wrench className="w-6 h-6 text-cyan-400" />
+                                    <Wrench className="w-6 h-6 text-brand-400" />
                                     Mounter's Quick-Card
                                 </h2>
-                                <p className="text-cyan-200 text-xs mt-1 font-mono tracking-wider">
+                                <p className="text-brand-200 text-xs mt-1 font-mono tracking-wider">
                                     {asset.path.toUpperCase()}
                                 </p>
                             </div>
@@ -127,7 +127,7 @@ export const MounterQuickCard: React.FC<MounterQuickCardProps> = ({ asset, onClo
                                 {/* 1. CLEARANCES */}
                                 {clearances && (
                                     <div className="relative group">
-                                        <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl opacity-20 group-hover:opacity-40 transition-opacity blur"></div>
+                                        <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-brand-500 rounded-xl opacity-20 group-hover:opacity-40 transition-opacity blur"></div>
                                         <div className="relative bg-slate-900 border border-blue-500/30 rounded-xl p-4">
                                             <div className="flex items-center gap-3 mb-3">
                                                 <TrendingUp className="w-5 h-5 text-blue-400" />
@@ -210,7 +210,7 @@ export const MounterQuickCard: React.FC<MounterQuickCardProps> = ({ asset, onClo
                                 Report Issue
                             </button>
                             <button 
-                                className={`flex-1 py-3 rounded-lg font-bold text-sm flex items-center justify-center gap-2 transition-all ${allChecked ? 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-500/20' : 'bg-slate-700 text-slate-400 cursor-not-allowed'}`}
+                                className={`flex-1 py-3 rounded-lg font-bold text-sm flex items-center justify-center gap-2 transition-all ${allChecked ? 'bg-brand-600 hover:bg-brand-500 text-white shadow-lg shadow-brand-500/20' : 'bg-slate-700 text-slate-400 cursor-not-allowed'}`}
                                 disabled={!allChecked}
                                 onClick={onClose}
                             >

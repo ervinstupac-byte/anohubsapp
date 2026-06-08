@@ -119,7 +119,7 @@ export const TelemetryDrilldownModal: React.FC<TelemetryDrilldownModalProps> = (
                     exit={{ scale: 0.95, opacity: 0, y: 10 }}
                     className="relative w-full max-w-4xl"
                 >
-                    <GlassCard className="flex-1 flex flex-col relative overflow-hidden border-cyan-500/30 p-0">
+                    <GlassCard className="flex-1 flex flex-col relative overflow-hidden border-brand-500/30 p-0">
                         {/* Header */}
                         <div className="h-16 px-6 bg-slate-950/80 border-b border-white/10 flex items-center justify-between shrink-0">
                             <div className="flex items-center gap-4">

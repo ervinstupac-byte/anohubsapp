@@ -93,7 +93,7 @@ export const CommissioningWizard: React.FC<CommissioningWizardProps> = ({ asset,
                 <div className="mb-6">
                     <h2 className="text-3xl font-black uppercase tracking-tighter mb-2">
                         <span className="text-white">Commissioning</span>
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 ml-2">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-purple-400 ml-2">
                             Mode
                         </span>
                     </h2>
@@ -102,7 +102,7 @@ export const CommissioningWizard: React.FC<CommissioningWizardProps> = ({ asset,
                     </p>
                 </div>
 
-                <div className="mb-8 p-6 bg-cyan-950/20 border border-cyan-500/30 rounded-lg">
+                <div className="mb-8 p-6 bg-brand-950/20 border border-brand-500/30 rounded-lg">
                     <p className="text-slate-300 mb-4">
                         This wizard will guide you through recording the "healthy state" of your turbine.
                         Required measurements:
@@ -119,7 +119,7 @@ export const CommissioningWizard: React.FC<CommissioningWizardProps> = ({ asset,
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={startCommissioning}
-                    className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-lg font-black uppercase text-white flex items-center gap-2 mx-auto hover:shadow-lg hover:shadow-cyan-500/50 transition-all"
+                    className="px-8 py-4 bg-gradient-to-r from-brand-500 to-purple-500 rounded-lg font-black uppercase text-white flex items-center gap-2 mx-auto hover:shadow-lg hover:shadow-brand-500/50 transition-all"
                 >
                     <Play className="w-5 h-5" />
                     Start Commissioning
@@ -141,7 +141,7 @@ export const CommissioningWizard: React.FC<CommissioningWizardProps> = ({ asset,
                     </div>
                     <div className="text-right">
                         <p className="text-xs text-slate-500 uppercase font-bold mb-1">Progress</p>
-                        <p className="text-3xl font-black text-cyan-400">
+                        <p className="text-3xl font-black text-brand-400">
                             {completedSteps.size}/{steps.filter(s => s.required).length}
                         </p>
                     </div>
@@ -250,14 +250,14 @@ const StepIndicator: React.FC<{
             whileTap={{ scale: 0.98 }}
             onClick={onClick}
             className={`p-3 rounded-lg border-2 transition-all ${active
-                ? 'bg-cyan-500/20 border-cyan-500'
+                ? 'bg-brand-500/20 border-brand-500'
                 : completed
                     ? 'bg-emerald-500/20 border-emerald-500'
                     : 'bg-slate-800/30 border-slate-700/50 hover:border-slate-600'
                 }`}
         >
             <div className="flex items-center gap-2 mb-1">
-                <Icon className={`w-4 h-4 ${completed ? 'text-emerald-400' : active ? 'text-cyan-400' : 'text-slate-500'
+                <Icon className={`w-4 h-4 ${completed ? 'text-emerald-400' : active ? 'text-brand-400' : 'text-slate-500'
                     }`} />
                 {required && !completed && (
                     <AlertCircle className="w-3 h-3 text-amber-400" />

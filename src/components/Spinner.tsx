@@ -30,7 +30,7 @@ export const Spinner: React.FC<SpinnerProps> = ({
             <div className="relative flex items-center justify-center">
 
                 {/* Glow Effect */}
-                <div className={`absolute bg-cyan-500/30 rounded-full blur-xl animate-pulse ${size === 'xl' ? 'w-48 h-48' : 'w-full h-full scale-150'}`}></div>
+                <div className={`absolute bg-brand-500/30 rounded-full blur-xl animate-pulse ${size === 'xl' ? 'w-48 h-48' : 'w-full h-full scale-150'}`}></div>
 
                 {/* Outer Static Ring */}
                 <div className={`${currentSize.w} ${currentSize.h} ${currentSize.border} border-slate-800 rounded-full absolute opacity-50`}></div>
@@ -38,7 +38,7 @@ export const Spinner: React.FC<SpinnerProps> = ({
                 {/* Main Rotating Ring */}
                 <div className={`
                     ${currentSize.w} ${currentSize.h} rounded-full 
-                    ${currentSize.border} border-t-cyan-400 border-r-transparent border-b-cyan-600 border-l-transparent 
+                    ${currentSize.border} border-t-brand-400 border-r-transparent border-b-brand-600 border-l-transparent 
                     animate-spin shadow-[0_0_20px_rgba(34,211,238,0.5)]
                     relative z-10
                 `}></div>
@@ -58,14 +58,14 @@ export const Spinner: React.FC<SpinnerProps> = ({
 
             {text && (
                 <div className="flex flex-col items-center gap-1">
-                    <div className="text-cyan-400 font-mono text-xs font-bold uppercase tracking-[0.3em] animate-pulse">
+                    <div className="text-brand-400 font-mono text-xs font-bold uppercase tracking-[0.3em] animate-pulse">
                         {text}
                     </div>
                     {/* Loading dots */}
                     <div className="flex gap-1">
-                        <div className="w-1 h-1 bg-cyan-500/50 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
-                        <div className="w-1 h-1 bg-cyan-500/50 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                        <div className="w-1 h-1 bg-cyan-500/50 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        <div className="w-1 h-1 bg-brand-500/50 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
+                        <div className="w-1 h-1 bg-brand-500/50 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-1 h-1 bg-brand-500/50 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                     </div>
                 </div>
             )}

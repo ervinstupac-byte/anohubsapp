@@ -26,10 +26,10 @@ export const EcosystemMap: React.FC = () => {
         {
             id: 'operations',
             label: 'Toolbox (Field)',
-            icon: <Wrench className="w-5 h-5 text-cyan-400" />,
+            icon: <Wrench className="w-5 h-5 text-brand-400" />,
             path: '/',
             description: 'Maintenance & Logs',
-            color: 'border-cyan-500/30 bg-cyan-500/5',
+            color: 'border-brand-500/30 bg-brand-500/5',
             x: '50%',
             y: '50%' // Center Hub
         },
@@ -107,7 +107,7 @@ export const EcosystemMap: React.FC = () => {
                     </div>
 
                     {/* Action Hint */}
-                    <div className="mt-2 text-[9px] font-mono text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="mt-2 text-[9px] font-mono text-brand-400 opacity-0 group-hover:opacity-100 transition-opacity">
                         Click to Navigate
                     </div>
                 </motion.button>

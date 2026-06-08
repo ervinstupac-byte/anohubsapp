@@ -70,14 +70,14 @@ export const SmartStartChecklist: React.FC = () => {
 
                 {/* SECTION 2: TECHNICAL & LAB */}
                 <div className="space-y-3">
-                    <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase px-2">
+                    <div className="flex items-center gap-2 text-xs font-bold text-brand-400 uppercase px-2">
                         <Activity className="w-4 h-4" /> Real-Time & Lab Checks
                     </div>
 
                     {checks.filter(c => c.category !== 'CRITICAL_WARNING').map(item => (
                         <div key={item.id} className="p-3 bg-slate-900/50 rounded border border-slate-700 flex justify-between items-center">
                             <div className="flex items-center gap-3">
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${item.category === 'LAB_MATERIAL' ? 'bg-purple-900/30 text-purple-400' : 'bg-cyan-900/30 text-cyan-400'}`}>
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${item.category === 'LAB_MATERIAL' ? 'bg-purple-900/30 text-purple-400' : 'bg-brand-900/30 text-brand-400'}`}>
                                     {item.category === 'LAB_MATERIAL' ? <FlaskConical size={14} /> : <Activity size={14} />}
                                 </div>
                                 <div>

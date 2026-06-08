@@ -91,8 +91,8 @@ const BladeAngleVisualizer: React.FC<BladeAngleVisualizerProps> = ({ angle, setp
     return (
         <GlassCard className={`border-l-4 ${isOutOfTolerance ? 'border-l-red-500' : 'border-l-emerald-500'}`}>
             <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-cyan-500/20 flex items-center justify-center">
-                    <Cog className="w-6 h-6 text-cyan-400" />
+                <div className="w-12 h-12 bg-brand-500/20 flex items-center justify-center">
+                    <Cog className="w-6 h-6 text-brand-400" />
                 </div>
                 <div>
                     <p className="text-[10px] text-slate-500 uppercase font-black tracking-wider">Blade Angle</p>
@@ -215,10 +215,10 @@ interface WicketGateControlProps {
 
 const WicketGateControl: React.FC<WicketGateControlProps> = ({ position }) => {
     return (
-        <GlassCard className="border-l-4 border-l-cyan-500">
+        <GlassCard className="border-l-4 border-l-brand-500">
             <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center">
-                    <Wind className="w-6 h-6 text-cyan-400" />
+                <div className="w-12 h-12 rounded-full bg-brand-500/20 flex items-center justify-center">
+                    <Wind className="w-6 h-6 text-brand-400" />
                 </div>
                 <div>
                     <p className="text-[10px] text-slate-500 uppercase font-black tracking-wider">Wicket Gate</p>
@@ -233,7 +233,7 @@ const WicketGateControl: React.FC<WicketGateControlProps> = ({ position }) => {
                     return (
                         <motion.div
                             key={i}
-                            className="absolute top-1/2 left-1/2 w-16 h-1 bg-cyan-400/50 origin-left"
+                            className="absolute top-1/2 left-1/2 w-16 h-1 bg-brand-400/50 origin-left"
                             style={{
                                 transform: `translate(-50%, -50%) rotate(${rotation}deg)`
                             }}
@@ -241,17 +241,17 @@ const WicketGateControl: React.FC<WicketGateControlProps> = ({ position }) => {
                     );
                 })}
                 <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-8 h-8 rounded-full bg-slate-800 border-2 border-cyan-400" />
+                    <div className="w-8 h-8 rounded-full bg-slate-800 border-2 border-brand-400" />
                 </div>
             </div>
 
             <div className="text-center">
-                <p className="text-4xl font-black text-cyan-400 mb-1">{position.toFixed(1)}%</p>
+                <p className="text-4xl font-black text-brand-400 mb-1">{position.toFixed(1)}%</p>
                 <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
                     <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${position}%` }}
-                        className="h-full bg-gradient-to-r from-cyan-500 to-cyan-300"
+                        className="h-full bg-gradient-to-r from-brand-500 to-brand-300"
                     />
                 </div>
             </div>
@@ -397,7 +397,7 @@ const ServoSystemPanel: React.FC<ServoSystemPanelProps> = ({ pressure, variant }
                     <p className="text-[9px] text-slate-500 uppercase font-bold">Viscosity (cSt)</p>
                 </div>
                 <div className="p-3 bg-slate-800/30 rounded-lg text-center">
-                    <p className="text-2xl font-black text-cyan-400">42</p>
+                    <p className="text-2xl font-black text-brand-400">42</p>
                     <p className="text-[9px] text-slate-500 uppercase font-bold">Temp (°C)</p>
                 </div>
                 <div className="p-3 bg-slate-800/30 rounded-lg text-center">

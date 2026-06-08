@@ -19,13 +19,13 @@ export const VoiceAssistant: React.FC = () => {
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[100] flex flex-col items-center justify-center animate-fade-in">
             <div className="relative">
                 {/* Pulsing Visualizer */}
-                <div className={`absolute inset-0 rounded-full bg-emerald-500/20 animate-ping duration-[2000ms] ${isProcessing ? 'bg-cyan-500/40' : ''}`}></div>
-                <div className={`w-32 h-32 rounded-full border-4 ${isProcessing ? 'border-cyan-500 animate-pulse' : 'border-emerald-500'} flex items-center justify-center relative z-10 bg-slate-900 shadow-[0_0_50px_rgba(16,185,129,0.3)]`}>
+                <div className={`absolute inset-0 rounded-full bg-emerald-500/20 animate-ping duration-[2000ms] ${isProcessing ? 'bg-brand-500/40' : ''}`}></div>
+                <div className={`w-32 h-32 rounded-full border-4 ${isProcessing ? 'border-brand-500 animate-pulse' : 'border-emerald-500'} flex items-center justify-center relative z-10 bg-slate-900 shadow-[0_0_50px_rgba(16,185,129,0.3)]`}>
                     <div className="flex gap-1.5 items-end h-8">
                         {[0.4, 0.7, 1, 0.6, 0.8].map((h, i) => (
                             <div
                                 key={i}
-                                className={`w-1 rounded-full ${isProcessing ? 'bg-cyan-500' : 'bg-emerald-500'} animate-bounce`}
+                                className={`w-1 rounded-full ${isProcessing ? 'bg-brand-500' : 'bg-emerald-500'} animate-bounce`}
                                 style={{ height: `${h * 100}%`, animationDelay: `${i * 0.1}s` }}
                             ></div>
                         ))}
@@ -34,7 +34,7 @@ export const VoiceAssistant: React.FC = () => {
             </div>
 
             <div className="mt-12 text-center space-y-4">
-                <h3 className={`text-2xl font-black uppercase tracking-widest ${isProcessing ? 'text-cyan-400' : 'text-white'}`}>
+                <h3 className={`text-2xl font-black uppercase tracking-widest ${isProcessing ? 'text-brand-400' : 'text-white'}`}>
                     {isProcessing ? 'MISAONI PROCES...' : 'ANO AGENT SLUŠA'}
                 </h3>
                 <p className="text-slate-400 font-mono text-sm tracking-tight max-w-xs mx-auto italic">

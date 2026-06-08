@@ -50,12 +50,12 @@ const FleetMap = ({ plants, events }: { plants: PlantStatus[], events: any[] }) 
                         <div className="absolute inset-0 rounded-full bg-purple-500/30 animate-ping"></div>
                     )}
 
-                    <div className={`w-4 h-4 rounded-full border-2 ${plant.healthScore < 90 ? 'bg-amber-500 border-amber-300' : 'bg-cyan-500 border-cyan-300'} shadow-[0_0_20px_rgba(6,182,212,0.5)] transition-all group-hover:scale-125`}></div>
+                    <div className={`w-4 h-4 rounded-full border-2 ${plant.healthScore < 90 ? 'bg-amber-500 border-amber-300' : 'bg-brand-500 border-brand-300'} shadow-[0_0_20px_rgba(6,182,212,0.5)] transition-all group-hover:scale-125`}></div>
 
                     {/* Tooltip Label */}
                     <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-slate-900/90 border border-white/10 px-2 py-1 rounded text-center min-w-[120px] opacity-100 transition-opacity z-10">
                         <div className="text-[10px] font-bold text-white uppercase tracking-wider">{plant.name}</div>
-                        <div className="text-[9px] font-mono text-cyan-400">Eff: {plant.efficiency.toFixed(1)}% | RI: {plant.healthScore}</div>
+                        <div className="text-[9px] font-mono text-brand-400">Eff: {plant.efficiency.toFixed(1)}% | RI: {plant.healthScore}</div>
                     </div>
                 </div>
             ))}
@@ -77,7 +77,7 @@ export const FleetIntelligenceNet = () => {
                         <Globe className="w-8 h-8 text-purple-400" />
                     </div>
                     <div>
-                        <h1 className="text-2xl font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">
+                        <h1 className="text-2xl font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-brand-400">
                             Fleet Intelligence Net
                         </h1>
                         <p className="text-xs font-mono text-slate-500 uppercase tracking-widest">
@@ -90,7 +90,7 @@ export const FleetIntelligenceNet = () => {
                 <div className="flex gap-6">
                     <div className="text-right">
                         <div className="text-[10px] text-slate-500 uppercase font-black">Fleet Reliability</div>
-                        <div className="text-3xl font-mono font-bold text-cyan-400">{fleetRI}<span className="text-sm text-slate-600">/100</span></div>
+                        <div className="text-3xl font-mono font-bold text-brand-400">{fleetRI}<span className="text-sm text-slate-600">/100</span></div>
                     </div>
                     <div className="text-right">
                         <div className="text-[10px] text-slate-500 uppercase font-black">Active Knowledge Nodes</div>
@@ -115,7 +115,7 @@ export const FleetIntelligenceNet = () => {
                     {/* BENCHMARKING TABLE */}
                     <div className="flex-1 bg-slate-900/40 rounded-xl p-6 border border-white/5 overflow-hidden">
                         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                            <Activity className="w-4 h-4 text-cyan-400" /> Real-Time Efficiency Benchmarking
+                            <Activity className="w-4 h-4 text-brand-400" /> Real-Time Efficiency Benchmarking
                         </h3>
                         <div className="space-y-4">
                             {plants.map(plant => (
@@ -128,7 +128,7 @@ export const FleetIntelligenceNet = () => {
                                     </div>
                                     <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
                                         <div
-                                            className={`h-full rounded-full transition-all duration-1000 ${plant.efficiency < 89 ? 'bg-amber-500' : 'bg-gradient-to-r from-cyan-600 to-cyan-400'}`}
+                                            className={`h-full rounded-full transition-all duration-1000 ${plant.efficiency < 89 ? 'bg-amber-500' : 'bg-gradient-to-r from-brand-600 to-brand-400'}`}
                                             style={{ width: `${plant.efficiency}%` }}
                                         ></div>
                                     </div>

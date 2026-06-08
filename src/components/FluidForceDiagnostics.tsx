@@ -96,7 +96,7 @@ export const FluidForceDiagnostics: React.FC = () => {
                         <div className="flex items-center gap-2">
                             <div className="w-1.5 h-8 bg-slate-800 rounded-full relative overflow-hidden">
                                 <div
-                                    className="absolute w-full bg-cyan-500 transition-all duration-500"
+                                    className="absolute w-full bg-brand-500 transition-all duration-500"
                                     style={{
                                         height: '2px',
                                         top: `${50 + (assetTele.shaftSag * 1000)}%` // Visual exaggeration

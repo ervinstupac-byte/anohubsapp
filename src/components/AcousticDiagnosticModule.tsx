@@ -103,7 +103,7 @@ export const AcousticDiagnosticModule: React.FC = () => {
                 <div className="relative h-32 bg-black/60 rounded-xl border border-white/5 p-2 overflow-hidden">
                     <canvas ref={canvasRef} width={400} height={128} className="w-full h-full" />
                     <div className="absolute top-2 left-2 flex gap-2">
-                        <span className="text-[8px] font-black bg-cyan-500/20 text-cyan-400 px-1 border border-cyan-500/30 rounded uppercase">Acoustic Logic v4.1</span>
+                        <span className="text-[8px] font-black bg-brand-500/20 text-brand-400 px-1 border border-brand-500/30 rounded uppercase">Acoustic Logic v4.1</span>
                         <span className="text-[8px] font-black bg-slate-500/20 text-slate-400 px-1 border border-slate-500/30 rounded uppercase tracking-widest">Ext. Mic: Connected</span>
                     </div>
                     <div className="absolute bottom-1 w-full flex justify-between px-2 text-[6px] text-slate-600 font-bold uppercase tracking-tighter">
@@ -130,12 +130,12 @@ export const AcousticDiagnosticModule: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className={`p-3 rounded-xl border transition-all ${metrics.ultrasonicLeakIndex > 7 ? 'bg-cyan-500/10 border-cyan-500/30' : 'bg-black/40 border-white/5'}`}>
+                    <div className={`p-3 rounded-xl border transition-all ${metrics.ultrasonicLeakIndex > 7 ? 'bg-brand-500/10 border-brand-500/30' : 'bg-black/40 border-white/5'}`}>
                         <div className="flex justify-between items-start mb-2">
                             <p className="text-[10px] text-slate-500 uppercase font-black">Ultrasonic Leak</p>
                             <span className="text-xl">🔊</span>
                         </div>
-                        <p className={`text-2xl font-mono font-black ${metrics.ultrasonicLeakIndex > 7 ? 'text-cyan-400' : 'text-white'}`}>
+                        <p className={`text-2xl font-mono font-black ${metrics.ultrasonicLeakIndex > 7 ? 'text-brand-400' : 'text-white'}`}>
                             {metrics.ultrasonicLeakIndex.toFixed(1)}
                         </p>
                         <p className="text-[8px] text-slate-500 italic mt-1 uppercase font-bold tracking-tight">
@@ -161,9 +161,9 @@ export const AcousticDiagnosticModule: React.FC = () => {
                 </div>
 
                 {(metrics.cavitationIntensity > 7 || metrics.ultrasonicLeakIndex > 7) && (
-                    <div className={`flex items-center p-3 rounded-xl gap-3 border ${metrics.ultrasonicLeakIndex > 7 ? 'bg-cyan-500/20 border-cyan-500/40' : 'bg-red-500/20 border-red-500/40'}`}>
+                    <div className={`flex items-center p-3 rounded-xl gap-3 border ${metrics.ultrasonicLeakIndex > 7 ? 'bg-brand-500/20 border-brand-500/40' : 'bg-red-500/20 border-red-500/40'}`}>
                         <span className="text-xl">{metrics.ultrasonicLeakIndex > 7 ? '🚨' : '🎙️'}</span>
-                        <p className={`text-[9px] font-bold leading-tight uppercase ${metrics.ultrasonicLeakIndex > 7 ? 'text-cyan-200' : 'text-red-200'}`}>
+                        <p className={`text-[9px] font-bold leading-tight uppercase ${metrics.ultrasonicLeakIndex > 7 ? 'text-brand-200' : 'text-red-200'}`}>
                             Ano-Agent: {metrics.ultrasonicLeakIndex > 7 ? 'Detektovano ultrazvučno šištanje. Moguće mikro-curenje. Provjerite spojeve.' : 'Detektovana intenzivna kavitacija. Provjerite pritiske.'}
                         </p>
                     </div>

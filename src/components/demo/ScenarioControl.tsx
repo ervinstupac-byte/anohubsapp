@@ -338,7 +338,7 @@ export const ScenarioControl: React.FC<{ className?: string }> = ({ className = 
             {/* Header */}
             <div className="px-4 py-3 bg-slate-900/50 border-b border-slate-700/50 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <FlaskConical className="w-4 h-4 text-cyan-400" />
+                    <FlaskConical className="w-4 h-4 text-brand-400" />
                     <span className="text-xs font-black text-slate-300 uppercase tracking-widest">
                         Scenario Control
                     </span>

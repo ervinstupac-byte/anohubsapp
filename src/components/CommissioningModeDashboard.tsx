@@ -30,8 +30,8 @@ export const CommissioningModeDashboard: React.FC = () => {
                 <div className="text-center mb-8">
                     <h1 className="text-4xl font-black uppercase tracking-tighter mb-3">
                         <span className="text-white">Commissioning</span>
-                        <span className="text-cyan-400 font-bold ml-2">{mapAssetToEnhancedAsset(selectedAsset).turbine_family?.toUpperCase()}</span>
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 ml-2">
+                        <span className="text-brand-400 font-bold ml-2">{mapAssetToEnhancedAsset(selectedAsset).turbine_family?.toUpperCase()}</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-purple-400 ml-2">
                             Mode
                         </span>
                     </h1>
@@ -111,7 +111,7 @@ export const CommissioningModeDashboard: React.FC = () => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={startCommissioningMode}
-                        className="px-12 py-5 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-xl font-black uppercase text-white text-lg flex items-center gap-3 mx-auto hover:shadow-2xl hover:shadow-cyan-500/50 transition-all"
+                        className="px-12 py-5 bg-gradient-to-r from-brand-500 via-purple-500 to-pink-500 rounded-xl font-black uppercase text-white text-lg flex items-center gap-3 mx-auto hover:shadow-2xl hover:shadow-brand-500/50 transition-all"
                     >
                         <Play className="w-6 h-6" />
                         Start Commissioning for {selectedAsset.name}
@@ -144,14 +144,14 @@ const FeatureCard: React.FC<{
 }> = ({ icon: Icon, title, description, features }) => (
     <GlassCard className="p-6">
         <div className="flex items-center gap-3 mb-3">
-            <Icon className="w-8 h-8 text-cyan-400" />
+            <Icon className="w-8 h-8 text-brand-400" />
             <h3 className="text-xl font-black text-white">{title}</h3>
         </div>
         <p className="text-sm text-slate-400 mb-4">{description}</p>
         <ul className="space-y-2">
             {features.map((feature, index) => (
                 <li key={index} className="flex items-center gap-2 text-xs text-slate-300">
-                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-brand-400" />
                     {feature}
                 </li>
             ))}

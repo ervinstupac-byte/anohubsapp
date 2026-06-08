@@ -69,7 +69,7 @@ export const GuidedDiagnosisModal: React.FC<GuidedDiagnosisModalProps> = ({ quer
                     className="w-full max-w-lg"
                 >
                     <GlassCard className="w-full border-indigo-500/30 overflow-hidden relative shadow-none rounded-none">
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-cyan-500 to-indigo-500 animate-pulse" />
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-brand-500 to-indigo-500 animate-pulse" />
 
                         {/* Session History Header */}
                         <div className="px-6 py-3 bg-indigo-950/30 border-b border-indigo-500/10 flex items-center gap-2 overflow-x-auto">

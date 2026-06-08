@@ -35,7 +35,7 @@ export const FutureTimeline: React.FC<FutureTimelineProps> = ({ predictions, mon
     return (
         <div className="w-full bg-slate-950 p-6">
             <div className="text-2xl font-bold mb-4 flex items-center gap-2">
-                <Clock className="w-6 h-6 text-cyan-400" />
+                <Clock className="w-6 h-6 text-brand-400" />
                 Future Timeline - Temporal Anticipation
             </div>
 
@@ -94,10 +94,10 @@ export const FutureTimeline: React.FC<FutureTimelineProps> = ({ predictions, mon
             </div>
 
             {/* Continuous Anticipation Status */}
-            <div className="mt-6 p-4 bg-gradient-to-r from-cyan-950 to-purple-950 border border-cyan-500 rounded-lg">
+            <div className="mt-6 p-4 bg-gradient-to-r from-brand-950 to-purple-950 border border-brand-500 rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
-                    <TrendingUp className="w-5 h-5 text-cyan-400" />
-                    <div className="text-sm font-bold text-cyan-300">Continuous Anticipation Active</div>
+                    <TrendingUp className="w-5 h-5 text-brand-400" />
+                    <div className="text-sm font-bold text-brand-300">Continuous Anticipation Active</div>
                 </div>
                 <div className="grid grid-cols-3 gap-4 text-xs text-slate-300">
                     <div>🔮 1000 Monte Carlo simulations/minute</div>

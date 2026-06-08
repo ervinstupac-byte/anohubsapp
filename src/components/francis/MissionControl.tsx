@@ -70,34 +70,34 @@ export const MissionControl: React.FC = () => {
 
     const getNodeClass = (nodeId: number) => {
         if (step > nodeId) return "border-emerald-500 bg-emerald-950/5 opacity-100";
-        if (step === nodeId) return "border-cyan-500 bg-cyan-950/10 shadow-none opacity-100 translate-x-2";
+        if (step === nodeId) return "border-brand-500 bg-brand-950/10 shadow-none opacity-100 translate-x-2";
         return "border-slate-800 bg-slate-900/40 opacity-40";
     };
 
     const getCircleClass = (nodeId: number) => {
         if (step > nodeId) return "bg-emerald-500 border-emerald-400 shadow-none";
-        if (step === nodeId) return "bg-slate-950 border-cyan-400 shadow-none scale-125";
+        if (step === nodeId) return "bg-slate-950 border-brand-400 shadow-none scale-125";
         return "bg-slate-900 border-slate-700";
     };
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12">
             {/* Header */}
-            <header className="bg-black/40 border-b-2 border-cyan-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-none transition-all">
+            <header className="bg-black/40 border-b-2 border-brand-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-none transition-all">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-4 text-center md:text-left">
-                        <div className="p-4 bg-cyan-600 rounded-none border border-white/10 shadow-none relative group overflow-hidden">
+                        <div className="p-4 bg-brand-600 rounded-none border border-white/10 shadow-none relative group overflow-hidden">
                             <Activity className="text-white w-8 h-8 relative z-10 animate-pulse" />
                         </div>
                         <div>
                             <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
-                                <span className="px-2 py-0.5 rounded-none bg-cyan-950 text-cyan-500 text-[10px] font-black border border-cyan-900/50 uppercase tracking-widest">SOP-MC-001</span>
+                                <span className="px-2 py-0.5 rounded-none bg-brand-950 text-brand-500 text-[10px] font-black border border-brand-900/50 uppercase tracking-widest">SOP-MC-001</span>
                                 <NeuralPulse color="cyan" />
                             </div>
                             <h1 className="text-3xl font-black text-white tracking-tighter uppercase relative z-10">
                                 {t('francis.missionControl.title')}
                             </h1>
-                            <p className="text-[10px] text-cyan-500/70 font-black uppercase tracking-[0.2em] italic">
+                            <p className="text-[10px] text-brand-500/70 font-black uppercase tracking-[0.2em] italic">
                                 {t('francis.missionControl.subtitle')}
                             </p>
                         </div>
@@ -114,7 +114,7 @@ export const MissionControl: React.FC = () => {
                             onClick={() => navigate(FRANCIS_PATHS.HUB)}
                             className="flex items-center gap-2 px-6 py-2 bg-white/5 border border-white/10 rounded-none text-xs font-black text-slate-400 hover:text-white hover:bg-white/10 transition group uppercase tracking-widest"
                         >
-                            <ArrowLeft className="w-4 h-4 text-cyan-500 group-hover:-translate-x-1 transition" />
+                            <ArrowLeft className="w-4 h-4 text-brand-500 group-hover:-translate-x-1 transition" />
                             <span>{t('francis.missionControl.returnBtn')}</span>
                         </button>
                     </div>
@@ -177,7 +177,7 @@ export const MissionControl: React.FC = () => {
                                 <div className="flex flex-col md:flex-row justify-between items-start gap-8 relative z-10">
                                     <div className="flex-1 space-y-4">
                                         <div className="flex items-center gap-4">
-                                            <Icon className={`w-10 h-10 ${step >= nodeId ? 'text-cyan-400' : 'text-slate-700'}`} />
+                                            <Icon className={`w-10 h-10 ${step >= nodeId ? 'text-brand-400' : 'text-slate-700'}`} />
                                             <div>
                                                 <h3 className={`text-2xl font-black uppercase tracking-tighter ${step >= nodeId ? 'text-white shadow-none' : 'text-slate-700'}`}>
                                                     {t(`francis.missionControl.${nodeKey}.title`)}
@@ -233,7 +233,7 @@ export const MissionControl: React.FC = () => {
                                                         </div>
                                                     </div>
                                                     <div className="w-full h-2.5 bg-slate-900 rounded-none border border-white/5 overflow-hidden shadow-none">
-                                                        <div className={`h-full transition-all duration-300 ${faults.dp && forensicPressure >= 11 ? 'bg-red-500' : 'bg-cyan-500'} shadow-none`} style={{ width: `${(forensicPressure / 14.5) * 100}%` }} />
+                                                        <div className={`h-full transition-all duration-300 ${faults.dp && forensicPressure >= 11 ? 'bg-red-500' : 'bg-brand-500'} shadow-none`} style={{ width: `${(forensicPressure / 14.5) * 100}%` }} />
                                                     </div>
                                                 </div>
                                             )}
@@ -278,7 +278,7 @@ export const MissionControl: React.FC = () => {
                                             nodeId === 3 && !isFilling && forensicPressure < 14.5 ? (
                                                 <button
                                                     onClick={() => setIsFilling(true)}
-                                                    className="w-full py-5 bg-cyan-600 hover:bg-cyan-500 border-2 border-cyan-400 text-white font-black rounded-none text-sm uppercase tracking-[0.2em] shadow-none transition-all hover:scale-105 italic flex items-center justify-center gap-4 group/btn"
+                                                    className="w-full py-5 bg-brand-600 hover:bg-brand-500 border-2 border-brand-400 text-white font-black rounded-none text-sm uppercase tracking-[0.2em] shadow-none transition-all hover:scale-105 italic flex items-center justify-center gap-4 group/btn"
                                                 >
                                                     <Waves className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                                                     {t('francis.missionControl.actions.startFilling')}

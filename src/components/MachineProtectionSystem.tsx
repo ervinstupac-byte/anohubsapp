@@ -121,7 +121,7 @@ export const MachineProtectionSystem: React.FC = () => {
                 <div className="pt-4 border-t border-white/5 grid grid-cols-2 gap-2">
                     <div className="p-2 bg-slate-900/60 rounded border border-white/5 flex flex-col items-center">
                         <span className="text-[8px] text-slate-500 font-black uppercase mb-1">Cylinder Bypass</span>
-                        <div className={`text-[10px] font-black ${assetTele.bypassValveActive ? 'text-cyan-400 animate-pulse' : 'text-slate-700'}`}>
+                        <div className={`text-[10px] font-black ${assetTele.bypassValveActive ? 'text-brand-400 animate-pulse' : 'text-slate-700'}`}>
                             {assetTele.bypassValveActive ? '● ACTIVATED' : '○ STANDBY'}
                         </div>
                     </div>

@@ -76,16 +76,16 @@ export const Linkage: React.FC = () => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     {/* SOP 1: Linkage Logic */}
-                    <GlassCard title={t('francis.linkage.s1Title')} icon={<Microscope className="text-cyan-400" />}>
+                    <GlassCard title={t('francis.linkage.s1Title')} icon={<Microscope className="text-brand-400" />}>
                         <div className="space-y-8">
-                            <p className="text-sm text-slate-400 font-bold italic border-l-4 border-cyan-500/30 pl-4 py-2 uppercase tracking-tight">
+                            <p className="text-sm text-slate-400 font-bold italic border-l-4 border-brand-500/30 pl-4 py-2 uppercase tracking-tight">
                                 {t('francis.linkage.s1Logic')}
                             </p>
 
                             <div className="space-y-4">
                                 {[1, 2].map((step) => (
-                                    <div key={step} className="p-6 bg-black/40 rounded-none border border-white/5 flex gap-6 items-center group/step hover:border-cyan-500/30 transition-all">
-                                        <div className="w-12 h-12 rounded-none bg-cyan-600/20 border-2 border-cyan-500 flex items-center justify-center text-cyan-500 font-black shadow-none">0{step}</div>
+                                    <div key={step} className="p-6 bg-black/40 rounded-none border border-white/5 flex gap-6 items-center group/step hover:border-brand-500/30 transition-all">
+                                        <div className="w-12 h-12 rounded-none bg-brand-600/20 border-2 border-brand-500 flex items-center justify-center text-brand-500 font-black shadow-none">0{step}</div>
                                         <p className="text-xs text-white font-black uppercase tracking-tight italic">{t(`francis.linkage.s1Step${step}`)}</p>
                                     </div>
                                 ))}

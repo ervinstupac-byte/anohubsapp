@@ -33,8 +33,8 @@ export const ManualControlPanel: React.FC = () => {
                 onClick={() => setIsOpen(!isOpen)}
                 className={`p-4 rounded-full shadow-lg border backdrop-blur-sm transition-all duration-300 flex items-center justify-center ${
                     isOpen 
-                        ? 'bg-cyan-600 border-cyan-400 text-white rotate-90' 
-                        : 'bg-slate-900/80 border-cyan-500/30 text-cyan-400 hover:bg-cyan-900/30 hover:border-cyan-400'
+                        ? 'bg-brand-600 border-brand-400 text-white rotate-90' 
+                        : 'bg-slate-900/80 border-brand-500/30 text-brand-400 hover:bg-brand-900/30 hover:border-brand-400'
                 }`}
                 title="Manual Injection Control"
             >

@@ -29,7 +29,7 @@ export const IncidentSimulator: React.FC = () => {
 
             <div className="space-y-3">
                 <p className="text-[10px] text-slate-400 leading-tight">
-                    Inject critical telemetry data for <span className="text-cyan-400 font-bold">{selectedAsset.name}</span> to test system-wide resilience.
+                    Inject critical telemetry data for <span className="text-brand-400 font-bold">{selectedAsset.name}</span> to test system-wide resilience.
                 </p>
 
                 <div className="grid grid-cols-1 gap-2">

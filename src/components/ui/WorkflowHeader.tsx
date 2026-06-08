@@ -17,7 +17,7 @@ interface WorkflowHeaderProps {
 
 // Module display configuration
 const MODULE_CONFIG: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
-    '/': { label: 'Toolbox', icon: <Wrench className="w-3 h-3" />, color: 'text-cyan-400' },
+    '/': { label: 'Toolbox', icon: <Wrench className="w-3 h-3" />, color: 'text-brand-400' },
     '/hpp-builder': { label: 'Design Studio', icon: <Settings className="w-3 h-3" />, color: 'text-purple-400' },
     '/executive': { label: 'Executive', icon: <BarChart3 className="w-3 h-3" />, color: 'text-amber-400' },
     '/diagnostic-twin': { label: 'Digital Twin', icon: <Monitor className="w-3 h-3" />, color: 'text-emerald-400' },
@@ -117,7 +117,7 @@ export const WorkflowHeader: React.FC<WorkflowHeaderProps> = ({ className = '' }
             <div className="flex items-center gap-2 text-xs font-mono">
                 <button
                     onClick={handleHomeClick}
-                    className="flex items-center gap-1 text-slate-500 hover:text-cyan-400 transition-colors"
+                    className="flex items-center gap-1 text-slate-500 hover:text-brand-400 transition-colors"
                 >
                     <Home className="w-3 h-3" />
                     {!isCompact && <span>Dashboard</span>}
@@ -193,7 +193,7 @@ export const WorkflowHeader: React.FC<WorkflowHeaderProps> = ({ className = '' }
                 <button
                     onClick={() => setShowMap(true)}
                     className={`
-                        p-1.5 rounded hover:bg-white/10 text-slate-400 hover:text-cyan-400
+                        p-1.5 rounded hover:bg-white/10 text-slate-400 hover:text-brand-400
                         transition-colors border border-transparent hover:border-white/5
                         ${isCompact ? 'scale-90' : ''}
                     `}
@@ -217,8 +217,8 @@ export const WorkflowHeader: React.FC<WorkflowHeaderProps> = ({ className = '' }
                                 className={`
                                     bg-slate-800/50 border border-white/10 rounded
                                     ${isCompact ? 'text-[10px] px-2 py-0.5' : 'text-xs px-3 py-1'}
-                                    font-mono font-bold text-cyan-400
-                                    focus:outline-none focus:border-cyan-500/50
+                                    font-mono font-bold text-brand-400
+                                    focus:outline-none focus:border-brand-500/50
                                     cursor-pointer
                                 `}
                             >

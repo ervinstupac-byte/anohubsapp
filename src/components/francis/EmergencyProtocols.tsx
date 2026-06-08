@@ -162,12 +162,12 @@ export const EmergencyProtocols: React.FC = () => {
                 </div>
 
                 {/* Grid Anomaly Intelligence */}
-                <section className="bg-black/40 p-10 rounded-none border border-cyan-900/30 relative group overflow-hidden">
-                    <div className="absolute inset-0 bg-cyan-500/5 -translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
+                <section className="bg-black/40 p-10 rounded-none border border-brand-900/30 relative group overflow-hidden">
+                    <div className="absolute inset-0 bg-brand-500/5 -translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
                     <div className="flex items-center gap-4 border-b border-white/5 pb-6 mb-10 relative z-10">
-                        <Activity className="w-8 h-8 text-cyan-500" />
+                        <Activity className="w-8 h-8 text-brand-500" />
                         <h2 className="text-2xl font-black text-white uppercase tracking-tighter shadow-none">Frequency Desync Intelligence</h2>
-                        <div className="ml-auto px-4 py-1.5 bg-cyan-600 text-white text-[11px] font-black rounded-none shadow-none">P-06</div>
+                        <div className="ml-auto px-4 py-1.5 bg-brand-600 text-white text-[11px] font-black rounded-none shadow-none">P-06</div>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-12 relative z-10">

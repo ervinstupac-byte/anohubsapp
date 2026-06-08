@@ -59,11 +59,11 @@ export const LearningLab = () => {
             {/* HEADER */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                 <div className="flex items-center gap-4">
-                    <div className="p-3 bg-cyan-500/10 rounded-xl border border-cyan-500/20">
-                        <BrainCircuit className="w-8 h-8 text-cyan-400" />
+                    <div className="p-3 bg-brand-500/10 rounded-xl border border-brand-500/20">
+                        <BrainCircuit className="w-8 h-8 text-brand-400" />
                     </div>
                     <div>
-                        <h1 className="text-2xl font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
+                        <h1 className="text-2xl font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-purple-400">
                             {viewMode === 'DIAGNOSTICS' ? 'The Learning Lab' : 'Operational Roadmap'}
                         </h1>
                         <p className="text-xs font-mono text-slate-500 uppercase tracking-widest">
@@ -75,7 +75,7 @@ export const LearningLab = () => {
                 <div className="flex bg-slate-900/50 p-1 rounded-lg border border-white/5">
                     <button
                         onClick={() => setViewMode('DIAGNOSTICS')}
-                        className={`px-4 py-1.5 rounded-md text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'DIAGNOSTICS' ? 'bg-cyan-500 text-black shadow-lg shadow-cyan-500/20' : 'text-slate-400 hover:text-white'}`}
+                        className={`px-4 py-1.5 rounded-md text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'DIAGNOSTICS' ? 'bg-brand-500 text-black shadow-lg shadow-brand-500/20' : 'text-slate-400 hover:text-white'}`}
                     >
                         Diagnostics
                     </button>
@@ -101,7 +101,7 @@ export const LearningLab = () => {
                                 <select
                                     value={selectedScenario}
                                     onChange={(e) => setSelectedScenario(e.target.value as any)}
-                                    className="bg-slate-950 border border-slate-700 rounded text-xs px-2 py-1 text-cyan-400 font-mono"
+                                    className="bg-slate-950 border border-slate-700 rounded text-xs px-2 py-1 text-brand-400 font-mono"
                                 >
                                     <option value="normal_ops">Normal Operation</option>
                                     <option value="bolt_looseness">Fault: Loose Bolt (Vibration Spike)</option>
@@ -147,7 +147,7 @@ export const LearningLab = () => {
 
                         <button
                             onClick={runDiagnostics}
-                            className="w-full py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-xl font-black uppercase tracking-widest text-sm shadow-lg shadow-cyan-900/20 flex items-center justify-center gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                            className="w-full py-4 bg-gradient-to-r from-brand-600 to-blue-600 hover:from-brand-500 hover:to-blue-500 rounded-xl font-black uppercase tracking-widest text-sm shadow-lg shadow-brand-900/20 flex items-center justify-center gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98]"
                         >
                             <Play className="w-5 h-5" />
                             Run Sentinel Kernel
@@ -197,8 +197,8 @@ export const LearningLab = () => {
                                         {/* XAI: MATH PROOF */}
                                         {res.mathProof && (
                                             <div className="mb-4 pl-7">
-                                                <div className="text-[9px] font-mono text-cyan-500 uppercase tracking-widest mb-1">Mathematical Proof (XAI)</div>
-                                                <div className="p-2 bg-slate-950 rounded border border-cyan-900/50 font-mono text-[9px] text-cyan-300 break-all leading-relaxed">
+                                                <div className="text-[9px] font-mono text-brand-500 uppercase tracking-widest mb-1">Mathematical Proof (XAI)</div>
+                                                <div className="p-2 bg-slate-950 rounded border border-brand-900/50 font-mono text-[9px] text-brand-300 break-all leading-relaxed">
                                                     {res.mathProof}
                                                 </div>
                                             </div>

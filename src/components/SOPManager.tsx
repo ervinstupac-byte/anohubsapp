@@ -199,7 +199,7 @@ export const SOPManager: React.FC = () => {
 
     return (
         <div className="animate-fade-in space-y-8 pb-12">
-            <div className="flex justify-between items-end bg-slate-950 p-6 rounded-none border-t border-b border-cyan-900/30 relative overflow-hidden">
+            <div className="flex justify-between items-end bg-slate-950 p-6 rounded-none border-t border-b border-brand-900/30 relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-2 opacity-10">
                     <div className="text-[100px] font-black text-white leading-none tracking-tighter">SOP</div>
                 </div>
@@ -209,7 +209,7 @@ export const SOPManager: React.FC = () => {
                         <h2 className="text-xs font-mono font-black text-purple-400 tracking-[0.2em] uppercase">Shadow Engineer</h2>
                     </div>
                     <p className="text-slate-400 text-sm font-light max-w-lg">
-                        Standard Operating Procedures (SOP) with <strong className="text-cyan-400">Live Data Injection</strong> and <strong className="text-purple-400">Neural Guidance</strong>.
+                        Standard Operating Procedures (SOP) with <strong className="text-brand-400">Live Data Injection</strong> and <strong className="text-purple-400">Neural Guidance</strong>.
                     </p>
                 </div>
                 <BackButton text="Back to Hub" />
@@ -226,13 +226,13 @@ export const SOPManager: React.FC = () => {
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 placeholder="Search 50 IEC 60041 compliant sources..."
-                                className="w-full bg-slate-950/50 border border-white/10 rounded-lg pl-12 pr-4 py-2.5 text-sm text-white focus:border-cyan-500/50 outline-none transition-all font-mono"
+                                className="w-full bg-slate-950/50 border border-white/10 rounded-lg pl-12 pr-4 py-2.5 text-sm text-white focus:border-brand-500/50 outline-none transition-all font-mono"
                             />
                         </div>
                         <div className="flex items-center gap-3">
                             <button
                                 onClick={() => setShowFullLibrary(!showFullLibrary)}
-                                className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${showFullLibrary ? 'bg-cyan-500 text-black' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                                className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${showFullLibrary ? 'bg-brand-500 text-black' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                                     }`}
                             >
                                 <Database className="w-3.5 h-3.5 inline-block mr-2" />
@@ -277,11 +277,11 @@ export const SOPManager: React.FC = () => {
                             <div
                                 key={i}
                                 onClick={() => handleOpenFile(file)}
-                                className="w-full p-4 bg-slate-950 border border-white/5 rounded-xl hover:border-cyan-500/30 hover:bg-cyan-500/5 transition-all group flex items-start justify-between gap-6 cursor-pointer"
+                                className="w-full p-4 bg-slate-950 border border-white/5 rounded-xl hover:border-brand-500/30 hover:bg-brand-500/5 transition-all group flex items-start justify-between gap-6 cursor-pointer"
                             >
                                 <div className="flex items-center gap-3 mb-4">
                                     <div className="p-2 bg-slate-800 rounded group-hover:scale-110 transition-transform">
-                                        <FileText className="w-5 h-5 text-cyan-400" />
+                                        <FileText className="w-5 h-5 text-brand-400" />
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <h4 className="text-xs font-bold text-white truncate uppercase tracking-tight">{file.path.split('/').pop()}</h4>
@@ -292,7 +292,7 @@ export const SOPManager: React.FC = () => {
                                     "{file.justification}"
                                 </p>
                                 <div className="flex justify-end pt-4 border-t border-white/5">
-                                    <span className="text-[9px] font-black text-cyan-500 uppercase tracking-widest flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                                    <span className="text-[9px] font-black text-brand-500 uppercase tracking-widest flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                                         OPEN SOURCE <ChevronRight className="w-3 h-3" />
                                     </span>
                                 </div>
@@ -326,7 +326,7 @@ export const SOPManager: React.FC = () => {
                 </div>
             ) : (
                 <div className="max-w-4xl mx-auto px-4">
-                    <div className="bg-slate-950 border border-cyan-900/30 rounded-sm overflow-hidden shadow-2xl shadow-black relative">
+                    <div className="bg-slate-950 border border-brand-900/30 rounded-sm overflow-hidden shadow-2xl shadow-black relative">
                         {/* ACTIVE HEADER */}
                         <div className="bg-slate-900 p-4 border-b border-white/5 flex justify-between items-center">
                             <div>
@@ -346,7 +346,7 @@ export const SOPManager: React.FC = () => {
                         {/* PROGRESS BAR */}
                         <div className="h-0.5 w-full bg-slate-800">
                             <div
-                                className="h-full bg-cyan-500 transition-all duration-500 shadow-[0_0_10px_rgba(6,182,212,0.8)]"
+                                className="h-full bg-brand-500 transition-all duration-500 shadow-[0_0_10px_rgba(6,182,212,0.8)]"
                                 style={{ width: `${((currentStepIndex + 1) / (activeSop?.steps.length || 1)) * 100}%` }}
                             />
                         </div>
@@ -421,12 +421,12 @@ export const SOPManager: React.FC = () => {
                                             onChange={(e) => setVerificationInput(e.target.value)}
                                             placeholder="Enter measured value..."
                                             disabled={isStepVerified}
-                                            className="flex-grow bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-sm px-4 py-3 text-white font-mono placeholder:text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors outline-none"
+                                            className="flex-grow bg-slate-950 border border-slate-700 focus:border-brand-500 rounded-sm px-4 py-3 text-white font-mono placeholder:text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors outline-none"
                                         />
                                         <button
                                             onClick={handleVerifySOP}
                                             disabled={isStepVerified}
-                                            className="px-6 bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-800 disabled:text-slate-600 text-white font-bold uppercase text-xs tracking-wider rounded-sm transition-colors"
+                                            className="px-6 bg-brand-600 hover:bg-brand-500 disabled:bg-slate-800 disabled:text-slate-600 text-white font-bold uppercase text-xs tracking-wider rounded-sm transition-colors"
                                         >
                                             Verify
                                         </button>

@@ -530,8 +530,8 @@ const ForensicHub: React.FC = () => {
             {/* HEADER */}
             <header className="h-16 border-b border-slate-800 bg-slate-900/50 flex items-center justify-between px-6 backdrop-blur-md z-10">
                 <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-cyan-500/10 rounded-lg flex items-center justify-center border border-cyan-500/20">
-                        <Activity className="w-6 h-6 text-cyan-400" />
+                    <div className="w-10 h-10 bg-brand-500/10 rounded-lg flex items-center justify-center border border-brand-500/20">
+                        <Activity className="w-6 h-6 text-brand-400" />
                     </div>
                     <div>
                         <h1 className="text-xl font-black uppercase tracking-tighter">Forensic Hub</h1>
@@ -593,7 +593,7 @@ const ForensicHub: React.FC = () => {
                     <div className="flex gap-2">
                         <button
                             onClick={handleGenerateReport}
-                            className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg shadow-lg shadow-cyan-900/20 transition-all active:scale-95"
+                            className="flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg shadow-lg shadow-brand-900/20 transition-all active:scale-95"
                         >
                             <FileText className="w-4 h-4" />
                             <span className="text-xs font-black uppercase tracking-widest">Prospectus</span>
@@ -648,7 +648,7 @@ const ForensicHub: React.FC = () => {
                                 key={tab}
                                 onClick={() => setActiveTab(tab as any)}
                                 className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider backdrop-blur-md border transition-all ${activeTab === tab
-                                    ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
+                                    ? 'bg-brand-500/20 border-brand-500 text-brand-400'
                                     : 'bg-slate-900/40 border-slate-700 text-slate-500 hover:text-slate-300'
                                     }`}
                             >
@@ -685,7 +685,7 @@ const ForensicHub: React.FC = () => {
                         <button
                             onClick={() => setRightPanelTab('ORACLE')}
                             className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-colors ${rightPanelTab === 'ORACLE'
-                                ? 'bg-cyan-500/10 text-cyan-400 border-b-2 border-cyan-500'
+                                ? 'bg-brand-500/10 text-brand-400 border-b-2 border-brand-500'
                                 : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800/50'
                                 }`}
                         >
@@ -779,7 +779,7 @@ const ForensicHub: React.FC = () => {
                                                 exit={{ opacity: 0, y: -10 }}
                                                 className="p-4 bg-slate-800/50 rounded-xl border border-slate-700"
                                             >
-                                                <div className="text-cyan-400 font-bold text-lg mb-1">{selectedContext.component}</div>
+                                                <div className="text-brand-400 font-bold text-lg mb-1">{selectedContext.component}</div>
                                                 <div className="text-slate-400 text-sm font-mono">{selectedContext.value || 'Monitoring...'}</div>
                                             </motion.div>
                                         ) : (
@@ -799,7 +799,7 @@ const ForensicHub: React.FC = () => {
                                 <div className="flex-1">
                                     <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center justify-between">
                                         <span>Ancestral Wisdom</span>
-                                        <span className="px-2 py-0.5 bg-cyan-900/30 text-cyan-400 rounded text-[10px]">LIVE</span>
+                                        <span className="px-2 py-0.5 bg-brand-900/30 text-brand-400 rounded text-[10px]">LIVE</span>
                                     </h3>
 
                                     <div className="space-y-4">
@@ -916,7 +916,7 @@ const ForensicHub: React.FC = () => {
                                                     <div key={entry.id} className="p-2 rounded bg-slate-900/40 border border-slate-700 text-[10px]">
                                                         <div className="flex justify-between text-slate-400 mb-1">
                                                             <span>{new Date(entry.timestamp).toLocaleTimeString()}</span>
-                                                            <span className={entry.severity === 'CRITICAL' ? 'text-red-400' : 'text-cyan-400'}>{entry.action}</span>
+                                                            <span className={entry.severity === 'CRITICAL' ? 'text-red-400' : 'text-brand-400'}>{entry.action}</span>
                                                         </div>
                                                         <div className="text-white font-bold truncate">{entry.diagnosis}</div>
                                                     </div>
@@ -946,7 +946,7 @@ const ForensicHub: React.FC = () => {
                                                     </span>
                                                     <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${snap.triggerType === 'AUTO'
                                                         ? 'bg-red-900/30 text-red-400'
-                                                        : 'bg-cyan-900/30 text-cyan-400'
+                                                        : 'bg-brand-900/30 text-brand-400'
                                                         }`}>
                                                         {snap.triggerType}
                                                     </span>
@@ -1031,7 +1031,7 @@ const ForensicHub: React.FC = () => {
                                                             <div className="mt-2 pt-2 border-t border-slate-700/50 grid grid-cols-2 gap-2">
                                                                 {snap.energyHarvest && (
                                                                     <div>
-                                                                        <div className="text-[8px] font-bold text-cyan-400 flex items-center gap-1">
+                                                                        <div className="text-[8px] font-bold text-brand-400 flex items-center gap-1">
                                                                             <Zap className="w-2 h-2" /> HARVEST
                                                                         </div>
                                                                         <div className="text-[8px] text-slate-400">
@@ -1188,7 +1188,7 @@ const ForensicHub: React.FC = () => {
 
                                                     <button
                                                         onClick={() => handleDownloadSnapshot(snap)}
-                                                        className="px-3 py-1.5 bg-cyan-900/30 hover:bg-cyan-900/50 text-cyan-400 rounded text-[10px] font-bold border border-cyan-500/30 transition-colors"
+                                                        className="px-3 py-1.5 bg-brand-900/30 hover:bg-brand-900/50 text-brand-400 rounded text-[10px] font-bold border border-brand-500/30 transition-colors"
                                                         title="Export Forensic Report"
                                                     >
                                                         <FileText className="w-3 h-3" />
@@ -1278,7 +1278,7 @@ const ForensicHub: React.FC = () => {
                                             <div key={order.orderId} className="p-2 bg-slate-900/50 rounded border border-slate-700 mb-2">
                                                 <div className="flex justify-between items-center mb-1">
                                                     <span className="text-[10px] text-white font-bold">{order.partId}</span>
-                                                    <span className="text-[9px] text-cyan-400 bg-cyan-950/30 px-1 rounded">{order.status}</span>
+                                                    <span className="text-[9px] text-brand-400 bg-brand-950/30 px-1 rounded">{order.status}</span>
                                                 </div>
                                                 <div className="text-[9px] text-slate-400 font-mono">
                                                     €{order.totalCost} • Qty: {order.quantity}
@@ -1315,7 +1315,7 @@ const ForensicHub: React.FC = () => {
                                             >
                                                 <div className="flex items-start justify-between mb-2">
                                                     <div className="flex-1">
-                                                        <h4 className="text-xs font-bold text-white leading-tight mb-1 group-hover:text-cyan-400 transition-colors">
+                                                        <h4 className="text-xs font-bold text-white leading-tight mb-1 group-hover:text-brand-400 transition-colors">
                                                             {result.entry.incidentPattern}
                                                         </h4>
                                                         <div className="flex items-center gap-2 text-[10px] text-slate-400">
@@ -1472,8 +1472,8 @@ const ForensicHub: React.FC = () => {
                                         {fishState && (
                                             <div className="p-4 rounded-xl border bg-slate-800/40 border-slate-700">
                                                 <div className="flex items-center gap-2 mb-3">
-                                                    <Activity className="w-4 h-4 text-cyan-400" />
-                                                    <h4 className="text-xs font-bold text-cyan-400 uppercase">Fish Passage Control</h4>
+                                                    <Activity className="w-4 h-4 text-brand-400" />
+                                                    <h4 className="text-xs font-bold text-brand-400 uppercase">Fish Passage Control</h4>
                                                 </div>
                                                 <div className="grid grid-cols-2 gap-4">
                                                     <div>
@@ -1873,12 +1873,12 @@ const ForensicHub: React.FC = () => {
                                     </div>
 
                                     <div className="p-6 bg-slate-950/50 rounded-xl border border-slate-800">
-                                        <h3 className="text-sm font-black text-cyan-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                        <h3 className="text-sm font-black text-brand-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                                             <Wrench className="w-4 h-4" /> Manual Interventions
                                         </h3>
                                         <ul className="space-y-3">
                                             {sopData.manualInterventions.map((action, i) => (
-                                                <li key={i} className="text-xs text-slate-300 bg-cyan-950/20 p-3 rounded border border-cyan-500/20">
+                                                <li key={i} className="text-xs text-slate-300 bg-brand-950/20 p-3 rounded border border-brand-500/20">
                                                     {action}
                                                 </li>
                                             ))}

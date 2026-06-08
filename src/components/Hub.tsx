@@ -61,8 +61,8 @@ export const Hub: React.FC = () => {
                 <Suspense fallback={
                     <div className="w-full h-full flex items-center justify-center bg-slate-950">
                         <div className="flex flex-col items-center gap-4">
-                            <div className="w-12 h-12 border-4 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin"></div>
-                            <p className="text-cyan-500 font-mono text-[10px] uppercase tracking-widest animate-pulse">Initializing Neural Link...</p>
+                            <div className="w-12 h-12 border-4 border-brand-500/20 border-t-brand-500 rounded-full animate-spin"></div>
+                            <p className="text-brand-500 font-mono text-[10px] uppercase tracking-widest animate-pulse">Initializing Neural Link...</p>
                         </div>
                     </div>
                 }>

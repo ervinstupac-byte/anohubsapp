@@ -71,10 +71,17 @@ try {
     ns: ['common', 'francis', 'system', 'docs'],
     defaultNS: 'common',
     interpolation: { escapeValue: false },
-    // Provide friendly fallback when key is missing
-    parseMissingKeyHandler: (key: string) => {
+    // Provide friendly fallback when key is missing.
+    // WHY: i18next (v21+) forwards the inline default value as the 2nd arg.
+    // Honour it first so `t('a.b', 'Nice Copy')` renders the real copy instead
+    // of a prettified key; only synthesise a label when no default was given.
+    parseMissingKeyHandler: (key: string, defaultValue?: string) => {
+      if (defaultValue) return defaultValue;
       const last = key.split('.').pop() || key;
-      return last.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      return last
+        .replace(/[-_]/g, ' ')
+        .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+        .replace(/\b\w/g, c => c.toUpperCase());
     }
   });
   console.log('[i18n] ✅✅✅ i18next initialized successfully');

@@ -111,14 +111,14 @@ export const TechnicalPassport: React.FC = () => {
     return (
         <div className="p-6 space-y-6">
             {/* Header */}
-            <GlassCard className="p-6 border-cyan-500/30">
+            <GlassCard className="p-6 border-brand-500/30">
                 <div className="flex justify-between items-start">
                     <div>
                         <h1 className="text-2xl font-black text-white uppercase tracking-wider flex items-center gap-3">
-                            <Book className="w-6 h-6 text-cyan-400" />
+                            <Book className="w-6 h-6 text-brand-400" />
                             Technical Passport
                         </h1>
-                        <p className="text-cyan-200 text-xs font-mono mt-1">
+                        <p className="text-brand-200 text-xs font-mono mt-1">
                             {selectedAsset.name} • {String(selectedAsset.id).toUpperCase()} • {profile?.type || 'GENERIC'}
                         </p>
                     </div>
@@ -127,7 +127,7 @@ export const TechnicalPassport: React.FC = () => {
                             <Download className="w-5 h-5" />
                         </button>
                         <button 
-                            className="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs uppercase rounded-lg transition-colors flex items-center gap-2"
+                            className="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs uppercase rounded-lg transition-colors flex items-center gap-2"
                             onClick={() => updateAsset(selectedAsset.id, { assetPassport: passportData })}
                         >
                             <Save className="w-4 h-4" />
@@ -152,7 +152,7 @@ export const TechnicalPassport: React.FC = () => {
                     </div>
                     <div className="p-4 bg-slate-900/50 rounded-lg border border-slate-700">
                         <div className="text-slate-400 text-[10px] uppercase font-bold mb-1">Surge Protection</div>
-                        <div className={`text-2xl font-black ${calculations.isSurgeSafe ? 'text-cyan-400' : 'text-red-400'}`}>
+                        <div className={`text-2xl font-black ${calculations.isSurgeSafe ? 'text-brand-400' : 'text-red-400'}`}>
                             {calculations.isSurgeSafe ? 'OPTIMAL' : 'UNSAFE'}
                         </div>
                     </div>
@@ -225,8 +225,8 @@ export const TechnicalPassport: React.FC = () => {
                 </GlassCard>
 
                 {/* Hydraulics & Pressure */}
-                <GlassCard className="p-6 border-cyan-500/20">
-                    <h3 className="text-cyan-400 font-black uppercase text-sm mb-4 flex items-center gap-2">
+                <GlassCard className="p-6 border-brand-500/20">
+                    <h3 className="text-brand-400 font-black uppercase text-sm mb-4 flex items-center gap-2">
                         <Droplets className="w-4 h-4" /> Pressure Profile
                     </h3>
                     <div className="space-y-4">
@@ -242,10 +242,10 @@ export const TechnicalPassport: React.FC = () => {
                                         ...prev,
                                         pressureProfile: { ...prev.pressureProfile, [key]: parseFloat(e.target.value) }
                                     }))}
-                                    className="w-full bg-slate-900/80 border border-slate-700 rounded p-2 text-sm text-white focus:border-cyan-500 outline-none transition-colors font-mono"
+                                    className="w-full bg-slate-900/80 border border-slate-700 rounded p-2 text-sm text-white focus:border-brand-500 outline-none transition-colors font-mono"
                                 />
                                 {HERITAGE_INSIGHTS[key] && (
-                                    <div className="hidden group-hover:block mt-2 p-2 bg-cyan-900/20 border border-cyan-500/20 rounded text-[10px] text-cyan-200">
+                                    <div className="hidden group-hover:block mt-2 p-2 bg-brand-900/20 border border-brand-500/20 rounded text-[10px] text-brand-200">
                                         <span className="font-bold block mb-0.5">{HERITAGE_INSIGHTS[key].title}</span>
                                         {HERITAGE_INSIGHTS[key].desc}
                                     </div>

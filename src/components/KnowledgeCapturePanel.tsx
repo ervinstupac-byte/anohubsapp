@@ -311,7 +311,7 @@ const KnowledgeCard: React.FC<{ result: KnowledgeSearchResult }> = ({ result }) 
                 <div className="flex-1">
                     <h4 className="text-lg font-bold text-white mb-1">{entry.incidentPattern}</h4>
                     <div className="flex items-center gap-3 text-xs text-slate-400">
-                        <span className="px-2 py-1 bg-cyan-500/20 text-cyan-400 rounded">
+                        <span className="px-2 py-1 bg-brand-500/20 text-brand-400 rounded">
                             {entry.turbineFamily.toUpperCase()}
                         </span>
                         <span className="flex items-center gap-1">

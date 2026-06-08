@@ -63,7 +63,7 @@ export const ForensicDepthAnalyzer: React.FC = () => {
                                 <div className="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-slate-800 border-2 border-slate-400" />
                                 <div className="flex justify-between items-start">
                                     <p className="text-[10px] font-black text-white uppercase leading-none">{ev.label}</p>
-                                    <span className="text-[9px] font-mono text-cyan-400">T{ev.time > 0 ? '+' : ''}{ev.time}ms</span>
+                                    <span className="text-[9px] font-mono text-brand-400">T{ev.time > 0 ? '+' : ''}{ev.time}ms</span>
                                 </div>
                                 <p className="text-[9px] text-slate-500 italic mt-1">{ev.detail}</p>
                             </div>

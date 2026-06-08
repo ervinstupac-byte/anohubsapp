@@ -78,7 +78,7 @@ export const TechnicalAuditReportModule: React.FC = () => {
             <div className="flex items-center justify-between mb-6">
                 <div>
                     <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                        <ShieldCheck className="text-cyan-400" />
+                        <ShieldCheck className="text-brand-400" />
                         Technical Audit Report
                     </h3>
                     <p className="text-sm text-slate-400">Generate certified PDF documentation.</p>
@@ -107,7 +107,7 @@ export const TechnicalAuditReportModule: React.FC = () => {
 
             <button
                 onClick={handleGenerateReport}
-                className="w-full py-4 bg-cyan-900/20 hover:bg-cyan-900/40 border border-cyan-500/30 text-cyan-400 rounded-lg font-bold flex items-center justify-center gap-2 transition-all group"
+                className="w-full py-4 bg-brand-900/20 hover:bg-brand-900/40 border border-brand-500/30 text-brand-400 rounded-lg font-bold flex items-center justify-center gap-2 transition-all group"
             >
                 <Download className="w-5 h-5 group-hover:-translate-y-1 transition-transform" />
                 DOWNLOAD AUDIT PDF

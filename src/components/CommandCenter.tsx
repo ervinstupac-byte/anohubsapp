@@ -165,7 +165,7 @@ export const CommandCenter: React.FC = () => {
     }, []);
 
     const healthColor = {
-        OPTIMAL: 'text-cyan-400',
+        OPTIMAL: 'text-brand-400',
         DEGRADED: 'text-amber-400',
         CRITICAL: 'text-red-400'
     }[systemHealth];

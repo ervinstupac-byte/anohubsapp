@@ -19,7 +19,7 @@ export const FieldModeToggle: React.FC<{ className?: string }> = ({ className = 
                 relative flex items-center gap-2 px-3 py-1.5 rounded border transition-all
                 ${isFieldMode
                     ? 'bg-white text-black border-white font-black'
-                    : 'bg-slate-900/80 text-slate-400 border-cyan-900/40 hover:border-cyan-500/50 hover:text-cyan-400'
+                    : 'bg-slate-900/80 text-slate-400 border-brand-900/40 hover:border-brand-500/50 hover:text-brand-400'
                 }
                 ${className}
             `}
@@ -52,7 +52,7 @@ export const ThemeIndicator: React.FC = () => {
     const { mode, setMode } = useTheme();
 
     const modes = [
-        { id: 'tactical-cyan', label: 'CYAN', color: 'bg-cyan-500' },
+        { id: 'tactical-cyan', label: 'CYAN', color: 'bg-brand-500' },
         { id: 'tactical-red', label: 'RED', color: 'bg-red-500' },
         { id: 'field-contrast', label: 'FIELD', color: 'bg-white' }
     ] as const;

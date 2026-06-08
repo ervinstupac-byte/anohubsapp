@@ -23,7 +23,7 @@ export const ModernButton: React.FC<ModernButtonProps> = ({
 
     // Variants
     const variants = {
-        primary: "bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-lg shadow-cyan-900/20 hover:shadow-cyan-500/40 border border-white/10 active:opacity-90",
+        primary: "bg-gradient-to-r from-brand-600 to-blue-600 hover:from-brand-500 hover:to-blue-500 text-white shadow-lg shadow-brand-900/20 hover:shadow-brand-500/40 border border-white/10 active:opacity-90",
         secondary: "bg-slate-900/80 hover:bg-slate-800 text-slate-100 border border-white/10 hover:border-white/20 backdrop-blur-md active:bg-slate-700",
         danger: "bg-red-600 hover:bg-red-500 text-white border border-red-400/50 shadow-lg shadow-red-900/30 active:bg-red-700",
         ghost: "bg-transparent hover:bg-white/5 text-slate-400 hover:text-white border border-transparent active:bg-white/10"

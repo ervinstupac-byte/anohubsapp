@@ -80,7 +80,7 @@ export const GlobalMap: React.FC = () => {
                     </GlassCard>
                     <GlassCard className="py-2 px-4 flex flex-col items-center min-w-[100px] bg-slate-900/90 backdrop-blur-xl border-slate-700">
                         <span className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">{t('globalMap.liveMw', 'Live MW')}</span>
-                        <span className="text-xl font-black text-cyan-400">{stats.power}</span>
+                        <span className="text-xl font-black text-brand-400">{stats.power}</span>
                     </GlassCard>
                     <GlassCard className={`py-2 px-4 flex flex-col items-center min-w-[80px] bg-slate-900/90 backdrop-blur-xl ${stats.critical > 0 ? 'border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.4)]' : 'border-slate-700'}`}>
                         <span className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">{t('globalMap.alerts', 'Alerts')}</span>
@@ -93,14 +93,14 @@ export const GlobalMap: React.FC = () => {
 
             {/* --- HUD: FLEET TACTICAL HUB --- */}
             <div className="absolute top-24 left-6 z-[1000] w-80 space-y-4 pointer-events-auto">
-                <GlassCard variant="commander" className="bg-slate-900/60 backdrop-blur-2xl border-cyan-500/20 shadow-[0_0_50px_rgba(6,182,212,0.1)]">
+                <GlassCard variant="commander" className="bg-slate-900/60 backdrop-blur-2xl border-brand-500/20 shadow-[0_0_50px_rgba(6,182,212,0.1)]">
                     <div className="flex items-center gap-3 mb-4">
-                        <div className="p-2 bg-cyan-500/20 rounded-lg">
-                            <ShieldCheck className="w-5 h-5 text-cyan-400" />
+                        <div className="p-2 bg-brand-500/20 rounded-lg">
+                            <ShieldCheck className="w-5 h-5 text-brand-400" />
                         </div>
                         <div>
                             <h3 className="text-sm font-black text-white uppercase tracking-tighter">Fleet Tactical Hub</h3>
-                            <p className="text-[9px] text-cyan-400/70 font-mono">BIHAĆ_BASIN_OVERWATCH</p>
+                            <p className="text-[9px] text-brand-400/70 font-mono">BIHAĆ_BASIN_OVERWATCH</p>
                         </div>
                     </div>
 
@@ -109,13 +109,13 @@ export const GlobalMap: React.FC = () => {
                             <div key={unit} className="p-3 bg-white/5 border border-white/10 rounded-xl relative group overflow-hidden">
                                 <div className="flex justify-between items-center mb-2">
                                     <span className="text-[10px] text-slate-400 font-black tracking-widest">{unit}</span>
-                                    <span className={`text-[10px] font-mono font-bold ${idx === 1 ? 'text-emerald-400' : 'text-cyan-400'}`}>
+                                    <span className={`text-[10px] font-mono font-bold ${idx === 1 ? 'text-emerald-400' : 'text-brand-400'}`}>
                                         {idx === 0 ? remainingLife.toFixed(1) : (98.2 - (idx * 0.5)).toFixed(1)}% RUL
                                     </span>
                                 </div>
                                 <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
                                     <motion.div
-                                        className={`h-full ${idx === 0 && remainingLife < 50 ? 'bg-red-500' : 'bg-cyan-500'}`}
+                                        className={`h-full ${idx === 0 && remainingLife < 50 ? 'bg-red-500' : 'bg-brand-500'}`}
                                         initial={{ width: 0 }}
                                         animate={{ width: `${idx === 0 ? remainingLife : (98.2 - (idx * 0.5))}%` }}
                                     />
@@ -146,7 +146,7 @@ export const GlobalMap: React.FC = () => {
             {/* --- HUD: BOTTOM LIVE LOG (Proactive Console Feed) --- */}
             <div className="absolute bottom-6 right-6 z-[1000] w-80 pointer-events-none hidden md:block">
                 <div className="bg-slate-950/80 backdrop-blur-md border border-slate-700/50 rounded-2xl p-4 shadow-2xl space-y-3 noise-commander overflow-hidden relative">
-                    <div className="absolute inset-0 bg-cyan-500/5 pointer-events-none" />
+                    <div className="absolute inset-0 bg-brand-500/5 pointer-events-none" />
                     <div className="flex items-center gap-2 mb-2 border-b border-white/10 pb-2 relative z-10">
                         <Activity className="w-4 h-4 text-emerald-400" />
                         <p className="text-[10px] text-slate-300 uppercase font-bold tracking-widest">Live Optimization Trace</p>
@@ -154,7 +154,7 @@ export const GlobalMap: React.FC = () => {
 
                     <div className="space-y-2 relative z-10">
                         <div className="flex justify-between items-center text-[10px] animate-pulse">
-                            <span className="text-cyan-400 font-mono">GRID_FREQ</span>
+                            <span className="text-brand-400 font-mono">GRID_FREQ</span>
                             <span className="text-white font-mono font-bold">{gridFrequency.toFixed(2)} Hz</span>
                         </div>
                         <div className="flex justify-between items-center text-[10px]">
@@ -233,7 +233,7 @@ export const GlobalMap: React.FC = () => {
                                         </div>
                                         <div className="bg-slate-800/50 p-2 rounded border border-white/5">
                                             <div className="text-[9px] text-slate-500 uppercase font-bold mb-0.5">{t('globalMap.output', 'Output')}</div>
-                                            <div className="text-sm font-mono font-bold text-cyan-400">
+                                            <div className="text-sm font-mono font-bold text-brand-400">
                                                 {liveData?.output || 0} MW
                                             </div>
                                         </div>
@@ -247,7 +247,7 @@ export const GlobalMap: React.FC = () => {
 
                                     <button
                                         onClick={() => selectAsset(asset.id)}
-                                        className="w-full bg-cyan-600/10 hover:bg-cyan-600 hover:text-white text-cyan-400 border border-cyan-600/30 text-xs font-bold py-2.5 rounded-lg transition-all uppercase tracking-wide flex items-center justify-center gap-2 group"
+                                        className="w-full bg-brand-600/10 hover:bg-brand-600 hover:text-white text-brand-400 border border-brand-600/30 text-xs font-bold py-2.5 rounded-lg transition-all uppercase tracking-wide flex items-center justify-center gap-2 group"
                                     >
                                         <span>{t('globalMap.openDashboard', 'Open Dashboard')}</span>
                                         <span className="group-hover:translate-x-1 transition-transform">→</span>

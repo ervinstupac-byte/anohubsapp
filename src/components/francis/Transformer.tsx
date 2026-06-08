@@ -139,7 +139,7 @@ export const Transformer: React.FC = () => {
                         <div className="p-10 bg-black/40 rounded-none border border-white/5 flex flex-col md:flex-row items-center justify-between gap-12 group/cool shadow-none relative overflow-hidden">
                             <div className="absolute inset-0 bg-indigo-500/5 opacity-0 group-hover/cool:opacity-100 transition-opacity pointer-events-none" />
                             <div className="flex items-center gap-8 relative z-10">
-                                <div className={`p-8 rounded-none transition-all duration-1000 ${fansRunning ? 'bg-cyan-600 shadow-none rotate-180' : 'bg-slate-900 rotate-0 grayscale'}`}>
+                                <div className={`p-8 rounded-none transition-all duration-1000 ${fansRunning ? 'bg-brand-600 shadow-none rotate-180' : 'bg-slate-900 rotate-0 grayscale'}`}>
                                     <Fan className={`w-12 h-12 text-white ${fansRunning ? 'animate-spin' : ''}`} />
                                 </div>
                                 <div>
@@ -149,7 +149,7 @@ export const Transformer: React.FC = () => {
                             </div>
                             <button
                                 onClick={() => setFansRunning(!fansRunning)}
-                                className={`px-12 py-5 text-sm font-black rounded-none border-2 transition-all duration-300 italic tracking-widest relative z-10 ${fansRunning ? 'bg-cyan-600 border-cyan-400 text-white shadow-none hover:scale-105' : 'bg-slate-900 border-white/10 text-slate-500 hover:text-white hover:border-white/30'}`}
+                                className={`px-12 py-5 text-sm font-black rounded-none border-2 transition-all duration-300 italic tracking-widest relative z-10 ${fansRunning ? 'bg-brand-600 border-brand-400 text-white shadow-none hover:scale-105' : 'bg-slate-900 border-white/10 text-slate-500 hover:text-white hover:border-white/30'}`}
                             >
                                 {fansRunning ? 'ARRAY ACTIVE' : 'ENGAGE MANUAL'}
                             </button>

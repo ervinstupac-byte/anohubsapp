@@ -28,13 +28,13 @@ export const DigitalIntroduction: React.FC = () => {
             {/* 1. HERO SECTION: THE VISION */}
             <div className="text-center space-y-8 pt-20 relative">
                 {/* Background Decor */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-500/10 rounded-full blur-[100px] pointer-events-none"></div>
 
                 <div className="relative inline-block">
-                    <span className="text-xs font-mono text-cyan-400 tracking-[0.3em] uppercase mb-2 block animate-pulse">{t('digitalIntro.visionLog', 'Vision Log v1.0')}</span>
+                    <span className="text-xs font-mono text-brand-400 tracking-[0.3em] uppercase mb-2 block animate-pulse">{t('digitalIntro.visionLog', 'Vision Log v1.0')}</span>
                     <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter drop-shadow-2xl uppercase leading-[0.9]">
                         {t('digitalIntro.heroTitleTop', 'Architects of')} <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">{t('digitalIntro.heroTitleHighlight', 'Immunity')}</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-blue-500 to-purple-600">{t('digitalIntro.heroTitleHighlight', 'Immunity')}</span>
                     </h1>
                 </div>
 
@@ -45,17 +45,17 @@ export const DigitalIntroduction: React.FC = () => {
 
             {/* 2. THE ORIGIN SIGNAL (Personal Authority) */}
             <div className="max-w-3xl mx-auto">
-                <GlassCard className="relative border-l-4 border-l-cyan-500 bg-gradient-to-r from-slate-900 to-slate-900/50 italic">
-                    <div className="text-4xl text-cyan-500/20 absolute top-4 left-4">❝</div>
+                <GlassCard className="relative border-l-4 border-l-brand-500 bg-gradient-to-r from-slate-900 to-slate-900/50 italic">
+                    <div className="text-4xl text-brand-500/20 absolute top-4 left-4">❝</div>
                     <div className="relative z-10 space-y-4 p-4">
                         <p className="text-slate-400 text-lg leading-relaxed">
                             "{t('digitalIntro.quote', 'For years, I watched the industry accept a 48% failure rate as \'unavoidable wear and tear\'. I realized standard maintenance wasn\'t enough. We needed a forensic approach. We needed to treat a hydropower plant not like a static building, but like a living organism with an immune system.')}"
                         </p>
                         <div className="flex items-center gap-4 pt-4 border-t border-white/5">
-                            <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-xs font-bold text-cyan-500 border border-cyan-500/30">ES</div>
+                            <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-xs font-bold text-brand-500 border border-brand-500/30">ES</div>
                             <div>
                                 <div className="text-white font-bold text-sm uppercase tracking-wider">Ervin Stupac</div>
-                                <div className="text-cyan-500/60 text-[10px] font-mono tracking-widest">LEAD ARCHITECT // ID: ES-001</div>
+                                <div className="text-brand-500/60 text-[10px] font-mono tracking-widest">LEAD ARCHITECT // ID: ES-001</div>
                             </div>
                         </div>
                     </div>
@@ -128,10 +128,10 @@ export const DigitalIntroduction: React.FC = () => {
             {/* 5. ACTIVATION AREA */}
             <div className="flex flex-col items-center gap-6 pt-8">
                 {signed ? (
-                    <div className="animate-scale-in text-center p-8 bg-cyan-950/30 border border-cyan-500/50 rounded-3xl backdrop-blur-xl shadow-[0_0_50px_rgba(6,182,212,0.2)]">
+                    <div className="animate-scale-in text-center p-8 bg-brand-950/30 border border-brand-500/50 rounded-3xl backdrop-blur-xl shadow-[0_0_50px_rgba(6,182,212,0.2)]">
                         <div className="text-6xl mb-4 animate-bounce">🔓</div>
                         <h3 className="text-2xl font-black text-white uppercase tracking-tight">{t('digitalIntro.activation.unlockedTitle', 'System Unlocked')}</h3>
-                        <p className="text-cyan-400 font-mono mt-2 text-sm">{t('digitalIntro.activation.loading', 'Loading Command Center...')}</p>
+                        <p className="text-brand-400 font-mono mt-2 text-sm">{t('digitalIntro.activation.loading', 'Loading Command Center...')}</p>
                     </div>
                 ) : (
                     <>
@@ -143,7 +143,7 @@ export const DigitalIntroduction: React.FC = () => {
                         <ModernButton
                             onClick={handleSign}
                             variant="primary"
-                            className="px-16 py-6 text-lg font-black tracking-widest shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_50px_rgba(6,182,212,0.6)] border-cyan-400"
+                            className="px-16 py-6 text-lg font-black tracking-widest shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_50px_rgba(6,182,212,0.6)] border-brand-400"
                             icon={<span>🚀</span>}
                         >
                             {t('digitalIntro.activation.enterBtn', 'ENTER COMMAND CENTER')}

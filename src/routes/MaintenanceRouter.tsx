@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { ROUTES } from './paths.ts';
+import { ROUTES, MAINTENANCE_PATHS } from './paths.ts';
 import { LoadingShimmer } from '../shared/components/ui/LoadingShimmer';
 import { createThrustBearingWithHistory } from '../models/MaintenanceChronicles';
 
@@ -46,8 +46,10 @@ const MaintenanceRouter: React.FC = () => {
     return (
         <Suspense fallback={<LoadingShimmer />}>
             <Routes>
-                {/* Default to dashboard */}
-                <Route index element={<Navigate to={ROUTES.MAINTENANCE.DASHBOARD} replace />} />
+                {/* Default to dashboard. WHY: absolute path — a relative `to`
+                    inside the splat catch-all below resolves against the
+                    unmatched URL and recursively appends `/dashboard`. */}
+                <Route index element={<Navigate to={MAINTENANCE_PATHS.DASHBOARD} replace />} />
 
                 <Route path={ROUTES.MAINTENANCE.DASHBOARD} element={<MaintenanceDashboard />} />
                 <Route path={ROUTES.MAINTENANCE.AUTOSTART} element={<AutostartDashboard />} />
@@ -65,8 +67,9 @@ const MaintenanceRouter: React.FC = () => {
                 <Route path={ROUTES.MAINTENANCE.DAMAGE_CARD} element={<SpecialistDamageCardPage />} />
                 <Route path={ROUTES.MAINTENANCE.ASSET_PASSPORT_CARD} element={<AssetPassportCard />} />
 
-                {/* Catch-all */}
-                <Route path="*" element={<Navigate to={ROUTES.MAINTENANCE.DASHBOARD} replace />} />
+                {/* Catch-all. WHY: must be absolute — a relative target loops,
+                    appending `/dashboard` to the unknown sub-path indefinitely. */}
+                <Route path="*" element={<Navigate to={MAINTENANCE_PATHS.DASHBOARD} replace />} />
             </Routes>
         </Suspense>
     );

@@ -28,9 +28,9 @@ const statusConfig: Record<SyncStatus, {
     },
     SYNCING: {
         icon: <RefreshCw className="w-4 h-4" />,
-        color: 'text-cyan-400',
-        bgColor: 'bg-cyan-500/10',
-        borderColor: 'border-cyan-500/30',
+        color: 'text-brand-400',
+        bgColor: 'bg-brand-500/10',
+        borderColor: 'border-brand-500/30',
         animate: true
     },
     OFFLINE: {

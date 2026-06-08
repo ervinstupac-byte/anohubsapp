@@ -49,7 +49,7 @@ export const ErosionMappingViewer: React.FC = () => {
             <div className="mb-6">
                 <h2 className="text-3xl font-black uppercase tracking-tighter mb-2">
                     <span className="text-white">Erosion</span>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 ml-2">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-blue-400 ml-2">
                         Mapping
                     </span>
                 </h2>
@@ -89,7 +89,7 @@ export const ErosionMappingViewer: React.FC = () => {
                 {/* Left: 3D Blade Map */}
                 <GlassCard className="p-6">
                     <h3 className="text-sm font-black text-white uppercase mb-4">AR Blade Scan - Blade #{blade.bladeId}</h3>
-                    <div className="aspect-[3/2] bg-gradient-to-br from-slate-900 to-slate-800 rounded-lg border-2 border-cyan-500/30 relative overflow-hidden">
+                    <div className="aspect-[3/2] bg-gradient-to-br from-slate-900 to-slate-800 rounded-lg border-2 border-brand-500/30 relative overflow-hidden">
                         {/* Blade outline */}
                         <svg className="absolute inset-0 w-full h-full">
                             {/* Blade profile (simplified) */}
@@ -147,7 +147,7 @@ export const ErosionMappingViewer: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="absolute top-2 right-2 bg-black/70 px-3 py-1 rounded text-xs text-cyan-400 font-bold">
+                        <div className="absolute top-2 right-2 bg-black/70 px-3 py-1 rounded text-xs text-brand-400 font-bold">
                             AR Point Cloud: {blade.erosionPoints.length} points
                         </div>
                     </div>

@@ -40,7 +40,7 @@ export const CausalChain: React.FC<CausalChainProps> = ({ analysis, className = 
         <div className={`tactical-module ${className}`}>
             {/* Header */}
             <div className="px-4 py-3 border-b border-white/5">
-                <h3 className="text-[10px] font-black uppercase tracking-widest text-cyan-400 flex items-center gap-2">
+                <h3 className="text-[10px] font-black uppercase tracking-widest text-brand-400 flex items-center gap-2">
                     <Zap className="w-3 h-3" />
                     Root Cause Analysis
                 </h3>
@@ -89,7 +89,7 @@ export const CausalChain: React.FC<CausalChainProps> = ({ analysis, className = 
                         <div key={event.id} className="relative">
                             {/* Connector Line */}
                             {index < analysis.causalChain.length - 1 && (
-                                <div className="absolute left-[11px] top-8 w-0.5 h-6 bg-gradient-to-b from-cyan-500/30 to-transparent" />
+                                <div className="absolute left-[11px] top-8 w-0.5 h-6 bg-gradient-to-b from-brand-500/30 to-transparent" />
                             )}
 
                             {/* Event Card */}

@@ -56,13 +56,13 @@ export const FullAuditLogModal: React.FC<FullAuditLogModalProps> = ({ isOpen, on
                                     >
                                         <ArrowLeft className="w-5 h-5" />
                                     </button>
-                                    <Terminal className="w-5 h-5 text-cyan-400" />
+                                    <Terminal className="w-5 h-5 text-brand-400" />
                                     <h2 className="text-xl font-bold text-white tracking-wide">Sovereign Audit Ledger (Offline)</h2>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <button 
                                         onClick={handleExport}
-                                        className="flex items-center gap-2 px-3 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 rounded-none text-xs transition-colors"
+                                        className="flex items-center gap-2 px-3 py-1.5 bg-brand-500/10 hover:bg-brand-500/20 text-brand-400 rounded-none text-xs transition-colors"
                                     >
                                         <Download className="w-3 h-3" />
                                         Export JSON
@@ -86,7 +86,7 @@ export const FullAuditLogModal: React.FC<FullAuditLogModalProps> = ({ isOpen, on
                                             <input 
                                                 type="text" 
                                                 placeholder="Search logs..." 
-                                                className="w-full bg-black/20 border border-white/10 rounded-none pl-9 pr-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50"
+                                                className="w-full bg-black/20 border border-white/10 rounded-none pl-9 pr-3 py-2 text-sm text-white focus:outline-none focus:border-brand-500/50"
                                                 value={filter}
                                                 onChange={(e) => setFilter(e.target.value)}
                                             />
@@ -106,12 +106,12 @@ export const FullAuditLogModal: React.FC<FullAuditLogModalProps> = ({ isOpen, on
                                                     <tr 
                                                         key={i} 
                                                         onClick={() => setSelectedLog(log)}
-                                                        className={`cursor-pointer hover:bg-white/5 transition-colors ${selectedLog === log ? 'bg-cyan-500/10' : ''}`}
+                                                        className={`cursor-pointer hover:bg-white/5 transition-colors ${selectedLog === log ? 'bg-brand-500/10' : ''}`}
                                                     >
                                                         <td className="p-3 text-slate-400 font-mono text-xs whitespace-nowrap">
                                                             {new Date(log.timestamp).toLocaleString()}
                                                         </td>
-                                                        <td className="p-3 text-cyan-300 font-medium">
+                                                        <td className="p-3 text-brand-300 font-medium">
                                                             {log.event_type}
                                                         </td>
                                                         <td className="p-3 text-slate-300 truncate max-w-[200px]">
@@ -158,7 +158,7 @@ export const FullAuditLogModal: React.FC<FullAuditLogModalProps> = ({ isOpen, on
                                             {selectedLog.metric_value && (
                                                 <div>
                                                     <div className="text-slate-500 mb-1">METRIC SNAPSHOT</div>
-                                                    <div className="text-cyan-400 text-lg">
+                                                    <div className="text-brand-400 text-lg">
                                                         {selectedLog.metric_value} <span className="text-sm text-slate-500">{selectedLog.metric_unit}</span>
                                                     </div>
                                                 </div>

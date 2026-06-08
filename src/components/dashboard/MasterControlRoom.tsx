@@ -167,7 +167,7 @@ export const MasterControlRoom: React.FC = () => {
                     <div className="col-span-5">
                         <div className="bg-slate-900 border border-slate-800 rounded-none p-6">
                             <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                <Activity className="w-4 h-4 text-cyan-500" />
+                                <Activity className="w-4 h-4 text-brand-500" />
                                 Efficiency Monitor (Placeholder)
                             </h4>
                             <p className="text-[10px] text-slate-500 mt-2">
@@ -244,7 +244,7 @@ export const MasterControlRoom: React.FC = () => {
                         </div>
                         <div className="flex items-center justify-between">
                             <span className="text-slate-400">η_max (Target)</span>
-                            <span className="text-cyan-400 font-bold">{hud.etaMax.toFixed(2)}%</span>
+                            <span className="text-brand-400 font-bold">{hud.etaMax.toFixed(2)}%</span>
                         </div>
                         <div className={`col-span-2 mt-1 px-2 py-1 rounded-none border ${hud.badgeBg} flex items-center justify-between`}>
                             <span className="text-slate-400 uppercase tracking-widest">Δ Optimization</span>

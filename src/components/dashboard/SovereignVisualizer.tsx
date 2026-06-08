@@ -186,7 +186,7 @@ export const SovereignVisualizer: React.FC<SovereignVisualizerProps> = ({ sandbo
             <div className="absolute top-4 left-4 z-10 pointer-events-none">
                 <div className="flex flex-col">
                     <span className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Digital Twin</span>
-                    <span className="text-xs font-mono text-cyan-400">FRANCIS VERTICAL • LIVE</span>
+                    <span className="text-xs font-mono text-brand-400">FRANCIS VERTICAL • LIVE</span>
                     {sandboxStress !== null && (
                         <div className="mt-1 px-2 py-0.5 bg-emerald-500/20 border border-emerald-500/50 rounded text-[9px] font-mono text-emerald-400 w-fit">
                             SANDBOX ACTIVE

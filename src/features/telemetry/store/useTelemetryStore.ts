@@ -1242,14 +1242,27 @@ export const useTelemetryStore = create<TelemetryState>()(
             // NC-24000: Full Offline-First Hydration
             hydrate: async () => {
                 // 1. Alarms
+                // NC-26000: The forensic alarm ledger (IndexedDB) intentionally keeps every
+                // historical row, but recurring telemetry conditions wrote many identical entries
+                // before dedup existed. Collapse to the most-recent record per message so the
+                // active panel reflects distinct conditions, not a flood of duplicates.
                 const alarms = await loadAlarms();
-                const activeAlarmsState = alarms.map(a => ({
-                    id: a.code || `ALM-${a.id}`, // Fallback if code missing
-                    severity: a.severity as any,
-                    message: a.message,
-                    timestamp: a.timestamp,
-                    acknowledged: a.acknowledged
-                }));
+                const latestByMessage = new Map<string, typeof alarms[number]>();
+                for (const a of alarms) {
+                    const prev = latestByMessage.get(a.message);
+                    if (!prev || (a.timestamp ?? 0) > (prev.timestamp ?? 0)) {
+                        latestByMessage.set(a.message, a);
+                    }
+                }
+                const activeAlarmsState = Array.from(latestByMessage.values())
+                    .sort((a, b) => (a.timestamp ?? 0) - (b.timestamp ?? 0))
+                    .map(a => ({
+                        id: a.code || `ALM-${a.id}`, // Fallback if code missing
+                        severity: a.severity as any,
+                        message: a.message,
+                        timestamp: a.timestamp,
+                        acknowledged: a.acknowledged
+                    }));
 
                 // 2. Telemetry History
                 const history = await getRecentHistory(50);
@@ -1400,6 +1413,20 @@ export const useTelemetryStore = create<TelemetryState>()(
             },
 
             pushAlarm: (alarm) => {
+                // NC-26000: Dedupe by message. Continuous telemetry effects (e.g. design-conflict
+                // checks in ScadaCore) re-fire every tick; without dedup the same condition floods
+                // the alarm list with identical entries. If an unacknowledged alarm with the same
+                // message is already active, refresh its timestamp instead of appending a duplicate.
+                const existing = get().activeAlarms.find(a => a.message === alarm.message && !a.acknowledged);
+                if (existing) {
+                    set((state) => ({
+                        activeAlarms: state.activeAlarms.map(a =>
+                            a.id === existing.id ? { ...a, timestamp: Date.now() } : a
+                        )
+                    }));
+                    return;
+                }
+
                 const newAlarm = {
                     id: alarm.id,
                     severity: alarm.severity,

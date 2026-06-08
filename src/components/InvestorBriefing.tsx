@@ -174,8 +174,8 @@ export const InvestorBriefing: React.FC = () => {
                         </GlassCard>
 
                         {/* NEW: Inventory Value Card */}
-                        <GlassCard className="border-cyan-500/20 bg-cyan-950/10">
-                            <p className="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2">Stored Asset Capital</p>
+                        <GlassCard className="border-brand-500/20 bg-brand-950/10">
+                            <p className="text-xs font-bold text-brand-400 uppercase tracking-widest mb-2">Stored Asset Capital</p>
                             <div className="text-3xl font-black text-white mb-1">€{(getTotalInventoryValue() / 1000).toFixed(1)}k</div>
                             <p className="text-xs text-slate-500">Value locked in Spare Parts Inventory</p>
                         </GlassCard>

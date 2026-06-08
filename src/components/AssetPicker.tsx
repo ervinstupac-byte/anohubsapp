@@ -21,7 +21,7 @@ export const AssetPicker: React.FC = () => {
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                         selectAsset(Number(e.target.value));
                     }}
-                    className="appearance-none w-full bg-slate-900/80 border border-slate-700 text-white text-sm rounded-lg px-4 py-2.5 pr-8 focus:outline-none focus:border-cyan-500 transition-colors cursor-pointer hover:bg-slate-800"
+                    className="appearance-none w-full bg-slate-900/80 border border-slate-700 text-white text-sm rounded-lg px-4 py-2.5 pr-8 focus:outline-none focus:border-brand-500 transition-colors cursor-pointer hover:bg-slate-800"
                 >
                     <option value="" disabled>{t('assetPicker.selectContext', 'Select Asset Context')}</option>
                     {assets.map((asset) => (
@@ -42,8 +42,8 @@ export const AssetPicker: React.FC = () => {
                 onClick={() => setIsWizardOpen(true)}
                 className="
                     flex items-center justify-center w-10 h-10 rounded-lg 
-                    bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 
-                    hover:bg-cyan-500 hover:text-black hover:shadow-[0_0_15px_cyan] 
+                    bg-brand-500/10 border border-brand-500/30 text-brand-400 
+                    hover:bg-brand-500 hover:text-black hover:shadow-[0_0_15px_cyan] 
                     transition-all duration-300 group
                 "
                 title={t('assetWizard.title', 'Register New Asset')}

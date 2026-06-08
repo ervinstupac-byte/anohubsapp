@@ -60,17 +60,17 @@ export const PhoenixDashboard: React.FC<PhoenixDashboardProps> = ({ blackStart, 
 
             <div className="grid grid-cols-2 gap-6">
                 {/* Island Grid Status */}
-                <div className={`bg-slate-900 border-2 rounded-none p-4 ${island.active ? 'border-cyan-500' : 'border-slate-700'
+                <div className={`bg-slate-900 border-2 rounded-none p-4 ${island.active ? 'border-brand-500' : 'border-slate-700'
                     }`}>
                     <div className="flex items-center gap-2 mb-4">
-                        <Zap className="w-5 h-5 text-cyan-400" />
-                        <div className="text-lg font-bold text-cyan-300">Island Grid</div>
+                        <Zap className="w-5 h-5 text-brand-400" />
+                        <div className="text-lg font-bold text-brand-300">Island Grid</div>
                     </div>
 
                     <div className="space-y-3">
-                        <div className={`p-4 rounded-none text-center ${island.active ? 'bg-cyan-950' : 'bg-slate-800'
+                        <div className={`p-4 rounded-none text-center ${island.active ? 'bg-brand-950' : 'bg-slate-800'
                             }`}>
-                            <div className={`text-3xl font-bold ${island.active ? 'text-cyan-300' : 'text-slate-500'
+                            <div className={`text-3xl font-bold ${island.active ? 'text-brand-300' : 'text-slate-500'
                                 }`}>
                                 {island.active ? '🏝️ ACTIVE' : '⏸️ STANDBY'}
                             </div>
@@ -86,7 +86,7 @@ export const PhoenixDashboard: React.FC<PhoenixDashboardProps> = ({ blackStart, 
                         <div className="grid grid-cols-2 gap-2">
                             <div className="bg-slate-800 rounded-none p-2">
                                 <div className="text-xs text-slate-400">Frequency</div>
-                                <div className="text-lg font-bold text-cyan-300 font-mono">
+                                <div className="text-lg font-bold text-brand-300 font-mono">
                                     {island.frequency.toFixed(2)} Hz
                                 </div>
                             </div>

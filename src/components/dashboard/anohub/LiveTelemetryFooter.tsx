@@ -23,7 +23,7 @@ export const LiveTelemetryFooter: React.FC = () => {
 
                 {/* 2. WAVEFORMS CONTAINER */}
                 <div className="flex-1 flex items-center gap-4 px-6 h-full overflow-hidden pointer-events-none">
-                    <Waveform color="text-cyan-400" glow="bloom-glow-cyan" delay="0s" label="PHASE_A" freq={1.2} />
+                    <Waveform color="text-brand-400" glow="bloom-glow-cyan" delay="0s" label="PHASE_A" freq={1.2} />
                     <Waveform color="text-emerald-400" glow="bloom-glow-emerald" delay="0.5s" label="PHASE_B" freq={1.1} />
                     <Waveform color="text-purple-400" glow="bloom-glow-purple" delay="1s" label="PHASE_C" freq={1.3} />
                     <Waveform color="text-amber-500" glow="bloom-glow-amber" delay="1.5s" label="NEUTRAL" freq={0.8} />
@@ -31,11 +31,11 @@ export const LiveTelemetryFooter: React.FC = () => {
 
                 {/* 3. HARDWARE TELEMETRY */}
                 <div className="flex items-center gap-6 shrink-0 border-l border-white/5 pl-6 h-full py-2">
-                    <DigitalReadout label="GRID_FREQ" value="50.02" unit="Hz" color="text-cyan-400" />
+                    <DigitalReadout label="GRID_FREQ" value="50.02" unit="Hz" color="text-brand-400" />
                     <DigitalReadout label="LOAD_FACTOR" value="92.4" unit="%" color="text-emerald-400" />
                     <div className="w-px h-8 bg-slate-800" />
                     <div className="text-right">
-                        <div className="text-[10px] font-black text-cyan-400 font-mono tracking-tighter">ANOHUB_LINK_v4.5</div>
+                        <div className="text-[10px] font-black text-brand-400 font-mono tracking-tighter">ANOHUB_LINK_v4.5</div>
                         <div className="text-[7px] font-mono text-slate-600 uppercase tracking-tighter font-black">Secure_Encryption: 256-bit</div>
                     </div>
                 </div>

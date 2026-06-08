@@ -224,7 +224,7 @@ export const QuestionnaireSummary: React.FC = () => {
             {/* HERO HEADER */}
             <div className="text-center space-y-4 animate-fade-in-up pt-6">
                 <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter">
-                    {t('questionnaire.title', 'Execution Gap').split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{t('questionnaire.title', 'Execution Gap Analysis').split(' ').slice(1).join(' ')}</span>
+                    {t('questionnaire.title', 'Execution Gap').split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-blue-500">{t('questionnaire.title', 'Execution Gap Analysis').split(' ').slice(1).join(' ')}</span>
                 </h2>
 
                 <div className="flex justify-center gap-6 text-xs uppercase tracking-widest text-slate-500 font-bold">
@@ -232,7 +232,7 @@ export const QuestionnaireSummary: React.FC = () => {
                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> {t('questionnaire.liveAnalysis')}
                     </span>
                     <span className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-cyan-500"></span> {t('questionnaire.aiReady')}
+                        <span className="w-2 h-2 rounded-full bg-brand-500"></span> {t('questionnaire.aiReady')}
                     </span>
                 </div>
             </div>
@@ -241,7 +241,7 @@ export const QuestionnaireSummary: React.FC = () => {
 
                 {/* LEFT COLUMN: EXECUTIVE SUMMARY */}
                 <div className="lg:col-span-1 space-y-6">
-                    <GlassCard className="border-t-4 border-t-cyan-500">
+                    <GlassCard className="border-t-4 border-t-brand-500">
                         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">{t('questionnaire.overallAssessment')}</h3>
                         <RiskGauge level={riskIndicator.level} />
 
@@ -280,12 +280,12 @@ export const QuestionnaireSummary: React.FC = () => {
                         </div>
                     </GlassCard>
 
-                    <GlassCard className="bg-cyan-900/10 border-cyan-500/20">
+                    <GlassCard className="bg-brand-900/10 border-brand-500/20">
                         <div className="flex items-center gap-3 mb-3">
                             <span className="text-2xl">🧠</span>
-                            <h4 className="font-bold text-cyan-300 text-sm uppercase tracking-wide">{t('questionnaire.conceptTitle')}</h4>
+                            <h4 className="font-bold text-brand-300 text-sm uppercase tracking-wide">{t('questionnaire.conceptTitle')}</h4>
                         </div>
-                        <p className="text-xs text-cyan-100/70 leading-relaxed font-medium">
+                        <p className="text-xs text-brand-100/70 leading-relaxed font-medium">
                             {t('questionnaire.conceptDesc')}
                         </p>
                     </GlassCard>

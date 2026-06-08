@@ -134,7 +134,7 @@ export const MechanicalIntelligencePanel: React.FC = () => {
         >
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
-                    <Info className="w-4 h-4 text-cyan-500" />
+                    <Info className="w-4 h-4 text-brand-500" />
                     <h2 className="text-sm font-black uppercase tracking-wider text-slate-300">Mechanical Intelligence</h2>
                 </div>
                 <div className="px-2 py-1 rounded bg-slate-800 border border-slate-700">
@@ -145,12 +145,12 @@ export const MechanicalIntelligencePanel: React.FC = () => {
             <div className="space-y-6 overflow-y-auto pr-2 custom-scrollbar">
                 {/* ROLE */}
                 <section>
-                    <div className="flex items-center gap-2 mb-3 text-cyan-400">
+                    <div className="flex items-center gap-2 mb-3 text-brand-400">
                         <Gauge className="w-4 h-4" />
                         <span className="text-[10px] font-black uppercase tracking-widest">Mechanical Role</span>
                     </div>
                     <div className="p-4 bg-white/5 rounded-xl border border-white/5">
-                        <p className="text-xs text-white font-bold mb-2 uppercase tracking-tight text-cyan-500">{info.role}</p>
+                        <p className="text-xs text-white font-bold mb-2 uppercase tracking-tight text-brand-500">{info.role}</p>
                         <p className="text-[11px] text-slate-400 leading-relaxed font-medium">
                             {info.description}
                         </p>

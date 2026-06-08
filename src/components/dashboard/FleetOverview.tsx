@@ -15,14 +15,14 @@ export const FleetOverview: React.FC = () => {
             <div className="flex justify-between items-center mb-6 pt-2">
                 <div>
                     <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        <Globe className="text-cyan-500" /> Global Fleet Command
+                        <Globe className="text-brand-500" /> Global Fleet Command
                     </h2>
                     <p className="text-xs text-slate-500 font-mono mt-1">REAL-TIME ASSET SOVEREIGNTY MONITOR</p>
                 </div>
                 <div className="flex gap-4 text-xs font-mono">
                     <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
-                        <span className="text-cyan-400">SYNCED</span>
+                        <div className="w-2 h-2 rounded-full bg-brand-500 animate-pulse" />
+                        <span className="text-brand-400">SYNCED</span>
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@ export const FleetOverview: React.FC = () => {
                             <div className="space-y-3">
                                 <div className="flex justify-between text-xs">
                                     <span className="text-slate-400">Baseline (Commissioned)</span>
-                                    <span className="text-cyan-300 font-mono">{node.baselineEff}%</span>
+                                    <span className="text-brand-300 font-mono">{node.baselineEff}%</span>
                                 </div>
                                 <div className="flex justify-between text-xs">
                                     <span className="text-slate-400">Current Efficiency</span>

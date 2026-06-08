@@ -62,7 +62,7 @@ export const UnifiedPDFViewer: React.FC<UnifiedPDFViewerProps> = ({
                 <div className="flex items-center justify-between px-4 py-3 bg-slate-950 border-b border-slate-800">
                     <div className="flex items-center gap-3">
                         <div className="p-2 bg-slate-800 rounded-full">
-                            <FileText className="w-5 h-5 text-cyan-400" />
+                            <FileText className="w-5 h-5 text-brand-400" />
                         </div>
                         <div>
                             <h2 id="pdf-viewer-title" className="text-sm font-bold text-white uppercase tracking-wider">{title}</h2>
@@ -99,8 +99,8 @@ export const UnifiedPDFViewer: React.FC<UnifiedPDFViewerProps> = ({
                 <div className="flex-grow bg-slate-800 relative">
                     {isLoading && (
                         <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-900/50 backdrop-blur-sm z-10 animate-in fade-in duration-300">
-                            <div className="w-12 h-12 border-4 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin mb-4"></div>
-                            <p className="text-cyan-400 font-mono text-[10px] tracking-widest animate-pulse uppercase">Rendering Engineering Dossier...</p>
+                            <div className="w-12 h-12 border-4 border-brand-500/20 border-t-brand-500 rounded-full animate-spin mb-4"></div>
+                            <p className="text-brand-400 font-mono text-[10px] tracking-widest animate-pulse uppercase">Rendering Engineering Dossier...</p>
                         </div>
                     )}
                     <iframe

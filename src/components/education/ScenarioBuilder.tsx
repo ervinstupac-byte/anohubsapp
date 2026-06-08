@@ -96,13 +96,13 @@ export const ScenarioBuilder: React.FC = () => {
 
     return (
         <div className="p-4 bg-slate-900 rounded-lg border border-slate-700">
-            <h3 className="text-xl font-bold text-cyan-400 mb-4 flex items-center gap-2">
+            <h3 className="text-xl font-bold text-brand-400 mb-4 flex items-center gap-2">
                 <PlayCircle className="w-6 h-6" /> Scenario Builder (Educational Mode)
             </h3>
             
             <div className="grid grid-cols-1 gap-4">
                 {scenarios.map(s => (
-                    <div key={s.id} className="p-4 bg-slate-800 rounded border border-slate-600 hover:border-cyan-500 transition-colors">
+                    <div key={s.id} className="p-4 bg-slate-800 rounded border border-slate-600 hover:border-brand-500 transition-colors">
                         <div className="flex justify-between items-start mb-2">
                             <div>
                                 <h4 className="font-bold text-white">{s.name}</h4>
@@ -111,7 +111,7 @@ export const ScenarioBuilder: React.FC = () => {
                             <button 
                                 onClick={() => runScenario(s.id)}
                                 disabled={!!activeScenario}
-                                className={`px-4 py-2 rounded font-bold flex items-center gap-2 ${activeScenario === s.id ? 'bg-cyan-600 text-white animate-pulse' : 'bg-slate-700 text-cyan-400 hover:bg-slate-600'}`}
+                                className={`px-4 py-2 rounded font-bold flex items-center gap-2 ${activeScenario === s.id ? 'bg-brand-600 text-white animate-pulse' : 'bg-slate-700 text-brand-400 hover:bg-slate-600'}`}
                             >
                                 <PlayCircle className="w-4 h-4" />
                                 {activeScenario === s.id ? `Running Step ${currentStepIndex + 1}/${s.steps.length}` : 'Run Demo'}
@@ -122,7 +122,7 @@ export const ScenarioBuilder: React.FC = () => {
                         {activeScenario === s.id && (
                             <div className="w-full bg-slate-900 h-2 rounded mt-2 overflow-hidden">
                                 <div 
-                                    className="bg-cyan-500 h-full transition-all duration-300"
+                                    className="bg-brand-500 h-full transition-all duration-300"
                                     style={{ width: `${((currentStepIndex + 1) / s.steps.length) * 100}%` }}
                                 />
                             </div>

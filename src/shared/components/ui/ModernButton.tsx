@@ -19,14 +19,14 @@ export const ModernButton: React.FC<ModernButtonProps> = ({
 }) => {
 
     // Base Styles
-    const baseStyles = "relative overflow-hidden rounded-none font-bold tracking-wide transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-4 px-6 text-sm uppercase";
+    const baseStyles = "relative overflow-hidden rounded-xl font-semibold tracking-wide transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-3.5 px-6 text-sm";
 
     // Variants
     const variants = {
-        primary: "bg-cyan-700 hover:bg-cyan-600 text-white border border-cyan-500/50 active:bg-cyan-800",
-        secondary: "bg-slate-900 hover:bg-slate-800 text-slate-100 border border-slate-700 hover:border-slate-600 active:bg-slate-700",
-        danger: "bg-red-900/80 hover:bg-red-800 text-red-100 border border-red-700 hover:border-red-500 active:bg-red-900",
-        ghost: "bg-transparent hover:bg-slate-800/50 text-slate-400 hover:text-white border border-transparent hover:border-slate-700 active:bg-slate-800"
+        primary: "bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-accent-500 text-white shadow-lg shadow-brand-500/25 active:from-brand-700",
+        secondary: "bg-white/5 hover:bg-white/10 text-slate-100 border border-white/10 hover:border-brand-400/40 active:bg-white/10",
+        danger: "bg-rose-600/90 hover:bg-rose-500 text-white border border-rose-400/40 active:bg-rose-700",
+        ghost: "bg-transparent hover:bg-white/5 text-slate-400 hover:text-white border border-transparent hover:border-white/10 active:bg-white/5"
     };
 
     return (

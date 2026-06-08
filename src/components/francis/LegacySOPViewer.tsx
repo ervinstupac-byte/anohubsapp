@@ -22,14 +22,14 @@ export const LegacySOPViewer: React.FC = () => {
                     Back to Operations
                 </button>
                 <div className="flex items-center gap-4">
-                    <h1 className="text-lg font-bold font-mono text-cyan-400 uppercase tracking-widest">
+                    <h1 className="text-lg font-bold font-mono text-brand-400 uppercase tracking-widest">
                         LEGACY SOP ARCHIVE: {sopId?.replace(/_/g, ' ')}
                     </h1>
                     <a
                         href={sopUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-xs text-slate-500 hover:text-cyan-400 flex items-center gap-1"
+                        className="text-xs text-slate-500 hover:text-brand-400 flex items-center gap-1"
                     >
                         <ExternalLink className="w-3 h-3" />
                         Open Raw

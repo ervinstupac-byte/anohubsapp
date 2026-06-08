@@ -100,7 +100,7 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({
                     <div>
                         <h3 className="text-2xl font-black uppercase tracking-tighter mb-2">
                             <span className="text-white">{MECHANICAL_TOLERANCES.ALIGNMENT_MM_M} mm Alignment</span>
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 ml-2">
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-purple-400 ml-2">
                                 Wizard
                             </span>
                         </h3>
@@ -157,13 +157,13 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({
                         <div className="mb-4 p-3 bg-slate-800/30 rounded-lg border border-slate-700/50">
                             <div className="flex items-center justify-between mb-2">
                                 <p className="text-xs text-slate-400 uppercase font-bold">Runout Points Recorded</p>
-                                <p className="text-sm font-black text-cyan-400">{runoutPoints.length}/8</p>
+                                <p className="text-sm font-black text-brand-400">{runoutPoints.length}/8</p>
                             </div>
                             <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
                                 <motion.div
                                     initial={{ width: 0 }}
                                     animate={{ width: `${(runoutPoints.length / 8) * 100}%` }}
-                                    className="h-full bg-gradient-to-r from-cyan-500 to-purple-500"
+                                    className="h-full bg-gradient-to-r from-brand-500 to-purple-500"
                                 />
                             </div>
                         </div>
@@ -211,11 +211,11 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({
                         <div className="p-4 bg-slate-800/30 rounded-lg border border-slate-700/50">
                             <div className="flex items-center justify-between mb-3">
                                 <div className="flex items-center gap-2">
-                                    <Bluetooth className={`w-5 h-5 ${isBluetoothConnected ? 'text-cyan-400' : 'text-slate-500'}`} />
+                                    <Bluetooth className={`w-5 h-5 ${isBluetoothConnected ? 'text-brand-400' : 'text-slate-500'}`} />
                                     <p className="text-sm font-bold text-white">Bluetooth Dial Indicator</p>
                                 </div>
                                 <div className={`px-2 py-1 rounded text-xs font-bold ${isBluetoothConnected
-                                    ? 'bg-cyan-500/20 text-cyan-400'
+                                    ? 'bg-brand-500/20 text-brand-400'
                                     : 'bg-slate-700/50 text-slate-400'
                                     }`}>
                                     {isBluetoothConnected ? 'CONNECTED' : 'DISCONNECTED'}
@@ -226,7 +226,7 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     onClick={connectBluetooth}
-                                    className="w-full px-4 py-2 bg-cyan-500/20 border border-cyan-500/50 rounded-lg text-cyan-400 font-bold text-sm hover:bg-cyan-500/30 transition-colors"
+                                    className="w-full px-4 py-2 bg-brand-500/20 border border-brand-500/50 rounded-lg text-brand-400 font-bold text-sm hover:bg-brand-500/30 transition-colors"
                                 >
                                     Connect Bluetooth Device
                                 </motion.button>
@@ -249,7 +249,7 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({
                                         min="0"
                                         max="360"
                                         step="45"
-                                        className="flex-1 px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                                        className="flex-1 px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-brand-500"
                                     />
                                     <span className="text-sm text-slate-400 font-bold">°</span>
                                 </div>
@@ -259,7 +259,7 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({
                                             key={angle}
                                             onClick={() => setCurrentAngle(angle)}
                                             className={`px-2 py-1 rounded text-xs font-bold transition-colors ${currentAngle === angle
-                                                ? 'bg-cyan-500/30 text-cyan-400 border border-cyan-500'
+                                                ? 'bg-brand-500/30 text-brand-400 border border-brand-500'
                                                 : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:bg-slate-700/50'
                                                 }`}
                                         >
@@ -279,7 +279,7 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({
                                     onChange={(e) => setManualRunout(e.target.value)}
                                     step="0.001"
                                     placeholder="0.045"
-                                    className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                                    className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-brand-500"
                                 />
                             </div>
 
@@ -288,7 +288,7 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({
                                 whileTap={{ scale: 0.98 }}
                                 onClick={addRunoutPoint}
                                 disabled={!manualRunout}
-                                className="w-full px-4 py-3 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-lg font-bold text-white flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-cyan-500/50 transition-all"
+                                className="w-full px-4 py-3 bg-gradient-to-r from-brand-500 to-purple-500 rounded-lg font-bold text-white flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-brand-500/50 transition-all"
                             >
                                 <Target className="w-5 h-5" />
                                 Record Point

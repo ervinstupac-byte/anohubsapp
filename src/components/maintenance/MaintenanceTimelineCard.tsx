@@ -20,7 +20,7 @@ export const MaintenanceTimelineCard: React.FC = () => {
         switch (urgency) {
             case 'CRITICAL': return 'text-red-400';
             case 'PRIORITY': return 'text-amber-400';
-            case 'PLANNING': return 'text-cyan-400';
+            case 'PLANNING': return 'text-brand-400';
             default: return 'text-emerald-400';
         }
     };
@@ -29,7 +29,7 @@ export const MaintenanceTimelineCard: React.FC = () => {
         switch (urgency) {
             case 'CRITICAL': return 'bg-red-500';
             case 'PRIORITY': return 'bg-amber-500';
-            case 'PLANNING': return 'bg-cyan-500';
+            case 'PLANNING': return 'bg-brand-500';
             default: return 'bg-emerald-500';
         }
     };
@@ -87,19 +87,19 @@ export const MaintenanceTimelineCard: React.FC = () => {
                 <div className="grid grid-cols-3 gap-2 pt-4 border-t border-white/5">
                     <div className="p-2 bg-slate-900/50 rounded flex flex-col items-center">
                         <span className="text-[8px] text-slate-500 uppercase tracking-widest">Vibration</span>
-                        <span className={`text-xs font-mono font-bold ${mechanical.vibration > 4.5 ? 'text-amber-400' : 'text-cyan-400'}`}>
+                        <span className={`text-xs font-mono font-bold ${mechanical.vibration > 4.5 ? 'text-amber-400' : 'text-brand-400'}`}>
                             {(mechanical.vibration || 0).toFixed(2)}
                         </span>
                     </div>
                     <div className="p-2 bg-slate-900/50 rounded flex flex-col items-center">
                         <span className="text-[8px] text-slate-500 uppercase tracking-widest">Temp</span>
-                        <span className={`text-xs font-mono font-bold ${mechanical.bearingTemp > 70 ? 'text-amber-400' : 'text-cyan-400'}`}>
+                        <span className={`text-xs font-mono font-bold ${mechanical.bearingTemp > 70 ? 'text-amber-400' : 'text-brand-400'}`}>
                             {(mechanical.bearingTemp || 0).toFixed(1)}°
                         </span>
                     </div>
                     <div className="p-2 bg-slate-900/50 rounded flex flex-col items-center">
                         <span className="text-[8px] text-slate-500 uppercase tracking-widest">Cavitation</span>
-                        <span className={`text-xs font-mono font-bold text-cyan-400`}>
+                        <span className={`text-xs font-mono font-bold text-brand-400`}>
                             {prediction.reason === 'Standard Wear' ? 'LOW' : 'HIGH'}
                         </span>
                     </div>

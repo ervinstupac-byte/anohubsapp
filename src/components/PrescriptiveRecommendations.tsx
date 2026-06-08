@@ -144,7 +144,7 @@ export const PrescriptiveRecommendations: React.FC = () => {
                                                                     {action.action.replace(/_/g, ' ')} within {action.timeframe}
                                                                 </p>
                                                                 <div className="flex gap-2">
-                                                                    <button className="px-3 py-1 bg-cyan-500/20 border border-cyan-500/50 rounded text-[9px] font-black text-cyan-400 hover:bg-cyan-500 hover:text-white transition-all uppercase tracking-widest">
+                                                                    <button className="px-3 py-1 bg-brand-500/20 border border-brand-500/50 rounded text-[9px] font-black text-brand-400 hover:bg-brand-500 hover:text-white transition-all uppercase tracking-widest">
                                                                         CREATE WORK ORDER
                                                                     </button>
                                                                     <span className="text-[9px] text-emerald-400 font-bold flex items-center gap-1">
@@ -161,7 +161,7 @@ export const PrescriptiveRecommendations: React.FC = () => {
                                     {/* Monitoring Actions */}
                                     {prescription.actions.filter(a => a.type === 'MONITORING').length > 0 && (
                                         <div>
-                                            <h5 className="text-[9px] text-cyan-400 font-black uppercase tracking-wider mb-2">
+                                            <h5 className="text-[9px] text-brand-400 font-black uppercase tracking-wider mb-2">
                                                 MONITORING:
                                             </h5>
                                             <div className="space-y-2">
@@ -169,7 +169,7 @@ export const PrescriptiveRecommendations: React.FC = () => {
                                                     .filter(a => a.type === 'MONITORING')
                                                     .map((action, idx) => (
                                                         <div key={idx} className="flex items-start gap-2">
-                                                            <span className="text-cyan-400 mt-0.5">👁️</span>
+                                                            <span className="text-brand-400 mt-0.5">👁️</span>
                                                             <div className="flex-1">
                                                                 <p className="text-[10px] text-slate-300 font-medium">
                                                                     {action.action.replace(/_/g, ' ')}

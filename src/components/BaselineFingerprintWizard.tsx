@@ -82,7 +82,7 @@ export const BaselineFingerprintWizard: React.FC<BaselineFingerprintWizardProps>
             <div className="mb-6">
                 <h3 className="text-2xl font-black uppercase tracking-tighter mb-2">
                     <span className="text-white">Baseline</span>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 ml-2">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-purple-400 ml-2">
                         Fingerprinting
                     </span>
                 </h3>
@@ -95,13 +95,13 @@ export const BaselineFingerprintWizard: React.FC<BaselineFingerprintWizardProps>
             <div className="mb-6 p-4 bg-slate-800/30 rounded-lg border border-slate-700/50">
                 <div className="flex items-center justify-between mb-3">
                     <p className="text-xs text-slate-400 uppercase font-bold">Recording Progress</p>
-                    <p className="text-sm font-black text-cyan-400">{recordedLoads.size}/5 Complete</p>
+                    <p className="text-sm font-black text-brand-400">{recordedLoads.size}/5 Complete</p>
                 </div>
                 <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden">
                     <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${(recordedLoads.size / 5) * 100}%` }}
-                        className="h-full bg-gradient-to-r from-cyan-500 to-purple-500"
+                        className="h-full bg-gradient-to-r from-brand-500 to-purple-500"
                     />
                 </div>
             </div>
@@ -151,8 +151,8 @@ export const BaselineFingerprintWizard: React.FC<BaselineFingerprintWizardProps>
             )}
 
             {/* Instructions */}
-            <div className="p-4 bg-cyan-950/20 border border-cyan-500/30 rounded-lg">
-                <p className="text-sm text-cyan-300 font-bold mb-2">📋 Instructions:</p>
+            <div className="p-4 bg-brand-950/20 border border-brand-500/30 rounded-lg">
+                <p className="text-sm text-brand-300 font-bold mb-2">📋 Instructions:</p>
                 <ol className="text-xs text-slate-300 space-y-1 list-decimal list-inside">
                     <li>Set turbine to <strong>0% load (idle)</strong> and click "Record Baseline"</li>
                     <li>Wait for recording to complete (3 seconds)</li>
@@ -197,12 +197,12 @@ const LoadLevelCard: React.FC<{
             className={`p-4 rounded-lg border-2 transition-all ${isRecorded
                 ? 'bg-emerald-500/20 border-emerald-500'
                 : isRecording
-                    ? 'bg-cyan-500/20 border-cyan-500 animate-pulse'
+                    ? 'bg-brand-500/20 border-brand-500 animate-pulse'
                     : 'bg-slate-800/30 border-slate-700/50'
                 }`}
         >
             <div className="flex items-center justify-between mb-3">
-                <Icon className={`w-5 h-5 ${isRecorded ? 'text-emerald-400' : isRecording ? 'text-cyan-400' : 'text-slate-500'
+                <Icon className={`w-5 h-5 ${isRecorded ? 'text-emerald-400' : isRecording ? 'text-brand-400' : 'text-slate-500'
                     }`} />
                 <span className={`text-xs font-bold px-2 py-1 rounded ${isRecorded ? 'bg-emerald-500/30 text-emerald-300' : 'bg-slate-700/50 text-slate-400'
                     }`}>
@@ -219,7 +219,7 @@ const LoadLevelCard: React.FC<{
                     whileTap={{ scale: 0.95 }}
                     onClick={onRecord}
                     disabled={disabled}
-                    className="w-full px-3 py-2 bg-cyan-500/20 border border-cyan-500/50 rounded-lg text-cyan-400 font-bold text-xs hover:bg-cyan-500/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1"
+                    className="w-full px-3 py-2 bg-brand-500/20 border border-brand-500/50 rounded-lg text-brand-400 font-bold text-xs hover:bg-brand-500/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1"
                 >
                     <Play className="w-3 h-3" />
                     Record
@@ -236,7 +236,7 @@ const TelemetryCard: React.FC<{
     color: string;
 }> = ({ label, value, icon: Icon, color }) => {
     const colorClasses = {
-        cyan: 'text-cyan-400',
+        cyan: 'text-brand-400',
         orange: 'text-orange-400',
         emerald: 'text-emerald-400',
         purple: 'text-purple-400'

@@ -113,16 +113,16 @@ export const CivilIntegrityDashboard: React.FC<CivilIntegrityProps> = ({ damData
                 </div>
 
                 {/* Seepage Monitoring */}
-                <div className="bg-slate-900 border border-cyan-500 rounded-lg p-4">
+                <div className="bg-slate-900 border border-brand-500 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-4">
-                        <TrendingDown className="w-5 h-5 text-cyan-400" />
-                        <div className="text-lg font-bold text-cyan-300">Seepage Rate (Q<sub>seep</sub>)</div>
+                        <TrendingDown className="w-5 h-5 text-brand-400" />
+                        <div className="text-lg font-bold text-brand-300">Seepage Rate (Q<sub>seep</sub>)</div>
                     </div>
 
                     <div className="mb-4">
                         <div className="text-xs text-slate-400 mb-2">Current Flow</div>
                         <div className={`text-4xl font-bold font-mono mb-1 ${seepagePct > 80 ? 'text-red-400' :
-                                seepagePct > 60 ? 'text-amber-400' : 'text-cyan-300'
+                                seepagePct > 60 ? 'text-amber-400' : 'text-brand-300'
                             }`}>
                             {damData.seepageRate.toFixed(1)}
                         </div>
@@ -134,7 +134,7 @@ export const CivilIntegrityDashboard: React.FC<CivilIntegrityProps> = ({ damData
                     <div className="relative h-3 bg-slate-800 rounded-full overflow-hidden mb-4">
                         <div
                             className={`absolute inset-y-0 left-0 transition-all ${seepagePct > 80 ? 'bg-red-500' :
-                                    seepagePct > 60 ? 'bg-amber-500' : 'bg-cyan-500'
+                                    seepagePct > 60 ? 'bg-amber-500' : 'bg-brand-500'
                                 }`}
                             style={{ width: `${Math.min(100, seepagePct)}%` }}
                         />

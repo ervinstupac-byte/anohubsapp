@@ -49,7 +49,7 @@ export const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, speed = 
                         <p className="text-xs font-mono text-slate-400">AnoHUB Intelligence Layer Initialization</p>
                     </div>
                 </div>
-                <div className="bg-black/40 border border-h-border rounded-lg p-5 font-mono text-sm text-cyan-400/90 h-64 overflow-hidden shadow-inner">
+                <div className="bg-black/40 border border-h-border rounded-lg p-5 font-mono text-sm text-brand-400/90 h-64 overflow-hidden shadow-inner">
                     {lines.map((line, i) => (
                         <div key={i} className="mb-1 animate-fade-in-up">
                             <span className="text-h-gold/50 mr-2">[{new Date().toLocaleTimeString()}]</span>

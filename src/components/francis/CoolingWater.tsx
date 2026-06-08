@@ -32,28 +32,28 @@ export const CoolingWater: React.FC = () => {
     const inletTemp = (telemetry.site?.temperature ?? 20) - 6.6; // Computed delta for cooling water
 
     return (
-        <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12 selection:bg-cyan-500/30">
+        <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12 selection:bg-brand-500/30">
             {/* Header */}
-            <header className="bg-black/40 border-b-2 border-cyan-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-none">
+            <header className="bg-black/40 border-b-2 border-brand-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-none">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="text-center md:text-left">
                         <h1 className="text-3xl font-black text-white tracking-tighter uppercase flex items-center justify-center md:justify-start gap-3">
-                            <Snowflake className="w-8 h-8 text-cyan-500 animate-pulse" />
+                            <Snowflake className="w-8 h-8 text-brand-500 animate-pulse" />
                             {t('francis.coolingWater.title')}
                         </h1>
-                        <p className="text-cyan-400 font-bold mt-1 uppercase text-xs tracking-widest flex items-center gap-2">
+                        <p className="text-brand-400 font-bold mt-1 uppercase text-xs tracking-widest flex items-center gap-2">
                             <NeuralPulse /> {t('francis.coolingWater.subtitle') || "THERMAL REJECTION LOGIC"} // NC-9.0 CRYOSYNC
                         </p>
                     </div>
 
                     <div className="flex gap-4">
-                        <div className="bg-black/40 border border-cyan-500/30 px-4 py-2 rounded-none flex flex-col items-end">
-                            <span className="text-[8px] text-cyan-500 font-black uppercase tracking-tighter">Current Flow</span>
+                        <div className="bg-black/40 border border-brand-500/30 px-4 py-2 rounded-none flex flex-col items-end">
+                            <span className="text-[8px] text-brand-500 font-black uppercase tracking-tighter">Current Flow</span>
                             <span className="text-xl font-black font-mono text-white">{coolingFlow} <span className="text-[10px] text-slate-500">L/s</span></span>
                         </div>
                         <button
                             onClick={() => navigate(FRANCIS_PATHS.HUB)}
-                            className="flex items-center gap-2 px-6 py-2 bg-cyan-600/10 border-2 border-cyan-500/50 text-cyan-400 rounded-none font-black hover:bg-cyan-500 hover:text-white hover:shadow-none transition-all group uppercase text-xs tracking-tighter"
+                            className="flex items-center gap-2 px-6 py-2 bg-brand-600/10 border-2 border-brand-500/50 text-brand-400 rounded-none font-black hover:bg-brand-500 hover:text-white hover:shadow-none transition-all group uppercase text-xs tracking-tighter"
                         >
                             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition" />
                             <span>{t('francis.coolingWater.return') || "Return"}</span>
@@ -68,7 +68,7 @@ export const CoolingWater: React.FC = () => {
                     {/* Auto-Strainers */}
                     <GlassCard title={t('francis.coolingWater.s1Title')} className="relative overflow-hidden group">
                         <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                            <Waves className="w-48 h-48 text-cyan-500" />
+                            <Waves className="w-48 h-48 text-brand-500" />
                         </div>
 
                         <div className="relative z-10 space-y-6">
@@ -78,16 +78,16 @@ export const CoolingWater: React.FC = () => {
                                     <span className="text-emerald-400 font-mono font-black text-xl bg-emerald-900/20 px-4 py-1 rounded-none border border-emerald-500/20">0.12 BAR</span>
                                 </div>
                                 <div className="w-full bg-slate-800 h-3 rounded-none overflow-hidden">
-                                    <div className="w-[24%] bg-gradient-to-r from-cyan-500 to-emerald-500 h-full shadow-none" />
+                                    <div className="w-[24%] bg-gradient-to-r from-brand-500 to-emerald-500 h-full shadow-none" />
                                 </div>
                                 <p className="text-[10px] text-slate-500 mt-4 italic font-bold leading-relaxed">{t('francis.coolingWater.dpDesc')}</p>
                             </div>
 
                             <div className="space-y-4">
-                                <h4 className="text-cyan-400 font-black text-[10px] uppercase tracking-[0.2em] border-b border-white/5 pb-2">{t('francis.coolingWater.flushLogic')}</h4>
+                                <h4 className="text-brand-400 font-black text-[10px] uppercase tracking-[0.2em] border-b border-white/5 pb-2">{t('francis.coolingWater.flushLogic')}</h4>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div className="p-4 bg-white/5 rounded-none border border-white/10 hover:bg-white/10 transition-colors">
-                                        <Activity className="w-5 h-5 text-cyan-400 mb-2" />
+                                        <Activity className="w-5 h-5 text-brand-400 mb-2" />
                                         <strong className="block text-white text-[10px] font-black uppercase mb-1">{t('francis.coolingWater.trig')}</strong>
                                         <span className="text-[9px] text-slate-500 font-bold uppercase tracking-tighter">0.30 Bar Delta</span>
                                     </div>
@@ -107,11 +107,11 @@ export const CoolingWater: React.FC = () => {
                     </GlassCard>
 
                     {/* Component Performance */}
-                    <GlassCard title={t('francis.coolingWater.s2Title')} icon={<Thermometer className="text-cyan-400" />}>
+                    <GlassCard title={t('francis.coolingWater.s2Title')} icon={<Thermometer className="text-brand-400" />}>
                         <div className="overflow-hidden rounded-none border border-white/5 bg-black/40">
                             <table className="w-full text-left text-xs border-collapse">
                                 <thead>
-                                    <tr className="bg-cyan-900/40 text-cyan-400 font-black text-[9px] uppercase tracking-[0.2em]">
+                                    <tr className="bg-brand-900/40 text-brand-400 font-black text-[9px] uppercase tracking-[0.2em]">
                                         <th className="p-4 border-b border-white/5">{t('francis.coolingWater.thCol')}</th>
                                         <th className="p-4 border-b border-white/5 text-right">{t('francis.coolingWater.thFlow')}</th>
                                         <th className="p-4 border-b border-white/5 text-right font-black">{t('francis.coolingWater.thStat')}</th>
@@ -121,7 +121,7 @@ export const CoolingWater: React.FC = () => {
                                     {[1, 2, 3].map((i) => (
                                         <tr key={i} className="group hover:bg-white/5 transition-colors border-b border-white/5">
                                             <td className="p-4 font-black uppercase tracking-tighter">{t(`francis.coolingWater.col${i}`)}</td>
-                                            <td className="p-4 text-right font-mono font-black text-cyan-300">
+                                            <td className="p-4 text-right font-mono font-black text-brand-300">
                                                 {i === 1 ? '850 m³/h' : i === 2 ? '45 L/min' : '30 L/min'}
                                             </td>
                                             <td className="p-4 text-right">
@@ -135,13 +135,13 @@ export const CoolingWater: React.FC = () => {
                             </table>
                         </div>
 
-                        <div className="mt-6 p-6 bg-gradient-to-br from-cyan-950/40 to-black rounded-none border border-cyan-500/20 flex justify-between items-center group overflow-hidden relative">
-                            <div className="absolute inset-0 bg-cyan-500/5 translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
+                        <div className="mt-6 p-6 bg-gradient-to-br from-brand-950/40 to-black rounded-none border border-brand-500/20 flex justify-between items-center group overflow-hidden relative">
+                            <div className="absolute inset-0 bg-brand-500/5 translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
                             <div className="relative z-10 flex flex-col">
-                                <span className="text-[10px] text-cyan-500 font-black uppercase tracking-[0.2em] mb-1">{t('francis.coolingWater.inletTemp')}</span>
+                                <span className="text-[10px] text-brand-500 font-black uppercase tracking-[0.2em] mb-1">{t('francis.coolingWater.inletTemp')}</span>
                                 <span className="text-3xl font-black font-mono text-white tracking-tighter tabular-nums">{inletTemp.toFixed(1)}°C</span>
                             </div>
-                            <Snowflake className="w-12 h-12 text-cyan-500 relative z-10 opacity-50 group-hover:rotate-180 transition-transform duration-1000" />
+                            <Snowflake className="w-12 h-12 text-brand-500 relative z-10 opacity-50 group-hover:rotate-180 transition-transform duration-1000" />
                         </div>
                     </GlassCard>
                 </div>
@@ -149,13 +149,13 @@ export const CoolingWater: React.FC = () => {
                 {/* Thermal Regulation Logic Tabs */}
                 <section className="bg-slate-900/60 p-8 rounded-none border border-white/5 space-y-8">
                     <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-                        <Activity className="w-6 h-6 text-cyan-400" />
+                        <Activity className="w-6 h-6 text-brand-400" />
                         <h2 className="text-2xl font-black text-white uppercase tracking-tighter">{t('francis.coolingWater.s3Title')}</h2>
                     </div>
 
                     <div className="flex flex-col md:flex-row gap-6">
                         {[
-                            { id: 'winter', icon: Snowflake, color: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/40', label: t('francis.coolingWater.modeWinter') },
+                            { id: 'winter', icon: Snowflake, color: 'text-brand-400', bg: 'bg-brand-500/10', border: 'border-brand-500/40', label: t('francis.coolingWater.modeWinter') },
                             { id: 'summer', icon: Sun, color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/40', label: t('francis.coolingWater.modeSummer') },
                             { id: 'failure', icon: AlertTriangle, color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/40', label: t('francis.coolingWater.modeFail') }
                         ].map((tab) => (
@@ -171,17 +171,17 @@ export const CoolingWater: React.FC = () => {
                                     <tab.icon className={`w-8 h-8 ${activeTab === tab.id ? tab.color : 'text-slate-600'}`} />
                                 </div>
                                 <span className={`font-black uppercase tracking-[0.2em] text-xs ${activeTab === tab.id ? 'text-white' : 'text-slate-500'}`}>{tab.label}</span>
-                                {activeTab === tab.id && <div className={`absolute bottom-0 left-0 right-0 h-1 ${tab.id === 'winter' ? 'bg-cyan-500' : tab.id === 'summer' ? 'bg-amber-500' : 'bg-red-500'}`} />}
+                                {activeTab === tab.id && <div className={`absolute bottom-0 left-0 right-0 h-1 ${tab.id === 'winter' ? 'bg-brand-500' : tab.id === 'summer' ? 'bg-amber-500' : 'bg-red-500'}`} />}
                             </button>
                         ))}
                     </div>
 
                     <div className="bg-black/60 p-8 rounded-none border border-white/5 min-h-[200px] flex items-center justify-center relative overflow-hidden shadow-none">
-                        <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/5 via-transparent to-transparent pointer-events-none" />
+                        <div className="absolute inset-0 bg-gradient-to-tr from-brand-500/5 via-transparent to-transparent pointer-events-none" />
 
                         {activeTab === 'winter' && (
                             <div className="animate-in fade-in zoom-in-95 duration-500 max-w-2xl text-center space-y-4">
-                                <h4 className="text-2xl font-black text-cyan-400 uppercase tracking-tighter">{t('francis.coolingWater.modeRec')}</h4>
+                                <h4 className="text-2xl font-black text-brand-400 uppercase tracking-tighter">{t('francis.coolingWater.modeRec')}</h4>
                                 <p className="text-slate-300 text-lg font-bold leading-relaxed">{t('francis.coolingWater.descWinter')}</p>
                                 <div className="flex justify-center gap-2 pt-4">
                                     <NeuralPulse />

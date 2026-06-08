@@ -37,7 +37,7 @@ export const Spinner: React.FC<SpinnerProps> = ({
                 {/* Main Rotating Ring */}
                 <div className={`
                     ${currentSize.w} ${currentSize.h} rounded-full 
-                    ${currentSize.border} border-t-cyan-600 border-r-transparent border-b-cyan-800 border-l-transparent 
+                    ${currentSize.border} border-t-brand-600 border-r-transparent border-b-brand-800 border-l-transparent 
                     animate-spin
                     relative z-10
                 `}></div>
@@ -57,14 +57,14 @@ export const Spinner: React.FC<SpinnerProps> = ({
 
             {text && (
                 <div className="flex flex-col items-center gap-1">
-                    <div className="text-cyan-600 font-mono text-xs font-bold uppercase tracking-[0.3em]">
+                    <div className="text-brand-600 font-mono text-xs font-bold uppercase tracking-[0.3em]">
                         {text}
                     </div>
                     {/* Loading dots */}
                     <div className="flex gap-1">
-                        <div className="w-1 h-1 bg-cyan-700 rounded-none animate-bounce" style={{ animationDelay: '0s' }}></div>
-                        <div className="w-1 h-1 bg-cyan-700 rounded-none animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                        <div className="w-1 h-1 bg-cyan-700 rounded-none animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        <div className="w-1 h-1 bg-brand-700 rounded-none animate-bounce" style={{ animationDelay: '0s' }}></div>
+                        <div className="w-1 h-1 bg-brand-700 rounded-none animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-1 h-1 bg-brand-700 rounded-none animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                     </div>
                 </div>
             )}

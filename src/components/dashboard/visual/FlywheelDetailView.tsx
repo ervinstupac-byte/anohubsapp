@@ -158,27 +158,27 @@ const FlywheelDetailView: React.FC<FlywheelDetailProps> = ({ onBack, onHome }) =
             initial="initial"
             animate="animate"
             exit="exit"
-            className={`relative w-full h-full bg-[#030708] rounded-3xl border border-cyan-500/20 overflow-hidden flex flex-col ${isFullscreen ? 'rounded-none' : ''}`}
+            className={`relative w-full h-full bg-[#030708] rounded-3xl border border-brand-500/20 overflow-hidden flex flex-col ${isFullscreen ? 'rounded-none' : ''}`}
         >
             {/* Header */}
             <motion.div
                 variants={childVariants}
-                className="flex items-center justify-between p-6 bg-gradient-to-b from-cyan-950/20 to-transparent border-b border-cyan-500/10"
+                className="flex items-center justify-between p-6 bg-gradient-to-b from-brand-950/20 to-transparent border-b border-brand-500/10"
             >
                 <div className="flex items-center gap-4">
                     <button
                         onClick={onBack}
-                        className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 transition-all group"
+                        className="p-2 rounded-xl bg-brand-500/10 border border-brand-500/30 text-brand-400 hover:bg-brand-500/20 transition-all group"
                         title="Back to System Topology"
                     >
                         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
                     </button>
                     <div>
                         <h2 className="text-xl font-black text-white tracking-widest uppercase">
-                            {t('mechanical.detail.title', 'Mechanical Backbone')} <span className="text-cyan-500">{t('common.drillDown', 'Drill-Down')}</span>
+                            {t('mechanical.detail.title', 'Mechanical Backbone')} <span className="text-brand-500">{t('common.drillDown', 'Drill-Down')}</span>
                         </h2>
                         <div className="flex items-center gap-3">
-                            <p className="text-[10px] text-cyan-400 font-bold uppercase tracking-tighter opacity-70">
+                            <p className="text-[10px] text-brand-400 font-bold uppercase tracking-tighter opacity-70">
                                 NC-9.0 {t('common.technicalAnalysis', 'Technical Analysis')} // 5 MECHANICAL NODES
                             </p>
                             {/* Live Vibration Indicator if High */}
@@ -196,8 +196,8 @@ const FlywheelDetailView: React.FC<FlywheelDetailProps> = ({ onBack, onHome }) =
                     {/* Legend */}
                     <div className="hidden md:flex items-center gap-4 mr-4 text-[9px] font-bold uppercase tracking-widest">
                         <div className="flex items-center gap-1">
-                            <div className="w-2 h-2 rounded-full bg-cyan-500" />
-                            <span className="text-cyan-400">Inertia</span>
+                            <div className="w-2 h-2 rounded-full bg-brand-500" />
+                            <span className="text-brand-400">Inertia</span>
                         </div>
                         <div className="flex items-center gap-1">
                             <div className="w-2 h-2 rounded-full bg-amber-500" />
@@ -209,20 +209,20 @@ const FlywheelDetailView: React.FC<FlywheelDetailProps> = ({ onBack, onHome }) =
                         </div>
                     </div>
 
-                    <div className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
-                        <span className="text-[10px] font-bold text-cyan-300 uppercase tracking-widest">{t('common.assetSyncActive', 'Asset Sync Active')}</span>
+                    <div className="px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-brand-500 animate-pulse" />
+                        <span className="text-[10px] font-bold text-brand-300 uppercase tracking-widest">{t('common.assetSyncActive', 'Asset Sync Active')}</span>
                     </div>
 
                     {onHome && (
-                        <button onClick={onHome} className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 transition-all group">
+                        <button onClick={onHome} className="p-2 rounded-xl bg-brand-500/10 border border-brand-500/30 text-brand-400 hover:bg-brand-500/20 transition-all group">
                             <Home className="w-5 h-5" />
                         </button>
                     )}
 
                     <button
                         onClick={toggleFullscreen}
-                        className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 transition-all group"
+                        className="p-2 rounded-xl bg-brand-500/10 border border-brand-500/30 text-brand-400 hover:bg-brand-500/20 transition-all group"
                     >
                         {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
                     </button>
@@ -231,7 +231,7 @@ const FlywheelDetailView: React.FC<FlywheelDetailProps> = ({ onBack, onHome }) =
 
             <div className="flex-1 flex gap-6 p-6 overflow-hidden">
                 {/* Visual Area */}
-                <motion.div variants={childVariants} className="flex-[2] relative bg-black/40 rounded-2xl border border-cyan-500/10 overflow-hidden">
+                <motion.div variants={childVariants} className="flex-[2] relative bg-black/40 rounded-2xl border border-brand-500/10 overflow-hidden">
                     <div className="absolute inset-0 flex items-center justify-center p-4">
                         <motion.img
                             animate={rpm > 10 ? { rotate: 360 } : { rotate: 0 }}
@@ -282,7 +282,7 @@ const FlywheelDetailView: React.FC<FlywheelDetailProps> = ({ onBack, onHome }) =
 
                     {/* Fullscreen indicator */}
                     {isFullscreen && (
-                        <div className="absolute top-4 right-4 px-2 py-1 bg-cyan-500/20 border border-cyan-500/30 rounded text-[9px] font-bold text-cyan-400 uppercase tracking-widest">
+                        <div className="absolute top-4 right-4 px-2 py-1 bg-brand-500/20 border border-brand-500/30 rounded text-[9px] font-bold text-brand-400 uppercase tracking-widest">
                             Full-Screen Mode • Press ESC to Exit
                         </div>
                     )}
@@ -297,15 +297,15 @@ const FlywheelDetailView: React.FC<FlywheelDetailProps> = ({ onBack, onHome }) =
                                 initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -20 }}
-                                className="h-full bg-cyan-500/5 border border-cyan-500/20 rounded-2xl p-6 backdrop-blur-xl flex flex-col"
+                                className="h-full bg-brand-500/5 border border-brand-500/20 rounded-2xl p-6 backdrop-blur-xl flex flex-col"
                             >
                                 <div className="flex items-center gap-4 mb-6">
-                                    <div className="p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+                                    <div className="p-3 rounded-xl bg-brand-500/10 border border-brand-500/30 text-brand-400">
                                         <activeData.icon className="w-8 h-8" />
                                     </div>
                                     <div>
                                         <h3 className="text-lg font-black text-white uppercase">{getComponentData(activeData).name}</h3>
-                                        <p className="text-xs font-bold text-cyan-400">{getComponentData(activeData).param}</p>
+                                        <p className="text-xs font-bold text-brand-400">{getComponentData(activeData).param}</p>
                                     </div>
                                 </div>
                                 <div className="space-y-6">
@@ -342,10 +342,10 @@ const FlywheelDetailView: React.FC<FlywheelDetailProps> = ({ onBack, onHome }) =
                                 </div>
                             </motion.div>
                         ) : (
-                            <div className="h-full flex flex-col items-center justify-center p-8 bg-cyan-500/5 border border-dashed border-cyan-500/20 rounded-2xl text-center">
-                                <Activity className="w-12 h-12 text-cyan-500/20 mb-4" />
-                                <h3 className="text-cyan-500/60 font-black text-sm uppercase">Select Mechanics</h3>
-                                <p className="text-[10px] text-cyan-500/40 font-bold mt-2">Explore Shaft & Coupling Physics</p>
+                            <div className="h-full flex flex-col items-center justify-center p-8 bg-brand-500/5 border border-dashed border-brand-500/20 rounded-2xl text-center">
+                                <Activity className="w-12 h-12 text-brand-500/20 mb-4" />
+                                <h3 className="text-brand-500/60 font-black text-sm uppercase">Select Mechanics</h3>
+                                <p className="text-[10px] text-brand-500/40 font-bold mt-2">Explore Shaft & Coupling Physics</p>
                             </div>
                         )}
                     </AnimatePresence>

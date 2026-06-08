@@ -1039,13 +1039,13 @@ export const ManualDataEntry: React.FC = () => {
         <div className="bg-slate-900 border border-slate-700 rounded-lg p-4 w-full max-w-sm">
             <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-2">
                 <div className="flex items-center gap-2">
-                    <Database className="w-4 h-4 text-cyan-400" />
+                    <Database className="w-4 h-4 text-brand-400" />
                     <span className="text-sm font-bold text-white uppercase tracking-wider">Data Injection</span>
                 </div>
                 <div className="flex gap-2">
                      <button 
                         onClick={() => setActiveTab('manual')}
-                        className={`p-1 rounded ${activeTab === 'manual' ? 'bg-cyan-900 text-cyan-400' : 'text-slate-500 hover:text-white'}`}
+                        className={`p-1 rounded ${activeTab === 'manual' ? 'bg-brand-900 text-brand-400' : 'text-slate-500 hover:text-white'}`}
                         title="Manual Entry"
                     >
                         <Sliders className="w-4 h-4" />
@@ -1102,7 +1102,7 @@ export const ManualDataEntry: React.FC = () => {
                                 type="number" 
                                 value={formState.flowRate}
                                 onChange={(e) => handleChange('flowRate', e.target.value)}
-                                className="w-full bg-transparent text-cyan-400 font-mono font-bold focus:outline-none"
+                                className="w-full bg-transparent text-brand-400 font-mono font-bold focus:outline-none"
                             />
                         </div>
                         <div className="bg-slate-950 p-2 rounded border border-slate-800">
@@ -1111,7 +1111,7 @@ export const ManualDataEntry: React.FC = () => {
                                 type="number" 
                                 value={formState.netHead}
                                 onChange={(e) => handleChange('netHead', e.target.value)}
-                                className="w-full bg-transparent text-cyan-400 font-mono font-bold focus:outline-none"
+                                className="w-full bg-transparent text-brand-400 font-mono font-bold focus:outline-none"
                             />
                         </div>
                     </div>
@@ -1141,7 +1141,7 @@ export const ManualDataEntry: React.FC = () => {
                                 type="number" 
                                 value={formState.waterTemp}
                                 onChange={(e) => handleChange('waterTemp', e.target.value)}
-                                className="w-full bg-transparent text-cyan-200 font-mono font-bold focus:outline-none"
+                                className="w-full bg-transparent text-brand-200 font-mono font-bold focus:outline-none"
                             />
                         </div>
                     </div>
@@ -1303,7 +1303,7 @@ export const ManualDataEntry: React.FC = () => {
                                 type="number" 
                                 value={formState.pipeDiaNew}
                                 onChange={(e) => handleChange('pipeDiaNew', e.target.value)}
-                                className="w-full bg-transparent text-cyan-200 font-mono font-bold focus:outline-none"
+                                className="w-full bg-transparent text-brand-200 font-mono font-bold focus:outline-none"
                             />
                         </div>
                     </div>
@@ -1465,7 +1465,7 @@ export const ManualDataEntry: React.FC = () => {
                 {/* Computer Vision Section */}
                 <div className="space-y-2 mt-4 border-t border-slate-800 pt-4">
                     <label className="text-xs text-slate-400 font-mono uppercase flex items-center gap-2">
-                        <Camera className="w-3 h-3 text-cyan-400" />
+                        <Camera className="w-3 h-3 text-brand-400" />
                         Visual Inspection (Computer Vision)
                     </label>
                     <div className="bg-slate-950 p-2 rounded border border-slate-800 flex items-center gap-4">
@@ -1476,7 +1476,7 @@ export const ManualDataEntry: React.FC = () => {
                                 onChange={handleImageUpload}
                                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                             />
-                            <div className="w-16 h-16 bg-slate-900 border border-slate-700 border-dashed rounded flex items-center justify-center group-hover:border-cyan-500 transition-colors">
+                            <div className="w-16 h-16 bg-slate-900 border border-slate-700 border-dashed rounded flex items-center justify-center group-hover:border-brand-500 transition-colors">
                                 {imagePreview ? (
                                     <img src={imagePreview} alt="Preview" className="w-full h-full object-cover rounded" />
                                 ) : (
@@ -1495,7 +1495,7 @@ export const ManualDataEntry: React.FC = () => {
                                         <span className="ml-2 text-red-500 font-bold animate-pulse">CRITICAL</span>
                                     )}
                                     {videoResult && (
-                                        <div className="mt-1 pt-1 border-t border-slate-800 text-[9px] text-cyan-300">
+                                        <div className="mt-1 pt-1 border-t border-slate-800 text-[9px] text-brand-300">
                                             AR: {videoResult.detectedAnomalies.length} Anomalies | Audio: {videoResult.audioAnalysis.detectedPattern}
                                         </div>
                                     )}
@@ -1511,7 +1511,7 @@ export const ManualDataEntry: React.FC = () => {
                     <button 
                         id="apply-btn"
                         onClick={handleApply}
-                        className="flex-1 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded transition-colors flex items-center justify-center gap-2"
+                        className="flex-1 py-2 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded transition-colors flex items-center justify-center gap-2"
                     >
                         <RefreshCw className="w-4 h-4" />
                         UPDATE
@@ -1665,7 +1665,7 @@ export const ManualDataEntry: React.FC = () => {
                         {/* Energy & Life Extension */}
                         <div className="grid grid-cols-2 gap-2">
                              <div className="p-2 rounded border text-xs bg-slate-950/50 border-slate-800 text-slate-400">
-                                <div className="font-bold uppercase mb-1 flex items-center gap-1 text-cyan-400">
+                                <div className="font-bold uppercase mb-1 flex items-center gap-1 text-brand-400">
                                     <Zap className="w-3 h-3" />
                                     Harvest
                                 </div>

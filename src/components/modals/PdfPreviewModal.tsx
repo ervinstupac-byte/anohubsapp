@@ -77,7 +77,7 @@ export const PdfPreviewModal: React.FC<PdfPreviewModalProps> = ({
                     onClick={(e) => e.stopPropagation()}
                     className="w-full max-w-6xl h-[90vh] flex flex-col"
                 >
-                    <GlassCard className="flex-1 flex flex-col overflow-hidden border-cyan-500/30 shadow-none">
+                    <GlassCard className="flex-1 flex flex-col overflow-hidden border-brand-500/30 shadow-none">
                         {/* Header */}
                         <div className="flex items-center justify-between px-6 py-4 bg-slate-900/90 border-b border-white/10">
                             <div className="flex items-center gap-4">
@@ -118,7 +118,7 @@ export const PdfPreviewModal: React.FC<PdfPreviewModalProps> = ({
                                 </button>
                                 <button
                                     onClick={handleDownload}
-                                    className="flex items-center gap-2 px-4 py-2 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 text-sm font-bold rounded-none transition-all"
+                                    className="flex items-center gap-2 px-4 py-2 bg-brand-500/10 hover:bg-brand-500/20 border border-brand-500/30 text-brand-400 text-sm font-bold rounded-none transition-all"
                                 >
                                     <Download className="w-4 h-4" />
                                     <span>{t('actions.download', 'Download')}</span>

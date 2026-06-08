@@ -48,7 +48,7 @@ export const ManagementSummary: React.FC = () => {
               </div>
               <div className="text-right">
                 <div className="text-sm font-mono">{r.computed_loss_cost ? `${Number(r.computed_loss_cost).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}` : '—'}</div>
-                <a className="text-xs text-cyan-400" href={r.pdf_path || '#'} target="_blank" rel="noreferrer">Open</a>
+                <a className="text-xs text-brand-400" href={r.pdf_path || '#'} target="_blank" rel="noreferrer">Open</a>
               </div>
             </li>
           ))}

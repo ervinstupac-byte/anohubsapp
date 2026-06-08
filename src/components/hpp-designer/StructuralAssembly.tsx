@@ -167,7 +167,7 @@ export const StructuralAssembly: React.FC<{ onComplete: () => void; onAssemblyCh
                                     p-4 rounded-xl border flex flex-col items-center gap-2 cursor-grab active:cursor-grabbing transition-all
                                     ${isInstalled
                                         ? 'bg-emerald-900/20 border-emerald-500/30 opacity-50 grayscale cursor-default'
-                                        : 'bg-slate-800/50 border-white/5 hover:border-cyan-500/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)]'}
+                                        : 'bg-slate-800/50 border-white/5 hover:border-brand-500/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)]'}
                                 `}
                             >
                                 <span className="text-3xl">{part.icon}</span>
@@ -183,7 +183,7 @@ export const StructuralAssembly: React.FC<{ onComplete: () => void; onAssemblyCh
             <div
                 className={`
                     relative rounded-2xl border-2 border-dashed transition-all overflow-hidden flex flex-col justify-end items-center p-8
-                    ${draggingPart ? 'border-cyan-500/50 bg-cyan-950/10' : 'border-slate-700/30 bg-black/20'}
+                    ${draggingPart ? 'border-brand-500/50 bg-brand-950/10' : 'border-slate-700/30 bg-black/20'}
                 `}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
@@ -209,12 +209,12 @@ export const StructuralAssembly: React.FC<{ onComplete: () => void; onAssemblyCh
                                     initial={{ opacity: 0, y: -50, scale: 0.9 }}
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                                    className="w-full h-16 bg-slate-800 rounded-lg border border-cyan-500/30 shadow-[0_4px_20px_rgba(0,0,0,0.5)] flex items-center justify-between px-4 relative group"
+                                    className="w-full h-16 bg-slate-800 rounded-lg border border-brand-500/30 shadow-[0_4px_20px_rgba(0,0,0,0.5)] flex items-center justify-between px-4 relative group"
                                     style={{ zIndex: part?.zIndex || 0 }}
                                 >
                                     <div className="flex items-center gap-4">
                                         <span className="text-2xl">{part?.icon}</span>
-                                        <span className="text-sm font-bold text-cyan-100">{t(`hpp_builder.assembly.components.${partId.toLowerCase()}`)}</span>
+                                        <span className="text-sm font-bold text-brand-100">{t(`hpp_builder.assembly.components.${partId.toLowerCase()}`)}</span>
                                     </div>
 
                                     {/* NEW: Go to Operations Deep-Link */}
@@ -224,13 +224,13 @@ export const StructuralAssembly: React.FC<{ onComplete: () => void; onAssemblyCh
                                             e.stopPropagation();
                                             navigate('/', { state: { focusComponent: partId, fromBuilder: true } });
                                         }}
-                                        className="opacity-0 group-hover:opacity-100 transition-opacity text-[9px] px-2 py-1 flex items-center gap-1 hover:bg-cyan-500/10 hover:text-cyan-400"
+                                        className="opacity-0 group-hover:opacity-100 transition-opacity text-[9px] px-2 py-1 flex items-center gap-1 hover:bg-brand-500/10 hover:text-brand-400"
                                     >
                                         <Wrench className="w-3 h-3" />
                                         <span>{t('actions.goToOperations', 'Operations')}</span>
                                     </ModernButton>
 
-                                    <div className="absolute inset-0 bg-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                                    <div className="absolute inset-0 bg-brand-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                                 </motion.div>
                             );
                         })}
@@ -259,7 +259,7 @@ export const StructuralAssembly: React.FC<{ onComplete: () => void; onAssemblyCh
             {/* ALIGNMENT MODAL */}
             {alignmentModal.open && (
                 <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="bg-slate-900 border border-cyan-500/30 p-8 rounded-2xl w-full max-w-md shadow-[0_0_50px_rgba(6,182,212,0.2)] animate-fade-in-up">
+                    <div className="bg-slate-900 border border-brand-500/30 p-8 rounded-2xl w-full max-w-md shadow-[0_0_50px_rgba(6,182,212,0.2)] animate-fade-in-up">
                         <h3 className="text-xl font-bold text-white mb-2">{t('hpp_builder.assembly.prompts.measure_alignment')}</h3>
                         <p className="text-slate-400 text-sm mb-6">Enter precision laser tracker value for {t(`hpp_builder.assembly.components.${alignmentModal.part?.toLowerCase()}`)}.</p>
 
@@ -269,7 +269,7 @@ export const StructuralAssembly: React.FC<{ onComplete: () => void; onAssemblyCh
                             autoFocus
                             value={measuredAlignment}
                             onChange={(e) => setMeasuredAlignment(e.target.value)}
-                            className="w-full bg-black/50 border border-slate-700 rounded-lg p-4 text-2xl font-mono text-cyan-400 mb-6 focus:border-cyan-500 outline-none"
+                            className="w-full bg-black/50 border border-slate-700 rounded-lg p-4 text-2xl font-mono text-brand-400 mb-6 focus:border-brand-500 outline-none"
                             placeholder="0.00"
                         />
 

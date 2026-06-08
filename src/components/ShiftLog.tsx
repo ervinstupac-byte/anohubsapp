@@ -66,14 +66,14 @@ export const ShiftLog: React.FC = () => {
                     </GlassCard>
 
                     {fieldDiagnoses.length > 0 && (
-                        <GlassCard title="Ano-Agent Feedback" className="border-l-4 border-l-cyan-500 animate-pulse">
+                        <GlassCard title="Ano-Agent Feedback" className="border-l-4 border-l-brand-500 animate-pulse">
                             <div className="space-y-4">
                                 {fieldDiagnoses.map((d, i) => (
-                                    <div key={i} className="p-4 bg-cyan-500/10 border border-cyan-500/30 rounded-xl">
-                                        <p className="text-[10px] text-cyan-400 font-black uppercase mb-1">Pattern Identified</p>
+                                    <div key={i} className="p-4 bg-brand-500/10 border border-brand-500/30 rounded-xl">
+                                        <p className="text-[10px] text-brand-400 font-black uppercase mb-1">Pattern Identified</p>
                                         <p className="text-sm text-slate-200 italic leading-relaxed">"{d.message}"</p>
                                         {d.diagnosis && (
-                                            <div className="mt-3 pt-3 border-t border-cyan-500/20">
+                                            <div className="mt-3 pt-3 border-t border-brand-500/20">
                                                 <p className="text-[9px] text-slate-500 uppercase font-bold">Recommended Action:</p>
                                                 <p className="text-xs text-white">{d.diagnosis.recommended_action}</p>
                                             </div>

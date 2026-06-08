@@ -54,7 +54,7 @@ export const DistributorSync: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
                         <div className="p-6 bg-black/60 rounded-none border border-white/5">
                             <p className="text-[10px] text-zinc-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
-                                <Cpu className="w-3 h-3 text-cyan-400" /> Vane Opening
+                                <Cpu className="w-3 h-3 text-brand-400" /> Vane Opening
                             </p>
                             <p className="text-3xl font-black text-white font-mono tracking-tighter">
                                 {guideVaneOpening.toFixed(1)} <span className="text-xs text-slate-500">%</span>
@@ -121,7 +121,7 @@ export const DistributorSync: React.FC = () => {
                                     ].map((row, idx) => (
                                         <tr key={idx} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
                                             <td className="p-4 font-black uppercase tracking-tighter group-hover:pl-6 transition-all">{row.point}</td>
-                                            <td className="p-4 font-mono font-black text-cyan-400">{row.val}</td>
+                                            <td className="p-4 font-mono font-black text-brand-400">{row.val}</td>
                                             <td className="p-4 text-right text-[10px] font-bold text-slate-500 italic uppercase">{row.method}</td>
                                         </tr>
                                     ))}

@@ -285,8 +285,8 @@ export const ShaftOrbitPlot = React.memo(forwardRef<ShaftOrbitPlotHandle, ShaftO
             <canvas ref={canvasRef} className="rounded-lg bg-slate-900/40 border border-white/5 shadow-2xl" />
 
             <div className="absolute top-2 left-2 flex flex-col gap-1">
-                <span className="text-[10px] font-bold text-cyan-400 font-mono">X: {vibrationX.toFixed(3)}mm</span>
-                <span className="text-[10px] font-bold text-cyan-400 font-mono">Y: {vibrationY.toFixed(3)}mm</span>
+                <span className="text-[10px] font-bold text-brand-400 font-mono">X: {vibrationX.toFixed(3)}mm</span>
+                <span className="text-[10px] font-bold text-brand-400 font-mono">Y: {vibrationY.toFixed(3)}mm</span>
             </div>
 
             <div className="absolute bottom-2 right-2 hidden group-hover:block">

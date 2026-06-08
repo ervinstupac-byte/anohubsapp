@@ -22,7 +22,7 @@ export const AIConstitution: React.FC = () => {
         {
             id: 3,
             title: "TRANSPARENCY OF INFERENCE",
-            icon: <BookOpen className="w-5 h-5 text-cyan-400" />,
+            icon: <BookOpen className="w-5 h-5 text-brand-300" />,
             description: "Every AI decision must be traceable to a specific set of sensor inputs and logic rules. 'Black box' operations are prohibited in critical control loops."
         },
         {
@@ -39,16 +39,16 @@ export const AIConstitution: React.FC = () => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="w-full max-w-4xl bg-slate-950 border border-slate-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+                className="w-full max-w-4xl glass-strong rounded-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
             >
                 {/* Header */}
-                <div className="p-6 border-b border-slate-800 flex items-center justify-between bg-slate-900/50">
+                <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/5">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-slate-900 border border-slate-700 flex items-center justify-center">
-                            <Scale className="w-6 h-6 text-slate-200" />
+                        <div className="w-12 h-12 rounded-xl bg-brand-gradient flex items-center justify-center shadow-glow">
+                            <Scale className="w-6 h-6 text-white" />
                         </div>
                         <div>
-                            <h1 className="text-xl font-black text-slate-100 tracking-[0.2em] uppercase">
+                            <h1 className="text-xl font-header font-black text-slate-100 tracking-[0.2em] uppercase">
                                 AI Constitution
                             </h1>
                             <div className="flex items-center gap-2 mt-1">
@@ -82,10 +82,10 @@ export const AIConstitution: React.FC = () => {
 
                         {/* Principles */}
                         {principles.map((p) => (
-                            <div key={p.id} className="p-6 bg-slate-900/20 border border-slate-800 hover:border-slate-700 transition-colors group">
+                            <div key={p.id} className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-brand-400/40 transition-colors group">
                                 <div className="flex items-start justify-between mb-4">
                                     <div className="flex items-center gap-3">
-                                        <div className="p-2 bg-slate-950 border border-slate-800 group-hover:border-slate-600 transition-colors">
+                                        <div className="p-2 rounded-lg bg-white/5 border border-white/10 group-hover:border-brand-400/40 transition-colors">
                                             {p.icon}
                                         </div>
                                         <h3 className="text-sm font-black text-slate-200 uppercase tracking-wide">
@@ -112,10 +112,10 @@ export const AIConstitution: React.FC = () => {
                                     </div>
                                 </div>
                                 <div className="flex gap-2">
-                                    <button className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 uppercase tracking-wider border border-slate-700 transition-colors">
+                                    <button className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-bold text-slate-200 uppercase tracking-wider border border-white/10 transition-colors">
                                         View Audit Logs
                                     </button>
-                                    <button className="px-4 py-2 bg-emerald-900/20 hover:bg-emerald-900/40 text-xs font-bold text-emerald-400 uppercase tracking-wider border border-emerald-500/30 transition-colors">
+                                    <button className="px-4 py-2 rounded-lg bg-accent-500/10 hover:bg-accent-500/20 text-xs font-bold text-accent-300 uppercase tracking-wider border border-accent-500/30 transition-colors">
                                         Verify Hash
                                     </button>
                                 </div>
@@ -125,7 +125,7 @@ export const AIConstitution: React.FC = () => {
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 border-t border-slate-800 bg-slate-950 flex justify-between items-center text-[10px] font-mono text-slate-600">
+                <div className="p-4 border-t border-white/10 bg-white/5 flex justify-between items-center text-[10px] font-mono text-slate-600">
                     <span>IMMUTABLE LEDGER RECORD: #992-881-AZ</span>
                     <span>LAST RATIFIED: 2024-10-15</span>
                 </div>

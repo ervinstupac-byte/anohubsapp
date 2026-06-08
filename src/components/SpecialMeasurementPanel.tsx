@@ -68,7 +68,7 @@ export const SpecialMeasurementPanel: React.FC<SpecialMeasurementPanelProps> = (
             <div className="mb-6">
                 <h3 className="text-2xl font-black uppercase tracking-tighter mb-2">
                     <span className="text-white">Special</span>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 ml-2">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-purple-400 ml-2">
                         Measurements
                     </span>
                 </h3>
@@ -90,7 +90,7 @@ export const SpecialMeasurementPanel: React.FC<SpecialMeasurementPanelProps> = (
                                     key={format}
                                     onClick={() => setImportFormat(format)}
                                     className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${importFormat === format
-                                        ? 'bg-cyan-500/30 text-cyan-400 border-2 border-cyan-500'
+                                        ? 'bg-brand-500/30 text-brand-400 border-2 border-brand-500'
                                         : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:bg-slate-700/50'
                                         }`}
                                 >
@@ -110,8 +110,8 @@ export const SpecialMeasurementPanel: React.FC<SpecialMeasurementPanelProps> = (
                             disabled={isProcessing}
                         />
                         <div className={`p-8 border-2 border-dashed rounded-lg transition-all ${isProcessing
-                            ? 'border-cyan-500 bg-cyan-500/10 animate-pulse'
-                            : 'border-slate-700 bg-slate-800/30 hover:border-cyan-500/50 hover:bg-slate-800/50'
+                            ? 'border-brand-500 bg-brand-500/10 animate-pulse'
+                            : 'border-slate-700 bg-slate-800/30 hover:border-brand-500/50 hover:bg-slate-800/50'
                             }`}>
                             <div className="text-center">
                                 <Upload className="w-12 h-12 mx-auto mb-4 text-slate-500" />
@@ -126,8 +126,8 @@ export const SpecialMeasurementPanel: React.FC<SpecialMeasurementPanelProps> = (
                     </label>
 
                     {/* Info Box */}
-                    <div className="p-4 bg-cyan-950/20 border border-cyan-500/30 rounded-lg">
-                        <p className="text-sm text-cyan-300 font-bold mb-2">📏 What to measure:</p>
+                    <div className="p-4 bg-brand-950/20 border border-brand-500/30 rounded-lg">
+                        <p className="text-sm text-brand-300 font-bold mb-2">📏 What to measure:</p>
                         <ul className="text-xs text-slate-300 space-y-1 list-disc list-inside">
                             <li>Spiral case geometry points (100+ recommended)</li>
                             <li>Stay ring bolt hole positions</li>

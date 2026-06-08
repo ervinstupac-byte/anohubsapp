@@ -51,7 +51,7 @@ export const SovereignCertificate: React.FC<SovereignCertificateProps> = ({ data
                     <p className="text-xs text-amber-500 uppercase tracking-wider">03. Metallurgy</p>
                     <p className="text-white">Runner: <span className="text-amber-300">{data.metallurgy.runnerMaterial}</span></p>
                     {data.metallurgy.ceramicCoatingApplied && (
-                        <p className="text-cyan-400 text-[10px] flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> CERAMIC ARMORED</p>
+                        <p className="text-brand-400 text-[10px] flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> CERAMIC ARMORED</p>
                     )}
                 </div>
 
@@ -70,7 +70,7 @@ export const SovereignCertificate: React.FC<SovereignCertificateProps> = ({ data
             <div className="relative z-10 grid grid-cols-2 gap-12 max-w-xl mx-auto mt-auto pt-8 border-t border-slate-800">
                 <div className="text-left">
                     <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-2">Unit Status</p>
-                    <p className={`text-xl font-bold tracking-wider ${isPerfect ? 'text-cyan-400' : 'text-red-500'}`}>
+                    <p className={`text-xl font-bold tracking-wider ${isPerfect ? 'text-brand-400' : 'text-red-500'}`}>
                         {isPerfect ? 'BORN PERFECT' : 'RESTRICTED'}
                     </p>
                     <p className="text-[10px] text-slate-600 font-mono mt-1">{timestamp}</p>

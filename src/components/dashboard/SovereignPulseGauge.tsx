@@ -103,7 +103,7 @@ export const SovereignPulseGauge: React.FC<SovereignPulseGaugeProps> = ({ classN
             <span className="text-[10px] font-mono text-white">{sovereignPulse.subIndices.physical.toFixed(0)}</span>
             <div className={`w-16 h-2 bg-slate-700 rounded-full overflow-hidden`}>
               <div 
-                className={`h-full bg-gradient-to-r from-emerald-400 to-cyan-400 transition-all duration-300`}
+                className={`h-full bg-gradient-to-r from-emerald-400 to-brand-400 transition-all duration-300`}
                 style={{ width: `${(sovereignPulse.subIndices.physical / 100) * 100}%` }}
               />
             </div>
@@ -131,7 +131,7 @@ export const SovereignPulseGauge: React.FC<SovereignPulseGaugeProps> = ({ classN
             <span className="text-[10px] font-mono text-white">{sovereignPulse.subIndices.environmental.toFixed(0)}</span>
             <div className={`w-16 h-2 bg-slate-700 rounded-full overflow-hidden`}>
               <div 
-                className={`h-full bg-gradient-to-r from-blue-400 to-cyan-400 transition-all duration-300`}
+                className={`h-full bg-gradient-to-r from-blue-400 to-brand-400 transition-all duration-300`}
                 style={{ width: `${(sovereignPulse.subIndices.environmental / 100) * 100}%` }}
               />
             </div>

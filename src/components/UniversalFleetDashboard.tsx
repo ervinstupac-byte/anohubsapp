@@ -52,7 +52,7 @@ export const UniversalFleetDashboard: React.FC = () => {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
                 <GlassCard className="p-12 text-center">
-                    <Zap className="w-16 h-16 text-cyan-400 mx-auto mb-4 opacity-50" />
+                    <Zap className="w-16 h-16 text-brand-400 mx-auto mb-4 opacity-50" />
                     <h2 className="text-2xl font-black text-white mb-2">Universal Fleet Command</h2>
                     <p className="text-slate-400">Select an asset from Global Map to begin</p>
                 </GlassCard>
@@ -86,7 +86,7 @@ export const UniversalFleetDashboard: React.FC = () => {
                         <div>
                             <h1 className="text-3xl font-black uppercase tracking-tighter mb-1">
                                 <span className="text-white">{asset.name}</span>
-                                <span className="text-cyan-400 ml-3">
+                                <span className="text-brand-400 ml-3">
                                     {TurbineFactory.getVariantDisplayName(asset.turbine_variant)}
                                 </span>
                             </h1>
@@ -196,7 +196,7 @@ export const UniversalFleetDashboard: React.FC = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setShowOverlay(!showOverlay)}
-                    className="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 flex items-center justify-center shadow-2xl shadow-cyan-500/50 border-2 border-white/20"
+                    className="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-gradient-to-r from-brand-500 to-purple-500 flex items-center justify-center shadow-2xl shadow-brand-500/50 border-2 border-white/20"
                 >
                     <Eye className="w-8 h-8 text-white" />
                 </motion.button>
@@ -250,7 +250,7 @@ const ViewModeButton: React.FC<ViewModeButtonProps> = ({ icon: Icon, label, acti
             px-6 py-3 rounded-lg border-2 transition-all font-bold text-sm uppercase tracking-wider
             flex items-center gap-2
             ${active
-                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-300 shadow-lg shadow-cyan-500/20'
+                ? 'bg-brand-500/20 border-brand-500 text-brand-300 shadow-lg shadow-brand-500/20'
                 : 'bg-slate-800/30 border-slate-700/50 text-slate-400 hover:border-slate-600'
             }
         `}

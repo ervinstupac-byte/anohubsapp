@@ -82,7 +82,7 @@ export const QuickCalcCard: React.FC = () => {
                 currentValue: currentClearance.toNumber(),
                 status: isBreach ? 'critical' : 'nominal',
                 route: '/maintenance/shaft-alignment',
-                icon: <Ruler className="w-4 h-4 text-cyan-400" />
+                icon: <Ruler className="w-4 h-4 text-brand-400" />
             });
         } else {
             // Kaplan: Blade Tip Clearance
@@ -98,7 +98,7 @@ export const QuickCalcCard: React.FC = () => {
                 currentValue: currentGap.toNumber(),
                 status: currentGap.lt(minGap) ? 'critical' : isWarning ? 'warning' : 'nominal',
                 route: '/maintenance/shaft-alignment',
-                icon: <Ruler className="w-4 h-4 text-cyan-400" />
+                icon: <Ruler className="w-4 h-4 text-brand-400" />
             });
         }
 

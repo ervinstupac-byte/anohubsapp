@@ -9,7 +9,7 @@ export const Breadcrumbs: React.FC = () => {
 
     return (
         <nav className="flex items-center gap-2 mb-6 text-[10px] font-black uppercase tracking-widest text-slate-500">
-            <Link to="/" className="hover:text-cyan-400 transition-colors">HUB</Link>
+            <Link to="/" className="hover:text-brand-400 transition-colors">HUB</Link>
             {pathnames.map((value, index) => {
                 const last = index === pathnames.length - 1;
                 const to = `/${pathnames.slice(0, index + 1).join('/')}`;
@@ -18,9 +18,9 @@ export const Breadcrumbs: React.FC = () => {
                     <React.Fragment key={to}>
                         <span className="opacity-30">/</span>
                         {last ? (
-                            <span className="text-cyan-500">{value.replace(/-/g, ' ')}</span>
+                            <span className="text-brand-500">{value.replace(/-/g, ' ')}</span>
                         ) : (
-                            <Link to={to} className="hover:text-cyan-400 transition-colors">
+                            <Link to={to} className="hover:text-brand-400 transition-colors">
                                 {value.replace(/-/g, ' ')}
                             </Link>
                         )}

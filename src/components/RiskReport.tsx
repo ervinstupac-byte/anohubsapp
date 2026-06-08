@@ -292,7 +292,7 @@ export const RiskReport: React.FC = () => {
                     <span className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">{t('riskReport.activeContext', 'Active Context')}</span>
                     <div className="h-4 w-px bg-slate-700"></div>
                     {selectedAsset ? (
-                        <div className="flex items-center gap-2 text-sm font-mono text-cyan-400">
+                        <div className="flex items-center gap-2 text-sm font-mono text-brand-400">
                             <span className={`w-2 h-2 rounded-full ${selectedAsset.status === 'Operational' ? 'bg-emerald-500' : 'bg-red-500'}`}></span>
                             {selectedAsset.name}
                         </div>
@@ -305,7 +305,7 @@ export const RiskReport: React.FC = () => {
             {/* HEADER */}
             <div className="text-center py-6 animate-fade-in-up">
                 <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase mb-2">
-                    {t('riskReport.title', 'Project')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{t('riskReport.dossier', 'Master Dossier')}</span>
+                    {t('riskReport.title', 'Project')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-blue-500">{t('riskReport.dossier', 'Master Dossier')}</span>
                 </h1>
                 <p className="text-slate-400 text-lg max-w-2xl mx-auto font-light">
                     {t('riskReport.subtitle', 'Comprehensive risk and design summary for enterprise archiving.')}
@@ -456,7 +456,7 @@ export const RiskReport: React.FC = () => {
                                     </div>
                                     <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-700">
                                         <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">{t('riskReport.turbine', 'Turbine')}</div>
-                                        <div className="text-cyan-400 font-bold">{designData.recommended_turbine}</div>
+                                        <div className="text-brand-400 font-bold">{designData.recommended_turbine}</div>
                                     </div>
                                 </div>
 
@@ -483,10 +483,10 @@ export const RiskReport: React.FC = () => {
 
                     {/* BOTTOM ACTION BAR (FULL WIDTH) - DODANE FUNKCIONALNOSTI ZA PREVIEW */}
                     <div className="lg:col-span-2 mt-4 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-                        <div className="relative overflow-hidden rounded-2xl p-[1px] bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600">
+                        <div className="relative overflow-hidden rounded-2xl p-[1px] bg-gradient-to-r from-brand-500 via-blue-600 to-purple-600">
                             <div className="bg-slate-900 rounded-[15px] p-8 text-center relative overflow-hidden">
                                 {/* Background Glow */}
-                                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-cyan-500/5 blur-3xl pointer-events-none"></div>
+                                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-brand-500/5 blur-3xl pointer-events-none"></div>
 
                                 <div className="relative z-10">
                                     <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">{t('riskReport.compileTitle', 'Compile Master Dossier')}</h3>
@@ -525,7 +525,7 @@ export const RiskReport: React.FC = () => {
                                             variant="primary"
                                             isLoading={uploading}
                                             icon={<span>🚀</span>}
-                                            className="min-w-[240px] shadow-cyan-500/20"
+                                            className="min-w-[240px] shadow-brand-500/20"
                                         >
                                             {!hasData ? t('riskReport.noDataButton', 'No Data') : t('riskReport.submitArchive', 'Submit to HQ Archive')}
                                         </ModernButton>

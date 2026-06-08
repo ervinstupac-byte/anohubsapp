@@ -83,7 +83,7 @@ export const ForensicLab: React.FC = () => {
             {/* Header */}
             <div className="mb-6">
                 <h1 className="text-lg font-black uppercase tracking-[0.3em] text-white font-mono mb-2">
-                    FORENSIC LAB <span className="text-cyan-400">//</span> DIAGNOSTIC TIME-MACHINE
+                    FORENSIC LAB <span className="text-brand-400">//</span> DIAGNOSTIC TIME-MACHINE
                 </h1>
                 <p className="text-[10px] text-slate-400 font-mono">
                     Investigate historical system states and perform root cause analysis
@@ -106,12 +106,12 @@ export const ForensicLab: React.FC = () => {
                                         key={snapshot.id}
                                         onClick={() => analyzeSnapshot(snapshot)}
                                         className={`w-full text-left p-3 rounded-sm border transition-all ${selectedSnapshot?.id === snapshot.id
-                                            ? 'border-cyan-500/50 bg-cyan-950/20'
-                                            : 'border-white/5 bg-slate-900/40 hover:border-cyan-500/30'
+                                            ? 'border-brand-500/50 bg-brand-950/20'
+                                            : 'border-white/5 bg-slate-900/40 hover:border-brand-500/30'
                                             }`}
                                     >
                                         <div className="flex items-start gap-2 mb-2">
-                                            <Clock className="w-3 h-3 text-cyan-400 mt-0.5" />
+                                            <Clock className="w-3 h-3 text-brand-400 mt-0.5" />
                                             <div className="flex-1 min-w-0">
                                                 <div className="text-[9px] font-mono text-white truncate">
                                                     {snapshot.id}
@@ -126,7 +126,7 @@ export const ForensicLab: React.FC = () => {
                                                 ? 'bg-red-950/40 text-red-400'
                                                 : snapshot.data.systemHealth === 'DEGRADED'
                                                     ? 'bg-amber-950/40 text-amber-400'
-                                                    : 'bg-cyan-950/40 text-cyan-400'
+                                                    : 'bg-brand-950/40 text-brand-400'
                                                 }`}>
                                                 {snapshot.data.systemHealth}
                                             </span>
@@ -170,7 +170,7 @@ export const ForensicLab: React.FC = () => {
                                         </div>
                                         <div className={`text-sm font-mono font-bold ${selectedSnapshot.data.systemHealth === 'CRITICAL' ? 'text-red-400' :
                                             selectedSnapshot.data.systemHealth === 'DEGRADED' ? 'text-amber-400' :
-                                                'text-cyan-400'
+                                                'text-brand-400'
                                             }`}>
                                             {selectedSnapshot.data.systemHealth}
                                         </div>
@@ -231,7 +231,7 @@ export const ForensicLab: React.FC = () => {
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={exportDossier}
-                                    className="flex-1 py-3 bg-cyan-950/20 border border-cyan-500/30 rounded-sm text-cyan-400 text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-cyan-950/40 transition-all flex items-center justify-center gap-2"
+                                    className="flex-1 py-3 bg-brand-950/20 border border-brand-500/30 rounded-sm text-brand-400 text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-brand-950/40 transition-all flex items-center justify-center gap-2"
                                 >
                                     <FileText className="w-4 h-4" />
                                     Export Forensic Dossier (PDF)

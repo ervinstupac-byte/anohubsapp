@@ -61,7 +61,7 @@ export const DCSystems: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
                         <div className="p-6 bg-black/60 rounded-none border border-white/5">
                             <p className="text-[10px] text-red-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
-                                <Zap className="w-3 h-3 text-cyan-400" /> Bus Potential
+                                <Zap className="w-3 h-3 text-brand-400" /> Bus Potential
                             </p>
                             <p className="text-3xl font-black text-white font-mono tracking-tighter">
                                 {busVoltage.toFixed(1)} <span className="text-xs text-slate-500 uppercase ml-2">VDC</span>
@@ -101,7 +101,7 @@ export const DCSystems: React.FC = () => {
                     <div className="grid grid-cols-2 md:grid-cols-6 gap-6">
                         {voltages.map((v, i) => (
                             <div key={i} className={`p-6 rounded-none border transition-all duration-500 group/cell ${v < 2.20 ? 'bg-red-950/20 border-red-500/50 shadow-none' : 'bg-black/40 border-white/5 hover:border-emerald-500/30'}`}>
-                                <div className="text-[9px] font-black text-slate-500 uppercase mb-2 tracking-widest group-hover/cell:text-cyan-400 transition-colors tracking-tighter">Cell No. {i + 1}</div>
+                                <div className="text-[9px] font-black text-slate-500 uppercase mb-2 tracking-widest group-hover/cell:text-brand-400 transition-colors tracking-tighter">Cell No. {i + 1}</div>
                                 <div className={`text-2xl font-black font-mono tracking-tighter ${v < 2.20 ? 'text-red-500' : 'text-white'}`}>
                                     {v.toFixed(2)}<span className="text-[10px] opacity-40 ml-1">V</span>
                                 </div>

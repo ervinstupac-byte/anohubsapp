@@ -82,7 +82,7 @@ export const RiskAssessment: React.FC<{ onShowSummary: () => void }> = ({ onShow
                     // STANDBY SCREEN (Ako nije odabran Asset)
                     <GlassCard className="text-center py-24 border-dashed border-slate-700/50 bg-slate-900/40">
                         <div className="relative inline-block mb-6">
-                            <div className="absolute inset-0 bg-cyan-500/20 blur-xl rounded-full"></div>
+                            <div className="absolute inset-0 bg-brand-500/20 blur-xl rounded-full"></div>
                             <span className="relative text-6xl opacity-90 grayscale">🏗️</span>
                         </div>
 
@@ -91,7 +91,7 @@ export const RiskAssessment: React.FC<{ onShowSummary: () => void }> = ({ onShow
                         </h2>
 
                         <p className="text-slate-400 max-w-lg mx-auto text-lg font-light leading-relaxed">
-                            <Trans i18nKey="riskAssessment.standbyDesc" components={{ strong: <strong className="text-cyan-400 font-bold" /> }} />
+                            <Trans i18nKey="riskAssessment.standbyDesc" components={{ strong: <strong className="text-brand-400 font-bold" /> }} />
                         </p>
 
                         <div className="mt-8 flex justify-center gap-2 opacity-50">

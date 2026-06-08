@@ -26,19 +26,19 @@ export const DigitalDisplay: React.FC<DigitalDisplayProps> = React.memo(({
     }, [value]);
 
     const colorClasses = {
-        cyan: 'text-cyan-400 drop-shadow-[0_0_12px_rgba(34,211,238,0.9)]',
+        cyan: 'text-brand-400 drop-shadow-[0_0_12px_rgba(34,211,238,0.9)]',
         orange: 'text-orange-400 drop-shadow-[0_0_12px_rgba(251,146,60,0.9)]',
         red: 'text-red-400 drop-shadow-[0_0_12px_rgba(248,113,113,0.9)]'
     };
 
     const bgClasses = {
-        cyan: 'from-cyan-500/10 to-blue-500/5',
+        cyan: 'from-brand-500/10 to-blue-500/5',
         orange: 'from-orange-500/10 to-yellow-500/5',
         red: 'from-red-500/10 to-pink-500/5'
     };
 
     const borderClasses = {
-        cyan: 'border-cyan-500/20',
+        cyan: 'border-brand-500/20',
         orange: 'border-orange-500/20',
         red: 'border-red-500/20'
     };
@@ -71,8 +71,8 @@ export const DigitalDisplay: React.FC<DigitalDisplayProps> = React.memo(({
                 </div>
             </div>
             {/* Decimal.js Verified Badge */}
-            <div className="mt-3 px-2 py-0.5 rounded-full bg-slate-950/50 border border-white/5 flex items-center gap-1.5 self-end group-hover:border-cyan-500/30 transition-colors">
-                <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.8)]"></div>
+            <div className="mt-3 px-2 py-0.5 rounded-full bg-slate-950/50 border border-white/5 flex items-center gap-1.5 self-end group-hover:border-brand-500/30 transition-colors">
+                <div className="w-1.5 h-1.5 rounded-full bg-brand-500 shadow-[0_0_8px_rgba(6,182,212,0.8)]"></div>
                 <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">{t('commander.verified')}</span>
             </div>
         </div>

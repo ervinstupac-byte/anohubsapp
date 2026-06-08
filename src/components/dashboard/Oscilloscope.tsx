@@ -131,7 +131,7 @@ export const Oscilloscope: React.FC<OscilloscopeProps> = ({ dataType, channels, 
     return (
         <div className="w-full bg-slate-950 p-6">
             <div className="text-2xl font-bold mb-4 flex items-center gap-2">
-                <Activity className="w-6 h-6 text-cyan-400 animate-pulse" />
+                <Activity className="w-6 h-6 text-brand-400 animate-pulse" />
                 High-Resolution Oscilloscope - {dataType}
             </div>
 
@@ -140,19 +140,19 @@ export const Oscilloscope: React.FC<OscilloscopeProps> = ({ dataType, channels, 
                 <div className="grid grid-cols-4 gap-4 text-xs">
                     <div>
                         <div className="text-slate-400 mb-1">Sample Rate</div>
-                        <div className="text-cyan-300 font-mono font-bold">{sampleRate} Hz</div>
+                        <div className="text-brand-300 font-mono font-bold">{sampleRate} Hz</div>
                     </div>
                     <div>
                         <div className="text-slate-400 mb-1">Time Window</div>
-                        <div className="text-cyan-300 font-mono font-bold">{timeWindow}s</div>
+                        <div className="text-brand-300 font-mono font-bold">{timeWindow}s</div>
                     </div>
                     <div>
                         <div className="text-slate-400 mb-1">Resolution</div>
-                        <div className="text-cyan-300 font-mono font-bold">{(1000 / sampleRate).toFixed(2)} ms/sample</div>
+                        <div className="text-brand-300 font-mono font-bold">{(1000 / sampleRate).toFixed(2)} ms/sample</div>
                     </div>
                     <div>
                         <div className="text-slate-400 mb-1">Channels</div>
-                        <div className="text-cyan-300 font-mono font-bold">{channels.length}</div>
+                        <div className="text-brand-300 font-mono font-bold">{channels.length}</div>
                     </div>
                 </div>
             </div>

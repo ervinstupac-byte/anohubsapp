@@ -21,20 +21,20 @@ export const ActionCard: React.FC = () => {
                 <div className="flex justify-between items-start mb-1">
                     <span className="text-[9px] text-slate-400 font-black font-mono uppercase tracking-[0.2em] opacity-80">Protocol Genesis</span>
                     {protocolVerified && (
-                            <span className="text-[8px] bg-cyan-500/20 text-cyan-400 px-1.5 py-0.5 rounded border border-cyan-500/20 font-black">
+                            <span className="text-[8px] bg-brand-500/20 text-brand-400 px-1.5 py-0.5 rounded border border-brand-500/20 font-black">
                             COMMANDER.VERIFIED
                         </span>
                     )}
                 </div>
                 <h2 className="text-2xl font-black text-slate-200 leading-tight uppercase drop-shadow-sm flex items-center gap-2">
-                    <Smartphone className="w-6 h-6 text-cyan-400/80" />
+                    <Smartphone className="w-6 h-6 text-brand-400/80" />
                     New Audit
                 </h2>
             </div>
 
             <div className="relative z-10 flex justify-end">
-                <div className={`bg-slate-800 p-2 rounded border border-slate-900 shadow-inner ${!isLocked ? 'group-hover:bg-cyan-600' : ''} transition-colors`}>
-                    <Upload className="w-4 h-4 text-cyan-400 group-hover:text-white" />
+                <div className={`bg-slate-800 p-2 rounded border border-slate-900 shadow-inner ${!isLocked ? 'group-hover:bg-brand-600' : ''} transition-colors`}>
+                    <Upload className="w-4 h-4 text-brand-400 group-hover:text-white" />
                 </div>
             </div>
 
@@ -58,7 +58,7 @@ export const LiveAnalytics: React.FC = () => {
         <div className="grid grid-cols-2 gap-4 h-full">
             <AnalyticsGraph title="Vibration Spectrum" color="text-emerald-400" glowClass="bloom-glow-emerald" />
             <AnalyticsGraph title="Oil Properties" color="text-amber-400" glowClass="bloom-glow-amber" />
-            <AnalyticsGraph title="Active Power" color="text-cyan-400" glowClass="bloom-glow-cyan" />
+            <AnalyticsGraph title="Active Power" color="text-brand-400" glowClass="bloom-glow-cyan" />
             <AnalyticsGraph title="Grid Sync" color="text-purple-400" glowClass="bloom-glow-purple" />
         </div>
     );

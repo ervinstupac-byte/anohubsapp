@@ -63,7 +63,7 @@ export const PlantMaster: React.FC = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h2 className="text-3xl font-black text-white tracking-tighter uppercase">
-                        Site <span className="text-cyan-400">Genesis</span>
+                        Site <span className="text-brand-400">Genesis</span>
                     </h2>
                     <p className="text-[10px] text-slate-500 font-mono uppercase tracking-widest mt-1">
                         Global Infrastructure Node // Geospatial Master
@@ -71,7 +71,7 @@ export const PlantMaster: React.FC = () => {
                 </div>
                 <div className="flex gap-2 w-full md:w-auto">
                     <select
-                        className="flex-1 md:flex-none bg-slate-900 border border-white/10 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-cyan-500"
+                        className="flex-1 md:flex-none bg-slate-900 border border-white/10 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-brand-500"
                         value={selectedPlant?.id || ''}
                         onChange={(e) => setSelectedPlant(plants.find(p => p.id === e.target.value))}
                     >
@@ -92,7 +92,7 @@ export const PlantMaster: React.FC = () => {
                 </div>
 
                 <div className="space-y-6">
-                    <GlassCard title="Geospatial Identity" icon={<Globe className="w-5 h-5 text-cyan-400" />}>
+                    <GlassCard title="Geospatial Identity" icon={<Globe className="w-5 h-5 text-brand-400" />}>
                         <div className="space-y-4">
                             <ModernInput
                                 label="Location Name"
@@ -124,8 +124,8 @@ export const PlantMaster: React.FC = () => {
 
                     <GlassCard title="Linked Assets" icon={<MapPin className="w-5 h-5 text-amber-400" />}>
                         <div className="grid grid-cols-2 gap-3">
-                            <div className="p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-lg">
-                                <p className="text-[9px] text-cyan-400 font-bold uppercase tracking-widest mb-1">Turbines</p>
+                            <div className="p-3 bg-brand-500/10 border border-brand-500/20 rounded-lg">
+                                <p className="text-[9px] text-brand-400 font-bold uppercase tracking-widest mb-1">Turbines</p>
                                 <div className="flex justify-between items-baseline">
                                     <span className="text-xl font-black text-white">4</span>
                                     <span className="text-[8px] text-slate-500">Units</span>
@@ -146,7 +146,7 @@ export const PlantMaster: React.FC = () => {
                         <div className="p-4 bg-white/5 rounded-xl border border-white/10">
                             <div className="flex justify-between items-center mb-2">
                                 <span className="text-xs text-slate-400 uppercase font-black tracking-widest flex items-center gap-2">
-                                    <Thermometer className="w-3 h-3 text-cyan-400" />
+                                    <Thermometer className="w-3 h-3 text-brand-400" />
                                     Avg Temperature
                                 </span>
                                 <span className="text-white font-mono font-bold text-sm">{selectedPlant?.ambient_temp_avg}°C</span>
@@ -155,7 +155,7 @@ export const PlantMaster: React.FC = () => {
                                 type="range" min="0" max="45" step="0.5"
                                 value={selectedPlant?.ambient_temp_avg || 15}
                                 onChange={(e) => setSelectedPlant({ ...selectedPlant, ambient_temp_avg: parseFloat(e.target.value) })}
-                                className="w-full accent-cyan-500"
+                                className="w-full accent-brand-500"
                             />
                         </div>
 
@@ -194,7 +194,7 @@ export const PlantMaster: React.FC = () => {
                     </div>
                 </GlassCard>
 
-                <GlassCard title="Energy Forensic" icon={<Zap className="w-5 h-5 text-cyan-400" />}>
+                <GlassCard title="Energy Forensic" icon={<Zap className="w-5 h-5 text-brand-400" />}>
                     <div className="space-y-4">
                         <div className="p-3 bg-white/5 rounded-lg border border-white/10">
                             <div className="flex justify-between items-center mb-1">

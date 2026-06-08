@@ -190,7 +190,7 @@ export const VibrationAnalyzer: React.FC = () => {
                                 style={{ position: 'fixed', left: tooltip.x + 15, top: tooltip.y - 15 }}
                                 className="z-50 bg-slate-900 border border-slate-600 p-3 rounded-none shadow-none w-64 pointer-events-none"
                             >
-                                <h4 className="text-xs font-bold text-cyan-400 uppercase mb-1 flex items-center gap-2">
+                                <h4 className="text-xs font-bold text-brand-400 uppercase mb-1 flex items-center gap-2">
                                     <Info className="w-3 h-3" /> {tooltip.title}
                                 </h4>
                                 <p className="text-[10px] text-slate-300 leading-tight">
@@ -219,7 +219,7 @@ export const VibrationAnalyzer: React.FC = () => {
                             <h4 className="text-[10px] text-slate-400 uppercase font-black tracking-widest">Diagnostic Verdict</h4>
                             {verdict.danger ? <AlertTriangle className="w-4 h-4 text-amber-400" /> : <ShieldCheck className="w-4 h-4 text-slate-200" />}
                         </div>
-                        <h2 className={`text-xl font-black uppercase tracking-tighter mb-2 ${verdict.danger ? 'text-amber-400' : 'text-cyan-400'
+                        <h2 className={`text-xl font-black uppercase tracking-tighter mb-2 ${verdict.danger ? 'text-amber-400' : 'text-brand-400'
                             }`}>
                             {verdict.cause === 'Normal Spectral Signature' ? 'Vibrational Stability: Nominal' : verdict.cause}
                         </h2>

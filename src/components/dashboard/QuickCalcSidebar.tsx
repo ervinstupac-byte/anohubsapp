@@ -155,7 +155,7 @@ export const QuickCalcSidebar: React.FC = () => {
                 className={`
                     fixed bottom-6 right-6 z-50
                     w-14 h-14 rounded-full
-                    bg-gradient-to-br from-cyan-500 to-blue-600
+                    bg-gradient-to-br from-brand-500 to-blue-600
                     shadow-[0_0_20px_rgba(6,182,212,0.4)]
                     hover:shadow-[0_0_30px_rgba(6,182,212,0.6)]
                     flex items-center justify-center
@@ -186,8 +186,8 @@ export const QuickCalcSidebar: React.FC = () => {
                 <div className="sticky top-0 bg-slate-950/90 backdrop-blur-sm border-b border-white/10 p-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center">
-                                <Calculator className="w-5 h-5 text-cyan-400" />
+                            <div className="w-10 h-10 rounded-xl bg-brand-500/20 flex items-center justify-center">
+                                <Calculator className="w-5 h-5 text-brand-400" />
                             </div>
                             <div>
                                 <h2 className="text-lg font-black text-white uppercase tracking-wider">
@@ -214,7 +214,7 @@ export const QuickCalcSidebar: React.FC = () => {
                             key={converter.id}
                             className="p-4 bg-slate-900/50 rounded-2xl border border-white/5"
                         >
-                            <div className="text-[10px] text-cyan-400 font-black uppercase tracking-widest mb-4">
+                            <div className="text-[10px] text-brand-400 font-black uppercase tracking-widest mb-4">
                                 {converter.name}
                             </div>
 
@@ -230,7 +230,7 @@ export const QuickCalcSidebar: React.FC = () => {
                                             inputMode="decimal"
                                             value={converters[converter.id]?.leftValue || ''}
                                             onChange={(e) => handleValueChange(converter.id, 'left', e.target.value)}
-                                            className="w-full bg-slate-950 border border-white/10 rounded-xl px-3 py-3 text-white text-lg font-mono focus:outline-none focus:border-cyan-500/50 transition-colors"
+                                            className="w-full bg-slate-950 border border-white/10 rounded-xl px-3 py-3 text-white text-lg font-mono focus:outline-none focus:border-brand-500/50 transition-colors"
                                             placeholder="0"
                                         />
                                         {converters[converter.id]?.leftValue && (
@@ -265,7 +265,7 @@ export const QuickCalcSidebar: React.FC = () => {
                                             inputMode="decimal"
                                             value={converters[converter.id]?.rightValue || ''}
                                             onChange={(e) => handleValueChange(converter.id, 'right', e.target.value)}
-                                            className="w-full bg-slate-950 border border-white/10 rounded-xl px-3 py-3 text-white text-lg font-mono focus:outline-none focus:border-cyan-500/50 transition-colors"
+                                            className="w-full bg-slate-950 border border-white/10 rounded-xl px-3 py-3 text-white text-lg font-mono focus:outline-none focus:border-brand-500/50 transition-colors"
                                             placeholder="0"
                                         />
                                         {converters[converter.id]?.rightValue && (

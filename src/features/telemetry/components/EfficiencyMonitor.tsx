@@ -34,7 +34,7 @@ export const EfficiencyMonitor: React.FC<EfficiencyMonitorProps> = ({ className 
 
     const statusColors: Record<string, string> = {
         excellent: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
-        good: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/20',
+        good: 'text-brand-400 bg-brand-500/10 border-brand-500/20',
         fair: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
         poor: 'text-red-400 bg-red-500/10 border-red-500/20'
     };
@@ -71,7 +71,7 @@ export const EfficiencyMonitor: React.FC<EfficiencyMonitorProps> = ({ className 
                         {efficiencyMetrics.delta > 5 ? (
                             <TrendingDown className="w-3 h-3 text-amber-400" />
                         ) : efficiencyMetrics.delta > 0 ? (
-                            <Activity className="w-3 h-3 text-cyan-400" />
+                            <Activity className="w-3 h-3 text-brand-400" />
                         ) : (
                             <TrendingUp className="w-3 h-3 text-emerald-400" />
                         )}

@@ -133,7 +133,7 @@ export const OverdriveDashboard: React.FC<OverdriveDashboardProps> = ({ thermal,
 
                         <div className="bg-slate-800 rounded p-3">
                             <div className="text-xs text-slate-400 mb-1">Thermal Margin</div>
-                            <div className="text-xl font-bold text-cyan-300 font-mono">
+                            <div className="text-xl font-bold text-brand-300 font-mono">
                                 {thermal.margin.toFixed(1)}°C
                             </div>
                             <div className="text-xs text-slate-500">
@@ -149,10 +149,10 @@ export const OverdriveDashboard: React.FC<OverdriveDashboardProps> = ({ thermal,
                 </div>
 
                 {/* Cavitation Status */}
-                <div className="bg-slate-900 border border-cyan-500 rounded-lg p-4">
+                <div className="bg-slate-900 border border-brand-500 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-4">
-                        <Droplets className="w-5 h-5 text-cyan-400" />
-                        <div className="text-lg font-bold text-cyan-300">Cavitation Status</div>
+                        <Droplets className="w-5 h-5 text-brand-400" />
+                        <div className="text-lg font-bold text-brand-300">Cavitation Status</div>
                     </div>
 
                     <div className="space-y-3">
@@ -169,7 +169,7 @@ export const OverdriveDashboard: React.FC<OverdriveDashboardProps> = ({ thermal,
 
                         <div className="bg-slate-800 rounded p-3">
                             <div className="text-xs text-slate-400 mb-1">Acoustic Margin</div>
-                            <div className="text-xl font-bold text-cyan-300 font-mono">
+                            <div className="text-xl font-bold text-brand-300 font-mono">
                                 {cavitation.margin.toFixed(1)}%
                             </div>
                             <div className="text-xs text-slate-500">

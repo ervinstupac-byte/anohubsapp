@@ -174,9 +174,9 @@ const BankiMichellPID: React.FC<{ sensors: any }> = ({ sensors }) => {
     return (
         <div className="relative w-full h-full p-8">
             {/* Crossflow Runner (rectangular) */}
-            <div className="absolute top-48 left-1/2 transform -translate-x-1/2 w-64 h-32 border-4 border-cyan-600 rounded flex items-center justify-center">
+            <div className="absolute top-48 left-1/2 transform -translate-x-1/2 w-64 h-32 border-4 border-brand-600 rounded flex items-center justify-center">
                 <div className="text-center">
-                    <div className="text-lg font-bold text-cyan-300">Crossflow Runner</div>
+                    <div className="text-lg font-bold text-brand-300">Crossflow Runner</div>
                     <div className="text-xs text-slate-400 mt-1">Two-stage flow</div>
                 </div>
             </div>
@@ -196,8 +196,8 @@ const BankiMichellPID: React.FC<{ sensors: any }> = ({ sensors }) => {
             {/* Internal Ventilation Ports */}
             <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2 flex gap-4">
                 {[1, 2, 3].map(i => (
-                    <div key={i} className="w-12 h-12 border-2 border-cyan-500 rounded-full flex items-center justify-center">
-                        <div className="text-xs text-cyan-300">V{i}</div>
+                    <div key={i} className="w-12 h-12 border-2 border-brand-500 rounded-full flex items-center justify-center">
+                        <div className="text-xs text-brand-300">V{i}</div>
                     </div>
                 ))}
             </div>

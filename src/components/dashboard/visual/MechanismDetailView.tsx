@@ -81,27 +81,27 @@ const MechanismDetailView: React.FC = () => {
             className="fixed inset-0 z-50 bg-[#020617] flex"
         >
             {/* Sidebar / HUD */}
-            <div className="w-1/3 h-full border-r border-cyan-900/30 p-8 flex flex-col justify-between bg-gradient-to-r from-[#020617] to-cyan-950/20 backdrop-blur-xl">
+            <div className="w-1/3 h-full border-r border-brand-900/30 p-8 flex flex-col justify-between bg-gradient-to-r from-[#020617] to-brand-950/20 backdrop-blur-xl">
                 <div>
                     <button
                         onClick={() => navigate(-1)}
-                        className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition mb-12 group"
+                        className="flex items-center gap-2 text-brand-400 hover:text-brand-300 transition mb-12 group"
                     >
                         <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition" />
                         <span className="font-bold uppercase tracking-widest text-sm">Return to Topology</span>
                     </button>
 
                     <h1 className="text-4xl font-black text-white uppercase tracking-tighter mb-2">
-                        Mechanism <span className="text-cyan-500">Detail</span>
+                        Mechanism <span className="text-brand-500">Detail</span>
                     </h1>
                     <p className="text-slate-400 text-sm font-mono mb-8">
                         INTERMEDIATE SHAFT & DISTRIBUTOR ASSEMBLY
                     </p>
 
-                    <GlassCard className="border-cyan-500/30">
+                    <GlassCard className="border-brand-500/30">
                         <div className="space-y-6">
                             <div className="flex items-start gap-4">
-                                <ShieldCheck className="w-6 h-6 text-cyan-400 mt-1" />
+                                <ShieldCheck className="w-6 h-6 text-brand-400 mt-1" />
                                 <div>
                                     <h3 className="text-white font-bold uppercase tracking-wider text-sm">{t('francis.mechanism.shaftSealing', 'Shaft Sealing')}</h3>
                                     <p className="text-slate-400 text-xs mt-1">
@@ -131,12 +131,12 @@ const MechanismDetailView: React.FC = () => {
                         <div
                             key={point.id}
                             className={`p-4 rounded border transition-all duration-300 ${hoveredPoint?.id === point.id
-                                ? 'bg-cyan-900/40 border-cyan-500/50 scale-105'
+                                ? 'bg-brand-900/40 border-brand-500/50 scale-105'
                                 : 'bg-slate-900/40 border-slate-800'
                                 }`}
                         >
                             <div className="flex justify-between items-center mb-1">
-                                <span className="text-cyan-400 font-bold uppercase text-xs">{point.label}</span>
+                                <span className="text-brand-400 font-bold uppercase text-xs">{point.label}</span>
                                 <span className="text-slate-500 text-[10px] font-mono">{point.id}</span>
                             </div>
                             <div className="text-white font-mono text-sm">{point.data}</div>
@@ -160,7 +160,7 @@ const MechanismDetailView: React.FC = () => {
                 {MECHANISM_POINTS.map((point) => (
                     <motion.div
                         key={point.id}
-                        className="absolute w-6 h-6 rounded-full border-2 border-cyan-500 bg-cyan-900/50 cursor-pointer shadow-[0_0_15px_rgba(34,211,238,0.5)] z-20 flex items-center justify-center"
+                        className="absolute w-6 h-6 rounded-full border-2 border-brand-500 bg-brand-900/50 cursor-pointer shadow-[0_0_15px_rgba(34,211,238,0.5)] z-20 flex items-center justify-center"
                         style={{ left: point.x, top: point.y }} // Simple absolute positioning for now - user might need to calibrate
                         whileHover={{ scale: 1.5, backgroundColor: 'rgba(34,211,238,0.2)' }}
                         onHoverStart={() => setHoveredPoint(point)}

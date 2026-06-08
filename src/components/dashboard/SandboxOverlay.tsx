@@ -192,7 +192,7 @@ export const SandboxOverlay: React.FC<SandboxOverlayProps> = ({
                                     type="range" min="0" max="100" step="0.1"
                                     value={values.flow}
                                     onChange={(e) => setValues(prev => ({ ...prev, flow: Number(e.target.value) }))}
-                                    className="w-full accent-cyan-500 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                                    className="w-full accent-brand-500 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer"
                                 />
                             </div>
 

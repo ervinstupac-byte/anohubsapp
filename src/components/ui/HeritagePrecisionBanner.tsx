@@ -42,13 +42,13 @@ export const HeritagePrecisionBanner: React.FC<HeritagePrecisionBannerProps> = (
         ? 'border-red-500/50 bg-red-950/20'
         : isDegraded
             ? 'border-amber-500/50 bg-amber-950/20'
-            : 'border-cyan-500/30 bg-cyan-950/10';
+            : 'border-brand-500/30 bg-brand-950/10';
 
     const accentColor = isCritical
         ? 'text-red-400'
         : isDegraded
             ? 'text-amber-400'
-            : 'text-cyan-400';
+            : 'text-brand-400';
 
     const StatusIcon = isCritical || isDegraded ? AlertTriangle : CheckCircle;
 
@@ -72,7 +72,7 @@ export const HeritagePrecisionBanner: React.FC<HeritagePrecisionBannerProps> = (
             <div className="relative z-10 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
                 {/* Left: Precision Standard */}
                 <div className="flex items-center gap-6">
-                    <div className={`p-4 rounded-xl border ${isNominal ? 'border-cyan-500/30 bg-cyan-500/10' : 'border-amber-500/30 bg-amber-500/10'}`}>
+                    <div className={`p-4 rounded-xl border ${isNominal ? 'border-brand-500/30 bg-brand-500/10' : 'border-amber-500/30 bg-amber-500/10'}`}>
                         <Crosshair className={`w-8 h-8 ${accentColor}`} />
                     </div>
 
@@ -102,7 +102,7 @@ export const HeritagePrecisionBanner: React.FC<HeritagePrecisionBannerProps> = (
                         </span>
                         <span className="text-sm text-slate-500 font-mono">mm/m</span>
                     </div>
-                    <div className={`mt-2 flex items-center gap-2 px-3 py-1 rounded-full ${isNominal ? 'bg-cyan-500/10' : 'bg-amber-500/10'}`}>
+                    <div className={`mt-2 flex items-center gap-2 px-3 py-1 rounded-full ${isNominal ? 'bg-brand-500/10' : 'bg-amber-500/10'}`}>
                         <StatusIcon className={`w-3 h-3 ${accentColor}`} />
                         <span className={`text-[10px] font-black uppercase tracking-wider ${accentColor}`}>
                             {isNominal ? t('heritage.nominal', 'NOMINAL') : t('heritage.deviation', 'DEVIATION')}
@@ -139,7 +139,7 @@ export const HeritagePrecisionBanner: React.FC<HeritagePrecisionBannerProps> = (
                     {/* Precision Bar */}
                     <div className="mt-3 w-40 h-2 bg-slate-800 rounded-full overflow-hidden ml-auto">
                         <div
-                            className={`h-full transition-all duration-500 ${isNominal ? 'bg-cyan-500' : isDegraded ? 'bg-amber-500' : 'bg-red-500'
+                            className={`h-full transition-all duration-500 ${isNominal ? 'bg-brand-500' : isDegraded ? 'bg-amber-500' : 'bg-red-500'
                                 }`}
                             style={{ width: `${Math.min(100, (GOLDEN_STANDARD / Math.max(currentAlignment, 0.001)) * 100)}%` }}
                         />

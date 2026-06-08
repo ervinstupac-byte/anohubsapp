@@ -33,7 +33,7 @@ export const SealingIntegrity: React.FC = () => {
     if (!selectedAsset) return null;
 
     return (
-        <GlassCard title="Shaft Seal Integrity (Zaptivka Vratila)" className={integrityStatus.isAlert ? 'border-l-4 border-l-red-500 bg-red-950/20' : 'border-l-4 border-l-cyan-500'}>
+        <GlassCard title="Shaft Seal Integrity (Zaptivka Vratila)" className={integrityStatus.isAlert ? 'border-l-4 border-l-red-500 bg-red-950/20' : 'border-l-4 border-l-brand-500'}>
             <div className="space-y-4">
                 <div className="flex justify-between items-center">
                     <div>

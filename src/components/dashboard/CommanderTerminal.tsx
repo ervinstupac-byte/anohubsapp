@@ -170,13 +170,13 @@ export const CommanderTerminal: React.FC = () => {
                     pointer-events-auto
                     w-12 h-12 rounded-full 
                     bg-black/80 backdrop-blur-md 
-                    border border-cyan-500/50 
+                    border border-brand-500/50 
                     shadow-[0_0_20px_rgba(6,182,212,0.3)]
                     flex items-center justify-center
-                    text-cyan-400
+                    text-brand-400
                     transition-all duration-300
-                    hover:bg-cyan-950/50 hover:border-cyan-400 hover:shadow-[0_0_30px_rgba(6,182,212,0.5)]
-                    ${isOpen ? 'bg-cyan-950 border-cyan-400' : ''}
+                    hover:bg-brand-950/50 hover:border-brand-400 hover:shadow-[0_0_30px_rgba(6,182,212,0.5)]
+                    ${isOpen ? 'bg-brand-950 border-brand-400' : ''}
                 `}
             >
                 <Terminal className="w-5 h-5" />
@@ -190,13 +190,13 @@ export const CommanderTerminal: React.FC = () => {
                         animate={{ opacity: 1, y: -16, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
                         transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
-                        className="pointer-events-auto w-96 h-80 bg-black/90 backdrop-blur-3xl border border-cyan-500/30 shadow-[0_0_40px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden"
+                        className="pointer-events-auto w-96 h-80 bg-black/90 backdrop-blur-3xl border border-brand-500/30 shadow-[0_0_40px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden"
                     >
                         {/* HEADER */}
-                        <div className="px-4 py-2.5 bg-cyan-500/10 border-b border-cyan-500/20 flex justify-between items-center shrink-0">
+                        <div className="px-4 py-2.5 bg-brand-500/10 border-b border-brand-500/20 flex justify-between items-center shrink-0">
                             <div className="flex items-center gap-2">
-                                <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-                                <span className="text-[10px] font-black text-cyan-400 uppercase tracking-widest">Commander_Terminal_v4.2</span>
+                                <Terminal className="w-3.5 h-3.5 text-brand-400" />
+                                <span className="text-[10px] font-black text-brand-400 uppercase tracking-widest">Commander_Terminal_v4.2</span>
                             </div>
                             <button
                                 onClick={() => setIsOpen(false)}
@@ -226,7 +226,7 @@ export const CommanderTerminal: React.FC = () => {
                                             <span className={`
                                                 ${msg.type === 'CRITICAL' ? 'text-red-400' :
                                                     msg.type === 'WARNING' ? 'text-amber-400' :
-                                                        msg.type === 'SUCCESS' ? 'text-emerald-400' : 'text-cyan-200'}
+                                                        msg.type === 'SUCCESS' ? 'text-emerald-400' : 'text-brand-200'}
                                             `}>
                                                 <ChevronRight className="w-2.5 h-2.5 inline mr-1" />
                                                 {msg.text}
@@ -239,12 +239,12 @@ export const CommanderTerminal: React.FC = () => {
 
                         {/* COMMAND INPUT */}
                         <form onSubmit={handleCommand} className="p-2 px-4 bg-white/5 border-t border-white/10 flex items-center gap-2">
-                            <span className="text-cyan-500 shrink-0">$</span>
+                            <span className="text-brand-500 shrink-0">$</span>
                             <input
                                 type="text"
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
-                                className="w-full bg-transparent border-none outline-none text-[10px] font-mono text-cyan-200 placeholder:text-cyan-500/30"
+                                className="w-full bg-transparent border-none outline-none text-[10px] font-mono text-brand-200 placeholder:text-brand-500/30"
                                 placeholder="Enter command (e.g. /explain)..."
                                 autoFocus
                             />

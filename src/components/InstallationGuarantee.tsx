@@ -217,14 +217,14 @@ export const InstallationGuarantee: React.FC = () => {
 
             <div className="text-center space-y-2 mb-8">
                 <h2 className="text-4xl font-black text-white tracking-tighter uppercase">
-                    {t('installationGuarantee.title').split(' ')[0]} <span className="text-cyan-400">{t('installationGuarantee.title').split(' ')[1]}</span>
+                    {t('installationGuarantee.title').split(' ')[0]} <span className="text-brand-400">{t('installationGuarantee.title').split(' ')[1]}</span>
                 </h2>
                 <p className="text-slate-400 text-lg max-w-3xl mx-auto font-light">
                     {t('installationGuarantee.subtitle')}
                 </p>
             </div>
 
-            <GlassCard className="p-0 border-t-4 border-t-cyan-500">
+            <GlassCard className="p-0 border-t-4 border-t-brand-500">
                 {/* STATUS BAR */}
                 <div className="p-6 border-b border-white/5 bg-slate-900/50 flex flex-col md:flex-row justify-between items-center gap-4">
                     <div className="flex items-center gap-4">
@@ -259,7 +259,7 @@ export const InstallationGuarantee: React.FC = () => {
                         <select
                             value={(audit as any).systemOrigin}
                             onChange={(e) => setAudit(prev => ({ ...prev, systemOrigin: e.target.value }))}
-                            className="w-full bg-slate-950 border border-white/5 rounded px-3 py-1.5 text-xs text-white outline-none focus:border-cyan-500"
+                            className="w-full bg-slate-950 border border-white/5 rounded px-3 py-1.5 text-xs text-white outline-none focus:border-brand-500"
                         >
                             <option value="Generator">Generator</option>
                             <option value="Hydraulic Unit">Hydraulic Unit</option>
@@ -271,7 +271,7 @@ export const InstallationGuarantee: React.FC = () => {
                         <select
                             value={(audit as any).locationTag}
                             onChange={(e) => setAudit(prev => ({ ...prev, locationTag: e.target.value }))}
-                            className="w-full bg-slate-950 border border-white/5 rounded px-3 py-1.5 text-xs text-white outline-none focus:border-cyan-500"
+                            className="w-full bg-slate-950 border border-white/5 rounded px-3 py-1.5 text-xs text-white outline-none focus:border-brand-500"
                         >
                             <option value="Upper Bearing">Upper Bearing</option>
                             <option value="Thrust Bearing">Thrust Bearing</option>
@@ -283,7 +283,7 @@ export const InstallationGuarantee: React.FC = () => {
                         <select
                             value={(audit as any).fluidType}
                             onChange={(e) => setAudit(prev => ({ ...prev, fluidType: e.target.value }))}
-                            className="w-full bg-slate-950 border border-white/5 rounded px-3 py-1.5 text-xs text-white outline-none focus:border-cyan-500"
+                            className="w-full bg-slate-950 border border-white/5 rounded px-3 py-1.5 text-xs text-white outline-none focus:border-brand-500"
                         >
                             <option value="VG46">ISO VG46</option>
                             <option value="VG68">ISO VG68</option>
@@ -295,8 +295,8 @@ export const InstallationGuarantee: React.FC = () => {
                 {/* AUDIT TABLE */}
                 <div className="p-6 md:p-8 space-y-4">
                     <div className="flex items-center gap-2 mb-6">
-                        <span className="h-px w-8 bg-cyan-500"></span>
-                        <h3 className="text-sm font-bold text-cyan-400 uppercase tracking-widest">{t('installationGuarantee.checkpoints')}</h3>
+                        <span className="h-px w-8 bg-brand-500"></span>
+                        <h3 className="text-sm font-bold text-brand-400 uppercase tracking-widest">{t('installationGuarantee.checkpoints')}</h3>
                     </div>
 
                     {AUDIT_STAGES.map((stage, index) => {
@@ -306,14 +306,14 @@ export const InstallationGuarantee: React.FC = () => {
                         return (
                             <div key={stage.id} className={`grid grid-cols-1 md:grid-cols-12 gap-4 items-center p-4 rounded-xl border transition-all duration-300 ${isAlarm
                                 ? 'bg-red-500/10 border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)]'
-                                : 'bg-slate-800/40 border-white/5 hover:border-cyan-500/30'
+                                : 'bg-slate-800/40 border-white/5 hover:border-brand-500/30'
                                 }`}>
                                 <div className="md:col-span-5">
                                     <div className="flex items-center gap-3">
                                         <span className={`text-xs font-mono ${isAlarm ? 'text-red-400' : 'text-slate-600'}`}>0{index + 1}</span>
                                         <div>
                                             <p className={`text-sm font-bold ${isAlarm ? 'text-red-200' : 'text-slate-200'}`}>{t(`installationGuarantee.checks.${stage.id}`)}</p>
-                                            <p className={`text-[10px] font-mono mt-0.5 ${isAlarm ? 'text-red-400' : 'text-cyan-400/80'}`}>{t(`installationGuarantee.checks.${stage.id}Req`)}</p>
+                                            <p className={`text-[10px] font-mono mt-0.5 ${isAlarm ? 'text-red-400' : 'text-brand-400/80'}`}>{t(`installationGuarantee.checks.${stage.id}Req`)}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -326,7 +326,7 @@ export const InstallationGuarantee: React.FC = () => {
                                         onChange={(e) => handleStageUpdate(stage.id, 'value', e.target.value)}
                                         className={`w-full bg-slate-900 border rounded-lg px-3 py-2 text-white text-sm outline-none transition-all placeholder-slate-600 ${isAlarm
                                             ? 'border-red-500 focus:ring-1 focus:ring-red-500 bg-red-950/20 text-red-100 shadow-[inset_0_0_10px_rgba(239,68,68,0.1)]'
-                                            : 'border-slate-700 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500'
+                                            : 'border-slate-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500'
                                             }`}
                                     />
                                     {isAlarm && stageData.error && (
@@ -366,7 +366,7 @@ export const InstallationGuarantee: React.FC = () => {
                         rows={3}
                         value={audit.finalNotes}
                         onChange={(e) => setAudit(prev => ({ ...prev, finalNotes: e.target.value }))}
-                        className="w-full bg-slate-950/50 border border-slate-700 rounded-xl p-4 text-slate-300 text-sm resize-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 outline-none transition-all"
+                        className="w-full bg-slate-950/50 border border-slate-700 rounded-xl p-4 text-slate-300 text-sm resize-none focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/20 outline-none transition-all"
                         placeholder={t('installationGuarantee.remarksPlaceholder')}
                     />
 
@@ -381,7 +381,7 @@ export const InstallationGuarantee: React.FC = () => {
                             onClick={handleSaveAudit}
                             disabled={!selectedAsset || isRiskCritical}
                             variant={isRiskCritical ? 'secondary' : 'primary'}
-                            className={`px-8 shadow-lg ${isRiskCritical ? 'grayscale opacity-50' : 'shadow-cyan-900/20'}`}
+                            className={`px-8 shadow-lg ${isRiskCritical ? 'grayscale opacity-50' : 'shadow-brand-900/20'}`}
                             icon={<span>{isRiskCritical ? '🔒' : '🔏'}</span>}
                         >
                             {!selectedAsset

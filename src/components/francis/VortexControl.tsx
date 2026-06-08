@@ -58,7 +58,7 @@ export const VortexControl: React.FC = () => {
                     <div data-hotspot-id="draft_tube" className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
                         <div className="p-6 bg-black/60 rounded-none border border-white/5">
                             <p className="text-[10px] text-emerald-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
-                                <Cpu className="w-3 h-3 text-cyan-400" /> Current Flow Flux
+                                <Cpu className="w-3 h-3 text-brand-400" /> Current Flow Flux
                             </p>
                             <p className="text-3xl font-black text-white font-mono tracking-tighter">
                                 {flowRelative.toFixed(1)} <span className="text-xs text-slate-500">% Rated</span>
@@ -122,13 +122,13 @@ export const VortexControl: React.FC = () => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Air Injection Module */}
-                    <GlassCard title={t('francis.vortex.s3Title')} icon={<Wind className="text-cyan-400" />}>
+                    <GlassCard title={t('francis.vortex.s3Title')} icon={<Wind className="text-brand-400" />}>
                         <div className="space-y-6">
                             <p className="text-[11px] text-slate-400 font-bold leading-relaxed">{t('francis.vortex.airDesc')}</p>
                             <div className="grid grid-cols-1 gap-3">
                                 {[1, 2, 3].map((num) => (
                                     <div key={num} className="p-4 bg-white/5 rounded-none border border-white/10 flex items-center gap-4 group/opt hover:bg-white/10 transition-all">
-                                        <div className="w-8 h-8 rounded-none bg-cyan-600/20 flex items-center justify-center border border-cyan-500/30 text-cyan-400 font-black text-[10px]">
+                                        <div className="w-8 h-8 rounded-none bg-brand-600/20 flex items-center justify-center border border-brand-500/30 text-brand-400 font-black text-[10px]">
                                             <Check className="w-4 h-4" />
                                         </div>
                                         <span className="text-xs text-slate-200 font-bold opacity-80 group-hover/opt:opacity-100 transition-opacity uppercase tracking-tighter">

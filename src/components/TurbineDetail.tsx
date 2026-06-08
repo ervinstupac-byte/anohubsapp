@@ -43,7 +43,7 @@ const ComponentCard: React.FC<TurbineComponent> = ({ name, description, critical
         group relative p-5 rounded-2xl border transition-all duration-300
         ${criticality === 'High'
             ? 'bg-gradient-to-br from-slate-900/60 to-red-950/30 border-red-500/20 hover:border-red-500/50'
-            : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-cyan-500/30'}
+            : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-brand-500/30'}
         backdrop-blur-sm
     `}>
         {/* Hover Glow */}
@@ -75,7 +75,7 @@ export const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
                     <div className="text-5xl mb-6 opacity-80">🚫</div>
                     <h3 className="text-2xl font-bold text-white mb-2">{t('turbineDetail.notFoundTitle')}</h3>
                     <p className="text-slate-400 mb-8">
-                        {t('turbineDetail.notFoundDesc')} <span className="text-cyan-400 font-mono bg-cyan-900/30 px-2 py-1 rounded border border-cyan-500/30">'{turbineKey}'</span>
+                        {t('turbineDetail.notFoundDesc')} <span className="text-brand-400 font-mono bg-brand-900/30 px-2 py-1 rounded border border-brand-500/30">'{turbineKey}'</span>
                     </p>
                     <BackButton text={t('turbineDetail.returnButton')} />
                 </GlassCard>
@@ -96,7 +96,7 @@ export const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
             {/* HERO HEADER */}
             <div className="text-center space-y-4 animate-fade-in-up py-4">
                 <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase drop-shadow-lg">
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{turbineKey}</span> {t('turbineDetail.specification')}
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-blue-500">{turbineKey}</span> {t('turbineDetail.specification')}
                 </h2>
                 <p className="text-slate-400 text-lg max-w-3xl mx-auto leading-relaxed font-medium">
                     {t('turbineDetail.subtitle')}
@@ -111,8 +111,8 @@ export const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
                     <GlassCard
                         title={t('turbineDetail.mechanicalSystems')}
                         subtitle={t('turbineDetail.rotatingParts')}
-                        className="h-full shadow-cyan-900/10"
-                        action={<span className="text-2xl p-2 bg-cyan-500/10 rounded-lg text-cyan-400">⚙️</span>}
+                        className="h-full shadow-brand-900/10"
+                        action={<span className="text-2xl p-2 bg-brand-500/10 rounded-lg text-brand-400">⚙️</span>}
                     >
                         <div className="space-y-4 mt-2">
                             {data.mechanical.map((comp) => (
@@ -162,7 +162,7 @@ export const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
                                 </div>
                             </div>
                             <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                                <div className="h-full bg-cyan-500 w-[90%] shadow-[0_0_10px_rgba(6,182,212,0.5)]"></div>
+                                <div className="h-full bg-brand-500 w-[90%] shadow-[0_0_10px_rgba(6,182,212,0.5)]"></div>
                             </div>
                         </div>
 

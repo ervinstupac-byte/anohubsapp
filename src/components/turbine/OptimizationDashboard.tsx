@@ -80,7 +80,7 @@ export const OptimizationDashboard: React.FC<OptimizationDashboardProps> = ({ as
                         <p className="text-sm text-slate-400">As-Is vs To-Be Performance Projection</p>
                     </div>
 
-                    <button className="px-6 py-3 bg-cyan-600 hover:bg-cyan-700 rounded-none font-black text-white uppercase tracking-wider flex items-center gap-2 hover:shadow-none transition-all">
+                    <button className="px-6 py-3 bg-brand-600 hover:bg-brand-700 rounded-none font-black text-white uppercase tracking-wider flex items-center gap-2 hover:shadow-none transition-all">
                         <Download className="w-5 h-5" />
                         Export PDF Report
                     </button>
@@ -184,7 +184,7 @@ export const OptimizationDashboard: React.FC<OptimizationDashboardProps> = ({ as
             </div>
 
             {/* ROI VISUALIZATION */}
-            <GlassCard className="bg-gradient-to-r from-emerald-950/40 to-cyan-950/40 border-2 border-emerald-500/30">
+            <GlassCard className="bg-gradient-to-r from-emerald-950/40 to-brand-950/40 border-2 border-emerald-500/30">
                 <h3 className="text-xl font-black text-emerald-400 uppercase tracking-wider mb-6 flex items-center gap-2">
                     <DollarSign className="w-6 h-6" />
                     Return on Investment Analysis
@@ -224,7 +224,7 @@ export const OptimizationDashboard: React.FC<OptimizationDashboardProps> = ({ as
                             initial={{ width: 0 }}
                             animate={{ width: '60%' }}
                             transition={{ duration: 1, delay: 0.5 }}
-                            className="h-full bg-gradient-to-r from-emerald-500 to-cyan-500"
+                            className="h-full bg-gradient-to-r from-emerald-500 to-brand-500"
                         />
                     </div>
                     <div className="flex justify-between text-xs text-slate-400 mb-2">
@@ -277,7 +277,7 @@ const ROIMetricCard: React.FC<ROIMetricCardProps> = ({ label, value, icon: Icon,
     const colorMap = {
         purple: 'bg-purple-500/20 border-purple-500/30 text-purple-400',
         emerald: 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400',
-        cyan: 'bg-cyan-500/20 border-cyan-500/30 text-cyan-400'
+        cyan: 'bg-brand-500/20 border-brand-500/30 text-brand-400'
     };
 
     return (

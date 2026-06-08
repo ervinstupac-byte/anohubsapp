@@ -113,7 +113,7 @@ export const HydraulicsPanel: React.FC = () => {
 
                     <div className="p-3 bg-slate-900 border border-white/5 rounded">
                         <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">Net Head (Hn)</div>
-                        <div className="text-xl font-black text-cyan-500 font-mono">
+                        <div className="text-xl font-black text-brand-500 font-mono">
                             {formatNumber(activeNetHead, language, 2)} <span className="text-xs text-slate-600">m</span>
                         </div>
                         <div className="text-[9px] text-slate-600 uppercase mt-1">Effective energy</div>
