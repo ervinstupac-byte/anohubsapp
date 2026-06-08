@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
 import { supabase } from '../services/supabaseClient';
 import idAdapter from '../utils/idAdapter';
+import { loggingService } from '../services/LoggingService';
 import { InspectionImage } from '../services/StrategicPlanningService';
 import {
     ActiveChecklist,
@@ -459,22 +460,54 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
         };
         setWorkOrders(prev => [...prev, newOrder]);
 
-        // Supabase Insert
+        // Supabase Insert with payload validation + retry for UUID mismatch
         const numeric = idAdapter.toNumber(order.assetId);
-        const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : order.assetId;
+        const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : (order.assetId ? String(order.assetId) : null);
 
-        const { data, error } = await supabase.from('work_orders').insert({
-            asset_id: assetDbId,
+        const payload: any = {
             asset_name: order.assetName,
             component: order.component,
             description: order.description,
             priority: order.priority,
             status: 'PENDING',
             trigger_source: order.trigger
-        }).select().single();
+        };
+
+        if (assetDbId !== null && assetDbId !== undefined) payload.asset_id = assetDbId;
+
+        // Log outgoing payload for debugging/traceability
+        try { loggingService.logEvent({ assetId: numeric !== null ? numeric : null, eventType: 'USER_ACTION', severity: 'INFO', details: { action: 'CREATE_WO_PAYLOAD', payload } }); } catch (e) { /* non-blocking */ }
+        console.debug('[MaintenanceContext] createWorkOrder payload:', payload);
+
+        // Try primary insert
+        let data: any = null;
+        let error: any = null;
+        try {
+            const res = await supabase.from('work_orders').insert(payload).select().single();
+            data = res.data; error = res.error;
+        } catch (err) {
+            error = err;
+        }
+
+        // If DB rejects UUID input (common when schema expects UUID but we sent numeric id), retry without asset_id
+        if (error) {
+            const msg = String((error && (error.message || error)) || error);
+            console.error('Failed to create WO in DB (first attempt):', error);
+            if (msg.includes('invalid input syntax for type uuid') || msg.includes('invalid input syntax for type uuid')) {
+                // remove asset_id and retry as a fallback
+                delete payload.asset_id;
+                console.warn('[MaintenanceContext] Retrying WO insert without asset_id due to UUID column type mismatch.');
+                try {
+                    const res2 = await supabase.from('work_orders').insert(payload).select().single();
+                    data = res2.data; error = res2.error;
+                } catch (err2) {
+                    error = err2;
+                }
+            }
+        }
 
         if (error) {
-            console.error("Failed to create WO in DB:", error);
+            console.error('Failed to create WO in DB after retries:', error);
             return newOrder;
         }
 

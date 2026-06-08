@@ -17,10 +17,11 @@ import { useDensity } from '../contexts/DensityContext';
 
 interface DashboardHeaderProps {
     onToggleSidebar: () => void;
+    isSidebarOpen?: boolean;
     title?: React.ReactNode;
 }
 
-export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSidebar, title }) => {
+export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSidebar, isSidebarOpen, title }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
@@ -76,7 +77,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
 
                 {/* LEFT: Identity & Status */}
                 <div className="flex items-center gap-6">
-                    <button onClick={onToggleSidebar} className="lg:hidden p-2 text-slate-400 hover:text-white">☰</button>
+                    <button onClick={onToggleSidebar} className="p-2 text-slate-400 hover:text-white" title={isSidebarOpen ? 'Hide sidebar' : 'Show sidebar'}>
+                        {isSidebarOpen ? <X className="w-5 h-5" /> : <span className="text-lg">☰</span>}
+                    </button>
 
                     {/* MISSION STATUS BAR */}
                     <div className="flex items-center gap-3 text-xs font-mono tracking-wider">

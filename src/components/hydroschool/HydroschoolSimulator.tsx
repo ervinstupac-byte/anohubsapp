@@ -3,6 +3,7 @@ import Decimal from 'decimal.js';
 import { supabase } from '../../services/supabaseClient';
 import { useAssetContext } from '../../contexts/AssetContext';
 import { subscribeLatestSensor } from '../../hooks/useTelemetrySubscription';
+import idAdapter from '../../utils/idAdapter';
 import { evaluateAging } from '../../services/AgingEstimator';
 
 const RHO = new Decimal(1000); // kg/m^3
@@ -42,7 +43,7 @@ const HydroschoolSimulator: React.FC = () => {
                 const { data: design } = await supabase
                     .from('turbine_designs')
                     .select("parameters->>family as family, parameters->>variant as variant, parameters->'design_points' as design_points")
-                    .eq('asset_id', assetId)
+                    .eq('asset_id', idAdapter.toDb(assetId))
                     .order('created_at', { ascending: false })
                     .limit(1)
                     .single();
@@ -106,7 +107,8 @@ const HydroschoolSimulator: React.FC = () => {
     // Subscribe to realtime telemetry and update aging
     useEffect(() => {
         if (!assetId) return;
-        const unsubscribe = subscribeLatestSensor(assetId, (payload) => {
+        const numeric = idAdapter.toNumber(assetId);
+        const unsubscribe = numeric !== null ? subscribeLatestSensor(numeric, (payload) => {
             const sample = {
                 timestamp: payload.timestamp || new Date().toISOString(),
                 output_power: payload.output_power ?? payload.output ?? payload.francis_data?.output_power,
@@ -117,7 +119,7 @@ const HydroschoolSimulator: React.FC = () => {
             setTelemetryWindow([...telemetryRef.current]);
             const result = evaluateAging(telemetryRef.current.map(s => ({ eta: s.efficiency ?? undefined, output_power: s.output_power, francis_data: s.francis_data })), designEta ?? undefined, hydroContext ?? undefined);
             setAgingResult(result);
-        });
+        }) : () => { };
         fetchLatestTelemetry();
         return () => unsubscribe();
     }, [assetId, designEta]);

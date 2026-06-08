@@ -68,7 +68,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                         };
 
                         const mappedAssets: Asset[] = data.map((item: any) => ({
-                            id: Number(item.id),
+                            id: item.id, // preserve raw id (may be numeric or UUID string)
                             name: item.name,
                             type: item.type,
                             location: item.location,
@@ -160,19 +160,22 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             logAction('CONTEXT_SWITCH', assetName, 'SUCCESS');
         }, 1000) // 1 second delay
     ).current;
+
     const selectAsset = useCallback((id: number | string) => {
-        const numeric = typeof id === 'number' ? id : (id ? Number(id) : null);
-        if (numeric === null || Number.isNaN(numeric)) {
+        if (id === null || id === undefined || id === '') {
             console.warn('[AssetContext] selectAsset called with invalid id', id);
             return;
         }
-        setSelectedAssetId(numeric);
-        localStorage.setItem('activeAssetId', String(numeric)); // Save to local storage
+
+        // Preserve numeric ids as numbers, keep UUIDs/strings as strings
+        const parsed = typeof id === 'number' ? id : (String(id));
+        setSelectedAssetId(parsed as number | string);
+        localStorage.setItem('activeAssetId', String(parsed)); // Save to local storage
 
         // Broadcast to other tabs instantly
-        assetChannelRef.current?.postMessage({ type: 'ASSET_CHANGED', assetId: numeric });
+        assetChannelRef.current?.postMessage({ type: 'ASSET_CHANGED', assetId: parsed });
 
-        const asset = assets.find(a => a.id === numeric);
+        const asset = assets.find(a => String(a.id) === String(parsed));
         if (asset) {
             debouncedLogContextSwitch(asset.name);
         }
@@ -255,7 +258,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }, [isGuest, logAction]);
 
     const selectedAsset = useMemo(() =>
-        assets.find(a => a.id === selectedAssetId) || null
+        assets.find(a => String(a.id) === String(selectedAssetId)) || null
         , [assets, selectedAssetId]);
 
     // --- NEW: Boolean for conditional rendering (must be after selectedAsset) ---

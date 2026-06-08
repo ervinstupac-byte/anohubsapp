@@ -43,7 +43,7 @@ export type Answers = Record<string, string>;
 
 // --- ASSET MANAGEMENT ---
 export interface Asset {
-  id: number;
+  id: number | string;
   name: string;
   type: 'HPP' | 'Solar' | 'Wind';
   location: string;

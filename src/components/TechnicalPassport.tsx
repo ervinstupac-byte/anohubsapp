@@ -149,15 +149,15 @@ export const TechnicalPassport: React.FC = () => {
 
     const handleSave = () => {
         if (!selectedAsset) return;
-        const numeric = idAdapter.toNumber(selectedAsset.id);
-        const internalId = numeric !== null ? numeric : selectedAsset.id;
+        const numeric = idAdapter.toNumber((selectedAsset as any).id);
+        const internalId = numeric !== null ? numeric : null;
         try {
             ProjectStateManager.setState({ identity: { assetId: internalId, assetName: selectedAsset.name } as any, assetPassport: { ...passportData, calculations } as any });
             loggingService.logAction(internalId, 'PASSPORT_SAVE', { calculations });
         } catch (e) {
-            // Fallback to legacy context update
-            updateAsset(internalId, { assetPassport: { ...passportData, calculations } });
-            loggingService.logAction(internalId, 'PASSPORT_SAVE_FALLBACK', {});
+            // Fallback to legacy context update (updateAsset accepts numeric|string)
+            updateAsset((selectedAsset as any).id, { assetPassport: { ...passportData, calculations } });
+            loggingService.logAction(idAdapter.toNumber((selectedAsset as any).id), 'PASSPORT_SAVE_FALLBACK', {});
         }
     };
 

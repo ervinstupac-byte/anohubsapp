@@ -5,6 +5,7 @@ import { AlarmBar } from './diagnostics/AlarmBar.tsx';
 import { useDiagnostic } from '../contexts/DiagnosticContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext';
 import { useTelemetry } from '../contexts/TelemetryContext';
+import idAdapter from '../utils/idAdapter';
 import { ModernButton } from '../shared/components/ui/ModernButton';
 import { motion } from 'framer-motion';
 import { Target, Settings, Zap, Shield, BookOpen, Activity, AlertTriangle, Map, ChevronRight, Gauge, FileText, Cpu, Wrench, TrendingUp, Clock, Users, Database, Power, Thermometer, AlertCircle, CheckCircle, Calculator } from 'lucide-react';
@@ -60,7 +61,7 @@ export const Hub: React.FC = () => {
     const { activeDiagnoses } = useDiagnostic();
     const criticalDiagnosis = activeDiagnoses.find(d => d.diagnosis?.severity === 'CRITICAL');
     const { selectedAsset } = useAssetContext();
-    const { telemetry } = useTelemetry();
+    const { telemetry, shutdownExcitation } = useTelemetry();
     const [systemStatus, setSystemStatus] = useState<'operational' | 'warning' | 'critical'>('operational');
     const [activeAlerts, setActiveAlerts] = useState(0);
 
@@ -276,14 +277,18 @@ export const Hub: React.FC = () => {
                             </div>
                         ))}
                     </div>
-                    <ModernButton
+                            <ModernButton
                         variant="primary"
                         className="mt-4 bg-red-600 hover:bg-red-700 h-10 border-none shadow-[0_0_30px_rgba(220,38,38,0.4)]"
                         onClick={() => {
                             // Trigger emergency shutdown via telemetry context
                             if (selectedAsset) {
-                                const { shutdownExcitation } = useTelemetry();
-                                shutdownExcitation(selectedAsset.id);
+                                        const numeric = idAdapter.toNumber((selectedAsset as any).id);
+                                        if (numeric === null) {
+                                            console.warn('[Hub] shutdownExcitation: selectedAsset.id is non-numeric', selectedAsset.id);
+                                            return;
+                                        }
+                                        shutdownExcitation(numeric);
                             }
                         }}
                     >
