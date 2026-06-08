@@ -106,6 +106,7 @@ const ScadaCore = lazy(() => import('./components/dashboard/ScadaCore').then(m =
 const SystemAuditLog = lazy(() => import('./components/ui/SystemAuditLog').then(m => ({ default: m.SystemAuditLog })));
 const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDashboard').then(m => ({ default: m.ForensicDashboard })));
 const ForensicDeepDive = lazy(() => import('./components/forensics/ForensicDeepDive').then(m => ({ default: m.ForensicDeepDive }))); // NC-21100
+const AudioSpectrogram = lazy(() => import('./components/forensics/AudioSpectrogram').then(m => ({ default: m.AudioSpectrogram }))); // re-wired orphan: was a dead /forensics/audio nav link
 
 const ForensicHub = lazy(() => import('./pages/ForensicHub').then(m => ({ default: m.default })));
 const SandboxPage = lazy(() => import('./pages/SandboxPage'));
@@ -497,6 +498,18 @@ const AppLayout: React.FC = () => {
                                                 <Route path="admin-approval" element={<RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}><AdminApproval /></RoleGuard>} />
                                                 <Route path="admin/health" element={<RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}><AdminHealth /></RoleGuard>} />
                                                 <Route path="/forensics" element={<Suspense fallback={<LoadingScreen />}><ForensicDashboard /></Suspense>} />
+                                                <Route path="forensics/audio" element={
+                                                    <Suspense fallback={<LoadingScreen />}>
+                                                        <div className="w-full">
+                                                            <div className="mb-6">
+                                                                <h1 className="text-2xl font-bold text-white mb-2">Acoustic Forensics</h1>
+                                                                <p className="text-slate-400 max-w-2xl">Live spectral signature of the active asset. High-frequency hiss flags silica-sand erosion in the flow path.</p>
+                                                            </div>
+                                                            <div className="h-[560px]"><AudioSpectrogram /></div>
+                                                        </div>
+                                                    </Suspense>
+                                                } />
+                                                <Route path="forensics/vision" element={<UnderConstruction />} />
                                                 <Route path="audit" element={<SystemAuditLog />} />
                                                 <Route path="stress-test" element={<SystemStressTest />} />
                                                 <Route path="precision-audit" element={<PrecisionAudit />} />
