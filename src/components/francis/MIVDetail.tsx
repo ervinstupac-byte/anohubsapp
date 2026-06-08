@@ -69,7 +69,7 @@ export const MIVDetail: React.FC = () => {
                         </div>
                         <div className="p-6 bg-black/60 rounded-none border border-white/5">
                             <p className="text-[10px] text-blue-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
-                                <RefreshCw className="w-3 h-3 text-cyan-400" /> Bypass Status
+                                <RefreshCw className="w-3 h-3 text-brand-400" /> Bypass Status
                             </p>
                             <p className="text-3xl font-black text-white font-mono tracking-tighter uppercase">
                                 Closed

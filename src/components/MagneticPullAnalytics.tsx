@@ -58,7 +58,7 @@ export const MagneticPullAnalytics: React.FC = () => {
                     </div>
                     <div className="bg-black/40 p-3 rounded-lg border border-white/5">
                         <p className="text-[10px] text-slate-500 uppercase font-black mb-1">Shaft Runout (e)</p>
-                        <p className="text-xl font-mono font-black text-cyan-400">{e.toFixed(2)} <span className="text-[10px]">mm</span></p>
+                        <p className="text-xl font-mono font-black text-brand-400">{e.toFixed(2)} <span className="text-[10px]">mm</span></p>
                     </div>
                 </div>
 

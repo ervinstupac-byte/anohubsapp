@@ -107,17 +107,17 @@ export const HydrologyLab: React.FC = () => {
         <div className="space-y-8 animate-fade-in">
             <div className="flex justify-between items-center">
                 <h2 className="text-3xl font-black text-white tracking-tighter uppercase">
-                    Hydrology <span className="text-cyan-400">Lab</span>
+                    Hydrology <span className="text-brand-400">Lab</span>
                 </h2>
                 {/* NC-85.2: Neural Processing Indicator */}
-                <div className={`flex items-center gap-3 px-4 py-2 rounded-full border border-cyan-500/20 bg-cyan-950/30 transition-opacity duration-300 ${isComputing ? 'opacity-100' : 'opacity-0'}`}>
-                    <div className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></div>
-                    <span className="text-xs font-mono text-cyan-300 uppercase tracking-widest">Neural Processing</span>
+                <div className={`flex items-center gap-3 px-4 py-2 rounded-full border border-brand-500/20 bg-brand-950/30 transition-opacity duration-300 ${isComputing ? 'opacity-100' : 'opacity-0'}`}>
+                    <div className="w-2 h-2 rounded-full bg-brand-400 animate-ping"></div>
+                    <span className="text-xs font-mono text-brand-300 uppercase tracking-widest">Neural Processing</span>
                 </div>
 
                 <div className="flex gap-2">
                     <select
-                        className="bg-slate-900 border border-white/10 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-cyan-500"
+                        className="bg-slate-900 border border-white/10 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-brand-500"
                         value={selectedPlantId}
                         onChange={(e) => {
                             setSelectedPlantId(e.target.value);
@@ -155,7 +155,7 @@ export const HydrologyLab: React.FC = () => {
                                 <label className="text-[10px] uppercase tracking-widest text-slate-500">Predicted Efficiency</label>
                                 <div className={`text-2xl numeric-display value-transition ${isComputing && staleValue !== null
                                         ? 'animate-stale-pulse'
-                                        : 'text-cyan-400'
+                                        : 'text-brand-400'
                                     }`}>
                                     {/* Show stale value with pulse during computation, otherwise fresh value */}
                                     {isComputing && staleValue !== null
@@ -166,8 +166,8 @@ export const HydrologyLab: React.FC = () => {
                             </div>
                             <div className="flex items-center justify-end">
                                 {isComputing ? (
-                                    <div className="text-xs text-cyan-500 flex items-center gap-2">
-                                        <div className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                                    <div className="text-xs text-brand-500 flex items-center gap-2">
+                                        <div className="w-2 h-2 rounded-full bg-brand-400 animate-ping" />
                                         <span className="font-mono uppercase tracking-widest">COMPUTING</span>
                                     </div>
                                 ) : (
@@ -178,7 +178,7 @@ export const HydrologyLab: React.FC = () => {
 
                         <div className="p-4 bg-white/5 rounded-xl border border-white/10 space-y-4">
                             <div className="flex items-center gap-2 text-xs font-black text-slate-500 uppercase tracking-widest">
-                                <Info className="w-4 h-4 text-cyan-500" />
+                                <Info className="w-4 h-4 text-brand-500" />
                                 Ecological Constraints
                             </div>
                             <div className="grid grid-cols-2 gap-4">
@@ -201,7 +201,7 @@ export const HydrologyLab: React.FC = () => {
 
                 <GlassCard title="Flow Duration Curve (FDC)" icon={<TrendingUp className="w-5 h-5 text-emerald-400" />}>
                     <div className="h-64 flex flex-col items-center justify-center border border-white/5 bg-black/40 rounded-2xl">
-                        <div className="text-cyan-400/20 mb-4 animate-pulse">
+                        <div className="text-brand-400/20 mb-4 animate-pulse">
                             <Waves className="w-16 h-16" />
                         </div>
                         <p className="text-[10px] text-slate-600 font-mono uppercase tracking-[0.2em]">FDC Mapping UI - COMING SOON</p>

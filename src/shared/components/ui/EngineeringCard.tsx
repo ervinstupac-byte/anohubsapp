@@ -103,7 +103,7 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
                         e.stopPropagation();
                         setIsMenuOpen(!isMenuOpen);
                     }}
-                    className={`p-1 rounded-none hover:bg-white/10 text-slate-500 hover:text-cyan-400 transition-colors ${isMenuOpen ? 'text-cyan-400 bg-white/5' : ''}`}
+                    className={`p-1 rounded-none hover:bg-white/10 text-slate-500 hover:text-brand-400 transition-colors ${isMenuOpen ? 'text-brand-400 bg-white/5' : ''}`}
                 >
                     <MoreVertical className="w-4 h-4" />
                 </button>
@@ -128,7 +128,7 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
                                         }}
                                         className={`
                                             w-full text-left px-4 py-2 text-xs font-mono font-bold flex items-center gap-2
-                                            ${action.variant === 'danger' ? 'text-red-400 hover:bg-red-950/30' : 'text-slate-300 hover:bg-slate-800 hover:text-cyan-400'}
+                                            ${action.variant === 'danger' ? 'text-red-400 hover:bg-red-950/30' : 'text-slate-300 hover:bg-slate-800 hover:text-brand-400'}
                                             transition-colors
                                         `}
                                     >
@@ -176,8 +176,8 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
                 <HeaderWrapper>
                     <div className="flex items-center gap-2">
                         <span className={typo.labelMd + ' text-slate-500'}>{title}</span>
-                        {docKey && <InfoTooltip docKey={docKey} className="text-slate-600 hover:text-cyan-400" />}
-                        {icon && <span className="text-slate-400 group-hover:text-cyan-400 transition-colors">{icon}</span>}
+                        {docKey && <InfoTooltip docKey={docKey} className="text-slate-600 hover:text-brand-400" />}
+                        {icon && <span className="text-slate-400 group-hover:text-brand-400 transition-colors">{icon}</span>}
                     </div>
                 </HeaderWrapper>
 
@@ -249,7 +249,7 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
                                     {docKey && <InfoTooltip docKey={docKey} />}
                                 </div>
                                 {subtitle && (
-                                    <p className={typo.labelXs + ' text-cyan-500/70 mt-0.5'}>{subtitle}</p>
+                                    <p className={typo.labelXs + ' text-brand-500/70 mt-0.5'}>{subtitle}</p>
                                 )}
                             </div>
                         </div>
@@ -295,7 +295,7 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
             className={`
                 bg-slate-900 border border-slate-700 ${spacing.cardPadding}
                 ${status !== 'nominal' ? `border-l-4 ${colors.border}` : ''}
-                hover:border-cyan-500/50 transition-all duration-500 rounded-none
+                hover:border-brand-500/50 transition-all duration-500 rounded-none
                 ${isClickable ? 'cursor-pointer hover:bg-slate-800/50' : ''}
                 ${className}
             `}
@@ -303,7 +303,7 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
             {(title || headerAction || actionMenu) && (
                 <div className="flex justify-between items-start mb-3 relative z-10">
                     <div className="flex items-center gap-3">
-                        {icon && <div className="text-cyan-400">{icon}</div>}
+                        {icon && <div className="text-brand-400">{icon}</div>}
                         <div>
                             <h3 className={`${typo.valueMd} text-slate-100 tracking-tight uppercase`}>{title}</h3>
                             {subtitle && <p className={typo.labelSm + ' text-slate-400 mt-0.5'}>{subtitle}</p>}

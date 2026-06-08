@@ -64,7 +64,7 @@ export const BrakingSystem: React.FC = () => {
                         </div>
                         <div className="p-6 bg-black/60 rounded-none border border-white/5">
                             <p className="text-[10px] text-red-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
-                                <Cpu className="w-3 h-3 text-cyan-400" /> Air Pressure
+                                <Cpu className="w-3 h-3 text-brand-400" /> Air Pressure
                             </p>
                             <p className="text-3xl font-black text-emerald-400 font-mono tracking-tighter">
                                 {airPressure.toFixed(1)} <span className="text-xs text-slate-500 ml-1">BAR</span>

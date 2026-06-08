@@ -19,7 +19,7 @@ export const Sparkline: React.FC<SparklineProps> = React.memo(({
     data,
     width = 60,
     height = 20,
-    color = '#22d3ee', // cyan-400 default
+    color = '#22d3ee', // brand-400 default
     className = '',
     markers = []
 }) => {

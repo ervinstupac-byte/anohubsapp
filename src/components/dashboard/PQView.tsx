@@ -119,7 +119,7 @@ export const PQView: React.FC<PQViewProps> = ({
 
                     <div className="bg-slate-800 p-3 rounded border border-slate-700">
                         <div className="text-xs text-slate-400 mb-1">Reactive Power (Q)</div>
-                        <div className={`text-2xl font-bold font-mono ${reactivePowerMVAR > 0 ? 'text-amber-300' : 'text-cyan-300'}`}>
+                        <div className={`text-2xl font-bold font-mono ${reactivePowerMVAR > 0 ? 'text-amber-300' : 'text-brand-300'}`}>
                             {reactivePowerMVAR.toFixed(1)} <span className="text-sm text-slate-500">MVAR</span>
                         </div>
                         <div className="text-xs mt-1 text-slate-500">

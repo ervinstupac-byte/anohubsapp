@@ -122,7 +122,7 @@ export const HydraulicMaintenance: React.FC = () => {
         <div className="animate-fade-in space-y-8 pb-12">
             <div className="flex justify-between items-center bg-slate-900/40 p-6 rounded-3xl border border-white/5 backdrop-blur-xl">
                 <div>
-                    <h2 className="text-3xl font-black text-white tracking-widest uppercase mb-1">Field <span className="text-cyan-400">Safeguard</span></h2>
+                    <h2 className="text-3xl font-black text-white tracking-widest uppercase mb-1">Field <span className="text-brand-400">Safeguard</span></h2>
                     <p className="text-slate-400 text-sm font-light italic">Mechanical Failure Prevention & Retrofit Validation.</p>
                 </div>
                 <BackButton text="Back to Hub" />
@@ -137,7 +137,7 @@ export const HydraulicMaintenance: React.FC = () => {
             ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="space-y-6">
-                        <GlassCard title="Retrofit Validator" className="border-l-4 border-l-cyan-500">
+                        <GlassCard title="Retrofit Validator" className="border-l-4 border-l-brand-500">
                             <div className="p-4 bg-slate-950 border border-white/5 rounded-xl mb-6">
                                 <label className="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-2 block">Pipe Diameter (mm)</label>
                                 <div className="flex gap-2">
@@ -152,8 +152,8 @@ export const HydraulicMaintenance: React.FC = () => {
                             </div>
 
                             {simResults && (
-                                <div className={`p-4 rounded-xl border animate-pulse ${simResults.isCritical ? 'bg-red-500/10 border-red-500/30' : 'bg-cyan-500/10 border-cyan-500/30'}`}>
-                                    <h4 className={`text-xs font-black uppercase mb-1 ${simResults.isCritical ? 'text-red-500' : 'text-cyan-400'}`}>
+                                <div className={`p-4 rounded-xl border animate-pulse ${simResults.isCritical ? 'bg-red-500/10 border-red-500/30' : 'bg-brand-500/10 border-brand-500/30'}`}>
+                                    <h4 className={`text-xs font-black uppercase mb-1 ${simResults.isCritical ? 'text-red-500' : 'text-brand-400'}`}>
                                         {simResults.isCritical ? 'CRITICAL VELOCITY' : 'Safe Retrofit'}
                                     </h4>
                                     <p className="text-[10px] text-slate-300">Actuator Speed: +{simResults.velocityIncrease}%</p>
@@ -217,7 +217,7 @@ export const HydraulicMaintenance: React.FC = () => {
                             <div className="aspect-video bg-slate-950 rounded-2xl border border-white/5 relative flex items-center justify-center p-12">
                                 <div className="w-full h-8 bg-slate-900 border border-slate-800 rounded-full relative overflow-hidden">
                                     <div
-                                        className={`absolute top-0 bottom-0 left-0 transition-all duration-300 ${assetTele?.oilPressureRate && assetTele.oilPressureRate > 15 ? 'bg-red-500 shadow-[0_0_20px_red]' : 'bg-cyan-500'}`}
+                                        className={`absolute top-0 bottom-0 left-0 transition-all duration-300 ${assetTele?.oilPressureRate && assetTele.oilPressureRate > 15 ? 'bg-red-500 shadow-[0_0_20px_red]' : 'bg-brand-500'}`}
                                         style={{ width: `${assetTele?.actuatorPosition || 0}%` }}
                                     />
                                 </div>

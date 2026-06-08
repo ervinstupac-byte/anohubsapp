@@ -12,7 +12,7 @@ export const TaskManager: React.FC = () => {
 
     return (
         <div className="p-4 bg-slate-950 rounded-lg border border-slate-800 font-mono text-xs h-full flex flex-col">
-            <h3 className="text-cyan-400 font-bold mb-4 flex items-center gap-2 uppercase tracking-wider">
+            <h3 className="text-brand-400 font-bold mb-4 flex items-center gap-2 uppercase tracking-wider">
                 <Server className="w-4 h-4" /> System Processes
             </h3>
 

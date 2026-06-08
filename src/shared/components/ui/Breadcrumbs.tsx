@@ -96,7 +96,7 @@ export const Breadcrumbs: React.FC = () => {
             >
                 <Link
                     to="/"
-                    className="flex items-center justify-center p-1 hover:bg-white/5 text-slate-400 hover:text-cyan-400 transition-colors"
+                    className="flex items-center justify-center p-1 hover:bg-white/5 text-slate-400 hover:text-brand-400 transition-colors"
                 >
                     <Home className="w-3.5 h-3.5" />
                 </Link>
@@ -111,7 +111,7 @@ export const Breadcrumbs: React.FC = () => {
                             <ChevronRight className="w-3 h-3 text-slate-700" />
 
                             {last ? (
-                                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.3)]">
+                                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-brand-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.3)]">
                                     {label}
                                 </span>
                             ) : (

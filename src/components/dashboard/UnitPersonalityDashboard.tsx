@@ -113,7 +113,7 @@ export const UnitPersonalityDashboard: React.FC<UnitPersonalityProps> = ({ unitI
                             <div className="text-xs text-slate-400 mb-2 uppercase font-bold">Active Strategies</div>
                             <div className="flex flex-wrap gap-2">
                                 {tuning.activeStrategies.map((strat, idx) => (
-                                    <span key={idx} className="px-2 py-1 bg-slate-800 text-cyan-400 text-xs rounded border border-cyan-900 font-mono">
+                                    <span key={idx} className="px-2 py-1 bg-slate-800 text-brand-400 text-xs rounded border border-brand-900 font-mono">
                                         {strat}
                                     </span>
                                 ))}
@@ -126,10 +126,10 @@ export const UnitPersonalityDashboard: React.FC<UnitPersonalityProps> = ({ unitI
                 </div>
 
                 {/* Type-Specific Status */}
-                <div className="col-span-2 bg-slate-900 border border-cyan-500 rounded-none p-4">
+                <div className="col-span-2 bg-slate-900 border border-brand-500 rounded-none p-4">
                     <div className="flex items-center gap-2 mb-2">
-                        <Activity className="w-5 h-5 text-cyan-400" />
-                        <div className="text-sm font-bold text-cyan-300">Unit Specifics: {type}</div>
+                        <Activity className="w-5 h-5 text-brand-400" />
+                        <div className="text-sm font-bold text-brand-300">Unit Specifics: {type}</div>
                     </div>
 
                     <div className="text-sm text-slate-300">

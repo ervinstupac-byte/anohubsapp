@@ -23,7 +23,7 @@ export const GlassCard = ({
         onClick={onClick}
         style={style}
         className={`bg-slate-900/40 backdrop-blur-xl border border-slate-800/50 rounded-xl p-6 
-                 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] hover:border-cyan-500/30 transition-all duration-500 
+                 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] hover:border-brand-500/30 transition-all duration-500 
                  ${onClick ? 'cursor-pointer' : ''} ${className}`}
     >
         {(title || action) && (

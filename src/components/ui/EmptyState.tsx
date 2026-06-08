@@ -51,7 +51,7 @@ const variantConfig: Record<EmptyStateVariant, { icon: typeof Radio; defaultTitl
         icon: Lightbulb,
         defaultTitle: 'Get Started',
         defaultDesc: 'Choose an action below to begin.',
-        color: 'text-cyan-400'
+        color: 'text-brand-400'
     },
     maintenance: {
         icon: Wrench,
@@ -100,7 +100,7 @@ export const EmptyState: React.FC<EmptyStateProps> = React.memo(({
                     repeat: Infinity,
                     ease: 'easeInOut'
                 }}
-                className={`mb-4 p-4 rounded-full border border-white/10 ${variant === 'guided' ? 'bg-cyan-950/30' :
+                className={`mb-4 p-4 rounded-full border border-white/10 ${variant === 'guided' ? 'bg-brand-950/30' :
                     variant === 'maintenance' ? 'bg-amber-950/30' :
                         variant === 'error' ? 'bg-red-950/30' :
                             'bg-slate-800/50'
@@ -124,9 +124,9 @@ export const EmptyState: React.FC<EmptyStateProps> = React.memo(({
             {action && (
                 <button
                     onClick={action.onClick}
-                    className="mt-4 px-4 py-2 text-xs font-bold text-cyan-400 
-                               border border-cyan-500/30 rounded-lg
-                               hover:bg-cyan-500/10 transition-colors duration-200
+                    className="mt-4 px-4 py-2 text-xs font-bold text-brand-400 
+                               border border-brand-500/30 rounded-lg
+                               hover:bg-brand-500/10 transition-colors duration-200
                                flex items-center gap-2"
                 >
                     {action.icon}
@@ -143,14 +143,14 @@ export const EmptyState: React.FC<EmptyStateProps> = React.memo(({
                             onClick={sa.onClick}
                             className="w-full px-4 py-3 text-left text-xs font-bold text-slate-400 
                                        bg-slate-900/50 border border-white/5 rounded-lg
-                                       hover:bg-slate-800 hover:text-white hover:border-cyan-500/30 
+                                       hover:bg-slate-800 hover:text-white hover:border-brand-500/30 
                                        transition-all flex items-center justify-between group"
                         >
                             <span className="flex items-center gap-2">
                                 {sa.icon}
                                 {sa.label}
                             </span>
-                            <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-cyan-400 transition-colors" />
+                            <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-brand-400 transition-colors" />
                         </button>
                     ))}
                 </div>

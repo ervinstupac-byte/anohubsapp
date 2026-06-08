@@ -71,8 +71,8 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
                             animate={{ y: 0, opacity: 1 }}
                             className="flex flex-col items-center mb-8"
                         >
-                            <div className="text-cyan-500 font-bold tracking-[0.3em] text-sm mb-2">ANOHUB</div>
-                            <div className="h-[2px] w-12 bg-cyan-500/50" />
+                            <div className="text-brand-500 font-bold tracking-[0.3em] text-sm mb-2">ANOHUB</div>
+                            <div className="h-[2px] w-12 bg-brand-500/50" />
                         </motion.div>
 
                         {/* Progress Container */}
@@ -82,7 +82,7 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
                                     key={messageIndex}
                                     initial={{ opacity: 0.5 }}
                                     animate={{ opacity: 1 }}
-                                    className="text-cyan-400 uppercase"
+                                    className="text-brand-400 uppercase"
                                 >
                                     {technicalMessages[messageIndex]}
                                 </motion.span>
@@ -91,7 +91,7 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
 
                             <div className="h-1 w-full bg-slate-900 rounded-full overflow-hidden border border-white/5">
                                 <motion.div
-                                    className="h-full bg-cyan-500 shadow-[0_0_10px_rgba(34,211,238,0.5)]"
+                                    className="h-full bg-brand-500 shadow-[0_0_10px_rgba(34,211,238,0.5)]"
                                     style={{ width: `${progress}%` }}
                                 />
                             </div>
@@ -126,7 +126,7 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
                     <motion.div
                         animate={{ top: ['-10%', '110%'] }}
                         transition={{ repeat: Infinity, duration: 2.5, ease: "linear" }}
-                        className="absolute left-0 right-0 h-[10vh] bg-gradient-to-b from-transparent via-cyan-500/5 to-transparent pointer-events-none"
+                        className="absolute left-0 right-0 h-[10vh] bg-gradient-to-b from-transparent via-brand-500/5 to-transparent pointer-events-none"
                     />
                 </motion.div>
             )}

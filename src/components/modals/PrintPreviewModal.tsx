@@ -150,13 +150,13 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                                     <div className="grid grid-cols-2 gap-2">
                                         <button 
                                             onClick={() => setSettings(s => ({ ...s, orientation: 'PORTRAIT' }))}
-                                            className={`p-3 rounded-none border text-xs font-bold transition-all ${settings.orientation === 'PORTRAIT' ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400' : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600'}`}
+                                            className={`p-3 rounded-none border text-xs font-bold transition-all ${settings.orientation === 'PORTRAIT' ? 'bg-brand-500/20 border-brand-500 text-brand-400' : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600'}`}
                                         >
                                             Portrait
                                         </button>
                                         <button 
                                             onClick={() => setSettings(s => ({ ...s, orientation: 'LANDSCAPE' }))}
-                                            className={`p-3 rounded-none border text-xs font-bold transition-all ${settings.orientation === 'LANDSCAPE' ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400' : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600'}`}
+                                            className={`p-3 rounded-none border text-xs font-bold transition-all ${settings.orientation === 'LANDSCAPE' ? 'bg-brand-500/20 border-brand-500 text-brand-400' : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600'}`}
                                         >
                                             Landscape
                                         </button>
@@ -168,13 +168,13 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                                     <div className="grid grid-cols-2 gap-2">
                                         <button 
                                             onClick={() => setSettings(s => ({ ...s, colorMode: 'COLOR' }))}
-                                            className={`p-3 rounded-none border text-xs font-bold transition-all ${settings.colorMode === 'COLOR' ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400' : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600'}`}
+                                            className={`p-3 rounded-none border text-xs font-bold transition-all ${settings.colorMode === 'COLOR' ? 'bg-brand-500/20 border-brand-500 text-brand-400' : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600'}`}
                                         >
                                             RGB Color
                                         </button>
                                         <button 
                                             onClick={() => setSettings(s => ({ ...s, colorMode: 'GRAYSCALE' }))}
-                                            className={`p-3 rounded-none border text-xs font-bold transition-all ${settings.colorMode === 'GRAYSCALE' ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400' : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600'}`}
+                                            className={`p-3 rounded-none border text-xs font-bold transition-all ${settings.colorMode === 'GRAYSCALE' ? 'bg-brand-500/20 border-brand-500 text-brand-400' : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600'}`}
                                         >
                                             Grayscale
                                         </button>
@@ -188,7 +188,7 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                                             type="checkbox" 
                                             checked={settings.includeCover} 
                                             onChange={(e) => setSettings(s => ({ ...s, includeCover: e.target.checked }))}
-                                            className="rounded-none bg-slate-700 border-slate-600 text-cyan-500 focus:ring-cyan-500/20" 
+                                            className="rounded-none bg-slate-700 border-slate-600 text-brand-500 focus:ring-brand-500/20" 
                                         />
                                         <span className="text-sm text-slate-300">Include Cover Page</span>
                                     </label>
@@ -199,7 +199,7 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                                 <button
                                     onClick={handleGenerate}
                                     disabled={isGenerating}
-                                    className="w-full py-4 bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-700 disabled:text-slate-500 text-white font-bold rounded-none shadow-none transition-all flex items-center justify-center gap-2"
+                                    className="w-full py-4 bg-brand-600 hover:bg-brand-500 disabled:bg-slate-700 disabled:text-slate-500 text-white font-bold rounded-none shadow-none transition-all flex items-center justify-center gap-2"
                                 >
                                     {isGenerating ? (
                                         <>
@@ -221,7 +221,7 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                             {/* Header */}
                             <div className="h-16 border-b border-white/10 bg-slate-900/50 flex items-center justify-between px-8">
                                 <div className="flex items-center gap-3">
-                                    <FileBarChart className="w-5 h-5 text-cyan-400" />
+                                    <FileBarChart className="w-5 h-5 text-brand-400" />
                                     <h2 className="text-lg font-bold text-white tracking-wide">Project Dossier Preview</h2>
                                 </div>
                                 <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-none text-slate-400 hover:text-white transition-colors">

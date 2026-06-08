@@ -30,7 +30,7 @@ export const SOPViewer: React.FC = () => {
                     <div className="flex items-center gap-6">
                         <div className="p-3 bg-slate-800 rounded-none border border-white/5 relative group overflow-hidden">
                             <FileText className="text-white w-5 h-5 group-hover:scale-110 transition-transform" />
-                            <div className="absolute inset-0 bg-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="absolute inset-0 bg-brand-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                         <div>
                             <div className="flex items-center gap-2 mb-0.5">
@@ -54,7 +54,7 @@ export const SOPViewer: React.FC = () => {
                         href={`/francis-docs/${activeDoc}.html`}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center gap-3 px-6 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-none text-[10px] font-black uppercase tracking-widest transition-all shadow-none italic"
+                        className="flex items-center gap-3 px-6 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-none text-[10px] font-black uppercase tracking-widest transition-all shadow-none italic"
                     >
                         <span>Open Raw Source</span>
                         <ExternalLink className="w-4 h-4" />
@@ -80,7 +80,7 @@ export const SOPViewer: React.FC = () => {
             <footer className="bg-black/80 border-t border-white/5 px-8 py-3 flex justify-between items-center relative z-50">
                 <div className="flex items-center gap-4 text-[10px] font-black text-slate-500 uppercase tracking-widest italic">
                     <Cpu className="w-4 h-4" />
-                    <span>Neural Link: <span className="text-cyan-500">Active</span></span>
+                    <span>Neural Link: <span className="text-brand-500">Active</span></span>
                     <span className="opacity-20 mx-2">|</span>
                     <span>Buffer: <span className="text-emerald-500">100%</span></span>
                 </div>

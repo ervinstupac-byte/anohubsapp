@@ -307,7 +307,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
               </button>
               <button 
                 onClick={() => setIsComfortMode(!isComfortMode)} 
-                className={`p-1 hover:bg-slate-800 border border-transparent hover:border-slate-600 transition-colors ${isComfortMode ? 'text-cyan-400' : 'text-slate-400'}`}
+                className={`p-1 hover:bg-slate-800 border border-transparent hover:border-slate-600 transition-colors ${isComfortMode ? 'text-brand-400' : 'text-slate-400'}`}
                 title="Visual Comfort Mode"
               >
                 <Eye className="w-4 h-4" />
@@ -320,7 +320,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
               <div className="text-[10px] font-mono text-slate-400">P_mech: {mechPowerMW.toFixed(2)} MW • η: {(eta * 100).toFixed(1)}% • v₂: {dischargeVelocityV2.toFixed(2)} m/s</div>
               <button
                 onClick={() => window.open('#/detach/scada', '_blank', 'width=1000,height=800,menubar=no,status=no')}
-                className="text-slate-500 hover:text-cyan-400 transition-colors"
+                className="text-slate-500 hover:text-brand-400 transition-colors"
                 title="Detach Module"
               >
                 <ExternalLink className="w-4 h-4" />
@@ -852,7 +852,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                 <div className="bg-slate-900 border border-slate-700 rounded-none w-[600px] shadow-none">
                     <div className="flex items-center justify-between p-4 border-b border-slate-700 bg-slate-950/50">
                         <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
-                            <Activity className="w-4 h-4 text-cyan-400" />
+                            <Activity className="w-4 h-4 text-brand-400" />
                             Pre-Start Checklist
                         </h3>
                         <button onClick={() => setShowPreStartModal(false)} className="text-slate-400 hover:text-white">✕</button>
@@ -1075,7 +1075,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
           <div className="text-[10px] text-slate-400 uppercase font-mono tracking-widest mb-2">Analog Tachometer</div>
           <div className="relative w-56 h-56 rounded-full border-4 border-slate-700 bg-slate-800 mx-auto">
             <div className="absolute inset-3 rounded-full border-2 border-slate-700" />
-            <div className="absolute left-1/2 top-1/2 w-0.5 h-24 bg-cyan-400 origin-bottom shadow-[0_0_10px_rgba(34,211,238,0.5)]" style={{ transform: `translate(-50%, -100%) rotate(${gauge.angle}deg)` }} />
+            <div className="absolute left-1/2 top-1/2 w-0.5 h-24 bg-brand-400 origin-bottom shadow-[0_0_10px_rgba(34,211,238,0.5)]" style={{ transform: `translate(-50%, -100%) rotate(${gauge.angle}deg)` }} />
             <div className="absolute left-1/2 top-1/2 w-3 h-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-300" />
             <div className="absolute left-1/2 top-1/2 w-48 h-48 -translate-x-1/2 -translate-y-1/2">
               <svg viewBox="0 0 200 200" className="w-full h-full">
@@ -1108,7 +1108,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
               <div className="text-xs font-mono text-slate-300 mb-1">P_dynamic</div>
               <div className="text-2xl font-black text-white">{pressures.pDynamicKpa.toFixed(1)}<span className="text-xs text-slate-400 ml-1">kPa</span></div>
               <div className="mt-2 h-24 bg-slate-800 rounded relative overflow-hidden">
-                <div className="absolute bottom-0 left-0 right-0 bg-cyan-500" style={{ height: `${Math.max(5, Math.min(100, pressures.pDynamicKpa / (family === 'PELTON' ? 15 : 5)))}%` }} />
+                <div className="absolute bottom-0 left-0 right-0 bg-brand-500" style={{ height: `${Math.max(5, Math.min(100, pressures.pDynamicKpa / (family === 'PELTON' ? 15 : 5)))}%` }} />
               </div>
             </div>
           </div>
@@ -1165,7 +1165,7 @@ const HistorianPanel: React.FC = () => {
             {(sessionLedger ?? []).slice(-20).reverse().map((e: any, i: number) => (
               <div key={`${e.hash}-${i}`} className="text-xs font-mono text-slate-300 border-b border-slate-800/50 pb-1 mb-1 last:border-0">
                 <span className="text-slate-500 mr-2">[{new Date(e.timestamp).toLocaleTimeString()}]</span>
-                <span className="text-cyan-600 font-bold mr-2">{e.action}</span>
+                <span className="text-brand-600 font-bold mr-2">{e.action}</span>
                 <span className="text-slate-400">{e.componentId ?? '-'}</span>
                 <span className="mx-2 text-slate-600">→</span>
                 <span className="text-slate-200">{String(e.newValue ?? '')}</span>

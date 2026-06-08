@@ -31,7 +31,7 @@ export const RevitalizationStrategy: React.FC = () => {
 
                 <div>
                     <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4">
-                        {t('revitalization.title').split(' ')[0]} {t('revitalization.title').split(' ')[1]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{t('revitalization.title').split(' ').slice(2).join(' ')}</span>
+                        {t('revitalization.title').split(' ')[0]} {t('revitalization.title').split(' ')[1]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-blue-500">{t('revitalization.title').split(' ').slice(2).join(' ')}</span>
                     </h2>
 
                     {selectedAsset && (
@@ -62,7 +62,7 @@ export const RevitalizationStrategy: React.FC = () => {
                         <div className="bg-slate-900/60 p-6 rounded-xl border border-white/5 flex flex-col gap-4">
                             <div className="flex justify-between items-center text-xs font-bold uppercase tracking-widest text-slate-500">
                                 <span>{t('revitalization.lea.matrix')}</span>
-                                <span className="text-cyan-400">{t('revitalization.lea.lcc')}</span>
+                                <span className="text-brand-400">{t('revitalization.lea.lcc')}</span>
                             </div>
 
                             <div className="flex items-stretch gap-1 h-12">
@@ -72,13 +72,13 @@ export const RevitalizationStrategy: React.FC = () => {
                                 <div className="w-8 bg-slate-800 flex items-center justify-center text-slate-500 text-xs font-mono border-y border-slate-700">
                                     VS
                                 </div>
-                                <div className="flex-1 bg-gradient-to-r from-cyan-900/50 to-cyan-800/50 text-cyan-400 flex items-center justify-center rounded-r-lg border border-cyan-500/30 text-sm font-bold shadow-[0_0_15px_rgba(6,182,212,0.1)] hover:flex-[1.2] transition-all cursor-default">
+                                <div className="flex-1 bg-gradient-to-r from-brand-900/50 to-brand-800/50 text-brand-400 flex items-center justify-center rounded-r-lg border border-brand-500/30 text-sm font-bold shadow-[0_0_15px_rgba(6,182,212,0.1)] hover:flex-[1.2] transition-all cursor-default">
                                     {t('revitalization.lea.replace')}
                                 </div>
                             </div>
                         </div>
 
-                        <div className="mt-6 p-4 bg-cyan-500/5 border-l-2 border-cyan-500 text-sm text-cyan-100 italic rounded-r-lg">
+                        <div className="mt-6 p-4 bg-brand-500/5 border-l-2 border-brand-500 text-sm text-brand-100 italic rounded-r-lg">
                             "{t('revitalization.lea.quote')}"
                         </div>
                     </GlassCard>
@@ -126,8 +126,8 @@ export const RevitalizationStrategy: React.FC = () => {
                                 <div className="w-2 h-2 bg-amber-500 rounded-full mr-3 shadow-[0_0_8px_rgba(245,158,11,0.5)]"></div>
                                 <span className="text-sm text-slate-300">{t('revitalization.risk.control')}</span>
                             </div>
-                            <div className="flex items-center p-3 rounded-lg bg-cyan-900/10 border border-cyan-500/10">
-                                <div className="w-2 h-2 bg-cyan-500 rounded-full mr-3 shadow-[0_0_8px_rgba(6,182,212,0.5)]"></div>
+                            <div className="flex items-center p-3 rounded-lg bg-brand-900/10 border border-brand-500/10">
+                                <div className="w-2 h-2 bg-brand-500 rounded-full mr-3 shadow-[0_0_8px_rgba(6,182,212,0.5)]"></div>
                                 <span className="text-sm text-slate-300">{t('revitalization.risk.mech')}</span>
                             </div>
                             <div className="flex items-center p-3 rounded-lg bg-purple-900/10 border border-purple-500/10">
@@ -141,10 +141,10 @@ export const RevitalizationStrategy: React.FC = () => {
 
             {/* CTA SECTION */}
             <div className="mt-12 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
-                <div className="relative rounded-2xl p-[1px] bg-gradient-to-r from-purple-500 via-cyan-500 to-blue-500 overflow-hidden">
+                <div className="relative rounded-2xl p-[1px] bg-gradient-to-r from-purple-500 via-brand-500 to-blue-500 overflow-hidden">
                     <div className="bg-slate-900/90 rounded-[15px] p-10 text-center backdrop-blur-xl relative">
                         {/* Background Glow */}
-                        <div className="absolute inset-0 bg-cyan-500/5 blur-3xl pointer-events-none"></div>
+                        <div className="absolute inset-0 bg-brand-500/5 blur-3xl pointer-events-none"></div>
 
                         <div className="relative z-10">
                             <h3 className="text-3xl font-bold text-white mb-3 tracking-tight">{t('revitalization.cta.title')}</h3>
@@ -154,7 +154,7 @@ export const RevitalizationStrategy: React.FC = () => {
                                 <ModernButton
                                     onClick={handleContactClick}
                                     variant="primary"
-                                    className="px-8 py-4 text-lg shadow-cyan-500/20"
+                                    className="px-8 py-4 text-lg shadow-brand-500/20"
                                     icon={<span>📅</span>}
                                 >
                                     {t('revitalization.cta.btn')}

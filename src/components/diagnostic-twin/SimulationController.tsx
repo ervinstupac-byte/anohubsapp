@@ -178,13 +178,13 @@ export const SimulationController: React.FC = () => {
 
                         {isInterpolating && (
                             <div className="mt-4 pt-4 border-t border-white/5">
-                                <div className="flex justify-between text-[8px] font-mono text-cyan-400 mb-1">
+                                <div className="flex justify-between text-[8px] font-mono text-brand-400 mb-1">
                                     <span>INTERPOLATING_STATE...</span>
                                     <span>{(((physics?.surgePressureBar ?? 0) / 145) * 100).toFixed(0)}%</span>
                                 </div>
                                 <div className="h-1 bg-white/5 rounded-full overflow-hidden">
                                     <motion.div
-                                        className="h-full bg-cyan-500"
+                                        className="h-full bg-brand-500"
                                         initial={{ width: 0 }}
                                         animate={{ width: '100%' }}
                                         transition={{ duration: 2.5, ease: "linear" }}
@@ -198,7 +198,7 @@ export const SimulationController: React.FC = () => {
 
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all ${isOpen ? 'bg-slate-800 text-white rotate-90' : 'bg-cyan-500 text-black hover:scale-110 active:scale-95'
+                className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all ${isOpen ? 'bg-slate-800 text-white rotate-90' : 'bg-brand-500 text-black hover:scale-110 active:scale-95'
                     }`}
             >
                 {isOpen ? <ChevronRight className="w-6 h-6" /> : <Play className="w-6 h-6" />}

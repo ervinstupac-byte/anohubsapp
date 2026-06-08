@@ -29,7 +29,7 @@ export const AutarkyDashboard: React.FC<AutarkyDashboardProps> = ({ materials, c
     return (
         <div className="w-full bg-slate-950 p-6">
             <div className="text-2xl font-bold mb-4 flex items-center gap-2">
-                <Factory className="w-6 h-6 text-cyan-400" />
+                <Factory className="w-6 h-6 text-brand-400" />
                 Autarky Matrix - Material Independence
             </div>
 
@@ -85,19 +85,19 @@ export const AutarkyDashboard: React.FC<AutarkyDashboardProps> = ({ materials, c
                         <div className="bg-slate-800 rounded p-3">
                             <div className="flex justify-between items-center mb-2">
                                 <span className="text-sm text-slate-400">Stainless 316L</span>
-                                <span className="text-lg font-bold text-cyan-300 font-mono">
+                                <span className="text-lg font-bold text-brand-300 font-mono">
                                     {materials.steel.available} kg
                                 </span>
                             </div>
                             <div className="relative h-2 bg-slate-700 rounded-full overflow-hidden mb-1">
                                 <div
-                                    className="absolute inset-y-0 left-0 bg-cyan-500"
+                                    className="absolute inset-y-0 left-0 bg-brand-500"
                                     style={{ width: `${Math.min(100, (materials.steel.runway / 24) * 100)}%` }}
                                 />
                             </div>
                             <div className="flex justify-between text-xs">
                                 <span className="text-slate-500">Runway</span>
-                                <span className="text-cyan-400 font-mono">{materials.steel.runway} months</span>
+                                <span className="text-brand-400 font-mono">{materials.steel.runway} months</span>
                             </div>
                         </div>
 
@@ -202,7 +202,7 @@ export const AutarkyDashboard: React.FC<AutarkyDashboardProps> = ({ materials, c
                         </div>
 
                         {/* Molecular Regeneration */}
-                        <div className="p-3 bg-gradient-to-r from-emerald-950 to-cyan-950 border border-emerald-500 rounded">
+                        <div className="p-3 bg-gradient-to-r from-emerald-950 to-brand-950 border border-emerald-500 rounded">
                             <div className="text-xs font-bold text-emerald-300 mb-1">
                                 ♻️ Molecular Regeneration Active
                             </div>
@@ -240,7 +240,7 @@ export const AutarkyDashboard: React.FC<AutarkyDashboardProps> = ({ materials, c
                                 <div className="text-slate-300 font-mono">{resource.current}</div>
                                 <div className="text-blue-300 font-mono">{resource.runway}</div>
                                 <div className={`font-bold ${resource.status === 'INFINITE' ? 'text-purple-400' :
-                                        resource.status === 'ON-DEMAND' ? 'text-cyan-400' :
+                                        resource.status === 'ON-DEMAND' ? 'text-brand-400' :
                                             resource.status === 'SECURE' ? 'text-emerald-400' : 'text-amber-400'
                                     }`}>
                                     {resource.status}

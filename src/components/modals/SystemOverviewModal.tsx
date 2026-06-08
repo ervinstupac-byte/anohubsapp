@@ -53,7 +53,7 @@ export const SystemOverviewModal: React.FC<SystemOverviewModalProps> = ({ isOpen
                     onClick={(e) => e.stopPropagation()}
                     className="w-full max-w-6xl h-[85vh] flex flex-col"
                 >
-                    <GlassCard className="flex-1 flex flex-col relative overflow-hidden border-cyan-500/30 p-0 shadow-none rounded-none">
+                    <GlassCard className="flex-1 flex flex-col relative overflow-hidden border-brand-500/30 p-0 shadow-none rounded-none">
                         {/* Header */}
                         <div className="flex items-center justify-between p-6 border-b border-white/10 bg-slate-950/80 shrink-0">
                             <div className="flex items-center gap-4">
@@ -63,13 +63,13 @@ export const SystemOverviewModal: React.FC<SystemOverviewModalProps> = ({ isOpen
                                 >
                                     <ArrowLeft className="w-6 h-6" />
                                 </button>
-                                <div className="p-3 bg-cyan-500/10 rounded-none border border-cyan-500/20 shadow-none">
-                                    <Server className="w-6 h-6 text-cyan-400" />
+                                <div className="p-3 bg-brand-500/10 rounded-none border border-brand-500/20 shadow-none">
+                                    <Server className="w-6 h-6 text-brand-400" />
                                 </div>
                                 <div>
                                     <h2 className="text-2xl font-black text-white tracking-widest uppercase flex items-center gap-3">
                                         System Topology
-                                        <span className="text-[10px] px-2 py-0.5 rounded-none bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 tracking-normal font-mono">v2.4.0</span>
+                                        <span className="text-[10px] px-2 py-0.5 rounded-none bg-brand-500/20 text-brand-300 border border-brand-500/30 tracking-normal font-mono">v2.4.0</span>
                                     </h2>
                                     <div className="flex items-center gap-4 text-xs font-mono text-slate-400 mt-1">
                                         <span className="flex items-center gap-1.5">
@@ -78,8 +78,8 @@ export const SystemOverviewModal: React.FC<SystemOverviewModalProps> = ({ isOpen
                                         </span>
                                         <span className="text-slate-600">|</span>
                                         <span className="flex items-center gap-1.5">
-                                            <Clock className="w-3.5 h-3.5 text-cyan-500" />
-                                            UPTIME: <span className="text-cyan-100">{formatUptime(uptime)}</span>
+                                            <Clock className="w-3.5 h-3.5 text-brand-500" />
+                                            UPTIME: <span className="text-brand-100">{formatUptime(uptime)}</span>
                                         </span>
                                     </div>
                                 </div>
@@ -129,7 +129,7 @@ export const SystemOverviewModal: React.FC<SystemOverviewModalProps> = ({ isOpen
                                     <Zap className="w-3 h-3" />
                                     Last Pulse
                                 </div>
-                                <div className="text-sm font-mono text-cyan-200">
+                                <div className="text-sm font-mono text-brand-200">
                                     {lastUpdate ? new Date(lastUpdate).toLocaleTimeString() : 'Waiting...'}
                                 </div>
                             </div>
@@ -155,7 +155,7 @@ export const SystemOverviewModal: React.FC<SystemOverviewModalProps> = ({ isOpen
                         <div className="px-6 py-3 bg-slate-900 border-t border-white/10 flex justify-between items-center text-[10px] font-mono text-slate-500 shrink-0">
                             <div className="flex gap-8">
                                 <div className="flex items-center gap-2">
-                                    <Network className="w-3 h-3 text-cyan-500" />
+                                    <Network className="w-3 h-3 text-brand-500" />
                                     <span>SYNC: <span className="text-slate-300">ACTIVE (14ms)</span></span>
                                 </div>
                                 <div className="flex items-center gap-2">

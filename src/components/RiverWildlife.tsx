@@ -26,7 +26,7 @@ const EcoModule: React.FC<{
     <div
         className={`
             group relative overflow-hidden rounded-2xl transition-all duration-500 animate-fade-in-up
-            ${isOpen ? 'bg-slate-800/80 ring-1 ring-cyan-500/50 shadow-lg' : 'bg-slate-900/40 border border-white/5 hover:border-white/10 hover:bg-slate-800/60'}
+            ${isOpen ? 'bg-slate-800/80 ring-1 ring-brand-500/50 shadow-lg' : 'bg-slate-900/40 border border-white/5 hover:border-white/10 hover:bg-slate-800/60'}
             backdrop-blur-md
         `}
         style={{ animationDelay: `${delay}ms` }}
@@ -38,7 +38,7 @@ const EcoModule: React.FC<{
             <div className="flex items-center gap-5">
                 <div className={`
                     text-3xl p-3 rounded-xl transition-all duration-300 shadow-inner
-                    ${isOpen ? 'bg-cyan-500/20 text-cyan-300 scale-110' : 'bg-slate-800 text-slate-400 group-hover:bg-slate-700 group-hover:text-white'}
+                    ${isOpen ? 'bg-brand-500/20 text-brand-300 scale-110' : 'bg-slate-800 text-slate-400 group-hover:bg-slate-700 group-hover:text-white'}
                 `}>
                     {item.icon}
                 </div>
@@ -52,7 +52,7 @@ const EcoModule: React.FC<{
 
             <div className={`
                 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 border
-                ${isOpen ? 'bg-cyan-500 text-slate-900 rotate-180 border-cyan-400' : 'bg-transparent border-slate-700 text-slate-500 group-hover:border-slate-500'}
+                ${isOpen ? 'bg-brand-500 text-slate-900 rotate-180 border-brand-400' : 'bg-transparent border-slate-700 text-slate-500 group-hover:border-slate-500'}
             `}>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -93,20 +93,20 @@ export const RiverWildlife: React.FC = () => {
                         {t('riverWildlife.sections.fish_passage.intro')}
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="bg-slate-900/40 p-5 rounded-xl border border-white/5 hover:border-cyan-500/30 transition-colors">
-                            <h4 className="font-bold text-cyan-400 mb-2">{t('riverWildlife.sections.fish_passage.ladders.title')}</h4>
+                        <div className="bg-slate-900/40 p-5 rounded-xl border border-white/5 hover:border-brand-500/30 transition-colors">
+                            <h4 className="font-bold text-brand-400 mb-2">{t('riverWildlife.sections.fish_passage.ladders.title')}</h4>
                             <p className="text-xs text-slate-400 leading-relaxed">{t('riverWildlife.sections.fish_passage.ladders.desc')}</p>
                         </div>
-                        <div className="bg-slate-900/40 p-5 rounded-xl border border-white/5 hover:border-cyan-500/30 transition-colors">
-                            <h4 className="font-bold text-cyan-400 mb-2">{t('riverWildlife.sections.fish_passage.lifts.title')}</h4>
+                        <div className="bg-slate-900/40 p-5 rounded-xl border border-white/5 hover:border-brand-500/30 transition-colors">
+                            <h4 className="font-bold text-brand-400 mb-2">{t('riverWildlife.sections.fish_passage.lifts.title')}</h4>
                             <p className="text-xs text-slate-400 leading-relaxed">{t('riverWildlife.sections.fish_passage.lifts.desc')}</p>
                         </div>
-                        <div className="bg-slate-900/40 p-5 rounded-xl border border-white/5 hover:border-cyan-500/30 transition-colors">
-                            <h4 className="font-bold text-cyan-400 mb-2">{t('riverWildlife.sections.fish_passage.bypass.title')}</h4>
+                        <div className="bg-slate-900/40 p-5 rounded-xl border border-white/5 hover:border-brand-500/30 transition-colors">
+                            <h4 className="font-bold text-brand-400 mb-2">{t('riverWildlife.sections.fish_passage.bypass.title')}</h4>
                             <p className="text-xs text-slate-400 leading-relaxed">{t('riverWildlife.sections.fish_passage.bypass.desc')}</p>
                         </div>
-                        <div className="bg-slate-900/40 p-5 rounded-xl border border-white/5 hover:border-cyan-500/30 transition-colors">
-                            <h4 className="font-bold text-cyan-400 mb-2">{t('riverWildlife.sections.fish_passage.turbines.title')}</h4>
+                        <div className="bg-slate-900/40 p-5 rounded-xl border border-white/5 hover:border-brand-500/30 transition-colors">
+                            <h4 className="font-bold text-brand-400 mb-2">{t('riverWildlife.sections.fish_passage.turbines.title')}</h4>
                             <p className="text-xs text-slate-400 leading-relaxed">{t('riverWildlife.sections.fish_passage.turbines.desc')}</p>
                         </div>
                     </div>
@@ -179,9 +179,9 @@ export const RiverWildlife: React.FC = () => {
                         {t('riverWildlife.sections.water_quality.intro')}
                     </p>
                     <div className="space-y-4">
-                        <div className="bg-gradient-to-r from-cyan-900/20 to-transparent p-5 rounded-xl border-l-4 border-cyan-500 relative overflow-hidden">
+                        <div className="bg-gradient-to-r from-brand-900/20 to-transparent p-5 rounded-xl border-l-4 border-brand-500 relative overflow-hidden">
                             <div className="relative z-10">
-                                <h4 className="font-bold text-cyan-300 mb-2">{t('riverWildlife.sections.water_quality.eflow.title')}</h4>
+                                <h4 className="font-bold text-brand-300 mb-2">{t('riverWildlife.sections.water_quality.eflow.title')}</h4>
                                 <p className="text-sm text-slate-300 leading-relaxed">
                                     {t('riverWildlife.sections.water_quality.eflow.desc')}
                                     <br /><span className="text-white font-bold block mt-2">{t('riverWildlife.sections.water_quality.eflow.mandate')}</span>
@@ -244,7 +244,7 @@ export const RiverWildlife: React.FC = () => {
 
                 <div className="pt-12">
                     <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-4 drop-shadow-lg">
-                        {t('riverWildlife.title').split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">{t('riverWildlife.title').split(' ').slice(1).join(' ')}</span>
+                        {t('riverWildlife.title').split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-emerald-400">{t('riverWildlife.title').split(' ').slice(1).join(' ')}</span>
                     </h2>
 
                     {selectedAsset && (
@@ -261,16 +261,16 @@ export const RiverWildlife: React.FC = () => {
             </div>
 
             {/* MANDATE BANNER */}
-            <div className="relative overflow-hidden rounded-2xl border border-cyan-500/30 p-1 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-950/80 to-slate-900/80 backdrop-blur-md"></div>
+            <div className="relative overflow-hidden rounded-2xl border border-brand-500/30 p-1 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+                <div className="absolute inset-0 bg-gradient-to-r from-brand-950/80 to-slate-900/80 backdrop-blur-md"></div>
                 <div className="relative z-10 flex flex-col md:flex-row gap-6 items-center p-6 md:p-8 text-center md:text-left">
-                    <div className="w-16 h-16 rounded-full bg-cyan-900/50 flex items-center justify-center text-4xl shadow-lg border border-cyan-500/30">
+                    <div className="w-16 h-16 rounded-full bg-brand-900/50 flex items-center justify-center text-4xl shadow-lg border border-brand-500/30">
                         📜
                     </div>
                     <div className="flex-grow">
-                        <h4 className="text-lg font-bold text-cyan-300 uppercase tracking-widest mb-2 flex items-center justify-center md:justify-start gap-2">
+                        <h4 className="text-lg font-bold text-brand-300 uppercase tracking-widest mb-2 flex items-center justify-center md:justify-start gap-2">
                             {t('riverWildlife.mandate')}
-                            <span className="h-px w-10 bg-cyan-500/50 hidden md:block"></span>
+                            <span className="h-px w-10 bg-brand-500/50 hidden md:block"></span>
                         </h4>
                         <p className="text-slate-300 leading-relaxed font-light">
                             <Trans i18nKey="riverWildlife.mandateDesc" components={{ strong: <strong className="text-white font-bold block mt-1" /> }} />

@@ -51,7 +51,7 @@ export const VisualInspectionHub: React.FC = () => {
                                 <Upload className="w-12 h-12 text-slate-500 mx-auto mb-4" />
                                 <h3 className="text-white font-bold text-lg mb-2">Upload Blade Photo</h3>
                                 <p className="text-slate-400 text-sm mb-6">Support for macro shots of Kaplan blades, Francis runners, and Pelton buckets.</p>
-                                <label className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded cursor-pointer transition-colors">
+                                <label className="inline-flex items-center gap-2 px-6 py-3 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded cursor-pointer transition-colors">
                                     <Camera className="w-4 h-4" />
                                     <span>Select Image</span>
                                     <input type="file" className="hidden" accept="image/*" onChange={handleFileUpload} />
@@ -67,12 +67,12 @@ export const VisualInspectionHub: React.FC = () => {
                                 {isAnalyzing && (
                                     <div className="absolute inset-0 z-10 overflow-hidden">
                                         <motion.div
-                                            className="w-full h-1 bg-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.8)]"
+                                            className="w-full h-1 bg-brand-400 shadow-[0_0_20px_rgba(34,211,238,0.8)]"
                                             animate={{ top: ['0%', '100%'] }}
                                             transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
                                         />
                                         <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="px-4 py-2 bg-slate-900/80 rounded border border-cyan-500 text-cyan-400 font-mono text-xs animate-pulse">
+                                            <div className="px-4 py-2 bg-slate-900/80 rounded border border-brand-500 text-brand-400 font-mono text-xs animate-pulse">
                                                 ANALYZING SURFACE TOPOLOGY...
                                             </div>
                                         </div>
@@ -145,7 +145,7 @@ export const VisualInspectionHub: React.FC = () => {
                                                         <span className="text-xs text-slate-500">Severity: {d.severity.toFixed(2)}</span>
                                                     </div>
                                                     <p className="text-xs text-slate-400 mt-1">{d.description}</p>
-                                                    <div className="text-[10px] text-cyan-400 mt-2 font-mono">
+                                                    <div className="text-[10px] text-brand-400 mt-2 font-mono">
                                                         Roughness: {VisualInspectionService.estimateHydraulicRoughness(d.severity, d.type)}
                                                     </div>
                                                 </div>
@@ -160,7 +160,7 @@ export const VisualInspectionHub: React.FC = () => {
                                     <ul className="space-y-1">
                                         {result.recommendations.map((rec, i) => (
                                             <li key={i} className="text-sm text-slate-300 flex items-start gap-2">
-                                                <span className="text-cyan-500 mt-1">▸</span>
+                                                <span className="text-brand-500 mt-1">▸</span>
                                                 {rec}
                                             </li>
                                         ))}

@@ -106,7 +106,7 @@ export const ContractManagement: React.FC = () => {
 
             <div className="text-center space-y-4">
                 <h2 className="text-4xl font-black text-white tracking-tighter">
-                    {t('contractManagement.title', 'Smart Contract')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{t('contractManagement.titleHighlight', 'Intelligence')}</span>
+                    {t('contractManagement.title', 'Smart Contract')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-blue-500">{t('contractManagement.titleHighlight', 'Intelligence')}</span>
                 </h2>
                 <p className="text-slate-400 max-w-2xl mx-auto text-lg font-light">
                     {t('contractManagement.subtitle')}

@@ -82,9 +82,9 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
                         initial={{ scale: 0.95, opacity: 0, y: 20 }}
                         animate={{ scale: 1, opacity: 1, y: 0 }}
                         exit={{ scale: 0.95, opacity: 0, y: 10 }}
-                        className="relative w-full max-w-6xl h-[85vh] flex flex-col shadow-2xl shadow-cyan-900/20"
+                        className="relative w-full max-w-6xl h-[85vh] flex flex-col shadow-2xl shadow-brand-900/20"
                     >
-                        <GlassCard className="flex-1 flex flex-col overflow-hidden border-cyan-500/30 p-0">
+                        <GlassCard className="flex-1 flex flex-col overflow-hidden border-brand-500/30 p-0">
                             {/* Header */}
                             <div className="h-14 px-6 bg-slate-950/80 border-b border-white/10 flex items-center justify-between shrink-0">
                                 <div className="flex items-center gap-4">
@@ -95,13 +95,13 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
                                     >
                                         <ArrowLeft className="w-5 h-5" />
                                     </button>
-                                    <div className="p-2 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                                        <FileText className="w-5 h-5 text-cyan-400" />
+                                    <div className="p-2 bg-brand-500/10 rounded-lg border border-brand-500/20">
+                                        <FileText className="w-5 h-5 text-brand-400" />
                                     </div>
                                     <div>
                                         <h2 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
                                             {title}
-                                            <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[10px] text-cyan-400">
+                                            <span className="px-2 py-0.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-[10px] text-brand-400">
                                                 READ ONLY
                                             </span>
                                         </h2>
@@ -133,8 +133,8 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
                                 <div className="flex-1 bg-slate-900/50 overflow-y-auto custom-scrollbar p-8 relative">
                                     {isChecking ? (
                                         <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                                            <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin" />
-                                            <p className="text-xs text-cyan-400 font-mono animate-pulse">DECRYPTING SECURE DOSSIER...</p>
+                                            <div className="w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
+                                            <p className="text-xs text-brand-400 font-mono animate-pulse">DECRYPTING SECURE DOSSIER...</p>
                                         </div>
                                     ) : loadError ? (
                                         <div className="flex flex-col items-center justify-center h-full text-center p-8">
@@ -165,14 +165,14 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
                                                 {/* Actions */}
                                                 <div className="grid grid-cols-2 gap-3">
                                                     <button className="flex flex-col items-center justify-center gap-2 p-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 transition-colors group">
-                                                        <Download className="w-5 h-5 text-slate-400 group-hover:text-cyan-400" />
+                                                        <Download className="w-5 h-5 text-slate-400 group-hover:text-brand-400" />
                                                         <span className="text-[10px] font-bold text-slate-400">EXPORT</span>
                                                     </button>
                                                     <button 
                                                         onClick={() => dispatch.triggerForensicExport()}
                                                         className="flex flex-col items-center justify-center gap-2 p-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 transition-colors group"
                                                     >
-                                                        <Printer className="w-5 h-5 text-slate-400 group-hover:text-cyan-400" />
+                                                        <Printer className="w-5 h-5 text-slate-400 group-hover:text-brand-400" />
                                                         <span className="text-[10px] font-bold text-slate-400">PRINT</span>
                                                     </button>
                                                 </div>
@@ -238,7 +238,7 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
                                                 
                                                 <button
                                                     onClick={handleStartAudit}
-                                                    className="w-full py-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm tracking-wide transition-all shadow-lg shadow-cyan-900/20"
+                                                    className="w-full py-3 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-bold text-sm tracking-wide transition-all shadow-lg shadow-brand-900/20"
                                                 >
                                                     INITIATE AUDIT
                                                 </button>

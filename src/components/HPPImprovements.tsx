@@ -146,7 +146,7 @@ export const HPPImprovements: React.FC = () => {
 
                 <div>
                     <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4">
-                        {t('hppImprovements.title').split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{t('hppImprovements.title').split(' ')[1]}</span>
+                        {t('hppImprovements.title').split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-blue-500">{t('hppImprovements.title').split(' ')[1]}</span>
                     </h2>
                     <p className="text-slate-400 text-lg font-light">
                         {t('hppImprovements.subtitle')}
@@ -161,7 +161,7 @@ export const HPPImprovements: React.FC = () => {
                     <GlassCard
                         title={t('hppImprovements.logTitle')}
                         subtitle={t('hppImprovements.contributor', { name: user?.email?.split('@')[0] || 'GUEST' })}
-                        className="sticky top-24 border-l-4 border-l-cyan-500"
+                        className="sticky top-24 border-l-4 border-l-brand-500"
                         action={<span className="text-2xl">💡</span>}
                     >
                         <form onSubmit={handleSubmit} className="space-y-5">
@@ -184,7 +184,7 @@ export const HPPImprovements: React.FC = () => {
                                             className={`
                                                 text-xs py-2 rounded-lg border transition-all font-bold uppercase tracking-wider
                                                 ${category === cat
-                                                    ? 'bg-cyan-600 text-white border-cyan-500 shadow-lg shadow-cyan-500/20'
+                                                    ? 'bg-brand-600 text-white border-brand-500 shadow-lg shadow-brand-500/20'
                                                     : 'bg-slate-900 text-slate-500 border-slate-700 hover:text-slate-300 hover:border-slate-600'}
                                             `}
                                         >
@@ -200,7 +200,7 @@ export const HPPImprovements: React.FC = () => {
                                     rows={5}
                                     value={description}
                                     onChange={e => setDescription(e.target.value)}
-                                    className="w-full bg-slate-950/50 border border-slate-700/50 rounded-xl p-3 text-white focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 outline-none resize-none transition-all text-sm placeholder-slate-600"
+                                    className="w-full bg-slate-950/50 border border-slate-700/50 rounded-xl p-3 text-white focus:border-brand-500/50 focus:ring-1 focus:ring-brand-500/50 outline-none resize-none transition-all text-sm placeholder-slate-600"
                                     placeholder={t('hppImprovements.descPlaceholder')}
                                     required
                                 />
@@ -258,13 +258,13 @@ export const HPPImprovements: React.FC = () => {
                         )}
 
                         {filteredIdeas.map((idea) => (
-                            <GlassCard key={idea.id} className="p-0 hover:border-cyan-500/30 transition-colors group">
+                            <GlassCard key={idea.id} className="p-0 hover:border-brand-500/30 transition-colors group">
                                 <div className="flex">
                                     {/* VOTE COLUMN */}
                                     <div className="flex flex-col items-center justify-center p-4 border-r border-white/5 bg-slate-900/30 w-20">
                                         <button
                                             onClick={() => handleVote(idea.id, idea.votes)}
-                                            className="w-10 h-10 rounded-xl bg-slate-800 hover:bg-cyan-500 hover:text-slate-900 flex items-center justify-center transition-all text-slate-400 shadow-lg active:scale-95 mb-2"
+                                            className="w-10 h-10 rounded-xl bg-slate-800 hover:bg-brand-500 hover:text-slate-900 flex items-center justify-center transition-all text-slate-400 shadow-lg active:scale-95 mb-2"
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
@@ -276,7 +276,7 @@ export const HPPImprovements: React.FC = () => {
                                     {/* CONTENT */}
                                     <div className="flex-grow p-6">
                                         <div className="flex justify-between items-start mb-3">
-                                            <h4 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors tracking-tight">
+                                            <h4 className="text-xl font-bold text-white group-hover:text-brand-400 transition-colors tracking-tight">
                                                 {idea.title}
                                             </h4>
                                             <CategoryBadge category={getCategoryLabel(idea.category)} />

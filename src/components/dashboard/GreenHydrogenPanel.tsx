@@ -149,7 +149,7 @@ export const GreenHydrogenPanel: React.FC = () => {
       <div className="grid grid-cols-4 gap-4">
         <div className="p-4 bg-scada-panel border border-scada-border rounded-none shadow-none">
           <div className="flex items-center gap-2 mb-2">
-            <Gauge className="w-4 h-4 text-cyan-400" />
+            <Gauge className="w-4 h-4 text-brand-400" />
             <span className="text-xs text-scada-muted uppercase font-mono">Storage Level</span>
           </div>
           <div className={`text-2xl font-bold font-mono tabular-nums ${getStatusColor(state.storage.fillLevel)}`}>
@@ -196,8 +196,8 @@ export const GreenHydrogenPanel: React.FC = () => {
       <div className="p-4 bg-scada-panel border border-scada-border rounded-none shadow-none">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-none ${state.isIslandMode ? 'bg-cyan-500/20' : 'bg-scada-bg'}`}>
-              <Power className={`w-5 h-5 ${state.isIslandMode ? 'text-cyan-400' : 'text-scada-muted'}`} />
+            <div className={`p-2 rounded-none ${state.isIslandMode ? 'bg-brand-500/20' : 'bg-scada-bg'}`}>
+              <Power className={`w-5 h-5 ${state.isIslandMode ? 'text-brand-400' : 'text-scada-muted'}`} />
             </div>
             <div>
               <div className="font-bold text-scada-text uppercase font-mono">Island Mode</div>
@@ -211,7 +211,7 @@ export const GreenHydrogenPanel: React.FC = () => {
           <button
             onClick={toggleIslandMode}
             className={`relative w-14 h-8 rounded-full transition-colors ${
-              state.isIslandMode ? 'bg-cyan-500' : 'bg-slate-700'
+              state.isIslandMode ? 'bg-brand-500' : 'bg-slate-700'
             }`}
           >
             <motion.div
@@ -226,7 +226,7 @@ export const GreenHydrogenPanel: React.FC = () => {
       <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Droplets className="w-5 h-5 text-cyan-400" />
+            <Droplets className="w-5 h-5 text-brand-400" />
             <span className="font-bold text-scada-text uppercase font-mono">Electrolysis Control</span>
           </div>
           <div className={`px-3 py-1 rounded-sm text-xs font-bold font-mono ${
@@ -243,7 +243,7 @@ export const GreenHydrogenPanel: React.FC = () => {
           </div>
           <div className="bg-scada-bg border border-scada-border p-3 rounded-sm">
             <div className="text-xs text-scada-muted uppercase font-mono">H2 Production</div>
-            <div className="text-xl font-bold text-cyan-400 font-mono tabular-nums">
+            <div className="text-xl font-bold text-brand-400 font-mono tabular-nums">
               {state.isRunning ? '21.7' : '0'} Nm³/h
             </div>
           </div>

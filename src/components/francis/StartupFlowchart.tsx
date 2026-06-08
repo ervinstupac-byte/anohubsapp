@@ -28,8 +28,8 @@ export const StartupFlowchart: React.FC = () => {
 
     const VerticalConnector = ({ active, current }: { active: boolean, current: boolean }) => (
         <div className="relative w-1.5 h-16 my-2 group">
-            <div className={`absolute inset-0 w-full h-full rounded-none transition-all duration-1000 ${active ? 'bg-cyan-500 shadow-none' : 'bg-slate-900 border-x border-white/5'}`} />
-            {current && <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-4 bg-cyan-400 rounded-none animate-ping opacity-40" />}
+            <div className={`absolute inset-0 w-full h-full rounded-none transition-all duration-1000 ${active ? 'bg-brand-500 shadow-none' : 'bg-slate-900 border-x border-white/5'}`} />
+            {current && <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-4 bg-brand-400 rounded-none animate-ping opacity-40" />}
         </div>
     );
 
@@ -39,7 +39,7 @@ export const StartupFlowchart: React.FC = () => {
         const Icon = step.icon;
 
         // Custom styling based on state
-        let cardStyle = isActive ? 'bg-slate-900/60 border-cyan-500 shadow-none' : 'bg-black/40 border-white/5 opacity-40';
+        let cardStyle = isActive ? 'bg-slate-900/60 border-brand-500 shadow-none' : 'bg-black/40 border-white/5 opacity-40';
         if (isCurrent) cardStyle += ' scale-105 border-2 shadow-none z-10';
 
         return (
@@ -51,7 +51,7 @@ export const StartupFlowchart: React.FC = () => {
                     <div className="flex justify-between items-start gap-8">
                         <div className="flex-1">
                             <div className="flex items-center gap-3 mb-4">
-                                <span className={`px-3 py-1 rounded-none text-[10px] font-black uppercase tracking-widest border italic transition-colors ${isActive ? 'bg-cyan-950 text-cyan-500 border-cyan-800' : 'bg-slate-900 text-slate-600 border-white/5'}`}>
+                                <span className={`px-3 py-1 rounded-none text-[10px] font-black uppercase tracking-widest border italic transition-colors ${isActive ? 'bg-brand-950 text-brand-500 border-brand-800' : 'bg-slate-900 text-slate-600 border-white/5'}`}>
                                     {t('francis.startupFlowchart.step_label').replace('1', step.id.toString())}
                                 </span>
                                 {isCurrent && <NeuralPulse color="cyan" />}
@@ -64,7 +64,7 @@ export const StartupFlowchart: React.FC = () => {
                             </p>
                         </div>
 
-                        <div className={`p-6 rounded-none border transition-all duration-700 ${isActive ? 'bg-cyan-600 text-white shadow-none rotate-0' : 'bg-slate-900 text-slate-800 border-white/5 rotate-12'}`}>
+                        <div className={`p-6 rounded-none border transition-all duration-700 ${isActive ? 'bg-brand-600 text-white shadow-none rotate-0' : 'bg-slate-900 text-slate-800 border-white/5 rotate-12'}`}>
                             <Icon className="w-10 h-10" />
                         </div>
                     </div>
@@ -95,21 +95,21 @@ export const StartupFlowchart: React.FC = () => {
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-24">
             {/* Header */}
-            <header className="bg-black/40 border-b-2 border-cyan-900 py-8 px-4 md:px-8 mb-16 sticky top-0 z-50 backdrop-blur-md shadow-none transition-all">
+            <header className="bg-black/40 border-b-2 border-brand-900 py-8 px-4 md:px-8 mb-16 sticky top-0 z-50 backdrop-blur-md shadow-none transition-all">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-4 text-center md:text-left">
-                        <div className="p-4 bg-cyan-600 rounded-none border border-white/10 shadow-none relative group overflow-hidden">
+                        <div className="p-4 bg-brand-600 rounded-none border border-white/10 shadow-none relative group overflow-hidden">
                             <Play className="text-white w-8 h-8 relative z-10 animate-pulse fill-current" />
                         </div>
                         <div>
                             <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
-                                <span className="px-2 py-0.5 rounded-none bg-cyan-950 text-cyan-500 text-[10px] font-black border border-cyan-900/50 uppercase tracking-widest">SOP-LIFE-001</span>
+                                <span className="px-2 py-0.5 rounded-none bg-brand-950 text-brand-500 text-[10px] font-black border border-brand-900/50 uppercase tracking-widest">SOP-LIFE-001</span>
                                 <NeuralPulse color="cyan" />
                             </div>
                             <h1 className="text-3xl font-black text-white tracking-tighter uppercase relative z-10">
                                 {t('francis.startupFlowchart.title')}
                             </h1>
-                            <p className="text-[10px] text-cyan-500/70 font-black uppercase tracking-[0.2em] italic mt-1">
+                            <p className="text-[10px] text-brand-500/70 font-black uppercase tracking-[0.2em] italic mt-1">
                                 Sequential Operational Readiness Matrix
                             </p>
                         </div>
@@ -119,7 +119,7 @@ export const StartupFlowchart: React.FC = () => {
                         onClick={() => navigate(FRANCIS_PATHS.HUB)}
                         className="flex items-center gap-2 px-6 py-2 bg-white/5 border border-white/10 rounded-none text-xs font-black text-slate-400 hover:text-white hover:bg-white/10 transition group uppercase tracking-widest"
                     >
-                        <ArrowLeft className="w-4 h-4 text-cyan-500 group-hover:-translate-x-1 transition" />
+                        <ArrowLeft className="w-4 h-4 text-brand-500 group-hover:-translate-x-1 transition" />
                         <span>{t('francis.startupFlowchart.backBtn')}</span>
                     </button>
                 </div>
@@ -132,7 +132,7 @@ export const StartupFlowchart: React.FC = () => {
                     onClick={() => setActiveStep(1)}
                     className={`
                         w-24 h-24 rounded-none flex items-center justify-center font-black text-white transition-all duration-700 relative group overflow-hidden
-                        ${activeStep > 0 ? 'bg-emerald-600 shadow-none scale-90' : 'bg-slate-900 border-2 border-white/10 hover:border-cyan-500 hover:scale-110 shadow-none'}
+                        ${activeStep > 0 ? 'bg-emerald-600 shadow-none scale-90' : 'bg-slate-900 border-2 border-white/10 hover:border-brand-500 hover:scale-110 shadow-none'}
                     `}
                 >
                     <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />

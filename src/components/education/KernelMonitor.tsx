@@ -36,7 +36,7 @@ export const KernelMonitor: React.FC = () => {
 
     return (
         <div className="p-4 bg-slate-950 rounded-lg border border-slate-800 font-mono text-xs">
-            <h3 className="text-cyan-400 font-bold mb-4 flex items-center gap-2 uppercase tracking-wider">
+            <h3 className="text-brand-400 font-bold mb-4 flex items-center gap-2 uppercase tracking-wider">
                 <Cpu className="w-4 h-4" /> Sovereign Kernel Monitor
             </h3>
 
@@ -68,7 +68,7 @@ export const KernelMonitor: React.FC = () => {
                             stage.stage === 'CORRELATE' ? 'bg-blue-500' : 'bg-slate-500'
                         }`} />
                         
-                        <div className="bg-slate-900 p-2 rounded border border-slate-800 group-hover:border-cyan-500/30 transition-colors">
+                        <div className="bg-slate-900 p-2 rounded border border-slate-800 group-hover:border-brand-500/30 transition-colors">
                             <div className="flex justify-between items-center mb-1">
                                 <span className="font-bold text-slate-300">{stage.stage}</span>
                                 <span className="text-[10px] text-slate-500">{stage.duration.toFixed(2)}ms</span>

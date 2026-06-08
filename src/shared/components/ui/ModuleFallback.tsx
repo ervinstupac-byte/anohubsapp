@@ -17,8 +17,8 @@ export const ModuleFallback: React.FC<ModuleFallbackProps> = ({
 }) => {
     const getIcon = () => {
         switch (icon) {
-            case 'Box': return <Box className="w-8 h-8 text-cyan-500/50" />;
-            case 'File': return <FileText className="w-8 h-8 text-cyan-500/50" />;
+            case 'Box': return <Box className="w-8 h-8 text-brand-500/50" />;
+            case 'File': return <FileText className="w-8 h-8 text-brand-500/50" />;
             case 'Ban': return <Ban className="w-8 h-8 text-red-500/50" />;
             default: return <AlertTriangle className="w-8 h-8 text-amber-500/50" />;
         }
@@ -34,7 +34,7 @@ export const ModuleFallback: React.FC<ModuleFallbackProps> = ({
             {onRetry && (
                 <button
                     onClick={onRetry}
-                    className="px-4 py-2 text-xs font-bold text-cyan-400 bg-cyan-950/30 border border-cyan-500/30 rounded-none hover:bg-cyan-900/50 transition-colors uppercase tracking-wider"
+                    className="px-4 py-2 text-xs font-bold text-brand-400 bg-brand-950/30 border border-brand-500/30 rounded-none hover:bg-brand-900/50 transition-colors uppercase tracking-wider"
                 >
                     Retry Module
                 </button>

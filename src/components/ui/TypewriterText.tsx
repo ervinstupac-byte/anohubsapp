@@ -48,7 +48,7 @@ export const TypewriterText: React.FC<TypewriterTextProps> = ({
                 <motion.span
                     animate={{ opacity: [0, 1, 0] }}
                     transition={{ repeat: Infinity, duration: 0.8 }}
-                    className="inline-block w-1.5 h-4 ml-0.5 bg-cyan-500 align-middle"
+                    className="inline-block w-1.5 h-4 ml-0.5 bg-brand-500 align-middle"
                 />
             )}
         </span>

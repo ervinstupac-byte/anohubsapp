@@ -51,10 +51,10 @@ export const LanguageSelector: React.FC = () => {
                                     localStorage.setItem('appLanguage', lang.code);
                                     setIsOpen(false);
                                 }}
-                                className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-800/80 transition-colors text-left group ${i18n.language === lang.code ? 'bg-slate-800/40 border-l-2 border-cyan-500' : 'border-l-2 border-transparent'}`}
+                                className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-800/80 transition-colors text-left group ${i18n.language === lang.code ? 'bg-slate-800/40 border-l-2 border-brand-500' : 'border-l-2 border-transparent'}`}
                             >
                                 <span className="text-xl">{lang.flag}</span>
-                                <span className={`text-sm font-medium ${i18n.language === lang.code ? 'text-cyan-400' : 'text-slate-400 group-hover:text-slate-200'}`}>
+                                <span className={`text-sm font-medium ${i18n.language === lang.code ? 'text-brand-400' : 'text-slate-400 group-hover:text-slate-200'}`}>
                                     {lang.label}
                                 </span>
                             </button>

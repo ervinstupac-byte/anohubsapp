@@ -104,7 +104,7 @@ export const FoundationOverview: React.FC<FoundationOverviewProps> = ({ structur
 
                         <div className="bg-slate-800 rounded p-3">
                             <div className="text-xs text-slate-400 mb-1">Uplift Pressure</div>
-                            <div className="text-xl font-mono text-cyan-300">
+                            <div className="text-xl font-mono text-brand-300">
                                 {structural.upliftPressure.toFixed(2)} bar
                             </div>
                         </div>
@@ -163,7 +163,7 @@ export const FoundationOverview: React.FC<FoundationOverviewProps> = ({ structur
 
                         <div className="bg-slate-800 rounded p-3">
                             <div className="text-xs text-slate-400 mb-1">DO Compliance</div>
-                            <div className="text-xl font-mono text-cyan-300">
+                            <div className="text-xl font-mono text-brand-300">
                                 {environmental.doCompliance.toFixed(0)}%
                             </div>
                         </div>

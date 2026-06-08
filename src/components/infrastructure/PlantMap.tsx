@@ -73,7 +73,7 @@ export const PlantMap: React.FC<PlantMapProps> = ({ lat, lng, onLocationChange }
 
             {/* Tactical Overlay */}
             <div className="absolute top-4 right-4 z-[1000] pointer-events-none">
-                <span className="bg-slate-950/80 backdrop-blur-md border border-cyan-500/30 text-[9px] font-black text-cyan-400 px-2 py-1 rounded-sm uppercase tracking-widest shadow-neon">
+                <span className="bg-slate-950/80 backdrop-blur-md border border-brand-500/30 text-[9px] font-black text-brand-400 px-2 py-1 rounded-sm uppercase tracking-widest shadow-neon">
                     Tactical Site Overwatch
                 </span>
             </div>

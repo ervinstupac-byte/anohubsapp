@@ -25,16 +25,16 @@ export const SatelliteInflowMap: React.FC<SatelliteInflowMapProps> = ({ snowCove
 
                 {/* Satellite Artifacts */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-full h-[1px] bg-cyan-500/20 absolute rotate-45" />
-                    <div className="w-full h-[1px] bg-cyan-500/20 absolute -rotate-45" />
-                    <div className="w-32 h-32 border border-cyan-500/40 rounded-full animate-pulse flex items-center justify-center">
-                        <div className="w-24 h-24 border border-cyan-500/20 rounded-full" />
+                    <div className="w-full h-[1px] bg-brand-500/20 absolute rotate-45" />
+                    <div className="w-full h-[1px] bg-brand-500/20 absolute -rotate-45" />
+                    <div className="w-32 h-32 border border-brand-500/40 rounded-full animate-pulse flex items-center justify-center">
+                        <div className="w-24 h-24 border border-brand-500/20 rounded-full" />
                     </div>
                 </div>
 
                 {/* NASA/ESA Branding */}
                 <div className="absolute top-4 right-4 flex gap-2">
-                    <span className="text-[8px] font-black text-cyan-400 bg-black/60 px-2 py-0.5 rounded border border-cyan-500/30">SENTINEL-2 LIVE</span>
+                    <span className="text-[8px] font-black text-brand-400 bg-black/60 px-2 py-0.5 rounded border border-brand-500/30">SENTINEL-2 LIVE</span>
                     <span className="text-[8px] font-black text-slate-400 bg-black/60 px-2 py-0.5 rounded">SWE SENSOR ACTIVE</span>
                 </div>
 
@@ -53,7 +53,7 @@ export const SatelliteInflowMap: React.FC<SatelliteInflowMapProps> = ({ snowCove
                 </div>
                 <div className="p-3 bg-white/5 rounded-xl">
                     <p className="text-[10px] text-slate-500 uppercase font-bold">Catchment saturation</p>
-                    <p className="text-xl font-black text-cyan-400">OPTIMAL</p>
+                    <p className="text-xl font-black text-brand-400">OPTIMAL</p>
                 </div>
             </div>
         </GlassCard>

@@ -68,7 +68,7 @@ export const PublicPortal: React.FC = () => {
             {/* SIDEBAR: SCENARIO SIMULATOR */}
             <div className="w-80 border-r border-slate-800 bg-slate-900/50 p-6 flex flex-col">
                 <div className="mb-8">
-                    <h1 className="text-2xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
+                    <h1 className="text-2xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-blue-600">
                         MONOLIT
                     </h1>
                     <p className="text-[10px] text-slate-500 font-mono tracking-widest mt-1">GUEST ARCHITECT PORTAL</p>
@@ -115,7 +115,7 @@ export const PublicPortal: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="bg-cyan-950/30 border border-cyan-800 p-4 rounded text-xs text-cyan-200/80 italic leading-relaxed">
+                    <div className="bg-brand-950/30 border border-brand-800 p-4 rounded text-xs text-brand-200/80 italic leading-relaxed">
                         "The Architect sees the invisible. Click a fault to see how the RCA Engine deconstructs the physics of failure."
                     </div>
                 </div>

@@ -8,7 +8,7 @@ export const WorkOrderOrchestrator: React.FC = () => {
     const [inputValue, setInputValue] = useState('');
     const [toolsConfirmed, setToolsConfirmed] = useState(false);
 
-    if (loading) return <div className="p-8 text-center animate-pulse text-cyan-500 uppercase font-black">Synchronizing Neural Link...</div>;
+    if (loading) return <div className="p-8 text-center animate-pulse text-brand-500 uppercase font-black">Synchronizing Neural Link...</div>;
     if (!activeWorkOrder) return null;
 
     const currentStep = activeWorkOrder.steps[currentStepIndex];
@@ -25,7 +25,7 @@ export const WorkOrderOrchestrator: React.FC = () => {
             <header className="flex justify-between items-center bg-slate-900/50 p-6 rounded-2xl border border-white/5">
                 <div>
                     <h2 className="text-2xl font-black text-white uppercase tracking-tighter">{activeWorkOrder.title}</h2>
-                    <p className="text-[10px] text-cyan-400 font-bold uppercase tracking-widest mt-1">STATUS: {activeWorkOrder.status}</p>
+                    <p className="text-[10px] text-brand-400 font-bold uppercase tracking-widest mt-1">STATUS: {activeWorkOrder.status}</p>
                 </div>
                 <div className="text-right">
                     <p className="text-[10px] text-slate-500 uppercase font-black">Progress</p>
@@ -35,7 +35,7 @@ export const WorkOrderOrchestrator: React.FC = () => {
 
             <GlassCard
                 title={`STEP ${currentStep.step_number}: ${currentStep.description}`}
-                className="border-l-4 border-l-cyan-500"
+                className="border-l-4 border-l-brand-500"
             >
                 <div className="space-y-8 mt-6">
                     {/* TOOLS SECTION */}
@@ -53,7 +53,7 @@ export const WorkOrderOrchestrator: React.FC = () => {
                         {!toolsConfirmed && (
                             <ModernButton
                                 variant="primary"
-                                className="mt-4 bg-cyan-600 h-10 text-[10px]"
+                                className="mt-4 bg-brand-600 h-10 text-[10px]"
                                 onClick={() => { confirmTools(currentStep.required_tools); setToolsConfirmed(true); }}
                             >
                                 CONFIRM TOOLS AVAILABILITY
@@ -76,7 +76,7 @@ export const WorkOrderOrchestrator: React.FC = () => {
                                         value={inputValue}
                                         onChange={(e) => setInputValue(e.target.value)}
                                         placeholder="Enter Measure..."
-                                        className="bg-slate-950 border-2 border-cyan-500/30 rounded-xl px-4 py-3 text-xl font-black text-white w-48 outline-none focus:border-cyan-500 transition-all text-right"
+                                        className="bg-slate-950 border-2 border-brand-500/30 rounded-xl px-4 py-3 text-xl font-black text-white w-48 outline-none focus:border-brand-500 transition-all text-right"
                                     />
                                 </div>
                             </div>
@@ -101,7 +101,7 @@ export const WorkOrderOrchestrator: React.FC = () => {
                         variant="primary"
                         fullWidth
                         onClick={handleComplete}
-                        className={`h-14 text-lg tracking-widest ${!toolsConfirmed ? 'opacity-30' : 'bg-gradient-to-r from-cyan-600 to-blue-600 shadow-[0_0_20px_rgba(6,182,212,0.3)]'}`}
+                        className={`h-14 text-lg tracking-widest ${!toolsConfirmed ? 'opacity-30' : 'bg-gradient-to-r from-brand-600 to-blue-600 shadow-[0_0_20px_rgba(6,182,212,0.3)]'}`}
                     >
                         {currentStepIndex === activeWorkOrder.steps.length - 1 ? 'SEAL WORK ORDER' : 'COMPLETE STEP & PROCEED'}
                     </ModernButton>

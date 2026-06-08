@@ -281,8 +281,8 @@ export const ToolboxLaunchpad: React.FC = () => {
                             subtitle="Total System Runtime"
                             chart={
                                 <div className="w-full flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-full bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20 shrink-0">
-                                        <Clock className="w-4 h-4 text-cyan-400 animate-gear" />
+                                    <div className="w-8 h-8 rounded-full bg-brand-500/10 flex items-center justify-center border border-brand-500/20 shrink-0">
+                                        <Clock className="w-4 h-4 text-brand-400 animate-gear" />
                                     </div>
                                     <div className="flex-1 space-y-1 min-w-0">
                                         <div className="h-1.5 w-full flex gap-[1px]">
@@ -292,7 +292,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                                                     initial={{ opacity: 0, scaleY: 0 }}
                                                     animate={{ opacity: 1, scaleY: 1 }}
                                                     transition={{ duration: 0.2, delay: i * 0.05 }}
-                                                    className={`h-full flex-1 ${i < 15 ? 'bg-cyan-500' : 'bg-slate-800'} ${i < 15 ? 'bloom-glow-cyan' : ''}`}
+                                                    className={`h-full flex-1 ${i < 15 ? 'bg-brand-500' : 'bg-slate-800'} ${i < 15 ? 'bloom-glow-cyan' : ''}`}
                                                 />
                                             ))}
                                         </div>

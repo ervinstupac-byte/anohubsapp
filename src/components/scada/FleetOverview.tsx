@@ -16,7 +16,7 @@ export const FleetOverview: React.FC<FleetOverviewProps> = React.memo(({ onToggl
                 <h3 className="text-[10px] sm:text-xs font-black uppercase tracking-wider sm:tracking-widest text-slate-400 truncate">FLEET OVERVIEW</h3>
                 <button
                     onClick={onToggleMap}
-                    className={`text-[9px] sm:text-[10px] font-bold px-2 py-1 rounded border transition-colors whitespace-nowrap ${showMap ? 'bg-cyan-900 text-cyan-400 border-cyan-700' : 'bg-slate-800 text-slate-500 border-slate-700 hover:text-white'}`}
+                    className={`text-[9px] sm:text-[10px] font-bold px-2 py-1 rounded border transition-colors whitespace-nowrap ${showMap ? 'bg-brand-900 text-brand-400 border-brand-700' : 'bg-slate-800 text-slate-500 border-slate-700 hover:text-white'}`}
                 >
                     {showMap ? 'HIDE MAP' : 'GLOBAL MAP'}
                 </button>
@@ -30,7 +30,7 @@ export const FleetOverview: React.FC<FleetOverviewProps> = React.memo(({ onToggl
                             className={`
                                 w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group relative overflow-hidden
                                 ${selectedAsset?.id === asset.id
-                                    ? 'bg-cyan-950/40 border border-cyan-500/30 text-white shadow-[0_0_15px_rgba(6,182,212,0.1)]'
+                                    ? 'bg-brand-950/40 border border-brand-500/30 text-white shadow-[0_0_15px_rgba(6,182,212,0.1)]'
                                     : 'hover:bg-slate-800/50 border border-transparent text-slate-400'}
                             `}
                         >
@@ -51,7 +51,7 @@ export const FleetOverview: React.FC<FleetOverviewProps> = React.memo(({ onToggl
                                     {[1, 2, 3, 4, 5].map(i => (
                                         <div
                                             key={i}
-                                            className="w-[2px] bg-cyan-400 animate-wave"
+                                            className="w-[2px] bg-brand-400 animate-wave"
                                             style={{
                                                 height: `${40 + Math.random() * 60}%`,
                                                 animationDelay: `${i * 0.15}s`,
@@ -91,7 +91,7 @@ export const FleetOverview: React.FC<FleetOverviewProps> = React.memo(({ onToggl
             {/* Add Asset Button */}
             <button
                 onClick={onRegisterAsset}
-                className="w-full mt-3 py-2 px-2 flex items-center justify-center gap-1 sm:gap-2 border border-dashed border-slate-700 rounded text-[9px] sm:text-[10px] font-bold text-slate-500 hover:text-cyan-400 hover:border-cyan-500 hover:bg-cyan-900/10 transition-all uppercase tracking-wider"
+                className="w-full mt-3 py-2 px-2 flex items-center justify-center gap-1 sm:gap-2 border border-dashed border-slate-700 rounded text-[9px] sm:text-[10px] font-bold text-slate-500 hover:text-brand-400 hover:border-brand-500 hover:bg-brand-900/10 transition-all uppercase tracking-wider"
             >
                 <span className="text-sm">+</span>
                 <span className="hidden xs:inline">Register New Plant</span>

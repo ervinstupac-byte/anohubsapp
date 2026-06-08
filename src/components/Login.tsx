@@ -66,7 +66,7 @@ export const Login: React.FC = () => {
                     </p>
                 </div>
 
-                <GlassCard className="shadow-2xl shadow-cyan-900/20">
+                <GlassCard className="shadow-2xl shadow-brand-900/20">
                     <div className="mb-6 text-center">
                         <h2 className="text-xl font-bold text-white tracking-tight">{t('login.title', 'Secure Access')}</h2>
                         <p className="text-xs text-slate-500 mt-1">{t('login.instructions', 'Please verify your credentials.')}</p>
@@ -99,7 +99,7 @@ export const Login: React.FC = () => {
                                 fullWidth
                                 variant="primary"
                                 isLoading={loading}
-                                className="shadow-lg shadow-cyan-500/20"
+                                className="shadow-lg shadow-brand-500/20"
                             >
                                 {t('login.signInButton', 'Authenticate')}
                             </ModernButton>

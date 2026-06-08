@@ -61,7 +61,7 @@ export const DiagnosticRCA: React.FC<DiagnosticRCAProps> = ({ diagnosis: externa
             {/* Header */}
             <div className="p-3 bg-slate-900/50 border-b border-white/5 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <Brain className={`w-4 h-4 ${isThinking ? 'text-cyan-400 animate-pulse' : 'text-slate-400'}`} />
+                    <Brain className={`w-4 h-4 ${isThinking ? 'text-brand-400 animate-pulse' : 'text-slate-400'}`} />
                     <span className="text-xs font-black text-slate-300 uppercase tracking-widest">
                         {isThinking ? 'Correlating Logic...' : 'NC-140 RCA Engine'}
                     </span>
@@ -109,7 +109,7 @@ export const DiagnosticRCA: React.FC<DiagnosticRCAProps> = ({ diagnosis: externa
                                     initial={{ width: 0 }}
                                     animate={{ width: `${result.confidence * 100}%` }}
                                     className={`h-full rounded-full ${result.severity === 'CRITICAL' ? 'bg-red-500' :
-                                        result.severity === 'WARNING' ? 'bg-amber-500' : 'bg-cyan-500'
+                                        result.severity === 'WARNING' ? 'bg-amber-500' : 'bg-brand-500'
                                         }`}
                                 />
                             </div>
@@ -127,7 +127,7 @@ export const DiagnosticRCA: React.FC<DiagnosticRCAProps> = ({ diagnosis: externa
                                 {expandedCause === result.cause ? (
                                     <ChevronUp className="w-3 h-3 text-slate-500" />
                                 ) : (
-                                    <ChevronDown className="w-3 h-3 text-slate-500 group-hover:text-cyan-400" />
+                                    <ChevronDown className="w-3 h-3 text-slate-500 group-hover:text-brand-400" />
                                 )}
                             </div>
 
@@ -148,10 +148,10 @@ export const DiagnosticRCA: React.FC<DiagnosticRCAProps> = ({ diagnosis: externa
 
                                     {/* NC-400: DNA Baseline Badge */}
                                     {baselineState && (
-                                        <div className="mt-3 flex items-center gap-2 bg-cyan-950/30 border border-cyan-500/20 rounded px-2 py-1.5">
-                                            <Database className="w-3 h-3 text-cyan-400" />
+                                        <div className="mt-3 flex items-center gap-2 bg-brand-950/30 border border-brand-500/20 rounded px-2 py-1.5">
+                                            <Database className="w-3 h-3 text-brand-400" />
                                             <div className="flex-1">
-                                                <span className="text-[9px] text-cyan-300 font-bold uppercase">
+                                                <span className="text-[9px] text-brand-300 font-bold uppercase">
                                                     Based on Commissioning DNA
                                                 </span>
                                                 <div className="flex items-center gap-2 mt-0.5">
@@ -177,9 +177,9 @@ export const DiagnosticRCA: React.FC<DiagnosticRCAProps> = ({ diagnosis: externa
                 {results.length > 0 && (
                     <button
                         onClick={() => setExpandedCause('SNAPSHOT_MODE')}
-                        className="w-full mt-2 py-2 flex items-center justify-center gap-2 bg-slate-900 hover:bg-black border border-slate-700 hover:border-cyan-500 rounded transition-all group"
+                        className="w-full mt-2 py-2 flex items-center justify-center gap-2 bg-slate-900 hover:bg-black border border-slate-700 hover:border-brand-500 rounded transition-all group"
                     >
-                        <Zap className="w-3 h-3 text-slate-500 group-hover:text-cyan-400" />
+                        <Zap className="w-3 h-3 text-slate-500 group-hover:text-brand-400" />
                         <span className="text-[9px] font-black tracking-widest text-slate-400 group-hover:text-white">CAPTURE FORENSIC SNAPSHOT</span>
                     </button>
                 )}
@@ -197,11 +197,11 @@ export const DiagnosticRCA: React.FC<DiagnosticRCAProps> = ({ diagnosis: externa
                     >
                         {/* The Capture Card */}
                         <div
-                            className="w-[800px] bg-[#0a0a0a] border-2 border-cyan-500/30 p-8 shadow-[0_0_100px_rgba(6,182,212,0.1)] relative overflow-hidden"
+                            className="w-[800px] bg-[#0a0a0a] border-2 border-brand-500/30 p-8 shadow-[0_0_100px_rgba(6,182,212,0.1)] relative overflow-hidden"
                             onClick={e => e.stopPropagation()}
                         >
                             {/* Watermarks */}
-                            <div className="absolute top-4 right-4 text-[10px] font-mono text-cyan-900 tracking-[0.5em] font-black uppercase pointer-events-none select-none">
+                            <div className="absolute top-4 right-4 text-[10px] font-mono text-brand-900 tracking-[0.5em] font-black uppercase pointer-events-none select-none">
                                 CONFIDENTIAL // DIAGNOSTIC INTERCEPT
                             </div>
                             <div className="absolute bottom-4 left-4 text-[10px] font-mono text-slate-800 tracking-widest font-black uppercase pointer-events-none select-none">
@@ -209,9 +209,9 @@ export const DiagnosticRCA: React.FC<DiagnosticRCAProps> = ({ diagnosis: externa
                             </div>
 
                             {/* Header */}
-                            <div className="flex items-center gap-4 mb-8 border-b border-cyan-500/20 pb-6">
-                                <div className="p-3 bg-cyan-950/20 border border-cyan-500/50 rounded">
-                                    <Brain className="w-8 h-8 text-cyan-400" />
+                            <div className="flex items-center gap-4 mb-8 border-b border-brand-500/20 pb-6">
+                                <div className="p-3 bg-brand-950/20 border border-brand-500/50 rounded">
+                                    <Brain className="w-8 h-8 text-brand-400" />
                                 </div>
                                 <div>
                                     <h1 className="text-3xl font-black text-white tracking-tighter uppercase mb-1">
@@ -219,7 +219,7 @@ export const DiagnosticRCA: React.FC<DiagnosticRCAProps> = ({ diagnosis: externa
                                     </h1>
                                     <div className="flex items-center gap-2">
                                         <span className="px-2 py-0.5 bg-red-500 text-black text-xs font-black uppercase">CRITICAL FAULT DETECTED</span>
-                                        <span className="text-xs font-mono text-cyan-600">ID: RCA-{Date.now().toString().slice(-6)}</span>
+                                        <span className="text-xs font-mono text-brand-600">ID: RCA-{Date.now().toString().slice(-6)}</span>
                                     </div>
                                 </div>
                             </div>
@@ -238,8 +238,8 @@ export const DiagnosticRCA: React.FC<DiagnosticRCAProps> = ({ diagnosis: externa
                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block">Logic Evidence Trace</label>
                                         <ul className="space-y-2">
                                             {results[0].evidence.map((ev, i) => (
-                                                <li key={i} className="flex items-center gap-3 text-sm font-mono text-cyan-300">
-                                                    <span className="w-1.5 h-1.5 bg-cyan-500 box-shadow-[0_0_8px_cyan]" />
+                                                <li key={i} className="flex items-center gap-3 text-sm font-mono text-brand-300">
+                                                    <span className="w-1.5 h-1.5 bg-brand-500 box-shadow-[0_0_8px_cyan]" />
                                                     {ev}
                                                 </li>
                                             ))}
@@ -255,7 +255,7 @@ export const DiagnosticRCA: React.FC<DiagnosticRCAProps> = ({ diagnosis: externa
                                         Confidence
                                     </div>
                                     <div className="w-full h-2 bg-slate-800 rounded-full mt-2 overflow-hidden">
-                                        <div className="h-full bg-cyan-500" style={{ width: `${results[0].confidence * 100}%` }} />
+                                        <div className="h-full bg-brand-500" style={{ width: `${results[0].confidence * 100}%` }} />
                                     </div>
                                 </div>
                             </div>
@@ -271,7 +271,7 @@ export const DiagnosticRCA: React.FC<DiagnosticRCAProps> = ({ diagnosis: externa
                                 </div>
                             </div>
 
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50" />
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-500 to-transparent opacity-50" />
                         </div>
 
                         <p className="fixed bottom-8 text-slate-500 text-xs font-mono uppercase tracking-widest animate-pulse">

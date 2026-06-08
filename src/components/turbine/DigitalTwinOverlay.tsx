@@ -57,13 +57,13 @@ export const DigitalTwinOverlay: React.FC<DigitalTwinOverlayProps> = ({
     }, [tData, turbineModel, asset]);
 
     return (
-        <GlassCard className="bg-gradient-to-br from-slate-950/95 via-slate-900/95 to-slate-950/95 border-2 border-cyan-500/30 overflow-hidden">
+        <GlassCard className="bg-gradient-to-br from-slate-950/95 via-slate-900/95 to-slate-950/95 border-2 border-brand-500/30 overflow-hidden">
             {/* HEADER */}
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
                 <div>
                     <h2 className="text-2xl font-black uppercase tracking-tighter">
                         <span className="text-white">Digital Twin</span>
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 ml-2">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-purple-400 ml-2">
                             AR Overlay
                         </span>
                     </h2>
@@ -78,17 +78,17 @@ export const DigitalTwinOverlay: React.FC<DigitalTwinOverlayProps> = ({
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setRotation(r => r + 15)}
-                        className="w-10 h-10 rounded-full bg-slate-800/50 border border-cyan-500/30 flex items-center justify-center hover:bg-cyan-500/20 transition-colors"
+                        className="w-10 h-10 rounded-full bg-slate-800/50 border border-brand-500/30 flex items-center justify-center hover:bg-brand-500/20 transition-colors"
                     >
-                        <RotateCw className="w-5 h-5 text-cyan-400" />
+                        <RotateCw className="w-5 h-5 text-brand-400" />
                     </motion.button>
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setZoom(z => Math.min(z + 0.1, 2))}
-                        className="w-10 h-10 rounded-full bg-slate-800/50 border border-cyan-500/30 flex items-center justify-center hover:bg-cyan-500/20 transition-colors"
+                        className="w-10 h-10 rounded-full bg-slate-800/50 border border-brand-500/30 flex items-center justify-center hover:bg-brand-500/20 transition-colors"
                     >
-                        <ZoomIn className="w-5 h-5 text-cyan-400" />
+                        <ZoomIn className="w-5 h-5 text-brand-400" />
                     </motion.button>
                 </div>
             </div>
@@ -96,7 +96,7 @@ export const DigitalTwinOverlay: React.FC<DigitalTwinOverlayProps> = ({
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* LEFT: 3D WIREFRAME MODEL */}
                 <div className="lg:col-span-2">
-                    <div className="aspect-[16/10] bg-gradient-to-br from-slate-950 to-slate-900 rounded-xl border border-cyan-500/20 relative overflow-hidden">
+                    <div className="aspect-[16/10] bg-gradient-to-br from-slate-950 to-slate-900 rounded-xl border border-brand-500/20 relative overflow-hidden">
                         {/* Grid background */}
                         <div className="absolute inset-0 opacity-20">
                             <svg width="100%" height="100%">
@@ -173,8 +173,8 @@ export const DigitalTwinOverlay: React.FC<DigitalTwinOverlayProps> = ({
 
                 {/* RIGHT: ANOMALY DETAILS */}
                 <div className="space-y-4">
-                    <div className="p-4 bg-slate-800/30 rounded-lg border border-cyan-500/20">
-                        <h3 className="text-sm font-black text-cyan-400 uppercase tracking-wider mb-3">
+                    <div className="p-4 bg-slate-800/30 rounded-lg border border-brand-500/20">
+                        <h3 className="text-sm font-black text-brand-400 uppercase tracking-wider mb-3">
                             Detected Anomalies
                         </h3>
 
@@ -383,7 +383,7 @@ const AnomalyCard: React.FC<AnomalyCardProps> = ({ anomaly, selected, onClick })
         whileHover={{ scale: 1.02 }}
         onClick={onClick}
         className={`p-3 rounded-lg border cursor-pointer transition-all ${selected
-            ? 'bg-cyan-500/20 border-cyan-500'
+            ? 'bg-brand-500/20 border-brand-500'
             : anomaly.severity === 'CRITICAL'
                 ? 'bg-red-950/30 border-red-500/30'
                 : 'bg-amber-950/30 border-amber-500/30'

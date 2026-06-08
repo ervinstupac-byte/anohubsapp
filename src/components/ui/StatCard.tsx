@@ -36,11 +36,11 @@ export const StatCard: React.FC<StatCardProps> = React.memo(({
     return (
         <GlassCard className="relative group overflow-hidden">
             {/* Background Glow */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 blur-3xl rounded-full -mr-16 -mt-16 group-hover:bg-cyan-500/10 transition-colors"></div>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-brand-500/5 blur-3xl rounded-full -mr-16 -mt-16 group-hover:bg-brand-500/10 transition-colors"></div>
 
             <div className="flex justify-between items-start mb-4">
                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{label}</span>
-                {icon && <span className="text-slate-400 group-hover:text-cyan-400 transition-colors">{icon}</span>}
+                {icon && <span className="text-slate-400 group-hover:text-brand-400 transition-colors">{icon}</span>}
             </div>
 
             <div className="flex items-baseline gap-2">

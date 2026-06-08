@@ -37,7 +37,7 @@ const TurbineUnit: React.FC<{
     else if (isEccentricityWarning) unitColor = 'orange';
 
     const colorMap = {
-        cyan: 'border-cyan-400 group-hover:border-cyan-300 bg-gradient-to-br from-cyan-500/10 via-blue-500/5 to-transparent shadow-[0_0_60px_rgba(6,182,212,0.2),inset_0_0_40px_rgba(6,182,212,0.1)]',
+        cyan: 'border-brand-400 group-hover:border-brand-300 bg-gradient-to-br from-brand-500/10 via-blue-500/5 to-transparent shadow-[0_0_60px_rgba(6,182,212,0.2),inset_0_0_40px_rgba(6,182,212,0.1)]',
         orange: 'border-amber-400 group-hover:border-amber-300 bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-transparent shadow-[0_0_60px_rgba(245,158,11,0.2),inset_0_0_40px_rgba(245,158,11,0.1)]',
         red: 'border-red-400 group-hover:border-red-300 bg-gradient-to-br from-red-500/10 via-pink-500/5 to-transparent shadow-[0_0_60px_rgba(239,68,68,0.2),inset_0_0_40px_rgba(220,38,38,0.1)]'
     };
@@ -54,7 +54,7 @@ const TurbineUnit: React.FC<{
                     `}
                 >
                     <div className="absolute inset-0 rounded-full noise-commander opacity-20"></div>
-                    <div className={`w-40 h-40 rounded-full border-[3px] border-dashed ${status === 'running' ? 'border-cyan-400/30 animate-[spin_8s_linear_infinite]' : 'border-white/5'}`}></div>
+                    <div className={`w-40 h-40 rounded-full border-[3px] border-dashed ${status === 'running' ? 'border-brand-400/30 animate-[spin_8s_linear_infinite]' : 'border-white/5'}`}></div>
 
                     <div className="absolute text-center z-10">
                         <DigitalDisplay
@@ -67,7 +67,7 @@ const TurbineUnit: React.FC<{
                     </div>
 
                     {status === 'running' && unitColor === 'cyan' && (
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-t from-cyan-500/10 to-transparent pointer-events-none animate-pulse"></div>
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-t from-brand-500/10 to-transparent pointer-events-none animate-pulse"></div>
                     )}
                 </motion.div>
             </Tooltip>
@@ -289,16 +289,16 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
         return (
             <div className="flex-1 bg-slate-950 relative overflow-hidden flex flex-col items-center justify-center p-8">
                 <div className="absolute inset-0 opacity-10 noise-commander"></div>
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-cyan-500/5 via-transparent to-emerald-500/5"></div>
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-brand-500/5 via-transparent to-emerald-500/5"></div>
 
                 <div className="relative z-10 max-w-2xl text-center space-y-12 animate-fade-in">
-                    <div className="inline-flex items-center gap-3 px-6 py-2 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-xs font-black uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(6,182,212,0.1)]">
+                    <div className="inline-flex items-center gap-3 px-6 py-2 bg-brand-500/10 border border-brand-500/20 rounded-full text-brand-400 text-xs font-black uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(6,182,212,0.1)]">
                         <Sparkles className="w-4 h-4 animate-pulse" /> {t('neuralFlow.intelInit')}
                     </div>
                     <div>
                         <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-white mb-6 uppercase">
                             Deploy Your <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-cyan-500 drop-shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-blue-500 to-brand-500 drop-shadow-[0_0_30px_rgba(6,182,212,0.3)]">
                                 {t('neuralFlow.diagnosticTwin')}
                             </span>
                         </h1>
@@ -308,7 +308,7 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                     </div>
 
                     <button
-                        className="group relative px-10 py-5 bg-cyan-600 hover:bg-cyan-500 text-white font-black uppercase tracking-[0.2em] rounded-2xl shadow-[0_0_40px_rgba(6,182,212,0.3)] transition-all active:scale-95 overflow-hidden"
+                        className="group relative px-10 py-5 bg-brand-600 hover:bg-brand-500 text-white font-black uppercase tracking-[0.2em] rounded-2xl shadow-[0_0_40px_rgba(6,182,212,0.3)] transition-all active:scale-95 overflow-hidden"
                         onClick={() => window.dispatchEvent(new CustomEvent('openAssetWizard'))}
                     >
                         <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
@@ -316,9 +316,9 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                     </button>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 pt-16 border-t border-white/5">
-                        <div className="p-8 bg-white/5 glass-panel border border-white/10 rounded-2xl hover:border-cyan-500/40 transition-all text-center group relative overflow-hidden">
-                            <div className="absolute inset-0 bg-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <Activity className="w-8 h-8 text-cyan-400 mx-auto mb-4 drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]" />
+                        <div className="p-8 bg-white/5 glass-panel border border-white/10 rounded-2xl hover:border-brand-500/40 transition-all text-center group relative overflow-hidden">
+                            <div className="absolute inset-0 bg-brand-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <Activity className="w-8 h-8 text-brand-400 mx-auto mb-4 drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]" />
                             <h3 className="text-white font-black uppercase tracking-tight mb-2">{t('neuralFlow.flowTitle')}</h3>
                             <p className="text-xs text-slate-500 font-medium">{t('neuralFlow.flowDesc')}</p>
                         </div>
@@ -347,10 +347,10 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
 
             <div style={{ background: '#0b2530' }} className="relative z-10 w-full max-w-6xl border border-white/10 p-6 sm:p-8 md:p-16 rounded-[2.5rem] backdrop-blur-3xl shadow-[0_40px_100px_rgba(0,0,0,0.6)] overflow-hidden">
                 <div className="absolute inset-0 noise-commander opacity-20"></div>
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent"></div>
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-500/40 to-transparent"></div>
 
                 <div className="absolute top-4 left-4 sm:top-8 sm:left-8 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 z-20">
-                    <div className="text-[10px] font-black text-cyan-400 tracking-[0.4em] border border-cyan-500/30 px-5 py-2.5 bg-cyan-500/5 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.1)] uppercase">
+                    <div className="text-[10px] font-black text-brand-400 tracking-[0.4em] border border-brand-500/30 px-5 py-2.5 bg-brand-500/5 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.1)] uppercase">
                         {t('neuralFlow.coreTwin')}
                     </div>
                     {/* SHA-256 VERIFIED pulsing badge */}
@@ -392,7 +392,7 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                     />
 
                     <div className="relative flex flex-col items-center justify-center sm:mx-4">
-                        <div className="w-[2px] h-40 bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent"></div>
+                        <div className="w-[2px] h-40 bg-gradient-to-b from-transparent via-brand-500/20 to-transparent"></div>
 
                         {/* HEALTH DELTA INDICATOR (NC-9.0 FLEET INTEL) */}
                         {demoMode.active && (
@@ -411,7 +411,7 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                             </motion.div>
                         )}
 
-                        <div className="w-[2px] h-40 bg-gradient-to-t from-transparent via-cyan-500/20 to-transparent"></div>
+                        <div className="w-[2px] h-40 bg-gradient-to-t from-transparent via-brand-500/20 to-transparent"></div>
                     </div>
 
                     <TurbineUnit
@@ -432,8 +432,8 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                         <div className="text-xs text-emerald-300 font-mono">Health (Global)</div>
                         <div className="text-2xl font-black text-white">{intelReport ? `${intelReport.globalHealthIndex}%` : `${integrity.healthPercent}%`}</div>
                     </div>
-                    <div className="p-3 bg-white/5 border border-cyan-400/10 rounded-lg text-center">
-                        <div className="text-xs text-cyan-300 font-mono">MTBF</div>
+                    <div className="p-3 bg-white/5 border border-brand-400/10 rounded-lg text-center">
+                        <div className="text-xs text-brand-300 font-mono">MTBF</div>
                         <div className="text-2xl font-black text-white">{intelReport ? `${Math.round((intelReport.totalFiles || 0) * 2)}h` : `${integrity.mtbfEstimateHours}h`}</div>
                     </div>
                     <div className="p-3 bg-white/5 border border-red-400/10 rounded-lg text-center">
@@ -513,11 +513,11 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                         exit={{ opacity: 0, y: 20, height: 0 }}
                         className="mt-6 overflow-hidden"
                     >
-                        <div className="p-6 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 rounded-2xl shadow-[0_20px_40px_rgba(6,182,212,0.1)] relative group">
+                        <div className="p-6 bg-gradient-to-br from-brand-500/10 to-purple-500/10 border border-brand-500/30 rounded-2xl shadow-[0_20px_40px_rgba(6,182,212,0.1)] relative group">
                             <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400">
+                                    <div className="w-12 h-12 rounded-full bg-brand-500/20 flex items-center justify-center text-brand-400">
                                         <Sparkles className="w-6 h-6 animate-pulse" />
                                     </div>
                                     <div>
@@ -531,7 +531,7 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                                 </div>
                                 <button
                                     onClick={() => navigate('/maintenance/shaft-alignment')}
-                                    className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-black uppercase text-[10px] tracking-[0.2em] rounded-xl transition-all active:scale-95 shadow-[0_0_20px_rgba(6,182,212,0.3)] flex items-center gap-2 whitespace-nowrap"
+                                    className="px-6 py-3 bg-brand-600 hover:bg-brand-500 text-white font-black uppercase text-[10px] tracking-[0.2em] rounded-xl transition-all active:scale-95 shadow-[0_0_20px_rgba(6,182,212,0.3)] flex items-center gap-2 whitespace-nowrap"
                                 >
                                     {t('neuralFlow.launchAlignmentWizard')}
                                     <ChevronRight className="w-4 h-4" />

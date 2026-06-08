@@ -125,17 +125,17 @@ export const PrecisionAudit: React.FC = () => {
             <div className="max-w-6xl mx-auto flex justify-between items-end border-b border-white/10 pb-6 mb-8">
                 <div>
                     <h1 className="text-4xl font-black text-white tracking-tighter uppercase flex items-center gap-3">
-                        <ShieldCheck className="w-10 h-10 text-cyan-400" />
+                        <ShieldCheck className="w-10 h-10 text-brand-400" />
                         Precision Audit Node
                     </h1>
-                    <p className="text-xs font-mono text-cyan-500 mt-2 uppercase tracking-[0.3em]">
+                    <p className="text-xs font-mono text-brand-500 mt-2 uppercase tracking-[0.3em]">
                         Protocol NC-5.8 // Deep Ingestion Sequence
                     </p>
                 </div>
                 <div className="flex gap-4">
                     {selectedAsset && (
-                        <div className="bg-cyan-500/10 border border-cyan-500/20 px-4 py-2 rounded flex items-center gap-2">
-                            <Database className="w-4 h-4 text-cyan-400" />
+                        <div className="bg-brand-500/10 border border-brand-500/20 px-4 py-2 rounded flex items-center gap-2">
+                            <Database className="w-4 h-4 text-brand-400" />
                             <span className="text-[10px] font-black text-white uppercase tracking-widest">{selectedAsset.name}</span>
                         </div>
                     )}
@@ -152,7 +152,7 @@ export const PrecisionAudit: React.FC = () => {
                 {/* Left Side: Audit Status & Selection */}
                 <div className="lg:col-span-1 space-y-6">
                     {/* Progress Card */}
-                    <GlassCard variant="commander" className="border-cyan-500/20 bg-cyan-500/5">
+                    <GlassCard variant="commander" className="border-brand-500/20 bg-brand-500/5">
                         <div className="flex flex-col items-center py-4">
                             <div className="relative w-32 h-32 flex items-center justify-center">
                                 <svg className="absolute w-full h-full -rotate-90">
@@ -166,12 +166,12 @@ export const PrecisionAudit: React.FC = () => {
                                         stroke="currentColor" strokeWidth="4" fill="transparent"
                                         strokeDasharray={377}
                                         strokeDashoffset={377 - (377 * progress) / 100}
-                                        className="text-cyan-500 transition-all duration-300"
+                                        className="text-brand-500 transition-all duration-300"
                                     />
                                 </svg>
                                 <div className="text-center z-10">
                                     <div className="text-3xl font-black text-white">{progress}%</div>
-                                    <div className="text-[8px] font-mono text-cyan-500 uppercase">Analysis</div>
+                                    <div className="text-[8px] font-mono text-brand-500 uppercase">Analysis</div>
                                 </div>
                             </div>
 
@@ -179,7 +179,7 @@ export const PrecisionAudit: React.FC = () => {
                                 <button
                                     onClick={() => runAudit()}
                                     disabled={auditState !== 'IDLE' || (!selectedAsset && !selectedDossier)}
-                                    className="w-full py-3 bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-800 disabled:text-slate-500 text-white font-black uppercase tracking-widest text-[10px] rounded transition-all shadow-[0_0_20px_rgba(8,145,178,0.2)] flex items-center justify-center gap-2"
+                                    className="w-full py-3 bg-brand-600 hover:bg-brand-500 disabled:bg-slate-800 disabled:text-slate-500 text-white font-black uppercase tracking-widest text-[10px] rounded transition-all shadow-[0_0_20px_rgba(8,145,178,0.2)] flex items-center justify-center gap-2"
                                 >
                                     {auditState === 'IDLE' ? (
                                         <>
@@ -195,8 +195,8 @@ export const PrecisionAudit: React.FC = () => {
                                 </button>
 
                                 {selectedDossier && (
-                                    <div className="p-3 bg-white/5 border border-cyan-500/30 rounded text-center">
-                                        <p className="text-[8px] text-cyan-500 uppercase font-black tracking-widest mb-1">Manual Target Active</p>
+                                    <div className="p-3 bg-white/5 border border-brand-500/30 rounded text-center">
+                                        <p className="text-[8px] text-brand-500 uppercase font-black tracking-widest mb-1">Manual Target Active</p>
                                         <p className="text-[10px] text-slate-300 font-bold truncate">
                                             {selectedDossier.path.split('/').pop()?.replace('.html', '').replace(/-/g, ' ').toUpperCase()}
                                         </p>
@@ -233,7 +233,7 @@ export const PrecisionAudit: React.FC = () => {
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                             placeholder="Search 50 IEC 60041 Compliant Files..."
-                                            className="w-full bg-slate-950/50 border border-white/10 rounded px-10 py-2 text-xs font-mono text-white outline-none focus:border-cyan-500/50 transition-colors"
+                                            className="w-full bg-slate-950/50 border border-white/10 rounded px-10 py-2 text-xs font-mono text-white outline-none focus:border-brand-500/50 transition-colors"
                                         />
                                     </div>
 
@@ -243,9 +243,9 @@ export const PrecisionAudit: React.FC = () => {
                                             <button
                                                 key={idx}
                                                 onClick={() => setSelectedDossier(file)}
-                                                className="w-full p-2.5 bg-white/5 border border-white/5 rounded text-left hover:bg-cyan-500/10 hover:border-cyan-500/20 transition-all group"
+                                                className="w-full p-2.5 bg-white/5 border border-white/5 rounded text-left hover:bg-brand-500/10 hover:border-brand-500/20 transition-all group"
                                             >
-                                                <div className="text-[10px] font-bold text-slate-300 group-hover:text-cyan-400 truncate mb-0.5">{displayTitle}</div>
+                                                <div className="text-[10px] font-bold text-slate-300 group-hover:text-brand-400 truncate mb-0.5">{displayTitle}</div>
                                                 <div className="text-[8px] font-mono text-slate-600 truncate">{file.path}</div>
                                             </button>
                                         );
@@ -264,10 +264,10 @@ export const PrecisionAudit: React.FC = () => {
                         <div className="space-y-3">
                             <div className="flex justify-between items-center text-[10px] font-mono">
                                 <span className="text-slate-500">ENGINEERING_FILES:</span>
-                                <span className="text-cyan-400">{rulebook.length} / {rulebook.length}</span>
+                                <span className="text-brand-400">{rulebook.length} / {rulebook.length}</span>
                             </div>
                             <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                                <div className="h-full bg-cyan-500 w-full" />
+                                <div className="h-full bg-brand-500 w-full" />
                             </div>
                             <div className="flex justify-between items-center text-[10px] font-mono">
                                 <span className="text-slate-500">PROTOCOL:</span>
@@ -326,7 +326,7 @@ export const PrecisionAudit: React.FC = () => {
                                     >
                                         <div className="flex justify-between items-start mb-4">
                                             <div>
-                                                <h4 className="text-sm font-black text-white uppercase tracking-wide group-hover:text-cyan-400 transition-colors">{f.title}</h4>
+                                                <h4 className="text-sm font-black text-white uppercase tracking-wide group-hover:text-brand-400 transition-colors">{f.title}</h4>
                                                 <div className="text-[10px] text-emerald-500 font-mono flex items-center gap-1 mt-1">
                                                     <CheckCircle2 className="w-3 h-3" />
                                                     {f.status} // NC-5.8 VERIFIED
@@ -336,11 +336,11 @@ export const PrecisionAudit: React.FC = () => {
                                                 CITED: {f.citation}
                                             </div>
                                         </div>
-                                        <p className="text-xs text-slate-400 leading-relaxed italic border-l-2 border-cyan-500/30 pl-4">
+                                        <p className="text-xs text-slate-400 leading-relaxed italic border-l-2 border-brand-500/30 pl-4">
                                             "{f.justification}"
                                         </p>
                                         <div className="mt-4 flex justify-end">
-                                            <button className="text-[9px] font-black text-cyan-400 uppercase tracking-widest flex items-center gap-1 hover:underline">
+                                            <button className="text-[9px] font-black text-brand-400 uppercase tracking-widest flex items-center gap-1 hover:underline">
                                                 View Source File <ArrowRight className="w-3 h-3" />
                                             </button>
                                         </div>

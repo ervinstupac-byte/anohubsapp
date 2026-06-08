@@ -7,7 +7,7 @@ const ProjectGenesisPage: React.FC = () => {
     return (
         <div className="flex flex-col min-h-screen bg-[#020617] text-slate-100">
             <DashboardHeader
-                title={<span className="text-cyan-500 font-black tracking-widest uppercase">FIELD INGESTION // GENESIS PROTOCOL</span>}
+                title={<span className="text-brand-500 font-black tracking-widest uppercase">FIELD INGESTION // GENESIS PROTOCOL</span>}
                 onToggleSidebar={() => { }} // Sidebar control handled by layout
             />
             <main className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">

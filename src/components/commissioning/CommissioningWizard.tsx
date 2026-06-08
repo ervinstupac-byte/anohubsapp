@@ -94,13 +94,13 @@ export const CommissioningWizard: React.FC<{ onClose: () => void }> = ({ onClose
                 <div className="p-6 border-b border-slate-700 flex justify-between items-center bg-slate-950">
                     <div>
                         <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                            <ShieldCheck className="text-cyan-400" /> Monolit Commissioning Wizard
+                            <ShieldCheck className="text-brand-400" /> Monolit Commissioning Wizard
                         </h2>
                         <p className="text-xs text-slate-400 font-mono mt-1">PROTOCOL NC-150 // UNIT BIRTH CERTIFICATE</p>
                     </div>
                     <div className="flex items-center gap-1">
                         {STEPS.map((step, idx) => (
-                            <div key={step.id} className={`h-1.5 w-8 rounded-full ${idx <= currentStep ? 'bg-cyan-500' : 'bg-slate-700'}`} />
+                            <div key={step.id} className={`h-1.5 w-8 rounded-full ${idx <= currentStep ? 'bg-brand-500' : 'bg-slate-700'}`} />
                         ))}
                     </div>
                 </div>
@@ -110,13 +110,13 @@ export const CommissioningWizard: React.FC<{ onClose: () => void }> = ({ onClose
 
                     {currentStep === 0 && (
                         <div className="text-center space-y-6 py-12">
-                            <ShieldCheck className="w-24 h-24 text-cyan-500 mx-auto opacity-80" />
+                            <ShieldCheck className="w-24 h-24 text-brand-500 mx-auto opacity-80" />
                             <h3 className="text-2xl font-bold text-white">Ready to commission Unit-01?</h3>
                             <p className="text-slate-400 max-w-lg mx-auto">
                                 This wizard enforces the "Architect's Standard". You cannot proceed if tolerances are not met.
                                 The resulting data will form the <strong>Genetic Baseline</strong> for the RCA Engine.
                             </p>
-                            <button onClick={() => setCurrentStep(1)} className="px-8 py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-bold uppercase tracking-wider transition-colors">
+                            <button onClick={() => setCurrentStep(1)} className="px-8 py-3 bg-brand-600 hover:bg-brand-500 text-white rounded font-bold uppercase tracking-wider transition-colors">
                                 Initialize Protocol
                             </button>
                         </div>
@@ -132,7 +132,7 @@ export const CommissioningWizard: React.FC<{ onClose: () => void }> = ({ onClose
                                     step="0.01"
                                     value={formData.alignment.plumbnessDeviation}
                                     onChange={e => setFormData({ ...formData, alignment: { ...formData.alignment, plumbnessDeviation: parseFloat(e.target.value) } })}
-                                    className="w-full bg-slate-900 border border-slate-600 text-white p-3 rounded focus:border-cyan-500 outline-none font-mono text-lg"
+                                    className="w-full bg-slate-900 border border-slate-600 text-white p-3 rounded focus:border-brand-500 outline-none font-mono text-lg"
                                 />
                                 <p className="text-xs text-slate-500 mt-2">Max allowed: 0.05 mm/m</p>
                             </div>
@@ -196,7 +196,7 @@ export const CommissioningWizard: React.FC<{ onClose: () => void }> = ({ onClose
                                             type="checkbox"
                                             checked={formData.metallurgy.ceramicCoatingApplied}
                                             onChange={e => setFormData({ ...formData, metallurgy: { ...formData.metallurgy, ceramicCoatingApplied: e.target.checked } })}
-                                            className="w-5 h-5 accent-cyan-500"
+                                            className="w-5 h-5 accent-brand-500"
                                         />
                                         <span className="text-white">Confirmed Application of Ceramic Coating (&gt;300µm)</span>
                                     </div>
@@ -226,9 +226,9 @@ export const CommissioningWizard: React.FC<{ onClose: () => void }> = ({ onClose
                                             type="range" min="0" max="120"
                                             value={formData.electrical.stabilizationTimeSeconds}
                                             onChange={e => setFormData({ ...formData, electrical: { ...formData.electrical, stabilizationTimeSeconds: parseInt(e.target.value) } })}
-                                            className="flex-1 accent-cyan-500"
+                                            className="flex-1 accent-brand-500"
                                         />
-                                        <span className="font-mono text-2xl text-cyan-400 w-16 text-right">{formData.electrical.stabilizationTimeSeconds}s</span>
+                                        <span className="font-mono text-2xl text-brand-400 w-16 text-right">{formData.electrical.stabilizationTimeSeconds}s</span>
                                     </div>
                                 </div>
                             </div>
@@ -286,7 +286,7 @@ export const CommissioningWizard: React.FC<{ onClose: () => void }> = ({ onClose
                                 <button onClick={onClose} className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded font-bold">
                                     Return to HMI
                                 </button>
-                                <button onClick={() => window.print()} className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-bold flex items-center gap-2">
+                                <button onClick={() => window.print()} className="px-6 py-3 bg-brand-600 hover:bg-brand-500 text-white rounded font-bold flex items-center gap-2">
                                     <Printer className="w-4 h-4" /> Print Certificate
                                 </button>
                             </div>
@@ -325,7 +325,7 @@ export const CommissioningWizard: React.FC<{ onClose: () => void }> = ({ onClose
                         </div>
                         <button
                             onClick={handleNext}
-                            className="px-8 py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-cyan-500/20"
+                            className="px-8 py-3 bg-brand-600 hover:bg-brand-500 text-white rounded font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-brand-500/20"
                         >
                             Confirm & Next <ChevronRight className="w-4 h-4" />
                         </button>

@@ -280,7 +280,7 @@ const SurgicalDigitalTwin: React.FC<Props> = ({ viewMode, setViewMode, activeAss
                 {typeof setXrayEnabled === 'function' && (
                     <button
                         onClick={() => setXrayEnabled(!xrayEnabled)}
-                        className={`px-2 py-1 rounded ${xrayEnabled ? 'bg-cyan-500 text-black' : 'bg-black/40 text-white'}`}>
+                        className={`px-2 py-1 rounded ${xrayEnabled ? 'bg-brand-500 text-black' : 'bg-black/40 text-white'}`}>
                         X‑Ray
                     </button>
                 )}

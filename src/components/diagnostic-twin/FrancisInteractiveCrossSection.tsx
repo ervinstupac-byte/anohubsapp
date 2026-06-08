@@ -138,7 +138,7 @@ export const FrancisInteractiveCrossSection: React.FC = () => {
             {/* FLOATING HUD LABELS */}
             <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-md p-2 rounded border border-white/10">
                 <div className="text-[10px] text-slate-500 uppercase font-black tracking-widest">{isCavitation ? "Cavitation Warning" : "Spiral Case Pressure"}</div>
-                <div className={`text-xl font-mono font-black ${pressure > 100 ? 'text-red-400' : 'text-cyan-400'}`}>
+                <div className={`text-xl font-mono font-black ${pressure > 100 ? 'text-red-400' : 'text-brand-400'}`}>
                     {pressure.toFixed(1)} <span className="text-[10px]">Bar</span>
                 </div>
             </div>

@@ -33,8 +33,8 @@ export const Manifesto: React.FC = () => {
                     <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-4 leading-none">{t('manifesto.title')}</h1>
                     <div className="flex flex-col gap-4">
                         <div className="flex items-center gap-4">
-                            <div className="h-[2px] w-20 bg-cyan-400" />
-                            <p className="text-lg md:text-xl italic font-bold tracking-[0.1em] uppercase text-cyan-400">{t('manifesto.subtitle')}</p>
+                            <div className="h-[2px] w-20 bg-brand-400" />
+                            <p className="text-lg md:text-xl italic font-bold tracking-[0.1em] uppercase text-brand-400">{t('manifesto.subtitle')}</p>
                         </div>
                         <p className="text-slate-400 font-bold leading-tight">
                             {t('manifesto.quote')}
@@ -45,7 +45,7 @@ export const Manifesto: React.FC = () => {
                 <div className="space-y-16">
                     {/* Section 1: The 0.05 mm/m Law */}
                     <div className="relative group">
-                        <div className="absolute -left-4 top-0 w-1 h-full bg-white/10 group-hover:bg-cyan-500 transition-colors" />
+                        <div className="absolute -left-4 top-0 w-1 h-full bg-white/10 group-hover:bg-brand-500 transition-colors" />
                         <div className="flex items-center gap-6 mb-6">
                             <div className="p-3 bg-white/5 rounded-none border border-white/10">
                                 <Ruler className="w-8 h-8 text-white" />
@@ -110,7 +110,7 @@ export const Manifesto: React.FC = () => {
                         </div>
                         <div>
                             <div className="text-[9px] font-black uppercase text-white/40 mb-1">{t('manifesto.sidebar.signature')}</div>
-                            <div className="text-[10px] font-black italic text-cyan-500">{t('manifesto.sidebar.certified')}</div>
+                            <div className="text-[10px] font-black italic text-brand-500">{t('manifesto.sidebar.certified')}</div>
                         </div>
                     </div>
                 </div>

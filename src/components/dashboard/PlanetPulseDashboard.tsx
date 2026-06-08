@@ -105,16 +105,16 @@ export const PlanetPulseDashboard: React.FC<PlanetPulseDashboardProps> = ({ seis
                 </div>
 
                 {/* Atmospheric */}
-                <div className="bg-slate-900 border-2 border-cyan-500 rounded-lg p-4">
+                <div className="bg-slate-900 border-2 border-brand-500 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-4">
-                        <Shield className="w-5 h-5 text-cyan-400" />
-                        <div className="text-lg font-bold text-cyan-300">Atmospheric</div>
+                        <Shield className="w-5 h-5 text-brand-400" />
+                        <div className="text-lg font-bold text-brand-300">Atmospheric</div>
                     </div>
 
                     <div className="space-y-3">
                         <div className="bg-slate-800 rounded p-3">
                             <div className="text-xs text-slate-400 mb-1">Pressure</div>
-                            <div className="text-3xl font-bold text-cyan-400 font-mono">
+                            <div className="text-3xl font-bold text-brand-400 font-mono">
                                 {atmospheric.pressure.toFixed(1)}
                             </div>
                             <div className="text-xs text-slate-500">hPa</div>
@@ -128,7 +128,7 @@ export const PlanetPulseDashboard: React.FC<PlanetPulseDashboardProps> = ({ seis
                             </div>
                         </div>
 
-                        <div className="p-2 rounded bg-cyan-950 text-center text-xs font-bold text-cyan-300">
+                        <div className="p-2 rounded bg-brand-950 text-center text-xs font-bold text-brand-300">
                             ✅ COMPENSATED
                         </div>
                     </div>
@@ -153,7 +153,7 @@ export const PlanetPulseDashboard: React.FC<PlanetPulseDashboardProps> = ({ seis
 
                         <div className="bg-slate-800 rounded p-3">
                             <div className="text-slate-400 mb-1">Barometric Compensation</div>
-                            <div className="text-xl font-bold text-cyan-400">±0.3m Range</div>
+                            <div className="text-xl font-bold text-brand-400">±0.3m Range</div>
                             <div className="text-xs text-slate-500">Live efficiency adjustment</div>
                         </div>
                     </div>

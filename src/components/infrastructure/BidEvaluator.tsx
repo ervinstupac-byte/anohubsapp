@@ -62,7 +62,7 @@ export const BidEvaluator: React.FC = () => {
         <div className="space-y-8 animate-fade-in">
             <div className="flex justify-between items-center">
                 <h2 className="text-3xl font-black text-white tracking-tighter uppercase">
-                    Bid <span className="text-cyan-400">Evaluator</span>
+                    Bid <span className="text-brand-400">Evaluator</span>
                 </h2>
                 <div className="flex gap-2 text-xs font-mono text-slate-500">
                     <Scale className="w-4 h-4" />

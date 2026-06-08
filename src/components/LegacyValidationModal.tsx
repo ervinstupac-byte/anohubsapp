@@ -161,7 +161,7 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                                         <span className="text-purple-400">{turbineFamily}</span>
 
                                         <span className="text-slate-500 uppercase">Component:</span>
-                                        <span className="text-cyan-400">{component}</span>
+                                        <span className="text-brand-400">{component}</span>
                                     </div>
                                 </div>
 
@@ -288,7 +288,7 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                                                 animate={{
                                                     width: `${(Array.from(checklistStatus.values()).filter(v => v).length / checklistStatus.size) * 100}%`
                                                 }}
-                                                className="h-full bg-gradient-to-r from-emerald-500 to-cyan-500"
+                                                className="h-full bg-gradient-to-r from-emerald-500 to-brand-500"
                                             />
                                         </div>
                                     </div>

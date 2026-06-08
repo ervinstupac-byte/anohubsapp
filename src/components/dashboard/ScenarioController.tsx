@@ -16,7 +16,7 @@ export const ScenarioController: React.FC = () => {
     return (
         <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 backdrop-blur-sm">
             <h4 className="text-[10px] text-slate-500 font-mono font-black uppercase tracking-widest mb-4 flex items-center gap-2">
-                <Play className="w-3 h-3 text-cyan-400 fill-cyan-400" />
+                <Play className="w-3 h-3 text-brand-400 fill-brand-400" />
                 Scenario Simulation Mode
             </h4>
             <div className="grid grid-cols-2 gap-2">
@@ -24,7 +24,7 @@ export const ScenarioController: React.FC = () => {
                     <button
                         key={s.id}
                         onClick={() => loadScenario(s.id)}
-                        className="flex flex-col items-center gap-1.5 p-2 bg-slate-900/40 border border-slate-700/30 rounded hover:border-cyan-500/40 hover:bg-slate-800/60 transition-all group text-center"
+                        className="flex flex-col items-center gap-1.5 p-2 bg-slate-900/40 border border-slate-700/30 rounded hover:border-brand-500/40 hover:bg-slate-800/60 transition-all group text-center"
                     >
                         <s.icon className={`w-4 h-4 ${s.color} group-hover:scale-110 transition-transform`} />
                         <span className="text-[8px] text-slate-400 font-mono font-bold uppercase tracking-tight leading-tight">

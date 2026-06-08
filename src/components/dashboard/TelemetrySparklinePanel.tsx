@@ -107,7 +107,7 @@ const SparklineMetric: React.FC<SparklineMetricProps> = ({
                     {[...Array(5)].map((_, i) => (
                         <div
                             key={i}
-                            className={`w-1 h-1 rounded-full ${data.length > i * 10 ? color.includes('cyan') ? 'bg-cyan-400' :
+                            className={`w-1 h-1 rounded-full ${data.length > i * 10 ? color.includes('cyan') ? 'bg-brand-400' :
                                 color.includes('amber') ? 'bg-amber-400' : 'bg-emerald-400' : 'bg-slate-700'
                                 }`}
                         />
@@ -137,7 +137,7 @@ export const TelemetrySparklinePanel: React.FC<{ className?: string }> = ({ clas
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                    <div className="w-2 h-2 rounded-full bg-brand-400 animate-pulse" />
                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                         Live Telemetry
                     </span>

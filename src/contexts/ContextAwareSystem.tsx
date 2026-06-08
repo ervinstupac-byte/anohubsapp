@@ -256,10 +256,10 @@ export function useAdaptiveStyles() {
 
     const colorSchemes = {
         TECHNICAL: {
-            primary: 'from-cyan-500 to-blue-500',
-            accent: 'text-cyan-400',
-            border: 'border-cyan-500',
-            bg: 'bg-cyan-500/20'
+            primary: 'from-brand-500 to-blue-500',
+            accent: 'text-brand-400',
+            border: 'border-brand-500',
+            bg: 'bg-brand-500/20'
         },
         BUSINESS: {
             primary: 'from-emerald-500 to-green-500',
@@ -304,7 +304,7 @@ export const RoleSelector: React.FC = () => {
                     key={role}
                     onClick={() => updateRole(role)}
                     className={`px-3 py-2 rounded-lg text-sm font-bold transition-all ${userContext.role === role
-                            ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white'
+                            ? 'bg-gradient-to-r from-brand-500 to-purple-500 text-white'
                             : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700/50'
                         }`}
                 >

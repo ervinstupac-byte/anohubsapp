@@ -73,7 +73,7 @@ export const PeltonJetVisualizer: React.FC<PeltonJetVisualizerProps> = ({ sessio
             <div className="mb-6">
                 <h3 className="text-2xl font-black uppercase tracking-tighter mb-2">
                     <span className="text-white">Pelton Jet</span>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 ml-2">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-purple-400 ml-2">
                         Sync Analysis
                     </span>
                 </h3>
@@ -95,7 +95,7 @@ export const PeltonJetVisualizer: React.FC<PeltonJetVisualizerProps> = ({ sessio
                                     key={count}
                                     onClick={() => setNozzleCount(count)}
                                     className={`flex-1 px-4 py-3 rounded-none font-bold transition-all ${nozzleCount === count
-                                        ? 'bg-cyan-500/30 text-cyan-400 border-2 border-cyan-500'
+                                        ? 'bg-brand-500/30 text-brand-400 border-2 border-brand-500'
                                         : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:bg-slate-700/50'
                                         }`}
                                 >
@@ -111,7 +111,7 @@ export const PeltonJetVisualizer: React.FC<PeltonJetVisualizerProps> = ({ sessio
                         whileTap={{ scale: 0.98 }}
                         onClick={analyzeJets}
                         disabled={isAnalyzing}
-                        className="w-full px-6 py-4 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-lg font-black uppercase text-white flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-cyan-500/50 transition-all"
+                        className="w-full px-6 py-4 bg-gradient-to-r from-brand-500 to-purple-500 rounded-lg font-black uppercase text-white flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-brand-500/50 transition-all"
                     >
                         {isAnalyzing ? (
                             <>
@@ -318,7 +318,7 @@ const ForceVectorDiagram: React.FC<{
                 </defs>
             </svg>
             <p className="text-xs text-center text-slate-400 mt-2">
-                <span className="text-cyan-400">Blue:</span> Individual forces |
+                <span className="text-brand-400">Blue:</span> Individual forces |
                 <span className="text-amber-400 ml-2">Orange:</span> Resultant
             </p>
         </div>

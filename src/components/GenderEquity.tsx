@@ -36,8 +36,8 @@ export const GenderEquity: React.FC = () => {
                     <p className="leading-relaxed text-slate-300 font-light text-lg">
                         <Trans i18nKey="genderEquity.strategy.impContent" components={{ strong: <strong className="text-white font-bold" /> }} />
                     </p>
-                    <div className="p-6 bg-cyan-500/10 border-l-4 border-cyan-500 rounded-r-xl">
-                        <p className="text-sm text-cyan-200 italic font-medium">
+                    <div className="p-6 bg-brand-500/10 border-l-4 border-brand-500 rounded-r-xl">
+                        <p className="text-sm text-brand-200 italic font-medium">
                             "{t('genderEquity.strategy.impQuote')}"
                         </p>
                     </div>
@@ -51,14 +51,14 @@ export const GenderEquity: React.FC = () => {
             content: (
                 <div className="space-y-4">
                     <div className="grid gap-4">
-                        <div className="bg-slate-900/40 p-5 rounded-xl border border-white/5 hover:border-cyan-500/30 transition-colors">
-                            <strong className="block text-cyan-400 mb-2 text-sm uppercase tracking-wider">{t('genderEquity.strategy.card1Title')}</strong>
+                        <div className="bg-slate-900/40 p-5 rounded-xl border border-white/5 hover:border-brand-500/30 transition-colors">
+                            <strong className="block text-brand-400 mb-2 text-sm uppercase tracking-wider">{t('genderEquity.strategy.card1Title')}</strong>
                             <span className="text-slate-300 text-sm leading-relaxed">
                                 <Trans i18nKey="genderEquity.strategy.card1Content" components={{ strong: <strong className="text-white" /> }} />
                             </span>
                         </div>
-                        <div className="bg-slate-900/40 p-5 rounded-xl border border-white/5 hover:border-cyan-500/30 transition-colors">
-                            <strong className="block text-cyan-400 mb-2 text-sm uppercase tracking-wider">{t('genderEquity.strategy.card2Title')}</strong>
+                        <div className="bg-slate-900/40 p-5 rounded-xl border border-white/5 hover:border-brand-500/30 transition-colors">
+                            <strong className="block text-brand-400 mb-2 text-sm uppercase tracking-wider">{t('genderEquity.strategy.card2Title')}</strong>
                             <span className="text-slate-300 text-sm leading-relaxed">
                                 <Trans i18nKey="genderEquity.strategy.card2Content" components={{ strong: <strong className="text-white" /> }} />
                             </span>
@@ -101,7 +101,7 @@ export const GenderEquity: React.FC = () => {
                     <button
                         onClick={() => setActiveTab('strategy')}
                         className={`px-6 py-2 rounded-full text-sm font-bold uppercase tracking-wider transition-all ${activeTab === 'strategy'
-                            ? 'bg-cyan-600 text-white shadow-[0_0_15px_rgba(8,145,178,0.5)]'
+                            ? 'bg-brand-600 text-white shadow-[0_0_15px_rgba(8,145,178,0.5)]'
                             : 'bg-slate-900/50 text-slate-500 hover:text-white border border-slate-700'
                             }`}
                     >
@@ -166,7 +166,7 @@ export const GenderEquity: React.FC = () => {
                             className={`
                                 group rounded-2xl overflow-hidden transition-all duration-500 ease-out border
                                 ${openSectionId === section.id
-                                    ? 'bg-slate-800/80 border-cyan-500/50 shadow-lg shadow-cyan-900/10'
+                                    ? 'bg-slate-800/80 border-brand-500/50 shadow-lg shadow-brand-900/10'
                                     : 'bg-slate-900/40 border-white/5 hover:border-white/10'}
                             `}
                         >
@@ -178,9 +178,9 @@ export const GenderEquity: React.FC = () => {
                                     <h3 className={`text-xl font-bold transition-colors ${openSectionId === section.id ? 'text-white' : 'text-slate-300'}`}>
                                         {section.title}
                                     </h3>
-                                    <p className="text-sm text-cyan-400 mt-1">{section.subtitle}</p>
+                                    <p className="text-sm text-brand-400 mt-1">{section.subtitle}</p>
                                 </div>
-                                <span className={`text-2xl transition-transform duration-300 ${openSectionId === section.id ? 'rotate-180 text-cyan-400' : 'text-slate-500'}`}>
+                                <span className={`text-2xl transition-transform duration-300 ${openSectionId === section.id ? 'rotate-180 text-brand-400' : 'text-slate-500'}`}>
                                     ▼
                                 </span>
                             </button>

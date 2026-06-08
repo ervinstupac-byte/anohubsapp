@@ -153,16 +153,16 @@ export const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary, onR
                 </div>
                 <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
                     <div
-                        className="h-full bg-cyan-500 transition-all duration-500 ease-out shadow-[0_0_10px_cyan]"
+                        className="h-full bg-brand-500 transition-all duration-500 ease-out shadow-[0_0_10px_cyan]"
                         style={{ width: `${progress}%` }}
                     ></div>
                 </div>
             </div>
 
             {/* QUESTION CARD */}
-            <GlassCard className="min-h-[500px] flex flex-col justify-between border-t-4 border-t-cyan-500">
+            <GlassCard className="min-h-[500px] flex flex-col justify-between border-t-4 border-t-brand-500">
                 <div>
-                    <span className="inline-block px-3 py-1 bg-cyan-950/50 text-cyan-400 text-xs font-mono rounded border border-cyan-500/20 mb-6 font-bold">
+                    <span className="inline-block px-3 py-1 bg-brand-950/50 text-brand-400 text-xs font-mono rounded border border-brand-500/20 mb-6 font-bold">
                         QUERY_ID: {currentQ.id.toUpperCase()}
                     </span>
 
@@ -183,9 +183,9 @@ export const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary, onR
                                     className={`
                                         w-full text-left p-6 rounded-xl border-2 transition-all duration-200 group relative overflow-hidden
                                         ${isSelected
-                                            ? 'bg-cyan-600 border-cyan-400 text-white shadow-lg shadow-cyan-900/50 scale-[1.02]'
+                                            ? 'bg-brand-600 border-brand-400 text-white shadow-lg shadow-brand-900/50 scale-[1.02]'
                                             : isFocused
-                                                ? 'bg-slate-800 border-cyan-500/50 text-white scale-[1.01]'
+                                                ? 'bg-slate-800 border-brand-500/50 text-white scale-[1.01]'
                                                 : 'bg-slate-800/30 border-white/5 text-slate-300 hover:bg-slate-800 hover:border-white/20 hover:text-white'}
                                     `}
                                 >
@@ -193,7 +193,7 @@ export const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary, onR
                                         <div className="flex items-center gap-4">
                                             <div className={`
                                                 w-6 h-6 rounded-full border-2 flex items-center justify-center text-[10px] font-bold transition-all
-                                                ${isSelected ? 'border-white bg-white text-cyan-600' : 'border-slate-500 text-slate-500 group-hover:border-cyan-400 group-hover:text-cyan-400'}
+                                                ${isSelected ? 'border-white bg-white text-brand-600' : 'border-slate-500 text-slate-500 group-hover:border-brand-400 group-hover:text-brand-400'}
                                             `}>
                                                 {String.fromCharCode(65 + index)}
                                             </div>
@@ -204,7 +204,7 @@ export const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary, onR
                                             <span className="text-white animate-scale-in text-xl font-bold">✓</span>
                                         )}
                                         {isFocused && !isSelected && (
-                                            <span className="text-cyan-500 text-xs uppercase tracking-widest font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <span className="text-brand-500 text-xs uppercase tracking-widest font-bold opacity-0 group-hover:opacity-100 transition-opacity">
                                                 Select
                                             </span>
                                         )}

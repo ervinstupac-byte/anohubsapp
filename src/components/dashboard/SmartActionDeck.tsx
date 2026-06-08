@@ -44,10 +44,10 @@ const ActionCard: React.FC<{ action: SmartAction }> = ({ action }) => {
         },
         MAINTENANCE: {
             icon: Wrench,
-            color: 'text-cyan-400',
-            bg: 'bg-cyan-500',
-            border: 'border-cyan-500',
-            gradient: 'from-cyan-500/10 to-transparent'
+            color: 'text-brand-400',
+            bg: 'bg-brand-500',
+            border: 'border-brand-500',
+            gradient: 'from-brand-500/10 to-transparent'
         }
     };
 

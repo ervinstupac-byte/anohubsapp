@@ -413,11 +413,11 @@ const AppLayout: React.FC = () => {
         <NavigationProvider value={navValue}>
             <DrillDownProvider>
                 {/* Fix 3: Layout "Hidden Corners" & Space Efficiency */}
-                <div className={`field-mode h-screen w-screen bg-[#05070a] text-slate-100 overflow-hidden selection:bg-cyan-500/30 font-sans relative grid ${isSidebarOpen ? 'grid-cols-[320px_1fr]' : 'grid-cols-[0px_1fr]'} transition-[grid-template-columns] duration-300 bg-[#020617] ${isCriticalDemo ? 'shadow-[inset_0_0_100px_rgba(239,68,68,0.2)]' : ''}`}>
+                <div className={`field-mode h-screen w-screen bg-[#05070a] text-slate-100 overflow-hidden selection:bg-brand-500/30 font-sans relative grid ${isSidebarOpen ? 'grid-cols-[320px_1fr]' : 'grid-cols-[0px_1fr]'} transition-[grid-template-columns] duration-300 bg-[#020617] ${isCriticalDemo ? 'shadow-[inset_0_0_100px_rgba(239,68,68,0.2)]' : ''}`}>
 
                     {/* The "Elite" Background Glows */}
                     <div className="fixed inset-0 pointer-events-none z-0">
-                        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-900/20 blur-[120px] rounded-full" />
+                        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-900/20 blur-[120px] rounded-full" />
                         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-900/20 blur-[120px] rounded-full" />
                         <div className="noise-overlay opacity-20" />
                     </div>

@@ -173,8 +173,8 @@ export const FrancisDigitalTwin: React.FC = () => {
                     <button
                         onClick={handleBack}
                         className={`px-3 py-1 rounded transition-colors flex items-center gap-2 ${currentView === 'main-hall'
-                            ? 'bg-cyan-500/20 text-cyan-400 cursor-default'
-                            : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700/50 hover:text-cyan-400'
+                            ? 'bg-brand-500/20 text-brand-400 cursor-default'
+                            : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700/50 hover:text-brand-400'
                             }`}
                     >
                         <Home className="w-3 h-3" />
@@ -183,7 +183,7 @@ export const FrancisDigitalTwin: React.FC = () => {
                     {currentView === 'generator-detail' && (
                         <>
                             <ChevronRight className="w-4 h-4 text-slate-600" />
-                            <div className="px-3 py-1 rounded bg-cyan-500/20 text-cyan-400">
+                            <div className="px-3 py-1 rounded bg-brand-500/20 text-brand-400">
                                 Generator
                             </div>
                         </>
@@ -196,7 +196,7 @@ export const FrancisDigitalTwin: React.FC = () => {
                 <button
                     onClick={toggleXRay}
                     className={`p-2 rounded-lg transition-all ${xRayActive
-                        ? 'bg-cyan-500/20 text-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
+                        ? 'bg-brand-500/20 text-brand-400 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
                         : 'bg-slate-800/80 text-slate-400 hover:bg-slate-700'
                         }`}
                     title="X-Ray Mode"
@@ -235,17 +235,17 @@ export const FrancisDigitalTwin: React.FC = () => {
             {/* LOADING */}
             {isLoading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-slate-950/90 z-40">
-                    <p className="text-cyan-400 font-mono animate-pulse">Initializing {currentView}...</p>
+                    <p className="text-brand-400 font-mono animate-pulse">Initializing {currentView}...</p>
                 </div>
             )}
 
             {/* LIVE DATA HUD */}
             <div className="absolute bottom-4 left-4 z-30 bg-slate-900/80 border border-slate-700/50 rounded px-4 py-2 text-xs font-mono text-slate-400 flex gap-4">
-                <span>STATUS: {activeAssetId ? <span className="text-cyan-400">LINKED</span> : <span className="text-slate-600">IDLE</span>}</span>
+                <span>STATUS: {activeAssetId ? <span className="text-brand-400">LINKED</span> : <span className="text-slate-600">IDLE</span>}</span>
                 {activeAssetId === 'generator' && (
                     <>
-                        <span>RPM: <span className="text-cyan-400">500</span></span>
-                        <span>TEMP: <span className="text-cyan-400">45°C</span></span>
+                        <span>RPM: <span className="text-brand-400">500</span></span>
+                        <span>TEMP: <span className="text-brand-400">45°C</span></span>
                     </>
                 )}
             </div>

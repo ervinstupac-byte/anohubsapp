@@ -109,7 +109,7 @@ export const SovereignSoundEngine: React.FC = () => {
             className={`fixed bottom-8 right-8 z-50 p-3 rounded-full border backdrop-blur-md transition-all ${
                 isMuted 
                 ? 'bg-slate-900/50 border-slate-700 text-slate-500 hover:text-white' 
-                : 'bg-cyan-500/20 border-cyan-500 text-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
+                : 'bg-brand-500/20 border-brand-500 text-brand-400 shadow-[0_0_20px_rgba(6,182,212,0.3)]'
             }`}
             title={isMuted ? "Enable Sovereign Sound" : "Mute Machine Audio"}
         >

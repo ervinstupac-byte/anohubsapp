@@ -32,7 +32,7 @@ export const MapModule: React.FC<MapModuleProps> = ({ isOpen, onClose }) => {
                         {/* Header */}
                         <div className="flex items-center justify-between p-4 border-b border-white/10 bg-slate-900/50">
                             <div>
-                                <h2 className="text-lg font-bold text-cyan-400 tracking-wide">
+                                <h2 className="text-lg font-bold text-brand-400 tracking-wide">
                                     GLOBAL FLEET MAP
                                 </h2>
                                 <p className="text-xs text-slate-400 font-mono mt-1">

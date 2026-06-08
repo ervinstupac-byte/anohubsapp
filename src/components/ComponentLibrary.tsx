@@ -40,7 +40,7 @@ export const ComponentLibrary: React.FC = () => {
                 <div className="flex items-center gap-4">
                     <BackButton text={t('actions.back', 'Back to Hub')} />
                     <h2 className="text-3xl font-bold text-white tracking-tight hidden md:block">
-                        {t('componentLibrary.title')} <span className="text-cyan-400">{t('componentLibrary.titleHighlight')}</span>
+                        {t('componentLibrary.title')} <span className="text-brand-400">{t('componentLibrary.titleHighlight')}</span>
                     </h2>
                 </div>
                 <div className="px-4 py-1.5 bg-slate-900/50 rounded-full border border-slate-700 text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">
@@ -60,7 +60,7 @@ export const ComponentLibrary: React.FC = () => {
                             className={`
                                 text-left p-4 rounded-xl border transition-all duration-300 group relative overflow-hidden
                                 ${selectedId === id
-                                    ? 'bg-gradient-to-r from-cyan-900/40 to-slate-900 border-cyan-500/50 shadow-lg'
+                                    ? 'bg-gradient-to-r from-brand-900/40 to-slate-900 border-brand-500/50 shadow-lg'
                                     : 'bg-slate-900/40 border-white/5 hover:bg-slate-800 hover:border-white/10'}
                             `}
                         >
@@ -68,17 +68,17 @@ export const ComponentLibrary: React.FC = () => {
                                 <h3 className={`font-bold text-sm transition-colors ${selectedId === id ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}`}>
                                     {t(`componentLibrary.components.${id}.title`)}
                                 </h3>
-                                {selectedId === id && <div className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_cyan]"></div>}
+                                {selectedId === id && <div className="w-2 h-2 rounded-full bg-brand-400 shadow-[0_0_10px_cyan]"></div>}
                             </div>
                             {/* Hover Effect */}
-                            <div className={`absolute left-0 top-0 bottom-0 w-1 bg-cyan-500 transition-all duration-300 ${selectedId === id ? 'opacity-100' : 'opacity-0 group-hover:opacity-50'}`}></div>
+                            <div className={`absolute left-0 top-0 bottom-0 w-1 bg-brand-500 transition-all duration-300 ${selectedId === id ? 'opacity-100' : 'opacity-0 group-hover:opacity-50'}`}></div>
                         </button>
                     ))}
                 </div>
 
                 {/* RIGHT CONTENT (DETAILS) */}
                 <div className="lg:col-span-8 h-full overflow-y-auto custom-scrollbar">
-                    <GlassCard className="h-full flex flex-col border-t-4 border-t-cyan-500">
+                    <GlassCard className="h-full flex flex-col border-t-4 border-t-brand-500">
 
                         {/* TITLE & DESC */}
                         <div className="mb-8 border-b border-white/10 pb-6">
@@ -92,13 +92,13 @@ export const ComponentLibrary: React.FC = () => {
 
                             {/* KPIS */}
                             <div className="space-y-4">
-                                <h4 className="text-cyan-400 font-bold uppercase text-xs tracking-[0.2em] flex items-center gap-2 mb-2">
+                                <h4 className="text-brand-400 font-bold uppercase text-xs tracking-[0.2em] flex items-center gap-2 mb-2">
                                     <span className="text-lg">📊</span> {t('componentLibrary.performanceKpis')}
                                 </h4>
                                 <ul className="space-y-2">
                                     {selectedComponent.kpis.map((kpi, idx) => (
-                                        <li key={idx} className="flex items-start gap-3 bg-slate-900/40 p-3 rounded-lg border border-white/5 hover:border-cyan-500/30 transition-colors">
-                                            <span className="text-cyan-500 mt-1 w-1.5 h-1.5 rounded-full bg-cyan-500 block shadow-[0_0_5px_cyan]"></span>
+                                        <li key={idx} className="flex items-start gap-3 bg-slate-900/40 p-3 rounded-lg border border-white/5 hover:border-brand-500/30 transition-colors">
+                                            <span className="text-brand-500 mt-1 w-1.5 h-1.5 rounded-full bg-brand-500 block shadow-[0_0_5px_cyan]"></span>
                                             <span className="text-sm text-slate-200 font-medium">{kpi}</span>
                                         </li>
                                     ))}

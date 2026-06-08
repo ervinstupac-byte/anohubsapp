@@ -74,7 +74,7 @@ export const AdminApproval: React.FC = () => {
             <div className="flex justify-between items-center">
                 <BackButton text="Engineer Hub" />
                 <h2 className="text-3xl font-black text-white uppercase tracking-tighter">
-                    Approval <span className="text-cyan-400">Control</span>
+                    Approval <span className="text-brand-400">Control</span>
                 </h2>
                 <div className="bg-amber-500/10 border border-amber-500/30 px-4 py-1 rounded-full">
                     <span className="text-amber-500 text-[10px] font-black uppercase tracking-widest">{pending.length} PENDING</span>
@@ -98,13 +98,13 @@ export const AdminApproval: React.FC = () => {
                             key={m.id}
                             title={m.asset_name_audit}
                             subtitle={new Date(m.created_at).toLocaleString()}
-                            className="group hover:border-cyan-500/50 transition-all border-amber-500/20"
+                            className="group hover:border-brand-500/50 transition-all border-amber-500/20"
                         >
                             <div className="space-y-4 mt-4">
                                 <div className="grid grid-cols-2 gap-2">
                                     <div className="bg-black/20 p-2 rounded border border-white/5">
                                         <p className="text-[8px] text-slate-500 uppercase font-black">Origin</p>
-                                        <p className="text-[10px] text-cyan-400 font-bold">{m.system_origin || 'Generator'}</p>
+                                        <p className="text-[10px] text-brand-400 font-bold">{m.system_origin || 'Generator'}</p>
                                     </div>
                                     <div className="bg-black/20 p-2 rounded border border-white/5">
                                         <p className="text-[8px] text-slate-500 uppercase font-black">Location</p>

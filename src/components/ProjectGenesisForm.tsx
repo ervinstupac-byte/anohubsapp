@@ -91,7 +91,7 @@ export const ProjectGenesisForm: React.FC = () => {
         <div className="p-6 max-w-5xl mx-auto">
             <header className="mb-8 text-center">
                 <h2 className="text-3xl font-black text-white uppercase tracking-tighter">
-                    Universal <span className="text-cyan-400">Entry Form</span>
+                    Universal <span className="text-brand-400">Entry Form</span>
                 </h2>
                 <p className="text-slate-400">Field Data Ingestion Interface</p>
             </header>
@@ -103,7 +103,7 @@ export const ProjectGenesisForm: React.FC = () => {
                     <div key={s.id} className="flex flex-col items-center gap-2 bg-slate-950 px-2 transition-all duration-300">
                         <div
                             className={`w-10 h-10 rounded-full flex items-center justify-center border-2 font-bold text-sm
-                            ${step >= s.id ? 'border-cyan-400 bg-cyan-900/20 text-cyan-400' : 'border-slate-700 bg-slate-900 text-slate-600'}`}
+                            ${step >= s.id ? 'border-brand-400 bg-brand-900/20 text-brand-400' : 'border-slate-700 bg-slate-900 text-slate-600'}`}
                         >
                             {s.id}
                         </div>
@@ -123,7 +123,7 @@ export const ProjectGenesisForm: React.FC = () => {
 
                 <div className="relative z-10">
                     <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-6 border-b border-slate-700/50 pb-4">
-                        <CurrentIcon className="text-cyan-400" />
+                        <CurrentIcon className="text-brand-400" />
                         {steps[step - 1].label} Data
                         <span className="text-xs font-normal text-slate-500 ml-auto uppercase tracking-widest">{steps[step - 1].desc}</span>
                     </h3>
@@ -167,7 +167,7 @@ export const ProjectGenesisForm: React.FC = () => {
                                     name="turbineType"
                                     value={formData.turbineType}
                                     onChange={handleChange}
-                                    className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-cyan-500 outline-none"
+                                    className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-brand-500 outline-none"
                                 >
                                     <optgroup label="Kaplan Family">
                                         <option value="KAPLAN_H">Kaplan Horizontal (S-Type)</option>
@@ -215,7 +215,7 @@ export const ProjectGenesisForm: React.FC = () => {
                                     name="pipeMaterial"
                                     value={formData.pipeMaterial}
                                     onChange={handleChange}
-                                    className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-cyan-500 outline-none"
+                                    className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-brand-500 outline-none"
                                 >
                                     <option value="STEEL">Steel</option>
                                     <option value="GRP">GRP</option>
@@ -261,7 +261,7 @@ export const ProjectGenesisForm: React.FC = () => {
                                     name="accessRoad"
                                     value={formData.accessRoad}
                                     onChange={handleChange}
-                                    className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-cyan-500 outline-none"
+                                    className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-brand-500 outline-none"
                                 >
                                     <option value="NORMAL">Standard Asphalt</option>
                                     <option value="DIFFICULT">Narrow / Gravel</option>
@@ -288,7 +288,7 @@ export const ProjectGenesisForm: React.FC = () => {
                     {step < 5 ? (
                         <button
                             onClick={() => setStep(s => Math.min(5, s + 1))}
-                            className="flex items-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded transition-colors shadow-[0_0_15px_rgba(8,145,178,0.4)]"
+                            className="flex items-center gap-2 px-6 py-3 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded transition-colors shadow-[0_0_15px_rgba(8,145,178,0.4)]"
                         >
                             <span className="uppercase tracking-wider">Next Section</span>
                             <ArrowRight className="w-4 h-4" />
@@ -314,10 +314,10 @@ const InputGroup = ({ label, tooltip, ...props }: any) => (
     <div className="space-y-1 group">
         <label className="text-xs font-bold text-slate-400 uppercase flex items-center justify-between">
             {label}
-            {tooltip && <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] text-cyan-400 normal-case">{tooltip}</span>}
+            {tooltip && <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] text-brand-400 normal-case">{tooltip}</span>}
         </label>
         <input
-            className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-cyan-500 outline-none placeholder:text-slate-700 transition-all focus:shadow-[0_0_10px_rgba(6,182,212,0.1)]"
+            className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-brand-500 outline-none placeholder:text-slate-700 transition-all focus:shadow-[0_0_10px_rgba(6,182,212,0.1)]"
             {...props}
         />
     </div>

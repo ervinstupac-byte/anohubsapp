@@ -87,7 +87,7 @@ export const CirculatoryDashboard: React.FC<{ data: CirculatoryData }> = ({ data
                 {/* 2. COOLING CIRCUIT */}
                 <div className="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
                     <h3 className="text-sm font-bold text-slate-300 mb-4 flex items-center gap-2">
-                        <Wind className="w-4 h-4 text-cyan-400" />
+                        <Wind className="w-4 h-4 text-brand-400" />
                         Heat Exchange
                     </h3>
 
@@ -95,13 +95,13 @@ export const CirculatoryDashboard: React.FC<{ data: CirculatoryData }> = ({ data
                         <div className="flex items-center justify-between bg-slate-800 p-3 rounded">
                             <div>
                                 <div className="text-xs text-slate-400">Oil Cooler Eff</div>
-                                <div className={`text-xl font-bold ${data.cooling.oilCoolerEff < 70 ? 'text-red-400' : 'text-cyan-300'}`}>
+                                <div className={`text-xl font-bold ${data.cooling.oilCoolerEff < 70 ? 'text-red-400' : 'text-brand-300'}`}>
                                     {data.cooling.oilCoolerEff.toFixed(0)}%
                                 </div>
                             </div>
                             <div className="h-10 w-1 bg-slate-700 rounded-full overflow-hidden">
                                 <div
-                                    className="w-full bg-cyan-400"
+                                    className="w-full bg-brand-400"
                                     style={{ height: `${data.cooling.oilCoolerEff}%`, marginTop: `${100 - data.cooling.oilCoolerEff}%` }}
                                 />
                             </div>

@@ -22,7 +22,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         <GlassCard className={className}>
             <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
                 <div className="flex items-center gap-3">
-                    {icon && <span className="text-xl text-cyan-400">{icon}</span>}
+                    {icon && <span className="text-xl text-brand-400">{icon}</span>}
                     <div>
                         <h3 className="text-sm font-bold text-white uppercase tracking-[0.2em]">{title}</h3>
                         {subtitle && <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">{subtitle}</p>}

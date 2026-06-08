@@ -152,9 +152,9 @@ export const MechanicalPanel: React.FC = () => {
 
             {/* Component Health Status */}
             {Object.keys(componentHealth).length > 0 && (
-                <GlassCard className="p-6 border-l-4 border-cyan-500">
+                <GlassCard className="p-6 border-l-4 border-brand-500">
                     <h3 className="text-sm font-bold text-white uppercase tracking-widest mb-4 flex items-center gap-2">
-                        <Activity className="w-4 h-4 text-cyan-400" /> Component Health Monitor
+                        <Activity className="w-4 h-4 text-brand-400" /> Component Health Monitor
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {entries.map(([compId, health]) => {
@@ -177,7 +177,7 @@ export const MechanicalPanel: React.FC = () => {
                                     key={compId}
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="p-3 bg-slate-950/50 rounded-lg border border-white/5 hover:border-cyan-500/30 transition-all"
+                                    className="p-3 bg-slate-950/50 rounded-lg border border-white/5 hover:border-brand-500/30 transition-all"
                                 >
                                     <div className="flex justify-between items-start mb-2">
                                         <div>

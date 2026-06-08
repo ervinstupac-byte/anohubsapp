@@ -47,7 +47,7 @@ export const BlackBoxForensics: React.FC = () => {
                     </div>
                     <div className="bg-black/40 p-2 rounded border border-white/5">
                         <p className="text-[8px] text-slate-500 uppercase font-black mb-1">Servo Pos</p>
-                        <p className="text-lg font-mono font-black text-cyan-400">{currentPoint.actuatorPosition.toFixed(1)} <span className="text-[8px] text-slate-600">%</span></p>
+                        <p className="text-lg font-mono font-black text-brand-400">{currentPoint.actuatorPosition.toFixed(1)} <span className="text-[8px] text-slate-600">%</span></p>
                     </div>
                     <div className="bg-black/40 p-2 rounded border border-white/5">
                         <p className="text-[8px] text-slate-500 uppercase font-black mb-1">Oil Temp</p>

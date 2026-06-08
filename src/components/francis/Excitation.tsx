@@ -82,14 +82,14 @@ export const Excitation: React.FC = () => {
                             </div>
                             <div className="h-4 bg-slate-900 rounded-none overflow-hidden border border-white/5 shadow-none">
                                 <div
-                                    className={`h-full transition-all duration-1000 shadow-none ${voltagePerc >= 95 ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 shadow-none' : 'bg-gradient-to-r from-amber-600 to-yellow-400'}`}
+                                    className={`h-full transition-all duration-1000 shadow-none ${voltagePerc >= 95 ? 'bg-gradient-to-r from-emerald-500 to-brand-500 shadow-none' : 'bg-gradient-to-r from-amber-600 to-yellow-400'}`}
                                     style={{ width: `${voltagePerc}%` }}
                                 />
                             </div>
                             <div className="grid grid-cols-2 gap-6 pt-4">
                                 <div className="p-4 bg-white/5 rounded-none border border-white/10">
                                     <span className="text-[9px] text-slate-500 font-black uppercase tracking-widest block mb-1">Excitation Current</span>
-                                    <span className="text-xl font-black text-cyan-400 font-mono tracking-tighter">{fieldCurrent} <span className="text-[10px] opacity-60 uppercase">Amps</span></span>
+                                    <span className="text-xl font-black text-brand-400 font-mono tracking-tighter">{fieldCurrent} <span className="text-[10px] opacity-60 uppercase">Amps</span></span>
                                 </div>
                                 <div className="p-4 bg-white/5 rounded-none border border-white/10">
                                     <span className="text-[9px] text-slate-500 font-black uppercase tracking-widest block mb-1">Thyristor Temp</span>

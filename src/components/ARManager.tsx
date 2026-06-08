@@ -229,7 +229,7 @@ export const ARManager: React.FC = () => {
                     <div className="space-y-1">
                         <div className="flex items-center gap-3">
                             <div className="w-3 h-3 bg-red-600 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.8)]" />
-                            <h2 className="text-xl font-black text-white uppercase tracking-tighter">AR FIELD GUIDE <span className="text-cyan-400">v2.0</span></h2>
+                            <h2 className="text-xl font-black text-white uppercase tracking-tighter">AR FIELD GUIDE <span className="text-brand-400">v2.0</span></h2>
                         </div>
                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest pl-6">Spatial AI Inspection Module</p>
                     </div>
@@ -247,15 +247,15 @@ export const ARManager: React.FC = () => {
 
                 <main className="flex-grow flex items-center justify-center">
                     {mode === 'RECOGNITION' && (
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border-2 border-dashed border-cyan-500/30 rounded-full animate-spin-slow pointer-events-none" />
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border-2 border-dashed border-brand-500/30 rounded-full animate-spin-slow pointer-events-none" />
                     )}
 
                     {isRemoteCalling && (
-                        <div className="absolute top-24 right-6 w-48 aspect-video bg-slate-900/80 border border-cyan-500/30 rounded-xl overflow-hidden pointer-events-auto">
-                            <div className="absolute top-2 left-2 px-2 py-0.5 bg-cyan-500 rounded text-[8px] font-black text-black">REMOTE: ING. STEVAN</div>
+                        <div className="absolute top-24 right-6 w-48 aspect-video bg-slate-900/80 border border-brand-500/30 rounded-xl overflow-hidden pointer-events-auto">
+                            <div className="absolute top-2 left-2 px-2 py-0.5 bg-brand-500 rounded text-[8px] font-black text-black">REMOTE: ING. STEVAN</div>
                                 <div className="w-full h-full flex flex-col items-center justify-center gap-2">
                                 <span className="text-2xl">👨‍🔧</span>
-                                <div className="text-[8px] text-cyan-400 font-mono font-bold uppercase">Streaming live feed...</div>
+                                <div className="text-[8px] text-brand-400 font-mono font-bold uppercase">Streaming live feed...</div>
                             </div>
                         </div>
                     )}
@@ -268,7 +268,7 @@ export const ARManager: React.FC = () => {
                                 key={m}
                                 disabled={m === 'FORENSICS_REPLAY' && !frozenBuffer}
                                 onClick={() => setMode(m)}
-                                className={`px-4 py-3 rounded-xl border transition-all text-[10px] font-black uppercase tracking-tighter ${mode === m ? 'bg-cyan-500 text-black border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.4)] scale-105' : 'bg-slate-900/60 text-slate-400 border-white/10 hover:border-white/20'} ${m === 'FORENSICS_REPLAY' && !frozenBuffer ? 'opacity-20 cursor-not-allowed' : ''}`}
+                                className={`px-4 py-3 rounded-xl border transition-all text-[10px] font-black uppercase tracking-tighter ${mode === m ? 'bg-brand-500 text-black border-brand-400 shadow-[0_0_15px_rgba(34,211,238,0.4)] scale-105' : 'bg-slate-900/60 text-slate-400 border-white/10 hover:border-white/20'} ${m === 'FORENSICS_REPLAY' && !frozenBuffer ? 'opacity-20 cursor-not-allowed' : ''}`}
                             >
                                 {m.replace('_', ' ')}
                             </button>
@@ -276,7 +276,7 @@ export const ARManager: React.FC = () => {
                     </div>
 
                     <div className="mt-4 p-4 bg-slate-950/80 border border-white/5 rounded-2xl flex items-center gap-4">
-                        <div className="w-10 h-10 bg-cyan-500/10 rounded-full flex items-center justify-center text-cyan-400 text-xl border border-cyan-500/20">🤖</div>
+                        <div className="w-10 h-10 bg-brand-500/10 rounded-full flex items-center justify-center text-brand-400 text-xl border border-brand-500/20">🤖</div>
                         <div className="flex-grow">
                             <p className="text-[10px] text-slate-500 font-black uppercase mb-1">Ano-Agent Visual Analysis</p>
                             <p className="text-xs text-white leading-tight italic">

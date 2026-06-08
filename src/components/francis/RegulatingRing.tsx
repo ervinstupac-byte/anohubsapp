@@ -74,7 +74,7 @@ export const RegulatingRing: React.FC = () => {
                         </div>
                         <div className="p-6 bg-black/60 rounded-none border border-white/5">
                             <p className="text-[10px] text-indigo-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
-                                <Settings className="w-3 h-3 text-cyan-400" /> Hunting Status
+                                <Settings className="w-3 h-3 text-brand-400" /> Hunting Status
                             </p>
                             <p className={`text-3xl font-black font-mono tracking-tighter uppercase ${huntingActive ? 'text-red-500 animate-pulse' : 'text-white'}`}>
                                 {huntingActive ? 'Detected' : 'Stabile'}
@@ -150,14 +150,14 @@ export const RegulatingRing: React.FC = () => {
                     </GlassCard>
 
                     {/* SOP 2: Eccentric Pin Adjustment */}
-                    <GlassCard title={t('francis.regRing.s2Title')} icon={<Settings className="text-cyan-400" />}>
+                    <GlassCard title={t('francis.regRing.s2Title')} icon={<Settings className="text-brand-400" />}>
                         <p className="text-[10px] text-slate-500 font-bold mb-8 uppercase tracking-widest leading-relaxed italic">
                             {t('francis.regRing.s2Intro')}
                         </p>
 
                         <div className="mb-8 p-6 bg-black/80 rounded-none border border-white/10 shadow-none relative overflow-hidden group">
-                            <div className="absolute inset-0 bg-cyan-500/5 translate-y-full group-hover:translate-y-0 transition-transform duration-700" />
-                            <p className="text-[11px] text-cyan-400 font-mono font-black tracking-tighter leading-relaxed relative z-10 text-center">
+                            <div className="absolute inset-0 bg-brand-500/5 translate-y-full group-hover:translate-y-0 transition-transform duration-700" />
+                            <p className="text-[11px] text-brand-400 font-mono font-black tracking-tighter leading-relaxed relative z-10 text-center">
                                 {t('francis.regRing.s2Physics')}
                             </p>
                         </div>
@@ -167,7 +167,7 @@ export const RegulatingRing: React.FC = () => {
                             <div className="grid grid-cols-1 gap-4">
                                 {[1, 2, 3, 4].map((step) => (
                                     <div key={step} className="flex gap-4 p-5 bg-white/5 rounded-none border border-white/5 hover:bg-white/10 transition-colors group/step">
-                                        <div className="w-10 h-10 rounded-none bg-cyan-600/20 flex items-center justify-center border border-cyan-500/30 text-cyan-400 font-black shrink-0 transition-transform group-hover/step:scale-110">
+                                        <div className="w-10 h-10 rounded-none bg-brand-600/20 flex items-center justify-center border border-brand-500/30 text-brand-400 font-black shrink-0 transition-transform group-hover/step:scale-110">
                                             {step < 10 ? `0${step}` : step}
                                         </div>
                                         <p className="text-xs text-slate-300 font-bold leading-relaxed pt-1">{t(`francis.regRing.s2Step${step}`)}</p>

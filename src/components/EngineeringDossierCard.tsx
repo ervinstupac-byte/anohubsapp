@@ -44,7 +44,7 @@ export const EngineeringDossierCard: React.FC = () => {
     const PAGE_SIZE = 50;
 
     const categories: DossierCategory[] = [
-        { label: 'Case Studies', count: 105, icon: <ScrollText className="w-4 h-4" />, color: 'text-cyan-400' },
+        { label: 'Case Studies', count: 105, icon: <ScrollText className="w-4 h-4" />, color: 'text-brand-400' },
         { label: 'Technical Insights', count: 150, icon: <BookOpen className="w-4 h-4" />, color: 'text-blue-400' },
         { label: 'Maintenance Protocols', count: 220, icon: <ShieldCheck className="w-4 h-4" />, color: 'text-emerald-400' },
         { label: 'Turbine Friend Dossiers', count: 379, icon: <FileText className="w-4 h-4" />, color: 'text-amber-400' },
@@ -185,7 +185,7 @@ export const EngineeringDossierCard: React.FC = () => {
                                 placeholder="Search Knowledge Base Evidence..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-black/40 border border-slate-800 rounded-lg py-2 pl-10 pr-4 text-xs font-mono text-cyan-400 focus:border-h-cyan/50 focus:outline-none transition-colors"
+                                className="w-full bg-black/40 border border-slate-800 rounded-lg py-2 pl-10 pr-4 text-xs font-mono text-brand-400 focus:border-h-cyan/50 focus:outline-none transition-colors"
                             />
                         </div>
 
@@ -311,7 +311,7 @@ export const EngineeringDossierCard: React.FC = () => {
                                         placeholder={`Search in ${selectedCategory}...`}
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="w-full bg-slate-950/50 border border-slate-800 rounded-xl py-4 pl-12 pr-6 text-sm font-mono text-cyan-400 focus:border-h-cyan/50 focus:outline-none transition-all"
+                                        className="w-full bg-slate-950/50 border border-slate-800 rounded-xl py-4 pl-12 pr-6 text-sm font-mono text-brand-400 focus:border-h-cyan/50 focus:outline-none transition-all"
                                     />
                                 </div>
                             </div>

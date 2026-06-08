@@ -120,7 +120,7 @@ export const SpecializedDiagnostics: React.FC = () => {
 
             {/* BACKGROUND VFX */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-cyan-900/10 blur-[100px] rounded-full" />
+                <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-brand-900/10 blur-[100px] rounded-full" />
                 <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-emerald-900/10 blur-[100px] rounded-full" />
             </div>
 
@@ -135,15 +135,15 @@ export const SpecializedDiagnostics: React.FC = () => {
                 </button>
             </div>
 
-            <GlassCard className="w-full max-w-2xl border-t-4 border-t-cyan-500 relative z-10 shadow-2xl">
+            <GlassCard className="w-full max-w-2xl border-t-4 border-t-brand-500 relative z-10 shadow-2xl">
 
                 {/* HEADER */}
                 <div className="mb-8 text-center">
-                    <div className="w-16 h-16 bg-cyan-900/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-cyan-500/30">
-                        <Activity className="w-8 h-8 text-cyan-400" />
+                    <div className="w-16 h-16 bg-brand-900/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-brand-500/30">
+                        <Activity className="w-8 h-8 text-brand-400" />
                     </div>
                     <h1 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter mb-2">
-                        {activeProfile?.type} <span className="text-cyan-400">{t('common.diagnostic_hub')}</span>
+                        {activeProfile?.type} <span className="text-brand-400">{t('common.diagnostic_hub')}</span>
                     </h1>
                     <p className="text-slate-400 text-sm font-mono max-w-md mx-auto">
                         Specialized Fault Isolation & Forensics
@@ -206,7 +206,7 @@ export const SpecializedDiagnostics: React.FC = () => {
                 {/* ACTION BUTTON */}
                 <ModernButton
                     onClick={handleRunDiagnostics}
-                    className="w-full py-4 text-lg font-black bg-cyan-600 hover:bg-cyan-500 text-white shadow-[0_0_20px_rgba(8,145,178,0.4)] mb-8"
+                    className="w-full py-4 text-lg font-black bg-brand-600 hover:bg-brand-500 text-white shadow-[0_0_20px_rgba(8,145,178,0.4)] mb-8"
                 >
                     <Play className="w-5 h-5 mr-2 fill-current" />
                     {t('francis.actions.run')}

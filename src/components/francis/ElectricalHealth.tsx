@@ -52,7 +52,7 @@ export const ElectricalHealth: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
                         <div className="p-6 bg-black/60 rounded-none border border-white/5">
                             <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
-                                <Cpu className="w-3 h-3 text-cyan-400" /> Gen Voltage
+                                <Cpu className="w-3 h-3 text-brand-400" /> Gen Voltage
                             </p>
                             <p className="text-3xl font-black text-white font-mono tracking-tighter">
                                 13.8 <span className="text-xs text-slate-500">kV</span>

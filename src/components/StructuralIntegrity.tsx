@@ -63,7 +63,7 @@ export const StructuralIntegrity: React.FC = () => {
 
                         <div className="p-6 bg-white/5 rounded-3xl border border-white/5">
                             <p className="text-[10px] text-slate-500 font-black uppercase mb-1">Reservoir Level</p>
-                            <p className="text-3xl font-black text-cyan-400">{assetTele.reservoirLevel.toFixed(1)} <span className="text-sm opacity-40">m</span></p>
+                            <p className="text-3xl font-black text-brand-400">{assetTele.reservoirLevel.toFixed(1)} <span className="text-sm opacity-40">m</span></p>
                         </div>
                     </div>
 

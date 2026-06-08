@@ -20,7 +20,7 @@ export const SecondaryMetricsGrid: React.FC = () => {
             value: physics.axialThrustKN?.toFixed(1) || '0.0',
             unit: 'kN',
             icon: Activity,
-            color: 'text-cyan-400',
+            color: 'text-brand-400',
             sub: 'Rotor Force'
         },
         {
@@ -103,7 +103,7 @@ export const SecondaryMetricsGrid: React.FC = () => {
                         </div>
                     </div>
                     <div className="flex items-baseline gap-1">
-                        <span className="text-xl font-black text-white group-hover:text-cyan-400 transition-colors">
+                        <span className="text-xl font-black text-white group-hover:text-brand-400 transition-colors">
                             {m.value}
                         </span>
                         <span className="text-xs font-bold text-slate-500">{m.unit}</span>

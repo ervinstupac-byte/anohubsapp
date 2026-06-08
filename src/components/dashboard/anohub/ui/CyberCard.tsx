@@ -10,7 +10,7 @@ interface CyberCardProps {
 export const CyberCard: React.FC<CyberCardProps> = ({ children, className = '', variant = 'primary', title }) => {
     const getBorderColor = () => {
         switch (variant) {
-            case 'primary': return 'stroke-cyan-500/30';
+            case 'primary': return 'stroke-brand-500/30';
             case 'danger': return 'stroke-red-500/30';
             case 'warning': return 'stroke-yellow-500/30';
             default: return 'stroke-slate-700';
@@ -19,7 +19,7 @@ export const CyberCard: React.FC<CyberCardProps> = ({ children, className = '', 
 
     const getCornerColor = () => {
         switch (variant) {
-            case 'primary': return 'fill-cyan-500';
+            case 'primary': return 'fill-brand-500';
             case 'danger': return 'fill-red-500';
             case 'warning': return 'fill-yellow-500';
             default: return 'fill-slate-600';
@@ -74,7 +74,7 @@ export const CyberCard: React.FC<CyberCardProps> = ({ children, className = '', 
             {title && (
                 <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 border-b border-white/5 pb-2 flex items-center justify-between">
                     {title}
-                    <div className={`w-1 h-1 rounded-full ${variant === 'primary' ? 'bg-cyan-500' : 'bg-slate-500'} shadow-[0_0_8px_currentColor]`} />
+                    <div className={`w-1 h-1 rounded-full ${variant === 'primary' ? 'bg-brand-500' : 'bg-slate-500'} shadow-[0_0_8px_currentColor]`} />
                 </h3>
             )}
 

@@ -21,9 +21,9 @@ export const HeatmapLegend: React.FC<HeatmapLegendProps> = ({ deltaMap }) => {
     ];
 
     return (
-        <div className="bg-slate-950/90 backdrop-blur-sm border border-cyan-900/30 rounded-sm p-4 text-xs font-mono">
-            <h3 className="text-[10px] font-black text-cyan-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
+        <div className="bg-slate-950/90 backdrop-blur-sm border border-brand-900/30 rounded-sm p-4 text-xs font-mono">
+            <h3 className="text-[10px] font-black text-brand-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse" />
                 Truth Heatmap
             </h3>
 
@@ -40,7 +40,7 @@ export const HeatmapLegend: React.FC<HeatmapLegendProps> = ({ deltaMap }) => {
                                 <span className="text-slate-300 text-[10px]">{label}</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className={`text-[9px] font-bold ${delta.agreement === 'sync_healthy' ? 'text-cyan-400' :
+                                <span className={`text-[9px] font-bold ${delta.agreement === 'sync_healthy' ? 'text-brand-400' :
                                     delta.agreement === 'sync_fault' ? 'text-red-400' :
                                         delta.agreement === 'conflict' ? 'text-amber-400' :
                                             'text-slate-500'
@@ -55,7 +55,7 @@ export const HeatmapLegend: React.FC<HeatmapLegendProps> = ({ deltaMap }) => {
 
             <div className="mt-4 pt-3 border-t border-white/10 space-y-1.5">
                 <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-cyan-500" />
+                    <div className="w-2 h-2 rounded-full bg-brand-500" />
                     <span className="text-[9px] text-slate-400">Sync: Healthy</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -73,7 +73,7 @@ export const HeatmapLegend: React.FC<HeatmapLegendProps> = ({ deltaMap }) => {
             </div>
 
             {/* Share Context QR Button */}
-            <button className="mt-4 w-full py-2 bg-cyan-900/20 hover:bg-cyan-900/40 border border-cyan-500/30 rounded-sm text-[9px] font-bold text-cyan-400 uppercase tracking-widest transition-all">
+            <button className="mt-4 w-full py-2 bg-brand-900/20 hover:bg-brand-900/40 border border-brand-500/30 rounded-sm text-[9px] font-bold text-brand-400 uppercase tracking-widest transition-all">
                 📱 Share Context QR
             </button>
         </div>

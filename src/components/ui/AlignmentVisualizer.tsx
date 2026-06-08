@@ -54,7 +54,7 @@ export const AlignmentVisualizer: React.FC<AlignmentVisualizerProps> = ({
 
                 {/* Golden Standard Circle (0.05 mm/m) */}
                 <div
-                    className={`absolute border-2 rounded-full z-20 ${isOutsideGolden ? 'border-cyan-500/40' : 'border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.4)]'}`}
+                    className={`absolute border-2 rounded-full z-20 ${isOutsideGolden ? 'border-brand-500/40' : 'border-brand-400 shadow-[0_0_20px_rgba(34,211,238,0.4)]'}`}
                     style={{
                         width: goldenLimit * scaleFactor * 2,
                         height: goldenLimit * scaleFactor * 2
@@ -62,7 +62,7 @@ export const AlignmentVisualizer: React.FC<AlignmentVisualizerProps> = ({
                 >
                     {!isOutsideGolden && (
                         <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="text-[10px] font-black text-cyan-400 uppercase tracking-tighter opacity-40">Precision</div>
+                            <div className="text-[10px] font-black text-brand-400 uppercase tracking-tighter opacity-40">Precision</div>
                         </div>
                     )}
                 </div>
@@ -108,10 +108,10 @@ export const AlignmentVisualizer: React.FC<AlignmentVisualizerProps> = ({
                         x: targetX + (thermal.growthMM * scaleFactor * 0.5), // Projected shift
                         y: -targetY - (thermal.growthMM * scaleFactor * 0.3)  // Projected rise
                     }}
-                    className="absolute w-4 h-4 rounded-full border-2 border-dashed border-cyan-400 z-20 flex items-center justify-center"
+                    className="absolute w-4 h-4 rounded-full border-2 border-dashed border-brand-400 z-20 flex items-center justify-center"
                 >
-                    <Thermometer className="w-2 h-2 text-cyan-400" />
-                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-cyan-900/80 text-[7px] font-black px-1 rounded border border-cyan-500/50">
+                    <Thermometer className="w-2 h-2 text-brand-400" />
+                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-brand-900/80 text-[7px] font-black px-1 rounded border border-brand-500/50">
                         Projected @ {thermal.targetTemp}°C
                     </div>
                 </motion.div>
@@ -120,7 +120,7 @@ export const AlignmentVisualizer: React.FC<AlignmentVisualizerProps> = ({
             {/* Thermal Control Toggle */}
             <button
                 onClick={() => setShowThermal(!showThermal)}
-                className={`absolute top-12 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1 rounded-full border transition-all z-50 ${showThermal ? 'bg-cyan-600 border-white text-white shadow-[0_0_15px_rgba(6,182,212,0.5)]' : 'bg-black/40 border-white/10 text-slate-400'}`}
+                className={`absolute top-12 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1 rounded-full border transition-all z-50 ${showThermal ? 'bg-brand-600 border-white text-white shadow-[0_0_15px_rgba(6,182,212,0.5)]' : 'bg-black/40 border-white/10 text-slate-400'}`}
             >
                 <Thermometer className={`w-3 h-3 ${showThermal ? 'animate-pulse' : ''}`} />
                 <span className="text-[8px] font-black uppercase tracking-widest">Thermal Comp</span>
@@ -136,7 +136,7 @@ export const AlignmentVisualizer: React.FC<AlignmentVisualizerProps> = ({
                 </div>
                 <div className="text-right">
                     <div className="text-[8px] font-black text-slate-500 uppercase">Status</div>
-                    <div className={`text-[10px] font-black uppercase tracking-widest ${isOutsideGolden ? 'text-amber-500' : 'text-cyan-400'}`}>
+                    <div className={`text-[10px] font-black uppercase tracking-widest ${isOutsideGolden ? 'text-amber-500' : 'text-brand-400'}`}>
                         {isOutsideGolden ? 'Longevity Loss' : 'Heritage Optimal'}
                     </div>
                 </div>

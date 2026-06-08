@@ -139,7 +139,7 @@ export const UserProfile: React.FC = () => {
 
     if (loading) return (
         <div className="flex justify-center items-center h-64">
-            <div className="animate-spin text-4xl text-cyan-500">⚙️</div>
+            <div className="animate-spin text-4xl text-brand-500">⚙️</div>
         </div>
     );
 
@@ -161,12 +161,12 @@ export const UserProfile: React.FC = () => {
 
             <div className="text-center space-y-2 mb-8">
                 <h2 className="text-4xl font-black text-white tracking-tighter">
-                    {t('profile.title', 'Engineer Profile').split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{t('profile.title', 'Engineer Profile').split(' ')[1]}</span>
+                    {t('profile.title', 'Engineer Profile').split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-blue-500">{t('profile.title', 'Engineer Profile').split(' ')[1]}</span>
                 </h2>
                 <p className="text-slate-400 font-medium">{t('profile.subtitle', 'Manage your identity and access levels.')}</p>
             </div>
 
-            <GlassCard className="p-0 overflow-hidden border-t-4 border-t-cyan-500">
+            <GlassCard className="p-0 overflow-hidden border-t-4 border-t-brand-500">
                 <div className="p-8 md:p-10">
                     <div className="flex flex-col md:flex-row gap-10 items-start">
 
@@ -184,7 +184,7 @@ export const UserProfile: React.FC = () => {
                                 </div>
 
                                 {/* Upload Button Overlay */}
-                                <label className="absolute bottom-2 right-2 p-3 rounded-full bg-cyan-600 text-white shadow-lg cursor-pointer hover:bg-cyan-500 transition-all hover:scale-110 active:scale-95 border border-cyan-400/50 z-10">
+                                <label className="absolute bottom-2 right-2 p-3 rounded-full bg-brand-600 text-white shadow-lg cursor-pointer hover:bg-brand-500 transition-all hover:scale-110 active:scale-95 border border-brand-400/50 z-10">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -195,7 +195,7 @@ export const UserProfile: React.FC = () => {
 
                             <div className="text-center w-full">
                                 <p className="text-xs text-slate-500 font-mono mb-2 truncate max-w-[200px] mx-auto bg-slate-950/50 py-1 px-2 rounded">{user?.email}</p>
-                                <span className={`inline-block px-4 py-1.5 text-xs font-bold rounded-full border ${role ? 'bg-cyan-950/30 text-cyan-400 border-cyan-500/20' : 'bg-slate-800 text-slate-500 border-slate-700'}`}>
+                                <span className={`inline-block px-4 py-1.5 text-xs font-bold rounded-full border ${role ? 'bg-brand-950/30 text-brand-400 border-brand-500/20' : 'bg-slate-800 text-slate-500 border-slate-700'}`}>
                                     {role || t('profile.unassignedRole', 'Unassigned Role')}
                                 </span>
                             </div>
@@ -237,7 +237,7 @@ export const UserProfile: React.FC = () => {
                                     onClick={updateProfile}
                                     isLoading={saving}
                                     variant="primary"
-                                    className="px-8 shadow-cyan-500/20"
+                                    className="px-8 shadow-brand-500/20"
                                     icon={<span>💾</span>}
                                 >
                                     {t('profile.saveButton', 'Save Changes')}

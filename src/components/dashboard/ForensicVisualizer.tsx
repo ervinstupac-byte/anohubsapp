@@ -78,7 +78,7 @@ export const ForensicVisualizer: React.FC<ForensicVisualizerProps> = ({ viewMode
                     value: `${MECHANICAL_TOLERANCES.ALIGNMENT_MM_M} mm/m`,
                     context: 'ISO 10816-5',
                     icon: Target,
-                    color: 'text-cyan-400'
+                    color: 'text-brand-400'
                 };
             case 'GAP':
                 return {
@@ -102,7 +102,7 @@ export const ForensicVisualizer: React.FC<ForensicVisualizerProps> = ({ viewMode
                     value: 'DRILL-DOWN',
                     context: 'Click to Enter',
                     icon: Zap,
-                    color: 'text-cyan-400',
+                    color: 'text-brand-400',
                     drillDown: 'GENERATOR'
                 };
             case 'RUNNER_OV':
@@ -111,7 +111,7 @@ export const ForensicVisualizer: React.FC<ForensicVisualizerProps> = ({ viewMode
                     value: 'DRILL-DOWN',
                     context: 'Click to Enter',
                     icon: Layers,
-                    color: 'text-cyan-400',
+                    color: 'text-brand-400',
                     drillDown: 'RUNNER'
                 };
             case 'SHAFT_OV':
@@ -230,7 +230,7 @@ export const ForensicVisualizer: React.FC<ForensicVisualizerProps> = ({ viewMode
                                 cx={spot.x}
                                 cy={spot.y}
                                 r="1.5"
-                                className={isCritical ? "fill-red-500" : "fill-cyan-500/80"}
+                                className={isCritical ? "fill-red-500" : "fill-brand-500/80"}
                             />
 
                             {/* Leader Line (Visible on Hover/Active) */}
@@ -271,7 +271,7 @@ export const ForensicVisualizer: React.FC<ForensicVisualizerProps> = ({ viewMode
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 20 }}
-                        className="absolute top-4 right-4 w-64 bg-slate-900/90 border border-cyan-500/30 backdrop-blur-md rounded-lg p-4 shadow-2xl z-20"
+                        className="absolute top-4 right-4 w-64 bg-slate-900/90 border border-brand-500/30 backdrop-blur-md rounded-lg p-4 shadow-2xl z-20"
                     >
                         <div className="flex items-center gap-3 mb-3 pb-3 border-b border-white/10">
                             <div className={`p-2 rounded bg-slate-800 ${activeData.color}`}>
@@ -304,7 +304,7 @@ export const ForensicVisualizer: React.FC<ForensicVisualizerProps> = ({ viewMode
 
             {/* View Toggle */}
             <div className="absolute bottom-4 left-4 flex gap-2">
-                <div className="px-3 py-1 bg-black/60 rounded text-xs font-mono text-cyan-500 border border-cyan-500/20">
+                <div className="px-3 py-1 bg-black/60 rounded text-xs font-mono text-brand-500 border border-brand-500/20">
                     MODE: {viewMode}
                 </div>
                 {activeAlarms.length > 0 && (

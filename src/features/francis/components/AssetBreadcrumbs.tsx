@@ -15,7 +15,7 @@ export const AssetBreadcrumbs: React.FC = () => {
         <nav className="flex items-center gap-2 px-6 py-3 bg-slate-900/30 backdrop-blur-md border-b border-white/5 relative z-30">
             <button
                 onClick={resetView}
-                className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-cyan-400 transition-colors"
+                className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-brand-400 transition-colors"
             >
                 <Home className="w-3 h-3" />
                 <span>Francis Hub</span>
@@ -34,9 +34,9 @@ export const AssetBreadcrumbs: React.FC = () => {
                     <motion.div
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-cyan-400"
+                        className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-brand-400"
                     >
-                        <span className="px-2 py-0.5 bg-cyan-500/10 rounded border border-cyan-500/20">
+                        <span className="px-2 py-0.5 bg-brand-500/10 rounded border border-brand-500/20">
                             {getLabel(activeAssetId)}
                         </span>
                     </motion.div>

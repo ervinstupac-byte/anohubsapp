@@ -21,12 +21,12 @@ export const EngineeringWisdomVault: React.FC = () => {
             variant="commander"
             title="Engineering Wisdom Vault"
             subtitle="Specialist Heuristic Injection"
-            icon={<Book className="w-5 h-5 text-cyan-400" />}
+            icon={<Book className="w-5 h-5 text-brand-400" />}
             className="h-full"
         >
             <div className="space-y-6">
-                <div className="p-4 bg-cyan-500/5 border border-cyan-500/20 rounded-xl">
-                    <p className="text-[10px] text-cyan-400 font-mono leading-relaxed mb-4">
+                <div className="p-4 bg-brand-500/5 border border-brand-500/20 rounded-xl">
+                    <p className="text-[10px] text-brand-400 font-mono leading-relaxed mb-4">
                         // SENIOR_ENGINEER_OVERRIDE: Manual rules take precedence in Sentinel AI logic traces.
                     </p>
 
@@ -36,11 +36,11 @@ export const EngineeringWisdomVault: React.FC = () => {
                             value={newRule}
                             onChange={(e) => setNewRule(e.target.value)}
                             placeholder="Type manual heuristic rule..."
-                            className="flex-1 bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-xs text-white focus:border-cyan-500/50 outline-none transition-all"
+                            className="flex-1 bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-xs text-white focus:border-brand-500/50 outline-none transition-all"
                         />
                         <button
                             onClick={handleAddRule}
-                            className="p-2 bg-cyan-500 text-black rounded-lg hover:scale-105 active:scale-95 transition-all"
+                            className="p-2 bg-brand-500 text-black rounded-lg hover:scale-105 active:scale-95 transition-all"
                         >
                             <Plus className="w-5 h-5" />
                         </button>
@@ -62,11 +62,11 @@ export const EngineeringWisdomVault: React.FC = () => {
                                     exit={{ opacity: 0, scale: 0.9 }}
                                     className="p-3 bg-white/5 border border-white/10 rounded-lg flex items-start gap-3 group"
                                 >
-                                    <div className="mt-1 w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
+                                    <div className="mt-1 w-1.5 h-1.5 rounded-full bg-brand-400 shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
                                     <p className="flex-1 text-[11px] text-slate-300 font-medium leading-relaxed">
                                         {rule}
                                     </p>
-                                    <ShieldAlert className="w-3 h-3 text-cyan-500/50" />
+                                    <ShieldAlert className="w-3 h-3 text-brand-500/50" />
                                 </motion.div>
                             ))
                         )}

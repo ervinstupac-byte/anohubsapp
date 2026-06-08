@@ -141,9 +141,9 @@ export const ExpertDiagnosticOverlay: React.FC = () => {
                         {/* Live Metrics Bar */}
                         <div className="grid grid-cols-3 gap-4 bg-slate-800/50 p-3 rounded border border-slate-700">
                             <div className="flex items-center gap-2">
-                                <Activity className="w-4 h-4 text-cyan-400" />
+                                <Activity className="w-4 h-4 text-brand-400" />
                                 <span className="text-slate-400 text-xs">{t('rcaMentor.liveMetrics.bearingTemp')}:</span>
-                                <span className="text-cyan-300 font-mono text-sm">{state.mechanical.bearingTemp.toFixed(1)}°C</span>
+                                <span className="text-brand-300 font-mono text-sm">{state.mechanical.bearingTemp.toFixed(1)}°C</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <TrendingUp className="w-4 h-4 text-purple-400" />

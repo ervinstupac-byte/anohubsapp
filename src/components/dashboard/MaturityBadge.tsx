@@ -89,7 +89,7 @@ export const MaturityBadge: React.FC<MaturityBadgeProps> = ({ state }) => {
             {/* Tooltip on hover */}
             <div className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-slate-900 border border-slate-700 rounded shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none">
                 <p className="text-[10px] text-slate-300 leading-tight">
-                    <span className="font-bold text-cyan-400 block mb-1">PRO-BONO ENGINEERING TOOL</span>
+                    <span className="font-bold text-brand-400 block mb-1">PRO-BONO ENGINEERING TOOL</span>
                     Audit measures data fidelity across Mechanical and Hydraulic domains.
                     Calculations are based on fundamental principles (Barlow, ISO, IEC).
                     <span className="text-slate-500 block mt-1 italic font-mono text-[8px]">Precision = 50yr Longevity.</span>

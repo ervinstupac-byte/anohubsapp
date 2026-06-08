@@ -48,7 +48,7 @@ Sent directly from AnoHub App.
             <div className="absolute inset-0" onClick={onClose}></div>
 
             <div className="relative w-full max-w-md animate-scale-in z-10">
-                <GlassCard className="p-0 border-t-4 border-t-cyan-500 shadow-2xl">
+                <GlassCard className="p-0 border-t-4 border-t-brand-500 shadow-2xl">
 
                     {/* Close Button */}
                     <button
@@ -99,7 +99,7 @@ Sent directly from AnoHub App.
                                     placeholder={t('feedback.placeholder', 'Optional: What can we improve to close the Execution Gap?')}
                                     value={comment}
                                     onChange={e => setComment(e.target.value)}
-                                    className="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-4 text-white text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50 outline-none resize-none transition-all placeholder-slate-600"
+                                    className="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-4 text-white text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500/50 outline-none resize-none transition-all placeholder-slate-600"
                                 ></textarea>
                             </div>
 
@@ -109,7 +109,7 @@ Sent directly from AnoHub App.
                                 disabled={!rating}
                                 variant="primary"
                                 fullWidth
-                                className="shadow-lg shadow-cyan-500/20"
+                                className="shadow-lg shadow-brand-500/20"
                             >
                                 {t('feedback.submitBtn', 'Submit Feedback')}
                             </ModernButton>

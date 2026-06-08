@@ -20,16 +20,16 @@ export const Intake: React.FC = () => {
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12">
             {/* Header */}
-            <header className="bg-black/40 border-b-2 border-cyan-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-none transition-all">
+            <header className="bg-black/40 border-b-2 border-brand-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-none transition-all">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-4 text-center md:text-left">
-                        <div className="p-4 bg-cyan-600 rounded-none border border-white/10 shadow-none relative group overflow-hidden">
+                        <div className="p-4 bg-brand-600 rounded-none border border-white/10 shadow-none relative group overflow-hidden">
                             <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
                             <Waves className="text-white w-8 h-8 relative z-10" />
                         </div>
                         <div>
                             <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
-                                <span className="px-2 py-0.5 rounded-none bg-cyan-950 text-cyan-500 text-[10px] font-black border border-cyan-900/50 uppercase tracking-widest">SOP-INT-001</span>
+                                <span className="px-2 py-0.5 rounded-none bg-brand-950 text-brand-500 text-[10px] font-black border border-brand-900/50 uppercase tracking-widest">SOP-INT-001</span>
                                 <NeuralPulse />
                             </div>
                             <h1 className="text-3xl font-black text-white tracking-tighter uppercase relative z-10">
@@ -42,7 +42,7 @@ export const Intake: React.FC = () => {
                         onClick={() => navigate(FRANCIS_PATHS.HUB)}
                         className="flex items-center gap-2 px-6 py-2 bg-white/5 border border-white/10 rounded-none text-xs font-black text-slate-400 hover:text-white hover:bg-white/10 transition group uppercase tracking-widest"
                     >
-                        <ArrowLeft className="w-4 h-4 text-cyan-500 group-hover:-translate-x-1 transition" />
+                        <ArrowLeft className="w-4 h-4 text-brand-500 group-hover:-translate-x-1 transition" />
                         <span>{t('francis.intake.return') || t('actions.back')}</span>
                     </button>
                 </div>
@@ -54,15 +54,15 @@ export const Intake: React.FC = () => {
                 <GlassCard title="Hydraulic Intake Intelligence" className="relative overflow-hidden group">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
                         <div className="p-6 bg-black/60 rounded-none border border-white/5">
-                            <p className="text-[10px] text-cyan-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
-                                <Filter className="w-3 h-3 text-cyan-400" /> Trash Clog
+                            <p className="text-[10px] text-brand-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
+                                <Filter className="w-3 h-3 text-brand-400" /> Trash Clog
                             </p>
                             <p className="text-3xl font-black text-white font-mono tracking-tighter">
                                 {trashBuildUp}% <span className="text-xs text-slate-500 uppercase ml-2">Surface</span>
                             </p>
                         </div>
                         <div className="p-6 bg-black/60 rounded-none border border-white/5">
-                            <p className="text-[10px] text-cyan-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
+                            <p className="text-[10px] text-brand-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
                                 <Activity className="w-3 h-3 text-emerald-400" /> Head Loss (ΔP)
                             </p>
                             <p className={`text-3xl font-black font-mono tracking-tighter ${isAlarm ? 'text-red-500' : 'text-emerald-400'}`}>
@@ -70,7 +70,7 @@ export const Intake: React.FC = () => {
                             </p>
                         </div>
                         <div className="p-6 bg-black/60 rounded-none border border-white/5">
-                            <p className="text-[10px] text-cyan-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
+                            <p className="text-[10px] text-brand-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
                                 <Droplets className="w-3 h-3 text-amber-400" /> Sediment PPM
                             </p>
                             <p className="text-3xl font-black text-white font-mono tracking-tighter uppercase">
@@ -82,17 +82,17 @@ export const Intake: React.FC = () => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Trash Rack Module */}
-                    <GlassCard title={t('francis.intake.rack')} icon={<Filter className="text-cyan-400" />}>
+                    <GlassCard title={t('francis.intake.rack')} icon={<Filter className="text-brand-400" />}>
                         <div className="space-y-8">
                             {/* Visualizer (Water Levels) */}
                             <div className="relative h-64 bg-slate-950 rounded-none border border-white/5 overflow-hidden flex items-end justify-between px-16 pt-16 group/vis shadow-none">
-                                <div className="absolute inset-0 bg-gradient-to-b from-cyan-950/20 to-transparent opacity-50" />
+                                <div className="absolute inset-0 bg-gradient-to-b from-brand-950/20 to-transparent opacity-50" />
 
                                 {/* Upstream */}
                                 <div className="w-24 relative z-10 flex flex-col items-center">
-                                    <div className="absolute -top-8 text-[10px] font-black text-cyan-500 uppercase tracking-widest">Upstream</div>
-                                    <div className="w-full bg-cyan-600/40 border-t-2 border-cyan-400 transition-all duration-700 shadow-none rounded-none" style={{ height: '85%' }}>
-                                        <div className="w-full h-full animate-pulse bg-cyan-400/5" />
+                                    <div className="absolute -top-8 text-[10px] font-black text-brand-500 uppercase tracking-widest">Upstream</div>
+                                    <div className="w-full bg-brand-600/40 border-t-2 border-brand-400 transition-all duration-700 shadow-none rounded-none" style={{ height: '85%' }}>
+                                        <div className="w-full h-full animate-pulse bg-brand-400/5" />
                                     </div>
                                 </div>
 
@@ -115,7 +115,7 @@ export const Intake: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className="p-6 bg-black/40 border border-white/5 rounded-none flex justify-between items-center group hover:border-cyan-500/30 transition-all">
+                            <div className="p-6 bg-black/40 border border-white/5 rounded-none flex justify-between items-center group hover:border-brand-500/30 transition-all">
                                 <div>
                                     <span className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] block mb-1">Clogging Risk</span>
                                     <span className={`text-lg font-black uppercase tracking-tighter ${isAlarm ? 'text-red-500' : 'text-emerald-500'}`}>

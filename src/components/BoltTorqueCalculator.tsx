@@ -94,7 +94,7 @@ export const BoltTorqueCalculator: React.FC = () => {
         <div className="animate-fade-in space-y-8 pb-12">
             <div className="flex justify-between items-center bg-slate-900/40 p-6 rounded-3xl border border-white/5 backdrop-blur-xl">
                 <div>
-                    <h2 className="text-3xl font-black text-white tracking-widest uppercase mb-1">Bolt <span className="text-cyan-400">Torque</span></h2>
+                    <h2 className="text-3xl font-black text-white tracking-widest uppercase mb-1">Bolt <span className="text-brand-400">Torque</span></h2>
                     <p className="text-slate-400 text-sm font-light italic">Precision Tension & Elongation Control.</p>
                 </div>
                 <BackButton text="Back to Hub" />
@@ -117,7 +117,7 @@ export const BoltTorqueCalculator: React.FC = () => {
                         <div className="space-y-3 p-4 bg-white/5 rounded-2xl border border-white/5">
                             <div className="flex justify-between text-xs">
                                 <span className="text-slate-500">Project Identity</span>
-                                <span className="text-cyan-400 font-mono font-bold uppercase">{identity.assetName}</span>
+                                <span className="text-brand-400 font-mono font-bold uppercase">{identity.assetName}</span>
                             </div>
                             <div className="flex justify-between text-xs pt-2 border-t border-white/5">
                                 <span className="text-slate-500">Bolt Size</span>
@@ -125,7 +125,7 @@ export const BoltTorqueCalculator: React.FC = () => {
                             </div>
                             <div className="flex justify-between text-xs">
                                 <span className="text-slate-500">Material Grade</span>
-                                <span className="text-cyan-400 font-bold">{liveMechanical.boltSpecs.grade || activePart.grade}</span>
+                                <span className="text-brand-400 font-bold">{liveMechanical.boltSpecs.grade || activePart.grade}</span>
                             </div>
                             <div className="flex justify-between text-xs">
                                 <span className="text-slate-500">Total Bolts</span>
@@ -134,7 +134,7 @@ export const BoltTorqueCalculator: React.FC = () => {
                         </div>
                     </GlassCard>
 
-                    <GlassCard title="Dynamic Results" className="border-l-4 border-l-cyan-500">
+                    <GlassCard title="Dynamic Results" className="border-l-4 border-l-brand-500">
                         <div className="space-y-6">
                             <StatCard label="Target Torque" value={calculations.torque.toString()} unit="Nm" />
                             <StatCard label="Target Force" value={calculations.force} unit="kN" />
@@ -171,18 +171,18 @@ export const BoltTorqueCalculator: React.FC = () => {
                                         <g key={i}>
                                             <circle
                                                 cx={x} cy={y} r="8"
-                                                className="fill-slate-900 stroke-cyan-500/30 stroke-2"
+                                                className="fill-slate-900 stroke-brand-500/30 stroke-2"
                                             />
                                             <text
                                                 x={x} y={y} dy=".3em"
                                                 textAnchor="middle"
-                                                className="text-[6px] fill-cyan-400 font-black"
+                                                className="text-[6px] fill-brand-400 font-black"
                                                 style={{ fontSize: '6px' }}
                                             >
                                                 {i + 1}
                                             </text>
                                             {/* Step label */}
-                                            <circle cx={x + 10} cy={y - 10} r="5" className="fill-cyan-500" />
+                                            <circle cx={x + 10} cy={y - 10} r="5" className="fill-brand-500" />
                                             <text x={x + 10} y={y - 10} dy=".3em" textAnchor="middle" className="text-[4px] fill-black font-bold" style={{ fontSize: '4px' }}>
                                                 {stepIndex + 1}
                                             </text>

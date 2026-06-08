@@ -40,15 +40,15 @@ export const ThermalCard: React.FC = () => {
 export const ShaftLiftCard: React.FC = () => {
     return (
         <div className="bg-slate-900/80 border border-slate-700/50 p-4 rounded-lg relative overflow-hidden backdrop-blur-md group h-full flex flex-col justify-between metallic-border shadow-2xl min-h-0">
-            <div className="absolute inset-0 bg-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+            <div className="absolute inset-0 bg-brand-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             <h3 className="text-[clamp(8px,1vh,10px)] font-black text-slate-500 uppercase tracking-[0.2em] mb-2 flex items-center gap-2 relative z-10 font-mono shrink-0">
-                <div className="w-1.5 h-3 bg-cyan-500 rounded-full bloom-glow-cyan animate-pulse" />
+                <div className="w-1.5 h-3 bg-brand-500 rounded-full bloom-glow-cyan animate-pulse" />
                 Shaft Lift
             </h3>
 
             <div className="flex gap-4 relative z-10 items-end min-h-0">
                 <div className="flex-1 min-h-0">
-                    <div className="text-[clamp(1.2rem,2.5vh,2rem)] font-black tracking-tighter text-cyan-400 bloom-glow-cyan font-mono leading-none truncate">+120<span className="text-[clamp(8px,1vh,12px)] text-slate-500 ml-1 uppercase">µM</span></div>
+                    <div className="text-[clamp(1.2rem,2.5vh,2rem)] font-black tracking-tighter text-brand-400 bloom-glow-cyan font-mono leading-none truncate">+120<span className="text-[clamp(8px,1vh,12px)] text-slate-500 ml-1 uppercase">µM</span></div>
                     <div className="text-[clamp(7px,0.8vh,9px)] text-slate-500 font-mono font-bold uppercase tracking-wider opacity-60 mt-1 truncate">Axial Positioning Delta</div>
                 </div>
 
@@ -70,7 +70,7 @@ export const ShaftLiftCard: React.FC = () => {
 
             <div className="flex justify-between items-center text-[clamp(6px,0.8vh,8px)] font-mono text-slate-600 uppercase font-black z-10 border-t border-white/5 pt-2 shrink-0">
                 <span>Source: NC-DISP-02</span>
-                <span className="text-cyan-500/80">0.001mm precision</span>
+                <span className="text-brand-500/80">0.001mm precision</span>
             </div>
         </div>
     );

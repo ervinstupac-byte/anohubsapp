@@ -205,7 +205,7 @@ export const ShaftAlignment: React.FC = () => {
 
                 {/* 1. API 686 CALCULATOR MODULE (DEEP DIVE) */}
                 <section className="bg-slate-900/40 border border-white/5 rounded-none p-1 overflow-hidden backdrop-blur-sm relative">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 via-cyan-500 to-amber-500 opacity-30" />
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 via-brand-500 to-amber-500 opacity-30" />
 
                     <div className={`grid grid-cols-1 lg:grid-cols-12 ${spacing.sectionGap}`}>
                         {/* Inputs */}
@@ -223,7 +223,7 @@ export const ShaftAlignment: React.FC = () => {
                                         type="number"
                                         value={rpm}
                                         onChange={(e) => setRpm(Number(e.target.value))}
-                                        className="w-full bg-black/60 border border-white/10 rounded-none px-4 py-2 text-cyan-400 font-mono font-bold focus:border-cyan-500 focus:outline-none transition-colors"
+                                        className="w-full bg-black/60 border border-white/10 rounded-none px-4 py-2 text-brand-400 font-mono font-bold focus:border-brand-500 focus:outline-none transition-colors"
                                     />
                                     <div className="text-[9px] text-slate-600 font-mono">Tier: {tolerances.tier.max === 99999 ? '>3600' : `<${tolerances.tier.max}`} RPM</div>
                                 </div>
@@ -236,13 +236,13 @@ export const ShaftAlignment: React.FC = () => {
                                     <div className="flex gap-2">
                                         <button
                                             onClick={() => setCouplingType('short')}
-                                            className={`flex-1 py-2 rounded-none text-xs font-black uppercase tracking-widest transition-all ${couplingType === 'short' ? 'bg-cyan-600 text-white shadow-none' : 'bg-white/5 text-slate-500'}`}
+                                            className={`flex-1 py-2 rounded-none text-xs font-black uppercase tracking-widest transition-all ${couplingType === 'short' ? 'bg-brand-600 text-white shadow-none' : 'bg-white/5 text-slate-500'}`}
                                         >
                                             Short
                                         </button>
                                         <button
                                             onClick={() => setCouplingType('spacer')}
-                                            className={`flex-1 py-2 rounded-none text-xs font-black uppercase tracking-widest transition-all ${couplingType === 'spacer' ? 'bg-cyan-600 text-white shadow-none' : 'bg-white/5 text-slate-500'}`}
+                                            className={`flex-1 py-2 rounded-none text-xs font-black uppercase tracking-widest transition-all ${couplingType === 'spacer' ? 'bg-brand-600 text-white shadow-none' : 'bg-white/5 text-slate-500'}`}
                                         >
                                             Spacer
                                         </button>
@@ -256,7 +256,7 @@ export const ShaftAlignment: React.FC = () => {
                                             type="number"
                                             value={spacerLength}
                                             onChange={(e) => setSpacerLength(Number(e.target.value))}
-                                            className="w-full bg-black/60 border border-white/10 rounded-none px-4 py-2 text-white font-mono font-bold focus:border-cyan-500 focus:outline-none"
+                                            className="w-full bg-black/60 border border-white/10 rounded-none px-4 py-2 text-white font-mono font-bold focus:border-brand-500 focus:outline-none"
                                         />
                                     </motion.div>
                                 )}
@@ -343,7 +343,7 @@ export const ShaftAlignment: React.FC = () => {
                 {/* 2. ORBIT ANALYSIS (NC-9.0) - Preserved but styled to fit density */}
                 <div className={`grid grid-cols-1 lg:grid-cols-3 ${spacing.sectionGap}`}>
                     <div className="lg:col-span-2">
-                        <GlassCard title="Shaft Orbit Dynamic Stability" icon={<Microscope className="text-cyan-400" />}>
+                        <GlassCard title="Shaft Orbit Dynamic Stability" icon={<Microscope className="text-brand-400" />}>
                             <div className="flex flex-col md:flex-row gap-6 items-center">
                                 <div className="p-4 bg-black/40 rounded-none border border-white/5 shadow-none">
                                     <ShaftOrbitPlot
@@ -363,7 +363,7 @@ export const ShaftAlignment: React.FC = () => {
                                     <div className={`grid grid-cols-2 ${spacing.sectionGap}`}>
                                         <div className="p-4 bg-black/40 rounded-none border border-white/5">
                                             <div className="text-[9px] text-slate-500 font-black uppercase mb-1">Eccentricity</div>
-                                            <div className="text-xl font-black font-mono text-cyan-400">{new Decimal(orbitAnalysis.eccentricity).toFixed(3)}</div>
+                                            <div className="text-xl font-black font-mono text-brand-400">{new Decimal(orbitAnalysis.eccentricity).toFixed(3)}</div>
                                         </div>
                                         <div className="p-4 bg-black/40 rounded-none border border-white/5">
                                             <div className="text-[9px] text-slate-500 font-black uppercase mb-1">Drift (&mu;m)</div>

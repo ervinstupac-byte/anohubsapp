@@ -101,7 +101,7 @@ export const BearingsDetail: React.FC = () => {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div className="p-4 bg-white/5 rounded-none border border-white/10">
                                     <p data-hotspot-id="upper_guide_bearing" className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest flex items-center gap-2">
-                                        <Thermometer className="w-3 h-3 text-cyan-400" /> Upper Guide Bearing
+                                        <Thermometer className="w-3 h-3 text-brand-400" /> Upper Guide Bearing
                                     </p>
                                     <p className="text-3xl font-black text-white font-mono tracking-tighter">
                                         {bearingTemp.toFixed(1)} <span className="text-xs text-slate-500">°C</span>

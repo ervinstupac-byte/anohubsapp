@@ -143,7 +143,7 @@ export const ClientConsultantDashboard: React.FC = () => {
                         <h3 className="text-xs font-bold text-slate-400 uppercase mb-3">Water-to-Wire Loss Audit</h3>
                         <div className="space-y-3">
                             <LossBar label="Trash Rack" value={losses.trashRackLossKW} total={opPoint.powerOutput * 1000} color="bg-blue-500" />
-                            <LossBar label="Penstock Friction" value={losses.penstockFrictionLossKW} total={opPoint.powerOutput * 1000} color="bg-cyan-500" warning={losses.penstockFrictionLossKW > 50} />
+                            <LossBar label="Penstock Friction" value={losses.penstockFrictionLossKW} total={opPoint.powerOutput * 1000} color="bg-brand-500" warning={losses.penstockFrictionLossKW > 50} />
                             <LossBar label="Generator Heat" value={losses.generatorElecLossKW} total={opPoint.powerOutput * 1000} color="bg-orange-500" />
                         </div>
                     </GlassCard>

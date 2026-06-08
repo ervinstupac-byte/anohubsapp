@@ -68,7 +68,7 @@ export const ResilienceDashboard: React.FC<ResilienceDashboardProps> = ({ resona
 
                         <div className="bg-slate-800 rounded p-3">
                             <div className="text-xs text-slate-400 mb-1">Bearing RUL Gain</div>
-                            <div className="text-xl font-bold text-cyan-400 font-mono">
+                            <div className="text-xl font-bold text-brand-400 font-mono">
                                 +{resonance.rulImpact.toFixed(0)} hrs
                             </div>
                         </div>
@@ -103,7 +103,7 @@ export const ResilienceDashboard: React.FC<ResilienceDashboardProps> = ({ resona
 
                         <div className="bg-slate-800 rounded p-3">
                             <div className="text-xs text-slate-400 mb-1">Stator Cooling</div>
-                            <div className="text-xl font-bold text-cyan-400 font-mono">
+                            <div className="text-xl font-bold text-brand-400 font-mono">
                                 -{harmonics.heatingReduction.toFixed(1)}°C
                             </div>
                         </div>
@@ -115,10 +115,10 @@ export const ResilienceDashboard: React.FC<ResilienceDashboardProps> = ({ resona
                 </div>
 
                 {/* Micro-Injection */}
-                <div className="bg-slate-900 border border-cyan-500 rounded-lg p-4">
+                <div className="bg-slate-900 border border-brand-500 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-4">
-                        <Wind className="w-5 h-5 text-cyan-400" />
-                        <div className="text-lg font-bold text-cyan-300">Micro-Injection Shield</div>
+                        <Wind className="w-5 h-5 text-brand-400" />
+                        <div className="text-lg font-bold text-brand-300">Micro-Injection Shield</div>
                     </div>
 
                     <div className="space-y-3">
@@ -135,7 +135,7 @@ export const ResilienceDashboard: React.FC<ResilienceDashboardProps> = ({ resona
 
                         <div className="bg-slate-800 rounded p-3">
                             <div className="text-xs text-slate-400 mb-1">Cavitation Reduction</div>
-                            <div className="text-xl font-bold text-cyan-400 font-mono">
+                            <div className="text-xl font-bold text-brand-400 font-mono">
                                 {injection.cavitationReduction.toFixed(0)}%
                             </div>
                         </div>
@@ -147,13 +147,13 @@ export const ResilienceDashboard: React.FC<ResilienceDashboardProps> = ({ resona
                             </div>
                             <div className="relative h-2 bg-slate-700 rounded-full overflow-hidden mt-2">
                                 <div
-                                    className="absolute inset-y-0 left-0 bg-cyan-500"
+                                    className="absolute inset-y-0 left-0 bg-brand-500"
                                     style={{ width: `${injection.coverage}%` }}
                                 />
                             </div>
                         </div>
 
-                        <div className="p-2 rounded bg-cyan-950 text-center text-xs text-cyan-300">
+                        <div className="p-2 rounded bg-brand-950 text-center text-xs text-brand-300">
                             12 injection valves
                         </div>
                     </div>
@@ -180,7 +180,7 @@ export const ResilienceDashboard: React.FC<ResilienceDashboardProps> = ({ resona
 
                         <div className="bg-slate-800 rounded p-3 text-center">
                             <div className="text-xs text-slate-400 mb-1">RUL Extension</div>
-                            <div className="text-2xl font-bold text-cyan-400">
+                            <div className="text-2xl font-bold text-brand-400">
                                 +{resonance.rulImpact.toFixed(0)} hrs
                             </div>
                         </div>
@@ -193,7 +193,7 @@ export const ResilienceDashboard: React.FC<ResilienceDashboardProps> = ({ resona
                         </div>
                     </div>
 
-                    <div className="mt-4 p-3 bg-gradient-to-r from-emerald-950 to-cyan-950 border border-emerald-500 rounded">
+                    <div className="mt-4 p-3 bg-gradient-to-r from-emerald-950 to-brand-950 border border-emerald-500 rounded">
                         <div className="text-xs font-bold text-emerald-300">
                             ♻️ Zero-Loss Philosophy: Every watt of parasitic loss converted to useful energy or longevity
                         </div>

@@ -8,8 +8,8 @@ export const UniversalTurbineDashboard: React.FC = () => {
       <GlassCard className="w-full max-w-2xl p-8 border border-white/10">
         <div className="flex items-start gap-4">
           <div className="shrink-0">
-            <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-400/20 flex items-center justify-center">
-              <Shield className="w-6 h-6 text-cyan-300" />
+            <div className="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-400/20 flex items-center justify-center">
+              <Shield className="w-6 h-6 text-brand-300" />
             </div>
           </div>
 

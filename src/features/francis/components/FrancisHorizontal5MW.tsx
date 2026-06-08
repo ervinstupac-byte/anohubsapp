@@ -276,7 +276,7 @@ export const FrancisHorizontal5MW: React.FC = () => {
                                 <li key={key}>
                                     <button
                                         onClick={() => setSelectedHotspot(key)}
-                                        className={`w-full text-left px-3 py-2 rounded border ${selectedHotspot === key ? 'border-cyan-500 bg-black/5' : 'border-transparent hover:border-white/10'}`}>
+                                        className={`w-full text-left px-3 py-2 rounded border ${selectedHotspot === key ? 'border-brand-500 bg-black/5' : 'border-transparent hover:border-white/10'}`}>
                                         <div className="flex items-center justify-between">
                                             <div className="text-sm">{key}</div>
                                             <div className="text-xs text-slate-400">{String(val)}</div>

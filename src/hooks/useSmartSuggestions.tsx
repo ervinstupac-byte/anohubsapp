@@ -101,7 +101,7 @@ export const useSmartSuggestions = () => {
                 id: 'sugg-edu',
                 label: 'Enable Education Mode',
                 type: 'action',
-                icon: <BookOpen className="text-cyan-400" />,
+                icon: <BookOpen className="text-brand-400" />,
                 action: () => toggleEducation(),
                 subtitle: 'Show detailed explanations and physics context',
                 priority: 'low'

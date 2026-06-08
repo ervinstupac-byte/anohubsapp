@@ -217,7 +217,7 @@ export const WorkOrderSummary: React.FC = () => {
                                     }
                                 }}
                                 disabled={isCreating}
-                                className="px-4 py-2 rounded bg-cyan-600 text-white font-bold"
+                                className="px-4 py-2 rounded bg-brand-600 text-white font-bold"
                             >
                                 {isCreating ? 'Creating...' : 'Create Work Order'}
                             </button>

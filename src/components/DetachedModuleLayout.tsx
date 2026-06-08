@@ -67,7 +67,7 @@ export const DetachedModuleLayout: React.FC = () => {
                  {/* Commander Focus */}
                  <button
                     onClick={() => window.opener?.focus()}
-                    className="p-1.5 rounded-lg bg-slate-800/80 text-cyan-400 hover:bg-cyan-500/20 hover:text-cyan-300 border border-slate-700 transition-all"
+                    className="p-1.5 rounded-lg bg-slate-800/80 text-brand-400 hover:bg-brand-500/20 hover:text-brand-300 border border-slate-700 transition-all"
                     title="Pull Focus to Commander"
                  >
                     <Target className="w-4 h-4" />

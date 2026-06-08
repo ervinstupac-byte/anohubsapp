@@ -61,7 +61,7 @@ export const CathodicProtection: React.FC = () => {
                         </div>
                         <div className="p-6 bg-black/60 rounded-none border border-white/5">
                             <p className="text-[10px] text-emerald-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
-                                <Cpu className="w-3 h-3 text-cyan-400" /> Protection Potential
+                                <Cpu className="w-3 h-3 text-brand-400" /> Protection Potential
                             </p>
                             <p className={`text-3xl font-black font-mono tracking-tighter ${isOptimal ? 'text-emerald-400' : 'text-amber-500'}`}>
                                 {protectionPotential} <span className="text-xs text-slate-500 ml-1">mV</span>

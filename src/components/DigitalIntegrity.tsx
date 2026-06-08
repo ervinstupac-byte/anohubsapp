@@ -217,7 +217,7 @@ export const DigitalIntegrity: React.FC = () => {
                             <span className="text-xs font-mono text-slate-400">{t('digitalIntegrity.nodeStatus', 'NODE STATUS')}: <span className="text-emerald-400 font-bold">{t('common.active', 'ACTIVE')}</span></span>
                         </div>
                         <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 border border-slate-700 shadow-lg">
-                            <span className="text-xs font-mono text-slate-400">{t('digitalIntegrity.height', 'HEIGHT')}: <span className="text-cyan-400 font-bold">{ledger.length} {t('digitalIntegrity.blocks', 'BLOCKS')}</span></span>
+                            <span className="text-xs font-mono text-slate-400">{t('digitalIntegrity.height', 'HEIGHT')}: <span className="text-brand-400 font-bold">{ledger.length} {t('digitalIntegrity.blocks', 'BLOCKS')}</span></span>
                         </div>
                     </div>
                 </div>
@@ -245,8 +245,8 @@ export const DigitalIntegrity: React.FC = () => {
                         <div className="space-y-5 animate-fade-in">
                             <div className="bg-slate-900/50 p-4 rounded-xl border border-white/5">
                                 <label className="text-[10px] text-slate-500 uppercase font-bold tracking-wider block mb-1">{t('digitalIntegrity.targetAsset', 'Target Asset')}</label>
-                                <div className="text-cyan-400 font-mono text-sm font-bold flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full"></span>
+                                <div className="text-brand-400 font-mono text-sm font-bold flex items-center gap-2">
+                                    <span className="w-1.5 h-1.5 bg-brand-500 rounded-full"></span>
                                     {selectedAsset.name}
                                 </div>
                             </div>
@@ -256,7 +256,7 @@ export const DigitalIntegrity: React.FC = () => {
                                 <select
                                     value={operation}
                                     onChange={e => setOperation(e.target.value)}
-                                    className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:border-cyan-500 outline-none transition-colors cursor-pointer"
+                                    className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:border-brand-500 outline-none transition-colors cursor-pointer"
                                 >
                                     <option value="Shaft Alignment Check">{t('digitalIntegrity.operations.alignment', 'Shaft Alignment Check')}</option>
                                     <option value="Maintenance Protocol Seal">{t('digitalIntegrity.operations.maintenance', 'Maintenance Protocol Seal')}</option>
@@ -277,7 +277,7 @@ export const DigitalIntegrity: React.FC = () => {
                                 />
                                 <button
                                     onClick={fetchLiveTelemetry}
-                                    className="absolute right-2 bottom-2 p-2 text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 rounded transition-colors"
+                                    className="absolute right-2 bottom-2 p-2 text-brand-400 hover:text-brand-300 hover:bg-brand-500/10 rounded transition-colors"
                                     title="Fetch Live System Data"
                                 >
                                     <RefreshCw className="w-4 h-4" />
@@ -291,7 +291,7 @@ export const DigitalIntegrity: React.FC = () => {
                                     variant="primary"
                                     fullWidth
                                     isLoading={isMining}
-                                    className="h-14 shadow-cyan-500/20"
+                                    className="h-14 shadow-brand-500/20"
                                     icon={!isMining && <span>🔒</span>}
                                 >
                                     {isMining ? t('digitalIntegrity.btnHashing', 'HASHING BLOCK...') : t('digitalIntegrity.btnSeal', 'SEAL TO BLOCKCHAIN')}
@@ -325,7 +325,7 @@ export const DigitalIntegrity: React.FC = () => {
                     <div className="space-y-3 max-h-[600px] overflow-y-auto custom-scrollbar pr-2">
                         <FetchSkeleton loading={isLoading} count={5}>
                             {ledger.map((block) => (
-                                <div key={block.block_index} className="relative p-5 bg-slate-900/40 rounded-2xl border border-white/5 hover:border-cyan-500/30 hover:bg-slate-800/60 transition-all group overflow-hidden">
+                                <div key={block.block_index} className="relative p-5 bg-slate-900/40 rounded-2xl border border-white/5 hover:border-brand-500/30 hover:bg-slate-800/60 transition-all group overflow-hidden">
 
                                     {/* Connector Line */}
                                     {block.block_index > 0 && <div className="absolute -top-6 left-[27px] w-0.5 h-10 bg-slate-800 z-0"></div>}
@@ -334,7 +334,7 @@ export const DigitalIntegrity: React.FC = () => {
                                         <div className="flex gap-5">
                                             {/* Block Index */}
                                             <div className="flex flex-col items-center pt-1">
-                                                <div className="w-12 h-12 bg-slate-950 rounded-xl flex items-center justify-center text-xs font-mono font-bold text-slate-500 border border-slate-800 group-hover:border-cyan-500/50 group-hover:text-cyan-400 transition-colors shadow-inner">
+                                                <div className="w-12 h-12 bg-slate-950 rounded-xl flex items-center justify-center text-xs font-mono font-bold text-slate-500 border border-slate-800 group-hover:border-brand-500/50 group-hover:text-brand-400 transition-colors shadow-inner">
                                                     #{block.block_index}
                                                 </div>
                                             </div>
@@ -346,7 +346,7 @@ export const DigitalIntegrity: React.FC = () => {
                                                         {block.data.includes('|') ? block.data.split('|')[2] : 'System Event'}
                                                     </p>
                                                     {block.asset_id && String(block.asset_id) !== 'ROOT' && (
-                                                        <span className="text-[9px] bg-slate-800 px-2 py-0.5 rounded text-cyan-200 border border-slate-700 font-mono w-fit">
+                                                        <span className="text-[9px] bg-slate-800 px-2 py-0.5 rounded text-brand-200 border border-slate-700 font-mono w-fit">
                                                             ASSET ID: {block.asset_id}
                                                         </span>
                                                     )}
@@ -373,7 +373,7 @@ export const DigitalIntegrity: React.FC = () => {
                                         </div>
 
                                         {/* Icon */}
-                                        <div className="text-slate-800 group-hover:text-cyan-500/10 transition-colors text-5xl select-none absolute right-4 top-4 pointer-events-none">
+                                        <div className="text-slate-800 group-hover:text-brand-500/10 transition-colors text-5xl select-none absolute right-4 top-4 pointer-events-none">
                                             🔗
                                         </div>
                                     </div>
