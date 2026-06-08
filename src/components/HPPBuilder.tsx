@@ -355,15 +355,16 @@ export const HPPBuilder: React.FC = () => {
             };
 
             // 1. Update canonical ProjectStateManager with new design specs
-            const internalId = numericForUpdate !== null ? numericForUpdate : selectedAsset.id;
+            const internalId = numericForUpdate !== null ? numericForUpdate : idAdapter.toNumber((selectedAsset as any)?.id);
             try {
                 // Store new specs in assetPassport for canonical storage
                 ProjectStateManager.setState({ identity: { assetId: internalId, assetName: selectedAsset.name } as any, assetPassport: { ...newSpecs } as any });
                 loggingService.logAction(internalId, 'DESIGN_UPDATE', { configName, bestTurbine, newSpecs });
             } catch (e) {
                 // Fallback local update to AssetContext if ProjectStateManager unavailable
-                updateAsset(internalId, { specs: newSpecs });
-                loggingService.logAction(internalId, 'DESIGN_UPDATE_FALLBACK', { configName, bestTurbine });
+                // updateAsset accepts numeric or string ids; prefer the original selectedAsset.id when internalId is null
+                updateAsset((selectedAsset as any)?.id, { specs: newSpecs });
+                loggingService.logAction(idAdapter.toNumber((selectedAsset as any)?.id), 'DESIGN_UPDATE_FALLBACK', { configName, bestTurbine });
             }
             // ------------------------------------------
 

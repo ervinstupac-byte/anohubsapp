@@ -366,7 +366,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                         CRITICAL OPS
                                     </div>
                                 </div>
-                                <button onClick={onClose} className="lg:hidden p-2 text-slate-600 hover:text-black transition-colors">
+                                <button onClick={onClose} className="p-2 text-slate-600 hover:text-black transition-colors" title="Collapse sidebar">
                                     <ChevronLeft className="w-5 h-5" />
                                 </button>
                             </div>
@@ -386,7 +386,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         </div>
 
                         {/* CONTENT */}
-                        <div className="flex-1 overflow-hidden relative z-10">
+                        <div className="flex-1 min-h-0 overflow-y-auto relative z-10">
                             <FleetSection
                                 showMap={showMap}
                                 onToggleMap={onToggleMap}

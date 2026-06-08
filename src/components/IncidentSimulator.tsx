@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
+import idAdapter from '../utils/idAdapter';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { ModernButton } from '../shared/components/ui/ModernButton';
 
@@ -36,7 +37,11 @@ export const IncidentSimulator: React.FC = () => {
                     <ModernButton
                         variant="secondary"
                         className="!py-2 border-red-500/20 hover:border-red-500/50 bg-red-500/5"
-                        onClick={() => triggerEmergency(selectedAsset.id, 'vibration_excess')}
+                        onClick={() => {
+                            const numeric = idAdapter.toNumber((selectedAsset as any).id);
+                            if (numeric === null) { console.warn('[IncidentSimulator] triggerEmergency: non-numeric id', selectedAsset.id); return; }
+                            triggerEmergency(numeric, 'vibration_excess');
+                        }}
                         disabled={!!activeIncident}
                     >
                         <span className="text-[10px] font-bold">💥 VIBRATION EXCESS</span>
@@ -45,7 +50,11 @@ export const IncidentSimulator: React.FC = () => {
                     <ModernButton
                         variant="secondary"
                         className="!py-2 border-orange-500/20 hover:border-orange-500/50 bg-orange-500/5"
-                        onClick={() => triggerEmergency(selectedAsset.id, 'bearing_overheat')}
+                        onClick={() => {
+                            const numeric = idAdapter.toNumber((selectedAsset as any).id);
+                            if (numeric === null) { console.warn('[IncidentSimulator] triggerEmergency: non-numeric id', selectedAsset.id); return; }
+                            triggerEmergency(numeric, 'bearing_overheat');
+                        }}
                         disabled={!!activeIncident}
                     >
                         <span className="text-[10px] font-bold">🔥 BEARING OVERHEAT</span>

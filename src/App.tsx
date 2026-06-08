@@ -415,7 +415,8 @@ const AppLayout: React.FC = () => {
                         <WorkflowHeader />
 
                         <DashboardHeader
-                            onToggleSidebar={() => setIsSidebarOpen(true)}
+                            onToggleSidebar={() => setIsSidebarOpen(s => !s)}
+                            isSidebarOpen={isSidebarOpen}
                             title={<span className="text-h-gold">ANOHUB // NC-9.0 NEURAL CORE</span>}
                         />
 

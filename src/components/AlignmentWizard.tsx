@@ -353,8 +353,8 @@ const RunoutDiagram: React.FC<{
     const centerY = 200;
     const radius = 150;
 
-    // Find max runout for scaling
-    const maxRunout = points.length > 0 ? Math.max(...points.map(p => p.runout)) : 0.1;
+    // Find max runout for scaling (guard against zero to avoid divide-by-zero)
+    const maxRunout = Math.max(0.001, ...(points.length > 0 ? points.map(p => p.runout) : [0.1]));
 
     return (
         <div className="p-4 bg-slate-900/50 rounded-lg border border-slate-700/50">

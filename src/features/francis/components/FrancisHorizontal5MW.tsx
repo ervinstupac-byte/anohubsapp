@@ -3,6 +3,7 @@ import { supabase } from '../../../services/supabaseClient';
 import Decimal from 'decimal.js';
 import { useAssetContext } from '../../../contexts/AssetContext';
 import { subscribeLatestSensor } from '../../../hooks/useTelemetrySubscription';
+import idAdapter from '../../../utils/idAdapter';
 import { evaluateAging, fetchExpertCurve } from '../../../services/AgingEstimator';
 // DiagnosticAdvisory removed - deleted during dependency sweep
 
@@ -79,7 +80,7 @@ export const FrancisHorizontal5MW: React.FC = () => {
             const { data: latest } = await supabase
                 .from('dynamic_sensor_data')
                 .select('*')
-                .eq('asset_id', assetId)
+                .eq('asset_id', idAdapter.toDb(assetId))
                 .order('timestamp', { ascending: false })
                 .limit(1)
                 .single();
@@ -91,9 +92,10 @@ export const FrancisHorizontal5MW: React.FC = () => {
 
     useEffect(() => {
         if (!assetId) return;
-        const unsubscribe = subscribeLatestSensor(assetId, (payload) => {
+        const numeric = idAdapter.toNumber(assetId);
+        const unsubscribe = numeric !== null ? subscribeLatestSensor(numeric, (payload) => {
             setLatestTelemetry(payload);
-        });
+        }) : () => { };
         // initial fetch
         fetchLatestTelemetry();
         return () => unsubscribe();
@@ -159,7 +161,8 @@ export const FrancisHorizontal5MW: React.FC = () => {
                 }));
 
                 // fetch expert curve for this design
-                const expertCurve = await fetchExpertCurve(assetId, (design as any)?.family, (design as any)?.variant);
+                const numericId = idAdapter.toNumber(assetId);
+                const expertCurve = await fetchExpertCurve(numericId ?? 0, (design as any)?.family, (design as any)?.variant);
 
                 // fetch hydrology_context for asset's plant (if available)
                 try {
