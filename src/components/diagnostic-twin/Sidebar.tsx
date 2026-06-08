@@ -35,7 +35,7 @@ const SECTIONS: SidebarSection[] = [
         title: 'OPERATIONS',
         icon: <Zap className="w-4 h-4" />,
         modules: [
-            { id: 'scada', title: 'SCADA Core', path: '/scada/core', icon: <Activity className="w-3 h-3" /> },
+            { id: 'scada', title: 'Insight Core', path: '/scada/core', icon: <Activity className="w-3 h-3" /> },
             { id: 'master', title: 'Master Dashboard', path: '/master', icon: <LayoutDashboard className="w-3 h-3" /> },
             { id: 'francisHub', title: 'Francis Turbine Hub', path: '/francis/hub', icon: <Zap className="w-3 h-3" /> }, // NC-20701
             { id: 'fleet', title: 'Fleet Overview', path: '/fleet', icon: <Map className="w-3 h-3" /> },
@@ -146,27 +146,32 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
             initial={{ x: -300 }}
             animate={{ x: isOpen ? 0 : -300 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed inset-y-0 left-0 w-64 bg-slate-950 border-r border-slate-800 flex flex-col z-40 shadow-none"
+            className="fixed inset-y-0 left-0 w-64 glass-strong border-r border-white/10 flex flex-col z-40"
         >
             {/* 1. HEADER & OMNIBAR */}
-            <div className="p-4 border-b border-slate-800 bg-slate-950/50 backdrop-blur-sm">
-                <div className="flex items-center gap-2 mb-4">
-                    <div className="w-6 h-6 rounded-none bg-emerald-500/20 flex items-center justify-center">
-                        <Cpu className="w-4 h-4 text-emerald-400" />
+            <div className="p-4 border-b border-white/10">
+                <div className="flex items-center gap-2.5 mb-4">
+                    <div className="w-8 h-8 rounded-xl bg-brand-gradient flex items-center justify-center shadow-glow">
+                        <Cpu className="w-4 h-4 text-white" />
                     </div>
-                    <span className="text-xs font-black tracking-[0.2em] text-slate-100">
-                        SOVEREIGN
-                    </span>
+                    <div className="flex flex-col leading-none">
+                        <span className="text-sm font-header font-bold tracking-tight text-gradient-brand">
+                            AnoHUB
+                        </span>
+                        <span className="text-[8px] font-semibold tracking-[0.25em] text-slate-500 uppercase mt-0.5">
+                            Intelligence
+                        </span>
+                    </div>
                 </div>
 
                 <div className="relative group">
-                    <Search className="absolute left-2.5 top-2 w-3.5 h-3.5 text-slate-500 group-focus-within:text-emerald-500 transition-colors" />
+                    <Search className="absolute left-2.5 top-2 w-3.5 h-3.5 text-slate-500 group-focus-within:text-brand-300 transition-colors" />
                     <input
                         type="text"
                         placeholder="Search modules..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-slate-900 border border-slate-800 rounded-none pl-8 pr-3 py-1.5 text-xs text-slate-300 placeholder-slate-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 transition-all"
+                        className="w-full bg-white/5 border border-white/10 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-300 placeholder-slate-600 focus:outline-none focus:border-brand-400/50 focus:ring-2 focus:ring-brand-500/20 transition-all"
                     />
                 </div>
 
@@ -205,7 +210,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         >
                             <div className="flex items-center gap-3">
                                 {/* Status Pulse */}
-                                <div className={`w-1.5 h-1.5 rounded-none ${getHealthColor(healthScore)}`} />
+                                <div className={`w-1.5 h-1.5 rounded-full ${getHealthColor(healthScore)}`} />
 
                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-slate-200 transition-colors">
                                     {section.title}
@@ -235,7 +240,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                                     onClick={() => navigate(module.path)}
                                                     className={`w-full text-left px-4 py-2 pl-10 flex items-center gap-3 text-[11px] font-mono transition-all
                                                         ${isActive
-                                                            ? 'text-emerald-400 bg-emerald-500/10 border-r-2 border-emerald-500'
+                                                            ? 'text-brand-300 bg-brand-500/10 border-r-2 border-brand-400'
                                                             : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'
                                                         }`}
                                                 >
@@ -255,35 +260,35 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
             </div>
 
             {/* 3. QUICK PINS & FOOTER */}
-            <div className="p-4 border-t border-slate-800 bg-slate-900/50">
+            <div className="p-4 border-t border-white/10">
                 <div className="flex items-center justify-between mb-3">
                     <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">
                         PINNED METRICS
                     </span>
-                    <Settings className="w-3 h-3 text-slate-600 cursor-pointer hover:text-emerald-400" />
+                    <Settings className="w-3 h-3 text-slate-600 cursor-pointer hover:text-brand-300" />
                 </div>
 
                 <div className="grid grid-cols-3 gap-2">
-                    <div className="bg-slate-950 p-2 rounded-none border border-slate-800 flex flex-col items-center">
-                        <Gauge className="w-3 h-3 text-cyan-500 mb-1" />
+                    <div className="bg-white/5 p-2 rounded-xl border border-white/10 flex flex-col items-center">
+                        <Gauge className="w-3 h-3 text-brand-300 mb-1" />
                         <span className="text-[10px] font-mono text-slate-300">{rpm.toFixed(0)}</span>
                         <span className="text-[8px] text-slate-600">RPM</span>
                     </div>
-                    <div className="bg-slate-950 p-2 rounded-none border border-slate-800 flex flex-col items-center">
-                        <Zap className="w-3 h-3 text-amber-500 mb-1" />
+                    <div className="bg-white/5 p-2 rounded-xl border border-white/10 flex flex-col items-center">
+                        <Zap className="w-3 h-3 text-amber-400 mb-1" />
                         <span className="text-[10px] font-mono text-slate-300">{power.toFixed(1)}</span>
                         <span className="text-[8px] text-slate-600">MW</span>
                     </div>
-                    <div className="bg-slate-950 p-2 rounded-none border border-slate-800 flex flex-col items-center">
-                        <Target className="w-3 h-3 text-emerald-500 mb-1" />
+                    <div className="bg-white/5 p-2 rounded-xl border border-white/10 flex flex-col items-center">
+                        <Target className="w-3 h-3 text-accent-400 mb-1" />
                         <span className="text-[10px] font-mono text-slate-300">{efficiency.toFixed(1)}%</span>
                         <span className="text-[8px] text-slate-600">EFF</span>
                     </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
+                <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-none bg-emerald-500 animate-pulse" />
+                        <div className="w-2 h-2 rounded-full bg-accent-400 animate-pulse" />
                         <span className="text-[9px] font-mono text-slate-500">SYSTEM ONLINE</span>
                     </div>
                     <span className="text-[9px] font-mono text-slate-600">v1.0.0</span>

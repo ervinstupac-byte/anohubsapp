@@ -293,10 +293,8 @@ const AppLayout: React.FC = () => {
     }, []);
 
 
-    useEffect(() => {
-        const hasCompleted = localStorage.getItem('hasCompletedOnboarding') === 'true';
-        if (!hasCompleted) setShowOnboarding(true);
-    }, []);
+    // NC-26000: Post-login welcome onboarding removed for a friction-free entry.
+    // Onboarding is now opt-in only (triggered explicitly via completeOnboarding flow).
 
     // NC-20400: Global click diagnostic logger (DEV only)
     useEffect(() => {
@@ -542,6 +540,7 @@ const AppLayout: React.FC = () => {
                 <CommandPalette /> {/* GLOBAL COMMAND PALETTE - NOW INSIDE DRILLDOWN PROVIDER */}
 
                 {/* Modals moved outside layout to prevent clipping */}
+                {/* NC-26000: auto welcome modal removed; kept opt-in */}
                 {showOnboarding && <Onboarding onComplete={handleOnboardingComplete} />}
                 <Suspense fallback={<Spinner />}>
                     <MapModule isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} />

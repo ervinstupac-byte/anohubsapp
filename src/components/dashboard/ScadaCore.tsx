@@ -313,8 +313,8 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                 <Eye className="w-4 h-4" />
               </button>
               <div className="w-px h-4 bg-slate-800 mx-2" />
-              <Activity className="w-4 h-4 text-emerald-400" />
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mimic Diagram</span>
+              <Activity className="w-4 h-4 text-accent-400" />
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Live Digital Twin</span>
             </div>
             <div className="flex items-center gap-4">
               <div className="text-[10px] font-mono text-slate-400">P_mech: {mechPowerMW.toFixed(2)} MW • η: {(eta * 100).toFixed(1)}% • v₂: {dischargeVelocityV2.toFixed(2)} m/s</div>

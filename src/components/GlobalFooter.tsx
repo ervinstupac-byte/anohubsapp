@@ -15,9 +15,9 @@ export const GlobalFooter: React.FC = () => {
 
                 {/* Math Integrity */}
                 <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-3 h-3 text-cyan-400" />
+                    <ShieldCheck className="w-3 h-3 text-brand-400" />
                     <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Logic Integrity:</span>
-                    <span className="text-[9px] font-bold text-cyan-400 uppercase">Decimal.js Verified</span>
+                    <span className="text-[9px] font-bold text-brand-400 uppercase">Decimal.js Verified</span>
                 </div>
             </div>
 

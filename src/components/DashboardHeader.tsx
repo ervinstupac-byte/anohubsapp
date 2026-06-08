@@ -72,7 +72,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
 
     return (
         <>
-            <header className="sticky top-0 z-30 h-16 border-b border-white/5 bg-slate-950/90 backdrop-blur-md flex items-center justify-between px-6 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+            <header className="sticky top-0 z-30 h-16 border-b border-white/10 glass-strong flex items-center justify-between px-6 shadow-[0_4px_30px_rgba(0,0,0,0.45)]">
 
                 {/* LEFT: Identity & Status */}
                 <div className="flex items-center gap-6">
@@ -88,15 +88,15 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
                         <div className="relative">
                             <button
                                 onClick={() => setIsQuickActionsOpen(!isQuickActionsOpen)}
-                                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all ${selectedAsset ? 'bg-cyan-950/30 border-cyan-500/30 hover:border-cyan-500/50' : 'bg-slate-900/30 border-slate-700/30 hover:border-slate-600/50'}`}
+                                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all ${selectedAsset ? 'bg-brand-950/30 border-brand-500/30 hover:border-brand-500/50' : 'bg-slate-900/30 border-slate-700/30 hover:border-slate-600/50'}`}
                             >
-                                <Database className={`w-3.5 h-3.5 ${selectedAsset ? 'text-cyan-400' : 'text-slate-600'}`} />
+                                <Database className={`w-3.5 h-3.5 ${selectedAsset ? 'text-brand-400' : 'text-slate-600'}`} />
                                 <div className="flex flex-col items-start">
                                     <span className={`font-bold ${selectedAsset ? 'text-white' : 'text-slate-500'}`}>
                                         {selectedAsset ? selectedAsset.name.toUpperCase() : t('header.fleetView', 'FLEET VIEW')}
                                     </span>
                                     {selectedAsset && (
-                                        <span className="text-[9px] text-cyan-400/70">
+                                        <span className="text-[9px] text-brand-400/70">
                                             {(selectedAsset.turbine_type || selectedAsset.type || 'HPP').toUpperCase()} | {selectedAsset.capacity?.toFixed(1) || '—'} MW
                                         </span>
                                     )}
@@ -114,9 +114,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
                                         <button
                                             onClick={() => { navigate('/hpp-builder'); setIsQuickActionsOpen(false); }}
                                             disabled={!selectedAsset}
-                                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${selectedAsset ? 'hover:bg-cyan-500/10 text-slate-300 hover:text-white' : 'opacity-40 cursor-not-allowed text-slate-600'}`}
+                                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${selectedAsset ? 'hover:bg-brand-500/10 text-slate-300 hover:text-white' : 'opacity-40 cursor-not-allowed text-slate-600'}`}
                                         >
-                                            <Settings className="w-4 h-4 text-cyan-400" />
+                                            <Settings className="w-4 h-4 text-brand-400" />
                                             <div>
                                                 <span className="text-sm font-bold">{t('header.editSpecs', 'Edit Technical Specs')}</span>
                                                 <p className="text-[9px] text-slate-500">{t('header.editSpecsDesc', 'HPP Builder Studio')}</p>
@@ -190,7 +190,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
                         {/* 4. SYSTEM TOPOLOGY */}
                         <button
                             onClick={() => dispatch.openSystemOverview()}
-                            className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-cyan-400 transition-colors"
+                            className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-brand-400 transition-colors"
                             title="Open System Topology Map"
                         >
                             <Network className="w-3.5 h-3.5" />
@@ -203,7 +203,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
                     {/* Command Search (Desktop) */}
                     <button
                         onClick={triggerCommandPalette}
-                        className="hidden xl:flex items-center gap-2 px-3 py-1.5 ml-4 bg-white/5 border border-white/10 rounded text-[10px] text-slate-400 hover:border-cyan-500/50 hover:text-cyan-400 transition-all"
+                        className="hidden xl:flex items-center gap-2 px-3 py-1.5 ml-4 bg-white/5 border border-white/10 rounded text-[10px] text-slate-400 hover:border-brand-500/50 hover:text-brand-400 transition-all"
                     >
                         <Search className="w-3 h-3" />
                         <span>SEARCH</span>
@@ -239,12 +239,12 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
                     {/* Heritage Status (Golden Seal) */}
                     <button
                         onClick={() => navigate('/' + ROUTES.FRANCIS.ROOT + '/' + ROUTES.FRANCIS.MANIFESTO)}
-                        className={`p-2 rounded-full transition-all duration-500 group relative ${isHeritageCertified ? 'bg-cyan-500/20 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.4)] border border-cyan-500/50' : 'bg-white/5 text-slate-600 border border-white/5'}`}
+                        className={`p-2 rounded-full transition-all duration-500 group relative ${isHeritageCertified ? 'bg-brand-500/20 text-brand-400 shadow-[0_0_15px_rgba(6,182,212,0.4)] border border-brand-500/50' : 'bg-white/5 text-slate-600 border border-white/5'}`}
                         title={isHeritageCertified ? "Heritage Certified - Tier 1 Asset" : "Heritage Certification Pending"}
                     >
                         <ShieldCheck className={`w-5 h-5 ${isHeritageCertified ? 'animate-pulse' : 'opacity-40'}`} />
                         {isHeritageCertified && (
-                            <div className="absolute -top-1 -right-1 w-2 h-2 bg-cyan-400 rounded-full animate-ping" />
+                            <div className="absolute -top-1 -right-1 w-2 h-2 bg-brand-400 rounded-full animate-ping" />
                         )}
                         <div className="absolute top-12 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 border border-white/10 rounded text-[9px] font-black uppercase tracking-widest text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 pointer-events-none">
                             {isHeritageCertified ? 'Roots of Engineering: Certified' : 'Heritage Status: Dormant'}
