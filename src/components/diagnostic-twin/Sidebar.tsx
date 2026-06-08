@@ -56,7 +56,7 @@ const SECTIONS: SidebarSection[] = [
             { id: 'lab', title: 'Forensic Lab', path: '/forensics', icon: <Microscope className="w-3 h-3" /> },
             { id: 'audio', title: 'Audio Spectrum', path: '/forensics/audio', icon: <Activity className="w-3 h-3" /> },
             { id: 'vision', title: 'Vision Analyzer', path: '/forensics/vision', icon: <Target className="w-3 h-3" /> },
-            { id: 'logs', title: 'Event Logs', path: '/logs', icon: <FileText className="w-3 h-3" /> }
+            { id: 'logs', title: 'Event Logs', path: '/governance/ledger', icon: <FileText className="w-3 h-3" /> } // re-pointed: /logs was unrouted; the Sovereign Ledger IS the operational event log
         ]
     },
     {
