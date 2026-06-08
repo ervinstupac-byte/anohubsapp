@@ -50,8 +50,8 @@ export const TYPOGRAPHY = {
   labelXs: 'text-[8px] font-mono font-bold uppercase tracking-wider',
   labelSm: 'text-[9px] font-mono font-medium uppercase tracking-wider',
   labelMd: 'text-[10px] font-black uppercase tracking-widest',
-  bodyXs: 'text-[10px] text-slate-300',
-  bodySm: 'text-xs text-slate-300',
+  bodyXs: 'text-[10px] text-slate-200',
+  bodySm: 'text-xs text-slate-200',
   valueMd: 'text-sm font-black uppercase',
   valueLg: 'text-2xl font-black',
   valueXl: 'text-3xl font-black'
@@ -61,8 +61,8 @@ export const TYPOGRAPHY_COMPACT = {
   labelXs: 'text-[7px] font-mono font-bold uppercase tracking-wider',
   labelSm: 'text-[8px] font-mono font-medium uppercase tracking-wider',
   labelMd: 'text-[9px] font-black uppercase tracking-widest',
-  bodyXs: 'text-[9px] text-slate-300',
-  bodySm: 'text-[11px] text-slate-300',
+  bodyXs: 'text-[9px] text-slate-200',
+  bodySm: 'text-[11px] text-slate-200',
   valueMd: 'text-xs font-black uppercase',
   valueLg: 'text-xl font-black',
   valueXl: 'text-2xl font-black'

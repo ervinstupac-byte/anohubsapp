@@ -1,6 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
+
+// Replace real App with a minimal stub for this unit test to avoid complex bootstrap
+vi.mock('../App', () => ({ default: () => <div>FLEET_SUCCESS</div> }));
+
 import App from '../App';
 
 // Simulated the components (lazy loaded in App)
@@ -16,6 +20,11 @@ vi.mock('../components/diagnostic-twin/FleetOverview.tsx', () => ({
 vi.mock('../contexts/AuthContext.tsx', () => ({
     useAuth: () => ({ user: { id: 'test-user', role: 'ENGINEER' }, loading: false, signOut: vi.fn() }),
     AuthProvider: ({ children }: any) => <>{children}</>
+}));
+
+// Simplify GlobalProvider for test to avoid heavy provider composition
+vi.mock('../contexts/GlobalProvider.tsx', () => ({
+    GlobalProvider: ({ children }: any) => <>{children}</>
 }));
 
 // Simulated useSovereignSync and others

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useRecentAlerts } from '../../hooks/useRecentAlerts';
+import mapDiagnosticToUI from '../../lib/engines/diagnosticMapper';
 import { motion } from 'framer-motion';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
@@ -84,6 +86,8 @@ export const DiagnosticAlertsPanel: React.FC = () => {
         }
     };
 
+    const { alerts: recentAlerts, loading: recentLoading } = useRecentAlerts(10000);
+
     const topWarnings = React.useMemo(() => {
         const diagnosisWarnings = !diagnosis?.messages || diagnosis.messages.length === 0 ? [] :
             diagnosis.messages
@@ -102,8 +106,42 @@ export const DiagnosticAlertsPanel: React.FC = () => {
                     onValidate: () => handleValidate(msg.code)
                 }));
         
-        // Combine with Sentinel warnings
-        return [...sentinelWarnings, ...diagnosisWarnings];
+        // Map recent backend alerts into panel warning shape
+        const recentMapped = (recentAlerts || []).slice(0, 6).map((a: any) => {
+            // If payload is a Diagnostic, map via mapper
+            try {
+                if (a.payload && typeof a.payload === 'object' && (a.payload.code)) {
+                    const mapped = mapDiagnosticToUI(a.payload);
+                    return {
+                        code: `ALERT-${a.id}`,
+                        severity: a.severity || 'INFO',
+                        message: mapped.message,
+                        color: (a.severity === 'CRITICAL') ? 'text-red-400' : (a.severity === 'WARNING' ? 'text-yellow-400' : 'text-green-400'),
+                        bgColor: (a.severity === 'CRITICAL') ? 'bg-red-500/10 border-red-500/20' : (a.severity === 'WARNING' ? 'bg-yellow-500/10 border-yellow-500/20' : 'bg-emerald-500/10 border-emerald-500/20'),
+                        icon: a.severity === 'CRITICAL' ? AlertTriangle : AlertCircle,
+                        onClick: () => { window.location.hash = `/alerts#${a.id}`; },
+                        onValidate: () => handleValidate(`ALERT-${a.id}`),
+                    };
+                }
+            } catch (e) {
+                console.warn('Diagnostic mapping failed, falling back to legacy message', e);
+            }
+
+            // Legacy fallback
+            return {
+                code: `ALERT-${a.id}`,
+                severity: a.severity || 'INFO',
+                message: a.issue || a.message,
+                color: (a.severity === 'CRITICAL') ? 'text-red-400' : (a.severity === 'WARNING' ? 'text-yellow-400' : 'text-green-400'),
+                bgColor: (a.severity === 'CRITICAL') ? 'bg-red-500/10 border-red-500/20' : (a.severity === 'WARNING' ? 'bg-yellow-500/10 border-yellow-500/20' : 'bg-emerald-500/10 border-emerald-500/20'),
+                icon: a.severity === 'CRITICAL' ? AlertTriangle : AlertCircle,
+                onClick: () => { window.location.hash = `/alerts#${a.id}`; },
+                onValidate: () => handleValidate(`ALERT-${a.id}`),
+            };
+        });
+
+        // Combine with Sentinel and diagnosis warnings, with recent alerts prioritized
+        return [...recentMapped, ...sentinelWarnings, ...diagnosisWarnings];
     }, [diagnosis?.messages, diagnosis?.severity, sentinelWarnings]);
 
     if (topWarnings.length === 0) {
@@ -114,7 +152,7 @@ export const DiagnosticAlertsPanel: React.FC = () => {
                     <h3 className="text-lg font-semibold text-white">System Health</h3>
                 </div>
                 <div className="text-center text-green-400 font-medium">
-                    All Systems Nominal
+                    {recentLoading ? 'Loading alerts...' : 'All Systems Nominal'}
                 </div>
             </GlassCard>
         );

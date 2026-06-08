@@ -1,0 +1,518 @@
+{
+  "testEngine": {
+    "name": "axe-core",
+    "version": "4.8.0"
+  },
+  "testRunner": {
+    "name": "axe"
+  },
+  "testEnvironment": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/148.0.0.0 Safari/537.36",
+    "windowWidth": 800,
+    "windowHeight": 600,
+    "orientationAngle": 0,
+    "orientationType": "portrait-primary"
+  },
+  "timestamp": "2026-05-30T22:49:18.331Z",
+  "url": "http://localhost:3000/#/login",
+  "toolOptions": {
+    "runOnly": {
+      "type": "tag",
+      "values": [
+        "wcag2aa",
+        "wcag21aa"
+      ]
+    },
+    "reporter": "v1"
+  },
+  "inapplicable": [
+    {
+      "id": "autocomplete-valid",
+      "impact": null,
+      "tags": [
+        "cat.forms",
+        "wcag21aa",
+        "wcag135",
+        "EN-301-549",
+        "EN-9.1.3.5",
+        "ACT"
+      ],
+      "description": "Ensure the autocomplete attribute is correct and suitable for the form field",
+      "help": "autocomplete attribute must be used correctly",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/autocomplete-valid?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "meta-viewport",
+      "impact": null,
+      "tags": [
+        "cat.sensory-and-visual-cues",
+        "wcag2aa",
+        "wcag144",
+        "EN-301-549",
+        "EN-9.1.4.4",
+        "ACT"
+      ],
+      "description": "Ensures <meta name=\"viewport\"> does not disable text scaling and zooming",
+      "help": "Zooming and scaling must not be disabled",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/meta-viewport?application=axeAPI",
+      "nodes": []
+    },
+    {
+      "id": "valid-lang",
+      "impact": null,
+      "tags": [
+        "cat.language",
+        "wcag2aa",
+        "wcag312",
+        "TTv5",
+        "TT11.b",
+        "EN-301-549",
+        "EN-9.3.1.2",
+        "ACT"
+      ],
+      "description": "Ensures lang attributes have valid values",
+      "help": "lang attribute must have a valid value",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/valid-lang?application=axeAPI",
+      "nodes": []
+    }
+  ],
+  "passes": [
+    {
+      "id": "avoid-inline-spacing",
+      "impact": null,
+      "tags": [
+        "cat.structure",
+        "wcag21aa",
+        "wcag1412",
+        "EN-301-549",
+        "EN-9.1.4.12",
+        "ACT"
+      ],
+      "description": "Ensure that text spacing set through style attributes can be adjusted with custom stylesheets",
+      "help": "Inline text spacing must be adjustable with custom stylesheets",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/avoid-inline-spacing?application=axeAPI",
+      "nodes": [
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "important-letter-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Letter-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-word-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "word-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-line-height",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "line-height in the style attribute is not set to !important, or meets the minimum"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-blue-600/10 rounded-full blur-[120px] animate-pulse-glow\" style=\"animation-delay: 2s;\"></div>",
+          "target": [
+            ".bottom-\\[-20\\%\\]"
+          ]
+        },
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "important-letter-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Letter-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-word-spacing",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "word-spacing in the style attribute is not set to !important, or meets the minimum"
+            },
+            {
+              "id": "important-line-height",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "line-height in the style attribute is not set to !important, or meets the minimum"
+            }
+          ],
+          "none": [],
+          "impact": null,
+          "html": "<div class=\"bg-slate-900 border border-slate-700 rounded-none p-6 \n                     hover:border-cyan-500/50 transition-all duration-500 \n                     shadow-2xl shadow-cyan-900/20\" style=\"opacity: 1; transform: none;\">",
+          "target": [
+            ".p-6"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "tags": [
+        "cat.color",
+        "wcag2aa",
+        "wcag143",
+        "TTv5",
+        "TT13.c",
+        "EN-301-549",
+        "EN-9.1.4.3",
+        "ACT"
+      ],
+      "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/color-contrast?application=axeAPI",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#e2e8f0",
+                "bgColor": "#101829",
+                "contrastRatio": 14.37,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 14.37"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"text-xs font-bold uppercase tracking-wider hidden sm:inline-block\">en</span>",
+          "target": [
+            ".hidden"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": "#0f172a",
+                "contrastRatio": 17.85,
+                "fontSize": "15.0pt (20px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "3:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 17.85"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<h2 class=\"text-xl font-bold text-white tracking-tight\">Title</h2>",
+          "target": [
+            "h2"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#e2e8f0",
+                "bgColor": "#0f172a",
+                "contrastRatio": 14.48,
+                "fontSize": "7.5pt (10px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 14.48"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<p class=\"text-[10px] text-slate-200 mt-1\">Instructions</p>",
+          "target": [
+            ".mt-1"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#94a3b8",
+                "bgColor": "#0f172a",
+                "contrastRatio": 6.96,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 6.96"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<label class=\"block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 ml-1\">EmailLabel</label>",
+          "target": [
+            ".mb-4.w-full:nth-child(1) > label"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": "#020617",
+                "contrastRatio": 20.17,
+                "fontSize": "10.5pt (14px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 20.17"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input class=\"\n                        w-full bg-slate-950 text-white placeholder-slate-600\n                        border border-slate-700 rounded-none\n                        pl-10 pr-4 py-3\n                        text-sm font-mono transition-all duration-300\n                        focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50 focus:bg-slate-900\n                        hover:border-slate-600\n                        disabled:opacity-50 disabled:cursor-not-allowed\n                        \n                    \" type=\"email\" placeholder=\"engineer@anohub.com\" required=\"\" value=\"\">",
+          "target": [
+            "input[type=\"email\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#94a3b8",
+                "bgColor": "#0f172a",
+                "contrastRatio": 6.96,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 6.96"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<label class=\"block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 ml-1\">PasswordLabel</label>",
+          "target": [
+            ".mb-4.w-full:nth-child(2) > label"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": "#020617",
+                "contrastRatio": 20.17,
+                "fontSize": "10.5pt (14px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 20.17"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<input class=\"\n                        w-full bg-slate-950 text-white placeholder-slate-600\n                        border border-slate-700 rounded-none\n                        pl-10 pr-4 py-3\n                        text-sm font-mono transition-all duration-300\n                        focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50 focus:bg-slate-900\n                        hover:border-slate-600\n                        disabled:opacity-50 disabled:cursor-not-allowed\n                        \n                    \" type=\"password\" placeholder=\"••••••••\" required=\"\" value=\"\">",
+          "target": [
+            "input[type=\"password\"]"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#ffffff",
+                "bgColor": "#0e7490",
+                "contrastRatio": 5.35,
+                "fontSize": "10.5pt (14px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 5.35"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button class=\"relative overflow-hidden rounded-none font-bold tracking-wide transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-4 px-6 text-sm uppercase bg-cyan-700 hover:bg-cyan-600 text-white border border-cyan-500/50 active:bg-cyan-800 w-full shadow-lg shadow-cyan-500/20\" type=\"submit\">",
+          "target": [
+            ".bg-cyan-700"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#e2e8f0",
+                "bgColor": "#0f172a",
+                "contrastRatio": 14.48,
+                "fontSize": "7.5pt (10px)",
+                "fontWeight": "normal",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 14.48"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<span class=\"flex-shrink-0 mx-4 text-[10px] text-slate-200 uppercase\">Or</span>",
+          "target": [
+            ".flex-shrink-0"
+          ]
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#f1f5f9",
+                "bgColor": "#0f172a",
+                "contrastRatio": 16.29,
+                "fontSize": "10.5pt (14px)",
+                "fontWeight": "bold",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has sufficient color contrast of 16.29"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": null,
+          "html": "<button class=\"relative overflow-hidden rounded-none font-bold tracking-wide transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-4 px-6 text-sm uppercase bg-slate-900 hover:bg-slate-800 text-slate-100 border border-slate-700 hover:border-slate-600 active:bg-slate-700 w-full \" type=\"button\">",
+          "target": [
+            ".hover\\:bg-slate-800"
+          ]
+        }
+      ]
+    }
+  ],
+  "incomplete": [
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "tags": [
+        "cat.color",
+        "wcag2aa",
+        "wcag143",
+        "TTv5",
+        "TT13.c",
+        "EN-301-549",
+        "EN-9.1.4.3",
+        "ACT"
+      ],
+      "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.8/color-contrast?application=axeAPI",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "contrastRatio": 0,
+                "fontSize": "36.0pt (48px)",
+                "fontWeight": "bold",
+                "messageKey": "bgGradient",
+                "expectedContrastRatio": "3:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<h1 aria-hidden=\"true\" class=\"text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-2 tracking-tighter drop-shadow-sm\">AnoHUB</h1>",
+                  "target": [
+                    "h1"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element's background color could not be determined due to a background gradient"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<h1 aria-hidden=\"true\" class=\"text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-2 tracking-tighter drop-shadow-sm\">AnoHUB</h1>",
+          "target": [
+            "h1"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "contrastRatio": 0,
+                "fontSize": "9.0pt (12px)",
+                "fontWeight": "normal",
+                "messageKey": "elmPartiallyObscured",
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<div class=\"absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-cyan-500/10 rounded-full blur-[120px] animate-pulse-glow\"></div>",
+                  "target": [
+                    ".top-\\[-20\\%\\]"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element's background color could not be determined because it's partially obscured by another element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<p class=\"text-xs text-slate-200 font-medium tracking-wide\">Subtitle</p>",
+          "target": [
+            ".font-medium"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+        }
+      ]
+    }
+  ],
+  "violations": []
+}

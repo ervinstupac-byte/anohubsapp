@@ -14,6 +14,8 @@ export class ConsoleLogService extends EventEmitter {
     private static instance: ConsoleLogService;
     private logs: LogEntry[] = [];
     private maxLogs: number = 200;
+    // recent message tracker to suppress rapid duplicate logs
+    private recentMessages: Map<string, { last: number; count: number }> = new Map();
     private originalConsole = {
         log: console.log,
         warn: console.warn,
@@ -63,9 +65,52 @@ export class ConsoleLogService extends EventEmitter {
             typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
         ).join(' ');
 
+        const now = Date.now();
+        const key = `${level}::${message}`;
+
+        // Known noisy patterns which should be throttled more aggressively
+        const noisyPatterns = [/SovereignKernel/, /TruthJudge/, /TEST API present\?/i];
+        const isNoisy = noisyPatterns.some(rx => rx.test(message));
+
+        // Simple duplicate suppression: if the same message appears repeatedly
+        // within a short window, increment a counter and suppress frequent repeats
+        const recent = this.recentMessages.get(key);
+        const windowMs = isNoisy ? 8000 : 1500;
+        const emitEvery = isNoisy ? 32 : 8;
+        if (recent && (now - recent.last) < windowMs) {
+            // bump counter
+            recent.count += 1;
+            recent.last = now;
+            // Only emit every Nth repeat to avoid flooding
+            if (recent.count % emitEvery !== 0) {
+                return; // suppress this duplicate
+            }
+            // Replace message with summary on the emitted entry
+            const summaryMsg = `${message} (repeated ${recent.count}x)`;
+            this.recentMessages.set(key, { last: now, count: 0 });
+
+            const entry: LogEntry = {
+                id: Math.random().toString(36).substring(7),
+                timestamp: now,
+                level,
+                message: summaryMsg,
+                source
+            };
+
+            this.logs.unshift(entry);
+            if (this.logs.length > this.maxLogs) this.logs.pop();
+            this.emit('log', entry);
+            // Also forward to original console for visibility
+            try { this.originalConsole.warn.apply(console, [summaryMsg]); } catch { }
+            return;
+        }
+
+        // First time seen (or outside suppression window)
+        this.recentMessages.set(key, { last: now, count: 0 });
+
         const entry: LogEntry = {
             id: Math.random().toString(36).substring(7),
-            timestamp: Date.now(),
+            timestamp: now,
             level,
             message,
             source

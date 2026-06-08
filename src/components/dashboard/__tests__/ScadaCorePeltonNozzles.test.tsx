@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { ScadaCore } from '../ScadaCore';
 import { dispatch } from '../../../lib/events';
@@ -21,10 +21,12 @@ describe('ScadaCore Pelton nozzle binding', () => {
       </MemoryRouter>
     );
     dispatch.setTurbineType({ family: 'PELTON', variant: 'pelton_multi_jet' });
-    // The mimic creates a path per jet between penstock and wheel
+    // The mimic creates a path per jet between penstock and wheel — wait for rendering
     const label = await screen.findByText(/Pelton Wheel/i);
     const container = label.parentElement?.parentElement as HTMLElement;
-    const jetPaths = container.querySelectorAll('path');
-    expect(jetPaths.length).toBeGreaterThanOrEqual(4);
+    await waitFor(() => {
+      const jetPaths = container.querySelectorAll('path');
+      expect(jetPaths.length).toBeGreaterThanOrEqual(4);
+    }, { timeout: 2000 });
   });
 });
