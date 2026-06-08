@@ -490,6 +490,7 @@ const AppLayout: React.FC = () => {
                                                 <Route path="library" element={<ComponentLibrary />} />
                                                 <Route path="knowledge/health-monitor" element={<LibraryHealthMonitor />} />
                                                 <Route path="vision" element={<UnderConstruction />} />
+                                                <Route path="settings" element={<UnderConstruction />} />
                                                 <Route path="forensic-hub" element={<ForensicHub />} />
                                                 <Route path="maintenance/*" element={<MaintenanceRouter />} />
                                                 <Route path="executive" element={<RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}><ExecutiveDashboard /></RoleGuard>} />
