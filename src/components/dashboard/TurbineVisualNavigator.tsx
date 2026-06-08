@@ -17,13 +17,11 @@ import {
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { useNavigate } from 'react-router-dom';
 import { Minimize2, Maximize2, Home } from 'lucide-react';
-import { FRANCIS_PATHS } from '../../routes/paths';
+import { FRANCIS_PATHS, ROUTES } from '../../routes/paths';
 import { TURBINE_COMPONENTS as COMPONENTS } from './data/visual-map';
 
 import GeneratorDetailView from './visual/GeneratorDetailView';
 import RunnerDetailView from './visual/RunnerDetailView';
-import GuideVaneDetailView from './visual/GuideVaneDetailView';
-import FlywheelDetailView from './visual/FlywheelDetailView';
 
 /**
  * NC-9.0 COMPLIANT VISUAL NAVIGATOR
@@ -267,9 +265,11 @@ const TurbineVisualNavigator: React.FC = () => {
                                                 } else if (group.id === 'temp-runner') {
                                                     setViewMode('runner-detail');
                                                 } else if (group.id === 'temp-shaft-coupling') {
-                                                    setViewMode('flywheel-detail');
-                                                } else if (group.id === 'nav-seal' || group.id === 'nav-distributor') {
-                                                    navigate('/francis/mechanism-detail');
+                                                    navigate(`/${ROUTES.PREDICTIVE_INTELLIGENCE}/${ROUTES.LABS.ROOT}/${ROUTES.LABS.COUPLING_BOLT_TENSIONING}`);
+                                                } else if (group.id === 'nav-distributor') {
+                                                    navigate(`/${ROUTES.PREDICTIVE_INTELLIGENCE}/${ROUTES.LABS.ROOT}/${ROUTES.LABS.GUIDE_BEARING_CLEARANCE}`);
+                                                } else if (group.id === 'nav-seal') {
+                                                    navigate(`/${ROUTES.PREDICTIVE_INTELLIGENCE}/${ROUTES.LABS.ROOT}/${ROUTES.LABS.RUNNER_LABYRINTH_SEAL}`);
                                                 } else {
                                                     setFocusedId(group.id);
                                                 }
@@ -520,38 +520,10 @@ const TurbineVisualNavigator: React.FC = () => {
                         <RunnerDetailView
                             onBack={() => setViewMode('overview')}
                             onHome={() => navigate(FRANCIS_PATHS.HUB)}
-                            onGuideVaneDrillDown={() => setViewMode('guide-vane-detail')}
+                            onGuideVaneDrillDown={() => navigate(`/${ROUTES.PREDICTIVE_INTELLIGENCE}/${ROUTES.LABS.ROOT}/${ROUTES.LABS.GUIDE_BEARING_CLEARANCE}`)}
                         />
                     </motion.div>
-                ) : viewMode === 'guide-vane-detail' ? (
-                    <motion.div
-                        key="guide-vane-detail"
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
-                        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-                        className="absolute inset-0 z-30"
-                    >
-                        <GuideVaneDetailView
-                            onBack={() => setViewMode('runner-detail')}
-                            onHome={() => navigate(FRANCIS_PATHS.HUB)}
-                        />
-                    </motion.div>
-                ) : (
-                    <motion.div
-                        key="flywheel-detail"
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
-                        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-                        className="absolute inset-0 z-30"
-                    >
-                        <FlywheelDetailView
-                            onBack={() => setViewMode('overview')}
-                            onHome={() => navigate(FRANCIS_PATHS.HUB)}
-                        />
-                    </motion.div>
-                )}
+                ) : null}
             </AnimatePresence>
         </div>
     );

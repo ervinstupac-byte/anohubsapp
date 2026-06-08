@@ -137,7 +137,7 @@ class FinancialImpactEngineClass extends BaseGuardian {
             // Maintenance & risk
             maintenanceBufferEuro,
             expectedMaintenanceCost,
-            potentialDamageEUR: state.demoMode.active ? potentialDamageEUR : 0,
+            potentialDamageEUR: 0, // Demo mode removed
             maintenanceSavingsEuro,
             leakageCostYearly,
             lifeExtensionSavings

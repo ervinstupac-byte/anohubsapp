@@ -46,12 +46,16 @@ const normalizePath = (p: string) => p.replace(/\\/g, '/').replace(/protocol\/to
 
 const toArchiveAbsolute = (p: string) => {
   const cleaned = normalizePath(p).replace(/^\/+/, '');
-  // If manifest points at docs (archival location), return a docs absolute path
-  if (cleaned.toLowerCase().startsWith('docs/')) return `/${cleaned}`;
-  // If the manifest already contains an explicit archive prefix, keep it as-is
-  if (cleaned.toLowerCase().startsWith('archive/')) return `/${cleaned}`;
-  // Default: keep legacy behavior mapping to the served /archive root
-  return `/archive/${cleaned}`;
+  // Strip docs/archive/ prefix — files in docs/ are NOT served by Vite.
+  // The public/archive/ directory is served at /archive/.
+  const withoutDocsPrefix = cleaned.replace(/^docs\/archive\//i, '').replace(/^docs\//i, '');
+  // Normalize underscore directory names to hyphens to match public/archive/ structure.
+  // e.g. case_studies → case-studies
+  const hyphenated = withoutDocsPrefix.replace(/\b(\w+)_(\w+)\//g, (_: string, a: string, b: string) => `${a}-${b}/`);
+  // If the manifest already contains an explicit archive/ prefix, keep it as-is
+  if (hyphenated.toLowerCase().startsWith('archive/')) return `/${hyphenated}`;
+  // Default: serve from /archive/ (public/archive/ via Vite)
+  return `/archive/${hyphenated}`;
 };
 
 export const DOSSIER_LIBRARY: Array<DossierFile & { originalPath?: string }> = DOSSIER_LIBRARY_RAW.map(d => ({ ...d, path: toArchiveAbsolute(d.path) }));

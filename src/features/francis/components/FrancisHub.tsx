@@ -36,7 +36,7 @@ export const FrancisHub: React.FC = () => {
     const [bigViewAsset, setBigViewAsset] = useState<string | null>(null);
     const [xrayEnabled, setXrayEnabled] = useState(false);
     const { selectedAsset } = useAssetContext();
-    const { isCommanderMode, toggleCommanderMode } = useTelemetryStore();
+    const { isCommanderMode } = useTelemetryStore();
 
     // Listen for clicks inside the injected SVG (dispatched by SurgicalDigitalTwin)
     useEffect(() => {
@@ -109,9 +109,8 @@ export const FrancisHub: React.FC = () => {
 
                     <div className="opacity-30">|</div>
 
-                    {/* Commander Mode Toggle (NC-8.0) */}
+                    {/* Commander Mode Toggle (NC-8.0) - Demo mode removed */}
                     <button
-                        onClick={toggleCommanderMode}
                         className={`flex items-center gap-2 px-3 py-1.5 rounded border transition-all ${isCommanderMode ? 'border-h-gold bg-h-gold/20 text-h-gold shadow-[0_0_15px_rgba(255,184,0,0.2)]' : 'border-white/10 text-slate-500 hover:border-white/20'}`}
                     >
                         <Shield className={`w-3 h-3 ${isCommanderMode ? 'fill-current' : ''}`} />

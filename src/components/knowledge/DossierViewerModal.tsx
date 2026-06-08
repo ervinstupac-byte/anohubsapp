@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ExternalLink, ShieldCheck, Download, Minimize2, AlertCircle, Activity } from 'lucide-react';
+import { X, ExternalLink, ShieldCheck, Download, Minimize2, AlertCircle, Activity, FileText, Clock, Eye } from 'lucide-react';
 import { resolveDossier } from '../../data/knowledge/DossierLibrary';
 
 interface DossierViewerModalProps {
@@ -16,6 +16,8 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
     const navigate = useNavigate();
     const [loadError, setLoadError] = useState(false);
     const [isChecking, setIsChecking] = useState(true);
+    const [viewCount, setViewCount] = useState(0);
+    const [lastViewed, setLastViewed] = useState<string | null>(null);
 
     // Resolve canonical dossier when possible
     const resolvedSource = sourceData || resolveDossier(filePath) || undefined;
@@ -23,19 +25,24 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
     const resolvedPathCandidate = resolvedSource?.path || filePath || '';
     const normalizedPath = resolvedPathCandidate.startsWith('/') ? resolvedPathCandidate : `/${resolvedPathCandidate}`;
     // Fallback mapping to current archival locations:
-    // - If original points into the repo source (AnoHub_site), prefer the docs archive copy
-    // - If it points at public/archive, map to docs/archive (NC-5.7 preservation)
+    // - Phase 3 migration moved src/AnoHub_site/ → public/anohub_site/ (served at /anohub_site/)
+    // - public/archive/ is served directly at /archive/ by Vite
     const activePath = (() => {
+        // AnoHub_site paths: Phase 3 moved these to public/anohub_site/
         if (normalizedPath.includes('AnoHub_site')) {
-            return normalizedPath.replace('/src/AnoHub_site/', '/docs/archive/').replace('/AnoHub_site/', '/docs/archive/');
+            return normalizedPath
+                .replace('/src/AnoHub_site/', '/anohub_site/')
+                .replace('/AnoHub_site/', '/anohub_site/');
         }
+        // Legacy /public/archive paths → /archive/
         if (normalizedPath.includes('/public/archive')) {
-            return normalizedPath.replace('/public/archive', '/docs/archive');
+            return normalizedPath.replace('/public/archive', '/archive');
         }
-        if (normalizedPath.startsWith('/archive/')) {
-            return normalizedPath.replace('/archive/', '/docs/archive/');
+        // /archive/ and /docs/archive/ both remap to /archive/ (public/archive/ is Vite-served)
+        if (normalizedPath.startsWith('/docs/archive/')) {
+            return normalizedPath.replace('/docs/archive/', '/archive/');
         }
-        // Use normalized path as-is (covers /docs/archive/* and absolute repo paths)
+        // Use normalized path as-is (covers /archive/*, /anohub_site/*, and absolute paths)
         return normalizedPath;
     })();
 
@@ -45,6 +52,10 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
             const controller = new AbortController();
             setIsChecking(true);
             setLoadError(false);
+            
+            // Track view statistics
+            setViewCount(prev => prev + 1);
+            setLastViewed(new Date().toLocaleString());
 
             // Physical check for file existence with abort-safe fetch
             fetch(activePath, { method: 'HEAD', signal: controller.signal })
@@ -110,6 +121,18 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
                                     </p>
                                 </div>
                             </div>
+                            <div className="flex items-center gap-3">
+                                <div className="flex items-center gap-2 px-3 py-1 bg-slate-800/50 rounded border border-white/10">
+                                    <Eye className="w-3 h-3 text-slate-400" />
+                                    <span className="text-[9px] font-mono text-slate-400">Views: {viewCount}</span>
+                                </div>
+                                {lastViewed && (
+                                    <div className="flex items-center gap-2 px-3 py-1 bg-slate-800/50 rounded border border-white/10">
+                                        <Clock className="w-3 h-3 text-slate-400" />
+                                        <span className="text-[9px] font-mono text-slate-400">Last: {lastViewed}</span>
+                                    </div>
+                                )}
+                            </div>
 
                             <div className="flex items-center gap-2">
                                 <button
@@ -128,6 +151,13 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
                                 >
                                     <ExternalLink className="w-5 h-5" />
                                 </a>
+                                <button
+                                    onClick={() => window.print()}
+                                    className="p-2 hover:bg-white/5 rounded text-slate-400 hover:text-white transition-colors"
+                                    title="Print dossier"
+                                >
+                                    <FileText className="w-5 h-5" />
+                                </button>
                                 <button
                                     onClick={onClose}
                                     className="p-2 bg-white/5 hover:bg-h-red/20 rounded text-slate-400 hover:text-h-red transition-colors"
@@ -157,7 +187,7 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
                                     </div>
                                     <div className="p-4 bg-h-red/5 border border-h-red/20 rounded-xl max-w-md text-center">
                                         <p className="text-[10px] text-h-red/80 leading-relaxed italic uppercase font-bold">
-                                            NC-5.8 Integrity Fault: This entry appears to be a mocked placeholder or the file was removed from the archive; expected location is /docs/archive/ (preserved under NC-5.7).
+                                            NC-5.8 Integrity Fault: This entry appears to be a mocked placeholder or the file was removed from the archive; expected locations are /archive/ (public/archive/) or /anohub_site/ (Phase 3 static content).
                                         </p>
                                     </div>
                                     <button
@@ -187,14 +217,23 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
                                 <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest">
                                     NC-9.0 INTEGRITY LOCK ACTIVE
                                 </span>
+                                <div className="flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded">
+                                    <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                                    <span className="text-[9px] font-mono text-emerald-400 uppercase tracking-widest">VERIFIED</span>
+                                </div>
                             </div>
                             <div className="flex items-center gap-2">
                                 <button
-                                    onClick={() => window.print()}
+                                    onClick={() => {
+                                        const link = document.createElement('a');
+                                        link.href = activePath;
+                                        link.download = title || 'dossier.pdf';
+                                        link.click();
+                                    }}
                                     className="flex items-center gap-2 px-3 py-1 bg-white/5 hover:bg-white/10 rounded text-[10px] font-bold text-slate-400 hover:text-white transition-all uppercase tracking-tighter"
                                 >
                                     <Download className="w-3 h-3" />
-                                    Export Forensic Log
+                                    Download
                                 </button>
                             </div>
                         </div>

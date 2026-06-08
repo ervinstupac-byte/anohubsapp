@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { useForensics } from '../contexts/ForensicsContext.tsx';
+import { Activity, AlertTriangle, TrendingUp, Clock } from 'lucide-react';
 
 export const ForensicDepthAnalyzer: React.FC = () => {
     const { frozenBuffer, isPostCaptureAction, resetForensics } = useForensics();
@@ -54,6 +55,19 @@ export const ForensicDepthAnalyzer: React.FC = () => {
                     <button onClick={resetForensics} className="text-[9px] text-slate-500 hover:text-white uppercase font-black">Clear Forensics</button>
                 </div>
 
+                {/* Key Insights Panel */}
+                {correlationMatrix.length > 0 && (
+                    <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl mb-4">
+                        <div className="flex items-center gap-2 mb-2">
+                            <Activity className="w-4 h-4 text-red-400" />
+                            <h4 className="text-[10px] font-black uppercase tracking-wider text-white">Root Cause Summary</h4>
+                        </div>
+                        <p className="text-[9px] text-slate-300">
+                            {correlationMatrix.length} events detected. Timeline spans {Math.abs(correlationMatrix[correlationMatrix.length - 1].time - correlationMatrix[0].time)}ms.
+                        </p>
+                    </div>
+                )}
+
                 {/* Correlation Matrix */}
                 <div className="space-y-2">
                     <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Event Correlation Timeline</p>
@@ -93,7 +107,10 @@ export const ForensicDepthAnalyzer: React.FC = () => {
                         className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-red-600"
                     />
                     <div className="flex justify-between mt-2">
-                        <span className="text-[9px] font-mono text-slate-600">-30,000 ms</span>
+                        <div className="flex items-center gap-2">
+                            <Clock className="w-3 h-3 text-slate-600" />
+                            <span className="text-[9px] font-mono text-slate-600">-30,000 ms</span>
+                        </div>
                         <span className="text-[10px] font-black text-white">REPLAY CURSOR: {replayIndex - Math.floor(frozenBuffer!.length / 2)}ms</span>
                         <span className="text-[9px] font-mono text-slate-600">+30,000 ms</span>
                     </div>

@@ -34,9 +34,9 @@ export const Login: React.FC = () => {
 
     const handleGuestLogin = async () => {
         try {
-            await signInAsGuest();
+            await signInAsGuest('ENGINEER'); // Default to ENGINEER role for guest login
             showToast(t('login.guestWelcome', "Welcome, Guest Engineer!"), "success");
-            navigate('/'); // Navigate to dashboard/hub
+            navigate('/'); // Navigate to dashboard/hub (will redirect based on role)
         } catch (error) {
             console.error("Auth Transition Failure:", error);
         }

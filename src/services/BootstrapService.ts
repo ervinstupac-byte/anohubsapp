@@ -21,7 +21,6 @@ import { RoboticFleetOrchestrator } from './RoboticFleetOrchestrator';
 import { SeismicPulseAnalyser } from './SeismicPulseAnalyser';
 import { UpstreamPulseIntegrator } from './UpstreamPulseIntegrator';
 import { WarehouseIntegrationService } from './WarehouseIntegrationService';
-import { LegacyKnowledgeService } from './LegacyKnowledgeService';
 import { FireSuppressionSystem } from './FireSuppressionSystem';
 import { DynamicThermalRating } from './DynamicThermalRating';
 import { ComputerVisionService } from './ComputerVisionService';
@@ -62,25 +61,7 @@ export class BootstrapService {
     // TIER DEFINITIONS
     // ========================================================================
 
-    private static readonly TIER_1_CRITICAL: ServiceDefinition[] = [
-        { name: 'KKS Asset Registry', tier: 1, task: () => (KKSAssetTagger as any)?.initializeRegistry?.() },
-        { name: 'Legacy Knowledge Base', tier: 1, task: () => (LegacyKnowledgeService as any)?.initialize?.() },
-        { name: 'Fire Suppression', tier: 1, task: () => (FireSuppressionSystem as any)?.initializeFireZones?.() },
-        { name: 'High Voltage Shield', tier: 1, task: () => (HVShield as any)?.initializeRelays?.() },
-        // NC-76.5: Database Verification & Auto-Seeding
-        {
-            name: 'Supabase Mainframe',
-            tier: 1,
-            task: async () => {
-                // Dynamic import to avoid circular dependencies during initial parse
-                const { DatabaseSeeder } = await import('./DatabaseSeeder');
-                const result = await DatabaseSeeder.seedIfEmpty();
-                if (!result) {
-                    console.warn('[Bootstrap] ⚠️ Database check completed with warnings, but proceeding.');
-                }
-            }
-        },
-    ];
+    private static readonly TIER_1_CRITICAL: ServiceDefinition[] = [];
 
     private static readonly TIER_2_SENSORS: ServiceDefinition[] = [
         { name: 'Acoustic Analytics', tier: 2, task: () => (CavitationAcousticAnalyser as any)?.initializeSensors?.() },

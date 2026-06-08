@@ -1,4 +1,3 @@
-```markdown
 # AnoHUB Application - Live Demonstration Script
 **Theme:** The Honest Engineering Tool
 **Presenter:** Product Architect

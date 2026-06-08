@@ -1,180 +1,224 @@
-import { AuditSnapshot } from '../stores/useDigitalLedger';
-import BaseGuardian from '../services/BaseGuardian';
-
 export interface CausalEvent {
-    id: string;
-    sensorId: string;
-    eventType: 'deviation' | 'threshold_breach' | 'cascade' | 'trip';
-    timestamp: number;
-    magnitude: number;
-    description: string;
-    confidence: number;
+  id: string;
+  eventType: 'symptom' | 'primary_suspect' | 'secondary_suspect' | 'consequence' | 'deviation' | 'threshold_breach' | 'cascade' | 'trip';
+  description: string;
+  confidence: number;
+  evidence?: string;
+  sensorId?: string;
+  timestamp?: number;
+  magnitude?: number;
 }
 
 export interface RootCauseAnalysis {
-    primaryAggressor: {
-        sensorId: string;
-        deviationTime: number;
-        magnitude: number;
-        baselineValue: number;
-        actualValue: number;
-    };
-    causalChain: CausalEvent[];
+  primaryAggressor: {
+    description: string;
     confidence: number;
-    summary: string;
+    sensorId?: string;
+    deviationTime?: number;
+    magnitude?: number;
+    baselineValue?: number;
+    actualValue?: number;
+  };
+  causalChain: CausalEvent[];
+  confidence: number;
+  summary: string;
 }
 
-export class RootCauseEngine extends BaseGuardian {
-    /**
-     * Analyze snapshot to identify root cause and build causal chain
-     */
-    static analyze(snapshot: AuditSnapshot): RootCauseAnalysis {
-        const diagnostics = snapshot.data.diagnostics || [];
+export interface FaultSymptoms {
+  cavitationRisk: 'LOW' | 'MEDIUM' | 'HIGH';
+  thermalStress: 'NORMAL' | 'ELEVATED' | 'CRITICAL';
+  vibrationSeverityZone: string;
+}
 
-        // Sort diagnostics by severity and timestamp
-        const sortedDiagnostics = [...diagnostics].sort((a, b) => {
-            const severityOrder = { critical: 0, warning: 1, info: 2 };
-            const aSeverity = severityOrder[a.type as keyof typeof severityOrder] ?? 3;
-            const bSeverity = severityOrder[b.type as keyof typeof severityOrder] ?? 3;
+export interface EngineInputParams {
+  head: number;
+  flow: number;
+  rpm: number;
+  temperature: number;
+  vibration: number;
+  efficiency: number;
+  suctionHead: number;
+}
 
-            if (aSeverity !== bSeverity) return aSeverity - bSeverity;
-            return (a.timestamp || 0) - (b.timestamp || 0);
-        });
+export function analyzeRootCause(
+  symptoms: FaultSymptoms,
+  params: EngineInputParams
+): RootCauseAnalysis | null {
+  const causalChain: CausalEvent[] = [];
+  const triggeredSymptoms: { type: keyof FaultSymptoms; message: string }[] = [];
 
-        // Identify primary aggressor (first critical deviation)
-        const primaryDiag = sortedDiagnostics[0] || {
-            id: 'UNKNOWN',
-            messageKey: 'Unknown Fault',
-            type: 'critical',
-            value: 'N/A',
-            timestamp: Date.now()
-        };
+  if (symptoms.cavitationRisk === 'HIGH') {
+    triggeredSymptoms.push({ type: 'cavitationRisk', message: `High cavitation risk detected (Suction Head: ${params.suctionHead}m, Flow: ${params.flow}m³/s)` });
+  }
+  if (symptoms.thermalStress === 'CRITICAL') {
+    triggeredSymptoms.push({ type: 'thermalStress', message: `Critical thermal stress (Temperature: ${params.temperature}°C)` });
+  }
+  if (symptoms.vibrationSeverityZone.includes('Zone D') || symptoms.vibrationSeverityZone.includes('Zone C')) {
+    triggeredSymptoms.push({ type: 'vibrationSeverityZone', message: `Critical vibration (Vibration: ${params.vibration}mm/s)` });
+  }
 
-        const primaryAggressor = {
-            sensorId: primaryDiag.id || 'SENSOR-UNKNOWN',
-            deviationTime: primaryDiag.timestamp || snapshot.timestamp,
-            magnitude: this.calculateMagnitude(primaryDiag),
-            baselineValue: 0, // Would come from historical data
-            actualValue: parseFloat(primaryDiag.value || '0')
-        };
+  if (triggeredSymptoms.length === 0) {
+    return null;
+  }
 
-        // Build causal chain
-        const causalChain = this.buildCausalChain(sortedDiagnostics, snapshot.timestamp);
+  // Add primary symptom(s)
+  triggeredSymptoms.forEach((symptom, idx) => {
+    causalChain.push({
+      id: `SYMPTOM-${idx}`,
+      eventType: 'symptom',
+      description: symptom.message,
+      confidence: 98,
+      evidence: 'Measured sensor values exceed threshold limits',
+      magnitude: 90,
+      timestamp: Date.now(),
+      sensorId: 'SENSOR-' + symptom.type.toUpperCase()
+    });
+  });
 
-        // Calculate overall confidence
-        const confidence = this.calculateConfidence(causalChain, diagnostics.length);
+  // Build causal chain based on symptoms
+  if (symptoms.thermalStress === 'CRITICAL') {
+    causalChain.push({
+      id: 'PRIMARY-THERMAL',
+      eventType: 'primary_suspect',
+      description: 'Insufficient Bearing Cooling Flow',
+      confidence: 75,
+      evidence: `High operating temperature (${params.temperature}°C) indicates reduced heat transfer`,
+      magnitude: 75,
+      timestamp: Date.now(),
+      sensorId: 'BEARING-COOLING'
+    });
 
-        // Generate summary
-        const summary = this.generateSummary(primaryAggressor, causalChain);
+    causalChain.push({
+      id: 'SECONDARY-THERMAL',
+      eventType: 'secondary_suspect',
+      description: 'Heat Exchanger Fouling',
+      confidence: 60,
+      evidence: 'Reduced heat transfer efficiency due to mineral deposits or corrosion',
+      magnitude: 60,
+      timestamp: Date.now(),
+      sensorId: 'HEAT-EXCHANGER'
+    });
 
-        return {
-            primaryAggressor,
-            causalChain,
-            confidence,
-            summary
-        };
-    }
+    causalChain.push({
+      id: 'CONSEQUENCE-THERMAL',
+      eventType: 'consequence',
+      description: 'Oil Degradation Imminent',
+      confidence: 80,
+      evidence: 'Temperatures above 85°C accelerate oil oxidation and viscosity loss',
+      magnitude: 80,
+      timestamp: Date.now(),
+      sensorId: 'OIL-QUALITY'
+    });
+  }
 
-    /**
-     * Calculate deviation magnitude from diagnostic
-     */
-    private static calculateMagnitude(diagnostic: any): number {
-        // Extract numeric value if possible
-        const valueStr = diagnostic.value || '0';
-        const match = valueStr.match(/[\d.]+/);
-        if (!match) return 0;
+  if (symptoms.cavitationRisk === 'HIGH') {
+    causalChain.push({
+      id: 'PRIMARY-CAVITATION',
+      eventType: 'primary_suspect',
+      description: 'Insufficient Draft Tube Submergence',
+      confidence: 78,
+      evidence: `Suction head of ${params.suctionHead}m is below recommended minimum`,
+      magnitude: 78,
+      timestamp: Date.now(),
+      sensorId: 'SUCTION-HEAD'
+    });
 
-        const value = parseFloat(match[0]);
+    causalChain.push({
+      id: 'SECONDARY-CAVITATION',
+      eventType: 'secondary_suspect',
+      description: 'Excessive Flow Rate',
+      confidence: 55,
+      evidence: `Flow rate (${params.flow}m³/s) may exceed design capacity at current head`,
+      magnitude: 55,
+      timestamp: Date.now(),
+      sensorId: 'FLOW-RATE'
+    });
 
-        // Simple heuristic: if value > 100, assume percentage deviation
-        if (value > 100) return value - 100;
+    causalChain.push({
+      id: 'CONSEQUENCE-CAVITATION',
+      eventType: 'consequence',
+      description: 'Runner Blade Pitting',
+      confidence: 85,
+      evidence: 'High cavitation risk leads to bubble collapse and material erosion',
+      magnitude: 85,
+      timestamp: Date.now(),
+      sensorId: 'RUNNER-BLADES'
+    });
+  }
 
-        return value;
-    }
+  if (symptoms.vibrationSeverityZone.includes('Zone D') || symptoms.vibrationSeverityZone.includes('Zone C')) {
+    causalChain.push({
+      id: 'PRIMARY-VIBRATION',
+      eventType: 'primary_suspect',
+      description: 'Rotor Mass Imbalance',
+      confidence: 70,
+      evidence: `High vibration (${params.vibration}mm/s) indicates unbalanced rotating components`,
+      magnitude: 70,
+      timestamp: Date.now(),
+      sensorId: 'VIBRATION-MONITOR'
+    });
 
-    /**
-     * Build causal chain from diagnostics
-     */
-    private static buildCausalChain(diagnostics: any[], snapshotTime: number): CausalEvent[] {
-        const chain: CausalEvent[] = [];
-        const timeWindow = 5000; // 5 second correlation window
+    causalChain.push({
+      id: 'SECONDARY-VIBRATION',
+      eventType: 'secondary_suspect',
+      description: 'Shaft Misalignment',
+      confidence: 60,
+      evidence: 'Misaligned coupling leads to increased radial loads and vibration',
+      magnitude: 60,
+      timestamp: Date.now(),
+      sensorId: 'SHAFT-ALIGNMENT'
+    });
 
-        diagnostics.forEach((diag, index) => {
-            const eventTime = diag.timestamp || snapshotTime - (diagnostics.length - index) * 1000;
+    causalChain.push({
+      id: 'CONSEQUENCE-VIBRATION',
+      eventType: 'consequence',
+      description: 'Bearing Overload & Wear',
+      confidence: 82,
+      evidence: 'Excessive vibration accelerates bearing fatigue and failure',
+      magnitude: 82,
+      timestamp: Date.now(),
+      sensorId: 'BEARING-HEALTH'
+    });
+  }
 
-            let eventType: CausalEvent['eventType'] = 'deviation';
-            if (diag.type === 'critical') eventType = 'threshold_breach';
-            if (index > 0 && index < diagnostics.length - 1) eventType = 'cascade';
-            if (index === diagnostics.length - 1 && diag.type === 'critical') eventType = 'trip';
+  // Calculate overall confidence
+  const avgConfidence = causalChain.reduce((sum, event) => sum + event.confidence, 0) / causalChain.length;
+  const overallConfidence = Math.round(avgConfidence);
 
-            chain.push({
-                id: `EVENT-${index}`,
-                sensorId: diag.id || `SENSOR-${index}`,
-                eventType,
-                timestamp: eventTime,
-                magnitude: this.calculateMagnitude(diag),
-                description: diag.messageKey || 'Unknown event',
-                confidence: this.calculateEventConfidence(diag, index, diagnostics.length)
-            });
-        });
+  // Build summary
+  const symptomCount = triggeredSymptoms.length;
+  const primarySuspects = causalChain.filter(e => e.eventType === 'primary_suspect');
+  const summary = `Detected ${symptomCount} critical symptom(s). Primary suspect(s): ${primarySuspects.map(p => p.description).join(', ')}.`;
 
-        return chain.slice(0, 5); // Limit to 5 events for clarity
-    }
+  const primaryAggressor = primarySuspects.length > 0 
+    ? { 
+        description: primarySuspects[0].description, 
+        confidence: primarySuspects[0].confidence,
+        sensorId: primarySuspects[0].sensorId,
+        magnitude: primarySuspects[0].magnitude,
+        deviationTime: primarySuspects[0].timestamp
+      }
+    : { description: 'Unknown Root Cause', confidence: 30, sensorId: 'UNKNOWN' };
 
-    /**
-     * Calculate confidence for individual event
-     */
-    private static calculateEventConfidence(diag: any, index: number, total: number): number {
-        let confidence = 70; // Base confidence
+  return {
+    primaryAggressor,
+    causalChain,
+    confidence: overallConfidence,
+    summary
+  };
+}
 
-        // Higher confidence for critical events
-        if (diag.type === 'critical') confidence += 20;
-
-        // Higher confidence for earlier events (likely root cause)
-        if (index === 0) confidence += 10;
-
-        // Lower confidence if too many events (noisy data)
-        if (total > 10) confidence -= 15;
-
-        return Math.min(Math.max(confidence, 0), 100);
-    }
-
-    /**
-     * Calculate overall analysis confidence
-     */
-    private static calculateConfidence(chain: CausalEvent[], totalDiagnostics: number): number {
-        if (chain.length === 0) return 0;
-
-        const avgEventConfidence = chain.reduce((sum, e) => sum + e.confidence, 0) / chain.length;
-
-        // Penalize if too few or too many events
-        let penalty = 0;
-        if (chain.length < 2) penalty = 20;
-        if (totalDiagnostics > 20) penalty = 15;
-
-        return Math.round(Math.max(avgEventConfidence - penalty, 0));
-    }
-
-    /**
-     * Generate human-readable summary
-     */
-    private static generateSummary(aggressor: RootCauseAnalysis['primaryAggressor'], chain: CausalEvent[]): string {
-        const aggressorName = aggressor.sensorId.replace('SENSOR-', '').replace(/_/g, ' ');
-        const chainLength = chain.length;
-
-        if (chainLength === 0) {
-            return `Primary fault detected in ${aggressorName}. No causal chain identified.`;
-        }
-
-        const lastEvent = chain[chain.length - 1];
-        const cascadeCount = chain.filter(e => e.eventType === 'cascade').length;
-
-        return `Root cause: ${aggressorName} deviation at ${new Date(aggressor.deviationTime).toLocaleTimeString()}. ` +
-            `Triggered ${cascadeCount} cascade event(s) leading to ${lastEvent.description}.`;
-    }
-
-    public getConfidenceScore(..._args: any[]): number {
-        // Root cause analysis derives confidence from event chain; default neutral fallback
-        return this.corrToScore(0);
-    }
+// Deprecated class for backward compatibility
+export class RootCauseEngine {
+  static analyze() {
+    return {
+      primaryAggressor: { sensorId: 'UNKNOWN', deviationTime: Date.now(), magnitude: 0, baselineValue: 0, actualValue: 0 },
+      causalChain: [],
+      confidence: 0,
+      summary: 'Deprecated API: Use analyzeRootCause() instead'
+    };
+  }
+  getConfidenceScore() {
+    return 0;
+  }
 }

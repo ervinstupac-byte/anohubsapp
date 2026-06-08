@@ -54,6 +54,15 @@ export class CavitationErosionService {
         arPointCloud: Array<{ x: number; y: number; z: number }>,
         surfaceArea: number
     ): BladeErosionMap {
+        if (!bladeId || bladeId <= 0) {
+            throw new Error('Invalid blade ID');
+        }
+        if (!arPointCloud || !Array.isArray(arPointCloud)) {
+            throw new Error('AR point cloud is required');
+        }
+        if (surfaceArea <= 0) {
+            throw new Error('Surface area must be positive');
+        }
         // In production: Process actual AR point cloud data
         // Extract pits by detecting Z-depth anomalies
 
@@ -104,6 +113,18 @@ export class CavitationErosionService {
         previousScan: BladeErosionMap[] | null,
         operatingHours: number
     ): ErosionAnalysis {
+        if (!assetId || assetId <= 0) {
+            throw new Error('Invalid asset ID');
+        }
+        if (!turbineFamily || typeof turbineFamily !== 'string') {
+            throw new Error('Invalid turbine family');
+        }
+        if (!currentScan || !Array.isArray(currentScan) || currentScan.length === 0) {
+            throw new Error('Current scan is required');
+        }
+        if (operatingHours < 0) {
+            throw new Error('Operating hours cannot be negative');
+        }
         // Calculate total mass loss
         const totalMassLoss = currentScan.reduce((sum, blade) => sum + blade.massLoss, 0);
 
@@ -181,6 +202,9 @@ export class CavitationErosionService {
      * Generate ANO-AGENT recommendation message
      */
     static generateRecommendation(analysis: ErosionAnalysis): string {
+        if (!analysis) {
+            throw new Error('Erosion analysis is required');
+        }
         const { massLossRate, erosionAcceleration, recommendedAction, recommendedMaterial, recommendedRegimeChange } = analysis;
 
         let message = `🤖 ANO-AGENT CAVITATION ANALYSIS:\n\n`;

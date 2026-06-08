@@ -55,7 +55,7 @@ describe('ForensicDashboard (War Game)', () => {
         // The mock returns the key.
         // Also note that the component might render children or other structure, but getByText should find the text node.
         expect(screen.getByText(/forensics.critical_alert/)).toBeInTheDocument();
-        expect(screen.getByText(/2000/)).toBeInTheDocument(); // Latency check - "2000 ms" might be split
+        expect(screen.getAllByText(/2000/)).toHaveLength(2); // Latency check - "2000 ms" appears in multiple places
     });
 
 });

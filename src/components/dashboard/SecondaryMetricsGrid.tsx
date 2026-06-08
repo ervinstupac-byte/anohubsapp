@@ -73,7 +73,7 @@ export const SecondaryMetricsGrid: React.FC = () => {
         },
         {
             label: 'Cathodic Prot.',
-            value: unifiedDiagnosis?.corrosionAlerts?.[0]?.averageVoltage?.toString() || '-780',
+            value: (unifiedDiagnosis as any)?.corrosionAlerts?.[0]?.averageVoltage?.toString() || '-780',
             unit: 'mV',
             icon: ShieldCheck,
             color: 'text-emerald-500',
@@ -81,7 +81,7 @@ export const SecondaryMetricsGrid: React.FC = () => {
         },
         {
             label: 'Thermal Rate',
-            value: (unifiedDiagnosis?.thermalInertia?.rate || 0.5).toFixed(2),
+            value: ((unifiedDiagnosis as any)?.thermalInertia?.rate || 0.5).toFixed(2),
             unit: '°C/min',
             icon: Thermometer,
             color: 'text-orange-500',

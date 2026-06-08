@@ -24,7 +24,7 @@ import { MechanicalPanel } from './cerebro/panels/MechanicalPanel';
 import { HydraulicsPanel } from './cerebro/panels/HydraulicsPanel';
 import { LiveMathSync, SystemHealth } from '../services/LiveMathSync'; // Engine
 import { LiveHUD } from './cerebro/LiveHUD'; // HUD
-import { ToastSystem } from '../shared/components/ui/ToastSystem'; // Legacy Guard
+
 import { useProjectEngine } from '../contexts/ProjectContext'; // Context
 
 export const StrategicPlanningDashboard: React.FC = () => {
@@ -319,8 +319,7 @@ export const StrategicPlanningDashboard: React.FC = () => {
             {/* LIVE HUD OVERLAY */}
             <LiveHUD health={systemHealth} />
 
-            {/* LEGACY GUARD TOASTS */}
-            <ToastSystem alerts={activeAlerts} />
+
 
         </div>
     );

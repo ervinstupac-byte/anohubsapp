@@ -1,12 +1,14 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import idAdapter from '../utils/idAdapter';
+import { Magnet, AlertTriangle, Zap, TrendingUp } from 'lucide-react';
 
 export const MagneticPullAnalytics: React.FC = () => {
     const { selectedAsset } = useAssetContext();
     const { telemetry } = useTelemetry();
+    const [forceHistory, setForceHistory] = useState<number[]>([]);
 
     const assetTele = useMemo(() => {
         if (!selectedAsset) return null;
@@ -39,6 +41,13 @@ export const MagneticPullAnalytics: React.FC = () => {
 
         return { force, bearingCapacity, diagnosis, I, e };
     }, [assetTele]);
+
+    // Track force history for trend visualization
+    useEffect(() => {
+        if (mspData) {
+            setForceHistory((prev: number[]) => [...prev, mspData.force].slice(-15));
+        }
+    }, [mspData]);
 
     if (!mspData) return null;
 
@@ -73,6 +82,18 @@ export const MagneticPullAnalytics: React.FC = () => {
                             style={{ width: `${forcePercent}%` }}
                         />
                     </div>
+                    {/* Force Trend Visualization */}
+                    {forceHistory.length > 0 && (
+                        <div className="h-10 bg-slate-900/50 rounded-lg border border-white/5 p-2 flex items-end gap-0.5 mt-2">
+                            {forceHistory.map((val: number, idx: number) => (
+                                <div
+                                    key={idx}
+                                    className={`flex-1 rounded-t ${val > 50 ? 'bg-red-500' : val > 25 ? 'bg-amber-500' : 'bg-emerald-500'}`}
+                                    style={{ height: `${Math.min(100, (val / bearingCapacity) * 100)}%` }}
+                                />
+                            ))}
+                        </div>
+                    )}
                     <div className="flex justify-between text-[8px] font-bold text-slate-600 uppercase">
                         <span>0 kN</span>
                         <span>Capacity: {bearingCapacity} kN</span>

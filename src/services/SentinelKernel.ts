@@ -1,4 +1,3 @@
-import { LegacyKnowledgeService } from './LegacyKnowledgeService';
 import { TelemetryData } from '../contexts/TelemetryContext';
 import Decimal from 'decimal.js';
 
@@ -97,22 +96,11 @@ export class SentinelKernel {
 
     /**
      * Forensic Analytics: Correlates telemetry against Legacy Knowledge Base.
+     * DEPRECATED: Legacy knowledge base removed.
      */
     static crossReferenceLegacy(telemetry: TelemetryData): string[] {
-        const findings: string[] = [];
-        const cases = LegacyKnowledgeService.getAllCases();
-
-        for (const c of cases) {
-            // Check for keyword matches in current status
-            if (c.severity === 'CRITICAL' && telemetry.status === 'CRITICAL') {
-                // If the user's issue matches known symptoms
-                if (telemetry.incidentDetails?.toLowerCase().includes(c.keywords[0])) {
-                    findings.push(`MATCH DETECTED: [${c.id}] ${c.symptom}`);
-                }
-            }
-        }
-
-        return findings;
+        // Legacy knowledge base removed - returning empty findings
+        return [];
     }
 
     public static getConfidenceScore(..._args: any[]): number {

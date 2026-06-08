@@ -35,10 +35,10 @@ import { LanguageSelector } from './components/LanguageSelector.tsx';
 import { SystemStressTest } from './components/debug/SystemStressTest.tsx'; // Debug
 
 import { Hub } from './components/Hub.tsx';
-import { Sidebar } from './components/diagnostic-twin/Sidebar.tsx';
-import { NeuralFlowMap } from './components/diagnostic-twin/NeuralFlowMap.tsx';
-import { FleetOverview } from './components/diagnostic-twin/FleetOverview.tsx';
-import { DigitalPanel } from './components/diagnostic-twin/DigitalPanel.tsx';
+import { Sidebar } from './components/diagnostics/Sidebar.tsx';
+import { NeuralFlowMap } from './components/diagnostics/NeuralFlowMap.tsx';
+import { FleetOverview } from './components/diagnostics/FleetOverview.tsx';
+import { DigitalPanel } from './components/diagnostics/DigitalPanel.tsx';
 import { AssetRegistrationWizard } from './components/AssetRegistrationWizard.tsx';
 import { UnderConstruction } from './components/ui/UnderConstruction.tsx';
 import { LoadingShimmer } from './shared/components/ui/LoadingShimmer';
@@ -50,11 +50,9 @@ import { GlobalFooter } from './components/GlobalFooter.tsx';
 import { DataSyncBridge } from './components/DataSyncBridge';
 import { ProjectPhaseGuide } from './components/ProjectPhaseGuide';
 const PrintPreviewModal = React.lazy(() => import('./components/modals/PrintPreviewModal.tsx').then(m => ({ default: m.PrintPreviewModal })));
-import { TRIGGER_FORENSIC_EXPORT } from './components/diagnostic-twin/Sidebar.tsx';
+import { TRIGGER_FORENSIC_EXPORT } from './components/diagnostics/Sidebar.tsx';
 import { useCerebro } from './contexts/ProjectContext';
-import { CommanderDemoHUD } from './components/diagnostic-twin/CommanderDemoHUD';
 import { SystemBootScreen } from './components/ui/SystemBootScreen.tsx';
-import { SimulationController } from './components/diagnostic-twin/SimulationController.tsx';
 import { CommanderTerminal } from './components/dashboard/CommanderTerminal.tsx';
 import { LibraryHealthMonitor } from './components/knowledge/LibraryHealthMonitor';
 
@@ -67,6 +65,7 @@ import { BootstrapService } from './services/BootstrapService';
 import { lazyHydratePhysicsSnapshots } from './services/DashboardDataService';
 import { RoleGuard } from './components/auth/RoleGuard.tsx'; // <--- NEW
 import { AccessDenied } from './components/auth/AccessDenied.tsx'; // <--- NEW
+import { RoleBasedRedirect } from './components/RoleBasedRedirect'; // <--- NEW: Role-based routing
 
 // --- 4. LAZY LOADED MODULES ---
 const UserProfile = lazy(() => import('./components/UserProfile.tsx').then(m => ({ default: m.UserProfile })));
@@ -80,7 +79,6 @@ const StandardOfExcellence = lazy(() => import('./components/StandardOfExcellenc
 const DigitalIntroduction = lazy(() => import('./components/DigitalIntroduction.tsx').then(m => ({ default: m.DigitalIntroduction })));
 const HPPImprovements = lazy(() => import('./components/HPPImprovements.tsx').then(m => ({ default: m.HPPImprovements })));
 const InstallationGuarantee = lazy(() => import('./components/InstallationGuarantee.tsx').then(m => ({ default: m.InstallationGuarantee })));
-const GenderEquity = lazy(() => import('./components/GenderEquity.tsx').then(m => ({ default: m.GenderEquity })));
 const HPPBuilder = lazy(() => import('./components/HPPBuilder.tsx').then(m => ({ default: m.HPPBuilder })));
 const RiverWildlife = lazy(() => import('./components/RiverWildlife.tsx').then(m => ({ default: m.RiverWildlife })));
 const RevitalizationStrategy = lazy(() => import('./components/RevitalizationStrategy.tsx').then(m => ({ default: m.RevitalizationStrategy })));
@@ -99,8 +97,58 @@ const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDash
 
 const ToolboxLaunchpad = lazy(() => import('./components/ToolboxLaunchpad.tsx').then(m => ({ default: m.ToolboxLaunchpad })));
 const SpecializedDiagnostics = lazy(() => import('./components/SpecializedDiagnostics.tsx').then(m => ({ default: m.SpecializedDiagnostics })));
-const LearningLab = lazy(() => import('./components/diagnostic-twin/LearningLab.tsx').then(m => ({ default: m.LearningLab })));
+const LearningLab = lazy(() => import('./components/diagnostics/LearningLab.tsx').then(m => ({ default: m.LearningLab })));
 const PrecisionAudit = lazy(() => import('./components/PrecisionAudit.tsx').then(m => ({ default: m.PrecisionAudit })));
+const SystemPredictionLab = lazy(() => import('./components/SystemPredictionLab.tsx').then(m => ({ default: m.SystemPredictionLab })));
+const VibrationAnalysisLab = lazy(() => import('./components/VibrationAnalysisLab.tsx').then(m => ({ default: m.VibrationAnalysisLab })));
+const PredictiveIntelligenceCenter = lazy(() => import('./components/PredictiveIntelligenceCenter.tsx').then(m => ({ default: m.PredictiveIntelligenceCenter })));
+
+// Predictive Intelligence Labs - Mechanical Forensics
+const ShaftPlumbnessLab = lazy(() => import('./components/ShaftPlumbnessLab.tsx').then(m => ({ default: m.ShaftPlumbnessLab })));
+const CouplingBoltTensioningLab = lazy(() => import('./components/CouplingBoltTensioningLab.tsx').then(m => ({ default: m.CouplingBoltTensioningLab })));
+const GuideBearingClearanceLab = lazy(() => import('./components/GuideBearingClearanceLab.tsx').then(m => ({ default: m.GuideBearingClearanceLab })));
+const HeadCoverDeflectionLab = lazy(() => import('./components/HeadCoverDeflectionLab.tsx').then(m => ({ default: m.HeadCoverDeflectionLab })));
+const JackingOilSystemLab = lazy(() => import('./components/JackingOilSystemLab.tsx').then(m => ({ default: m.JackingOilSystemLab })));
+const KaplanBladeTrunnionLab = lazy(() => import('./components/KaplanBladeTrunnionLab.tsx').then(m => ({ default: m.KaplanBladeTrunnionLab })));
+const MechanicalBrakeWearLab = lazy(() => import('./components/MechanicalBrakeWearLab.tsx').then(m => ({ default: m.MechanicalBrakeWearLab })));
+const RunnerLabyrinthSealLab = lazy(() => import('./components/RunnerLabyrinthSealLab.tsx').then(m => ({ default: m.RunnerLabyrinthSealLab })));
+const ShearPinFatigueLab = lazy(() => import('./components/ShearPinFatigueLab.tsx').then(m => ({ default: m.ShearPinFatigueLab })));
+const ThrustBearingLoadDistributionLab = lazy(() => import('./components/ThrustBearingLoadDistributionLab.tsx').then(m => ({ default: m.ThrustBearingLoadDistributionLab })));
+const StayVaneCrackLab = lazy(() => import('./components/StayVaneCrackLab.tsx').then(m => ({ default: m.StayVaneCrackLab })));
+
+// Predictive Intelligence Labs - Electrical Diagnostics
+const GeneratorAirGapLab = lazy(() => import('./components/GeneratorAirGapLab.tsx').then(m => ({ default: m.GeneratorAirGapLab })));
+const ExcitationHeatDissipationLab = lazy(() => import('./components/ExcitationHeatDissipationLab.tsx').then(m => ({ default: m.ExcitationHeatDissipationLab })));
+const PartialDischargeLab = lazy(() => import('./components/PartialDischargeLab.tsx').then(m => ({ default: m.PartialDischargeLab })));
+const RotorPoleImpedanceLab = lazy(() => import('./components/RotorPoleImpedanceLab.tsx').then(m => ({ default: m.RotorPoleImpedanceLab })));
+const StatorCoreClampingLab = lazy(() => import('./components/StatorCoreClampingLab.tsx').then(m => ({ default: m.StatorCoreClampingLab })));
+const StatorWindingThermalLab = lazy(() => import('./components/StatorWindingThermalLab.tsx').then(m => ({ default: m.StatorWindingThermalLab })));
+const TransformerDissolvedGasLab = lazy(() => import('./components/TransformerDissolvedGasLab.tsx').then(m => ({ default: m.TransformerDissolvedGasLab })));
+
+// Predictive Intelligence Labs - Hydraulic Analytics
+const DraftTubeAirAdmissionLab = lazy(() => import('./components/DraftTubeAirAdmissionLab.tsx').then(m => ({ default: m.DraftTubeAirAdmissionLab })));
+const DraftTubeSurgeLab = lazy(() => import('./components/DraftTubeSurgeLab.tsx').then(m => ({ default: m.DraftTubeSurgeLab })));
+const FrancisCavitationProfilingLab = lazy(() => import('./components/FrancisCavitationProfilingLab.tsx').then(m => ({ default: m.FrancisCavitationProfilingLab })));
+const KaplanCamCurveLab = lazy(() => import('./components/KaplanCamCurveLab.tsx').then(m => ({ default: m.KaplanCamCurveLab })));
+const MainInletValveBypassLab = lazy(() => import('./components/MainInletValveBypassLab.tsx').then(m => ({ default: m.MainInletValveBypassLab })));
+const OilCoolerThermalEfficiencyLab = lazy(() => import('./components/OilCoolerThermalEfficiencyLab.tsx').then(m => ({ default: m.OilCoolerThermalEfficiencyLab })));
+const PeltonInjectorAlignmentLab = lazy(() => import('./components/PeltonInjectorAlignmentLab.tsx').then(m => ({ default: m.PeltonInjectorAlignmentLab })));
+const PeltonNeedleValveLab = lazy(() => import('./components/PeltonNeedleValveLab.tsx').then(m => ({ default: m.PeltonNeedleValveLab })));
+const PenstockWaterHammerLab = lazy(() => import('./components/PenstockWaterHammerLab.tsx').then(m => ({ default: m.PenstockWaterHammerLab })));
+const SpiralCasePressureLossLab = lazy(() => import('./components/SpiralCasePressureLossLab.tsx').then(m => ({ default: m.SpiralCasePressureLossLab })));
+const TrashRackHeadLossLab = lazy(() => import('./components/TrashRackHeadLossLab.tsx').then(m => ({ default: m.TrashRackHeadLossLab })));
+
+// Predictive Intelligence Labs - Operational Scenarios
+const BlackStartCapabilityLab = lazy(() => import('./components/BlackStartCapabilityLab.tsx').then(m => ({ default: m.BlackStartCapabilityLab })));
+const GovernorDeadbandLab = lazy(() => import('./components/GovernorDeadbandLab.tsx').then(m => ({ default: m.GovernorDeadbandLab })));
+const IndexTestingEfficiencyLab = lazy(() => import('./components/IndexTestingEfficiencyLab.tsx').then(m => ({ default: m.IndexTestingEfficiencyLab })));
+const LoadRejectionOverspeedLab = lazy(() => import('./components/LoadRejectionOverspeedLab.tsx').then(m => ({ default: m.LoadRejectionOverspeedLab })));
+const LubricatingOilDegradationLab = lazy(() => import('./components/LubricatingOilDegradationLab.tsx').then(m => ({ default: m.LubricatingOilDegradationLab })));
+const RoughZoneOperationLab = lazy(() => import('./components/RoughZoneOperationLab.tsx').then(m => ({ default: m.RoughZoneOperationLab })));
+const RunUpVibrationLab = lazy(() => import('./components/RunUpVibrationLab.tsx').then(m => ({ default: m.RunUpVibrationLab })));
+const UnitStartupSequenceLab = lazy(() => import('./components/UnitStartupSequenceLab.tsx').then(m => ({ default: m.UnitStartupSequenceLab })));
+const BearingCoolingWaterFlowLab = lazy(() => import('./components/BearingCoolingWaterFlowLab.tsx').then(m => ({ default: m.BearingCoolingWaterFlowLab })));
+
 const FrancisHub = React.lazy(() => import('./features/francis/components/FrancisHub').then(module => ({ default: module.FrancisHub })));
 const SOPViewer = React.lazy(() => import('./components/francis/SOPViewer').then(module => ({ default: module.SOPViewer })));
 // Francis Turbine Module - All routes extracted to dedicated sub-router
@@ -114,6 +162,9 @@ const MaintenanceRouter = React.lazy(() => import('./routes/MaintenanceRouter.ts
 const EngineerLanding = React.lazy(() => import('./pages/EngineerLanding').then(m => ({ default: m.EngineerLanding })));
 const OwnerLanding = React.lazy(() => import('./pages/OwnerLanding').then(m => ({ default: m.OwnerLanding })));
 const HydroschoolLanding = React.lazy(() => import('./pages/HydroschoolLanding').then(m => ({ default: m.HydroschoolLanding })));
+
+// Knowledge Base — static AnoHub_site HTML served via iframe wrapper
+const KnowledgeBaseViewer = React.lazy(() => import('./pages/KnowledgeBaseViewer').then(m => ({ default: m.KnowledgeBaseViewer })));
 
 
 
@@ -180,7 +231,6 @@ const AppLayout: React.FC = () => {
     const [reconstructing, setReconstructing] = useState(false);
     const [reconstructProgress, setReconstructProgress] = useState<number | null>(null);
     const { state: cerebroState } = useCerebro();
-    const isCriticalDemo = cerebroState?.demoMode?.active && cerebroState?.demoMode?.scenario !== 'NORMAL';
     const { state: technicalState } = useCerebro();
 
     const isHub = location.pathname === '/';
@@ -261,8 +311,6 @@ const AppLayout: React.FC = () => {
             'hppImprovements': '/hpp-improvements',
             'installation': '/installation-guarantee',
             'installationGuarantee': '/installation-guarantee',
-            'gender': '/gender-equity',
-            'genderEquity': '/gender-equity',
             'hppBuilder': '/hpp-builder',
             'phases': '/phase-guide',
             'phaseGuide': '/phase-guide',
@@ -329,15 +377,7 @@ const AppLayout: React.FC = () => {
         <NavigationProvider value={navValue}>
             <DrillDownProvider>
                 {/* Fix 3: Layout "Hidden Corners" & Space Efficiency */}
-                <div className={`field-mode h-screen w-screen bg-[#05070a] text-slate-100 overflow-hidden selection:bg-cyan-500/30 font-sans relative grid ${isSidebarOpen ? 'lg:grid-cols-[280px_1fr]' : 'grid-cols-[0px_1fr]'} transition-[grid-template-columns] duration-300 bg-[#020617] ${isCriticalDemo ? 'shadow-[inset_0_0_100px_rgba(239,68,68,0.2)]' : ''}`}>
-                    {isCriticalDemo && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: [0.1, 0.4, 0.1] }}
-                            transition={{ repeat: Infinity, duration: 2 }}
-                            className="fixed inset-0 pointer-events-none z-[99] border-[24px] border-red-500/20 shadow-[inset_0_0_150px_rgba(239,68,68,0.3)]"
-                        />
-                    )}
+                <div className={`field-mode h-screen w-screen bg-[#05070a] text-slate-100 overflow-hidden selection:bg-cyan-500/30 font-sans relative grid ${isSidebarOpen ? 'lg:grid-cols-[280px_1fr]' : 'grid-cols-[0px_1fr]'} transition-[grid-template-columns] duration-300 bg-[#020617]`}>
                     {/* The "Elite" Background Glows */}
                     <div className="fixed inset-0 pointer-events-none z-0">
                         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-900/20 blur-[120px] rounded-full" />
@@ -403,7 +443,7 @@ const AppLayout: React.FC = () => {
                                     }>
                                         <div className="w-full">
                                             <Routes location={location}>
-                                                <Route index element={<ToolboxLaunchpad />} />
+                                                <Route index element={<RoleBasedRedirect />} />
                                                 <Route path={ROUTES.DIAGNOSTIC_TWIN} element={<NeuralFlowMap />} />
                                                 {/* Francis Turbine Module - All routes handled by dedicated sub-router */}
                                                 <Route path="/francis/*" element={<FrancisRouter />} />
@@ -442,7 +482,6 @@ const AppLayout: React.FC = () => {
                                                 {/* GENERAL INFO */}
                                                 <Route path="hpp-improvements" element={<HPPImprovements />} />
                                                 <Route path="installation-guarantee" element={<InstallationGuarantee />} />
-                                                <Route path="gender-equity" element={<GenderEquity />} />
 
                                                 {/* INFRASTRUCTURE - RESTRICTED */}
                                                 <Route path="infrastructure/*" element={
@@ -460,6 +499,10 @@ const AppLayout: React.FC = () => {
                                                 <Route path="library" element={<ComponentLibrary />} />
                                                 <Route path="knowledge/health-monitor" element={<LibraryHealthMonitor />} />
                                                 <Route path="vision" element={<UnderConstruction />} />
+
+                                                {/* Knowledge Base — static AnoHub_site HTML via iframe wrapper */}
+                                                <Route path="knowledge-base" element={<KnowledgeBaseViewer />} />
+                                                <Route path="knowledge-base/:section" element={<KnowledgeBaseViewer />} />
 
                                                 {/* Maintenance Sub-Router */}
                                                 <Route path="/maintenance/*" element={<MaintenanceRouter />} />
@@ -490,6 +533,59 @@ const AppLayout: React.FC = () => {
                                                 <Route path="stress-test" element={<SystemStressTest />} />
                                                 <Route path="precision-audit" element={<PrecisionAudit />} />
                                                 <Route path="learning-lab" element={<LearningLab />} />
+                                                <Route path="prediction-lab" element={<SystemPredictionLab />} />
+                                                <Route path="vibration-lab" element={<VibrationAnalysisLab />} />
+                                                <Route path="lab/system-prediction" element={<SystemPredictionLab />} />
+                                                <Route path="lab/vibration-analysis" element={<VibrationAnalysisLab />} />
+
+                                                {/* Predictive Intelligence Center */}
+                                                <Route path="predictive-intelligence" element={<PredictiveIntelligenceCenter />} />
+
+                                                {/* Predictive Intelligence Labs - Mechanical Forensics */}
+                                                <Route path="lab/shaft-plumbness" element={<ShaftPlumbnessLab />} />
+                                                <Route path="lab/coupling-bolt-tensioning" element={<CouplingBoltTensioningLab />} />
+                                                <Route path="lab/guide-bearing-clearance" element={<GuideBearingClearanceLab />} />
+                                                <Route path="lab/head-cover-deflection" element={<HeadCoverDeflectionLab />} />
+                                                <Route path="lab/jacking-oil-system" element={<JackingOilSystemLab />} />
+                                                <Route path="lab/kaplan-blade-trunnion" element={<KaplanBladeTrunnionLab />} />
+                                                <Route path="lab/mechanical-brake-wear" element={<MechanicalBrakeWearLab />} />
+                                                <Route path="lab/runner-labyrinth-seal" element={<RunnerLabyrinthSealLab />} />
+                                                <Route path="lab/shear-pin-fatigue" element={<ShearPinFatigueLab />} />
+                                                <Route path="lab/thrust-bearing-load" element={<ThrustBearingLoadDistributionLab />} />
+                                                <Route path="lab/stay-vane-crack" element={<StayVaneCrackLab />} />
+
+                                                {/* Predictive Intelligence Labs - Electrical Diagnostics */}
+                                                <Route path="lab/generator-airgap" element={<GeneratorAirGapLab />} />
+                                                <Route path="lab/excitation-heat" element={<ExcitationHeatDissipationLab />} />
+                                                <Route path="lab/partial-discharge" element={<PartialDischargeLab />} />
+                                                <Route path="lab/rotor-pole-impedance" element={<RotorPoleImpedanceLab />} />
+                                                <Route path="lab/stator-core-clamping" element={<StatorCoreClampingLab />} />
+                                                <Route path="lab/stator-winding-thermal" element={<StatorWindingThermalLab />} />
+                                                <Route path="lab/transformer-gas" element={<TransformerDissolvedGasLab />} />
+
+                                                {/* Predictive Intelligence Labs - Hydraulic Analytics */}
+                                                <Route path="lab/draft-tube-air" element={<DraftTubeAirAdmissionLab />} />
+                                                <Route path="lab/draft-tube-surge" element={<DraftTubeSurgeLab />} />
+                                                <Route path="lab/francis-cavitation" element={<FrancisCavitationProfilingLab />} />
+                                                <Route path="lab/kaplan-cam-curve" element={<KaplanCamCurveLab />} />
+                                                <Route path="lab/miv-bypass" element={<MainInletValveBypassLab />} />
+                                                <Route path="lab/oil-cooler" element={<OilCoolerThermalEfficiencyLab />} />
+                                                <Route path="lab/pelton-injector" element={<PeltonInjectorAlignmentLab />} />
+                                                <Route path="lab/pelton-needle" element={<PeltonNeedleValveLab />} />
+                                                <Route path="lab/penstock-hammer" element={<PenstockWaterHammerLab />} />
+                                                <Route path="lab/spiral-case" element={<SpiralCasePressureLossLab />} />
+                                                <Route path="lab/trash-rack" element={<TrashRackHeadLossLab />} />
+
+                                                {/* Predictive Intelligence Labs - Operational Scenarios */}
+                                                <Route path="lab/black-start" element={<BlackStartCapabilityLab />} />
+                                                <Route path="lab/governor-deadband" element={<GovernorDeadbandLab />} />
+                                                <Route path="lab/index-testing" element={<IndexTestingEfficiencyLab />} />
+                                                <Route path="lab/load-rejection" element={<LoadRejectionOverspeedLab />} />
+                                                <Route path="lab/oil-degradation" element={<LubricatingOilDegradationLab />} />
+                                                <Route path="lab/rough-zone" element={<RoughZoneOperationLab />} />
+                                                <Route path="lab/runup-vibration" element={<RunUpVibrationLab />} />
+                                                <Route path="lab/startup-sequence" element={<UnitStartupSequenceLab />} />
+                                                <Route path="lab/bearing-cooling" element={<BearingCoolingWaterFlowLab />} />
 
                                                 {/* ACCESS DENIED PAGE */}
                                                 <Route path="/access-denied" element={<AccessDenied />} />
@@ -529,8 +625,6 @@ const AppLayout: React.FC = () => {
                         <AssetTypeSelector />
                     </Suspense>
 
-                    <SimulationController />
-                    <CommanderDemoHUD />
                     <CommanderTerminal />
                     <CommandPalette /> {/* GLOBAL COMMAND PALETTE - NOW INSIDE DRILLDOWN PROVIDER */}
                 </div>

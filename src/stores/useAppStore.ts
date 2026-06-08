@@ -5,7 +5,7 @@ import { persist } from 'zustand/middleware';
  * App Store (Zustand)
  * 
  * Manages UI state and session-specific data.
- * This includes demo modes, manual rules, and temporary UI flags.
+ * This includes manual rules and temporary UI flags.
  * 
  * Separation Rationale:
  * - UI state shouldn't be mixed with technical/physical state
@@ -13,23 +13,7 @@ import { persist } from 'zustand/middleware';
  * - Zustand provides better performance than Context for frequent updates
  */
 
-export type DemoScenario =
-    | 'NORMAL'
-    | 'WATER_HAMMER'
-    | 'GRID_LOSS'
-    | 'CAVITATION'
-    | 'BEARING_FAILURE'
-    | 'ALIGNMENT_DRIFT';
-
-export interface DemoMode {
-    active: boolean;
-    scenario: DemoScenario | null;
-}
-
 interface AppState {
-    // Demo Mode
-    demoMode: DemoMode;
-
     // Manual Engineering Rules
     manualRules: string[];
 
@@ -41,10 +25,6 @@ interface AppState {
     darkMode: boolean;
 
     // Actions
-    setDemoMode: (mode: DemoMode) => void;
-    startScenario: (scenario: DemoScenario) => void;
-    stopDemo: () => void;
-
     addManualRule: (rule: string) => void;
     removeManualRule: (rule: string) => void;
     clearManualRules: () => void;
@@ -61,10 +41,6 @@ interface AppState {
 }
 
 const initialState = {
-    demoMode: {
-        active: false,
-        scenario: null
-    },
     manualRules: [],
     appliedMitigations: [],
     sidebarCollapsed: false,
@@ -75,32 +51,6 @@ export const useAppStore = create<AppState>()(
     persist(
         (set) => ({
             ...initialState,
-
-            // Demo Mode Actions
-            setDemoMode: (mode: DemoMode) => {
-                console.log('[AppStore] Demo mode set:', mode);
-                set({ demoMode: mode });
-            },
-
-            startScenario: (scenario: DemoScenario) => {
-                console.log('[AppStore] Starting scenario:', scenario);
-                set({
-                    demoMode: {
-                        active: scenario !== 'NORMAL',
-                        scenario: scenario === 'NORMAL' ? null : scenario
-                    }
-                });
-            },
-
-            stopDemo: () => {
-                console.log('[AppStore] Stopping demo mode');
-                set({
-                    demoMode: {
-                        active: false,
-                        scenario: null
-                    }
-                });
-            },
 
             // Manual Rules Actions
             addManualRule: (rule: string) => {
@@ -156,7 +106,6 @@ export const useAppStore = create<AppState>()(
             name: 'anohub-app-store',
             partialize: (state) => ({
                 // Only persist relevant data
-                demoMode: state.demoMode,
                 manualRules: state.manualRules,
                 appliedMitigations: state.appliedMitigations,
                 sidebarCollapsed: state.sidebarCollapsed,
@@ -167,7 +116,6 @@ export const useAppStore = create<AppState>()(
 );
 
 // Selectors for optimized subscriptions
-export const useDemoMode = () => useAppStore((state) => state.demoMode);
 export const useManualRules = () => useAppStore((state) => state.manualRules);
 export const useAppliedMitigations = () => useAppStore((state) => state.appliedMitigations);
 export const useSidebarState = () => useAppStore((state) => state.sidebarCollapsed);

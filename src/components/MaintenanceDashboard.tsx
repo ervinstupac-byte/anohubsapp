@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ROUTES } from '../routes/paths.ts';
+import { ROUTES, getMaintenancePath } from '../routes/paths.ts';
 import { useMaintenance, protocols } from '../contexts/MaintenanceContext.tsx';
 import { useInventory } from '../contexts/InventoryContext.tsx';
 import { useWorkOrder } from '../contexts/WorkOrderContext.tsx';
@@ -28,6 +28,8 @@ import { ForensicDepthAnalyzer } from './ForensicDepthAnalyzer.tsx';
 import { OrbitPlotter } from '../features/telemetry/components/OrbitPlotter';
 import { MagneticPullAnalytics } from './MagneticPullAnalytics.tsx';
 import { AcousticDiagnosticModule } from './AcousticDiagnosticModule.tsx';
+import { QuickAccessCard } from '../shared/components/ui/QuickAccessCard';
+import { Wrench, Settings, Activity, Shield, FileText, Clock, AlertTriangle, Calendar, CheckCircle, Smartphone, AlertCircle, TrendingUp, Info } from 'lucide-react';
 // import { AIPredictiveModule } from './AIPredictiveModule.tsx'; // REMOVED: simulation feature
 
 // --- HEATMAP GENERATOR ---
@@ -63,8 +65,39 @@ export const MaintenanceDashboard: React.FC = () => {
     const { showToast } = useToast();
     const { activeQuery } = useDiagnostic();
     const { state } = useCerebro();
+    const [maintenanceStatus, setMaintenanceStatus] = useState<'nominal' | 'attention' | 'critical'>('nominal');
+    const [upcomingServices, setUpcomingServices] = useState<any[]>([]);
 
     const hours = selectedAsset ? operatingHours[idAdapter.toStorage(selectedAsset.id)] || 0 : 0;
+
+    // Calculate maintenance status based on protocols
+    useEffect(() => {
+        if (!selectedAsset) return;
+        
+        const numericId = idAdapter.toNumber(selectedAsset.id) || 0;
+        const protocolStatuses = protocols.map(proto => {
+            const progress = (hours % proto.threshold) / proto.threshold * 100;
+            return { proto, progress };
+        });
+        
+        const criticalServices = protocolStatuses.filter(p => p.progress > 80);
+        const attentionServices = protocolStatuses.filter(p => p.progress > 50 && p.progress <= 80);
+        
+        if (criticalServices.length > 0) {
+            setMaintenanceStatus('critical');
+        } else if (attentionServices.length > 0) {
+            setMaintenanceStatus('attention');
+        } else {
+            setMaintenanceStatus('nominal');
+        }
+        
+        // Get upcoming services (next 3)
+        const upcoming = protocolStatuses
+            .filter(p => p.progress < 100)
+            .sort((a, b) => b.progress - a.progress)
+            .slice(0, 3);
+        setUpcomingServices(upcoming);
+    }, [selectedAsset, hours]);
 
     // Heatmap removed - showing real data only
     const heatmapData: number[] = [];
@@ -99,6 +132,108 @@ export const MaintenanceDashboard: React.FC = () => {
                 </div>
             </div>
 
+            {/* QUICK ACCESS CARDS SECTION */}
+            <div className="mb-6">
+                {/* Maintenance Status Banner */}
+                {selectedAsset && (
+                    <div className={`mb-4 p-4 rounded-xl border-2 flex items-center justify-between ${
+                        maintenanceStatus === 'critical' ? 'bg-red-500/10 border-red-500/30' :
+                        maintenanceStatus === 'attention' ? 'bg-amber-500/10 border-amber-500/30' :
+                        'bg-emerald-500/10 border-emerald-500/30'
+                    }`}>
+                        <div className="flex items-center gap-3">
+                            {maintenanceStatus === 'critical' ? <AlertCircle className="w-5 h-5 text-red-500" /> :
+                             maintenanceStatus === 'attention' ? <AlertTriangle className="w-5 h-5 text-amber-500" /> :
+                             <CheckCircle className="w-5 h-5 text-emerald-500" />}
+                            <div>
+                                <div className={`text-xs font-bold uppercase tracking-wider ${
+                                    maintenanceStatus === 'critical' ? 'text-red-500' :
+                                    maintenanceStatus === 'attention' ? 'text-amber-500' :
+                                    'text-emerald-500'
+                                }`}>
+                                    Maintenance Status: {maintenanceStatus.toUpperCase()}
+                                </div>
+                                <div className="text-[10px] text-slate-400">
+                                    {upcomingServices.length > 0 ? `${upcomingServices.length} service${upcomingServices.length > 1 ? 's' : ''} upcoming` : 'All systems nominal'}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="text-right">
+                            <div className="text-[10px] text-slate-500 uppercase tracking-wider">Operating Hours</div>
+                            <div className="text-sm font-bold text-white">{hours.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}h</div>
+                        </div>
+                    </div>
+                )}
+
+                <div className="mb-4">
+                    <h2 className="text-xl font-black text-white uppercase tracking-widest mb-1">Maintenance Command Center</h2>
+                    <p className="text-sm text-slate-400">Quick access to maintenance functions</p>
+                </div>
+                
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+                    <QuickAccessCard
+                        id="timeline"
+                        title="Timeline"
+                        description="Service schedule"
+                        icon={<Calendar className="w-6 h-6" />}
+                        color="bg-red-500/10"
+                        borderColor="border-red-500/30"
+                        priority="critical"
+                        onClick={() => document.getElementById('maintenance-timeline')?.scrollIntoView({ behavior: 'smooth' })}
+                    />
+                    <QuickAccessCard
+                        id="protocols"
+                        title="Protocols"
+                        description="Service procedures"
+                        icon={<CheckCircle className="w-6 h-6" />}
+                        color="bg-red-500/10"
+                        borderColor="border-red-500/30"
+                        priority="critical"
+                        onClick={() => document.getElementById('service-protocols')?.scrollIntoView({ behavior: 'smooth' })}
+                    />
+                    <QuickAccessCard
+                        id="hydraulic"
+                        title="Hydraulic"
+                        description="Labyrinth health"
+                        icon={<Activity className="w-6 h-6" />}
+                        route={getMaintenancePath(ROUTES.MAINTENANCE.HYDRAULIC)}
+                        color="bg-amber-500/10"
+                        borderColor="border-amber-500/30"
+                        priority="high"
+                    />
+                    <QuickAccessCard
+                        id="bolt-torque"
+                        title="Bolt Torque"
+                        description="Fastener integrity"
+                        icon={<Wrench className="w-6 h-6" />}
+                        route={getMaintenancePath(ROUTES.MAINTENANCE.BOLT_TORQUE)}
+                        color="bg-amber-500/10"
+                        borderColor="border-amber-500/30"
+                        priority="high"
+                    />
+                    <QuickAccessCard
+                        id="shadow-engineer"
+                        title="Shadow Engineer"
+                        description="SOP manager"
+                        icon={<Settings className="w-6 h-6" />}
+                        route={getMaintenancePath(ROUTES.MAINTENANCE.SHADOW_ENGINEER)}
+                        color="bg-cyan-500/10"
+                        borderColor="border-cyan-500/30"
+                        priority="medium"
+                    />
+                    <QuickAccessCard
+                        id="ar-guide"
+                        title="AR Guide"
+                        description="Field manual"
+                        icon={<Smartphone className="w-6 h-6" />}
+                        route={getMaintenancePath(ROUTES.MAINTENANCE.AR_GUIDE)}
+                        color="bg-cyan-500/10"
+                        borderColor="border-cyan-500/30"
+                        priority="medium"
+                    />
+                </div>
+            </div>
+
             {!selectedAsset ? (
                 <GlassCard className="text-center py-20">
                     <p className="text-slate-500 uppercase tracking-widest font-bold">Select an Asset to view Maintenance Schedule</p>
@@ -109,7 +244,7 @@ export const MaintenanceDashboard: React.FC = () => {
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* LEFT: STATUS CARD */}
-                        <div className="space-y-6">
+                        <div className="space-y-6" id="maintenance-timeline">
                             <MaintenanceTimelineCard />
                             <ExpertMaintenanceAdvisorCard />
                             <SmartActionList />
@@ -126,14 +261,47 @@ export const MaintenanceDashboard: React.FC = () => {
                                 </div>
                             </GlassCard>
 
+                            {/* Maintenance Insights Panel */}
+                            {upcomingServices.length > 0 && (
+                                <GlassCard className="bg-gradient-to-r from-amber-950/20 to-cyan-950/20 border border-amber-500/30">
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <Info className="w-5 h-5 text-amber-400" />
+                                        <h3 className="text-sm font-bold text-amber-300 uppercase tracking-wider">Upcoming Services</h3>
+                                    </div>
+                                    <div className="space-y-2">
+                                        {upcomingServices.map((item: any, idx: number) => (
+                                            <div key={idx} className="flex items-center justify-between p-2 bg-slate-900/50 rounded border border-white/5">
+                                                <div className="flex items-center gap-2">
+                                                    <div className={`w-2 h-2 rounded-full ${
+                                                        item.progress > 80 ? 'bg-red-500 animate-pulse' :
+                                                        item.progress > 50 ? 'bg-amber-500' : 'bg-emerald-500'
+                                                    }`} />
+                                                    <span className="text-xs text-slate-200 font-bold">{item.proto.name}</span>
+                                                </div>
+                                                <span className={`text-[10px] font-mono font-bold ${
+                                                    item.progress > 80 ? 'text-red-400' :
+                                                    item.progress > 50 ? 'text-amber-400' : 'text-emerald-400'
+                                                }`}>{item.progress.toFixed(1)}%</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </GlassCard>
+                            )}
+
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="bg-slate-900/40 p-4 rounded-2xl border border-white/5">
                                     <p className="text-[9px] text-slate-500 uppercase font-black mb-1">Last Service</p>
-                                    <p className="text-xs text-white font-bold">22 Oct 2023</p>
+                                    <p className="text-xs text-white font-bold">Not recorded</p>
                                 </div>
-                                <div className="bg-slate-900/40 p-4 rounded-2xl border border-white/5">
+                                <div className={`bg-slate-900/40 p-4 rounded-2xl border border-white/5 ${
+                                    maintenanceStatus === 'critical' ? 'border-red-500/30' :
+                                    maintenanceStatus === 'attention' ? 'border-amber-500/30' : 'border-emerald-500/30'
+                                }`}>
                                     <p className="text-[9px] text-slate-500 uppercase font-black mb-1">Node Integrity</p>
-                                    <p className="text-xs text-cyan-400 font-bold">VERIFIED</p>
+                                    <p className={`text-xs font-bold ${
+                                        maintenanceStatus === 'critical' ? 'text-red-400' :
+                                        maintenanceStatus === 'attention' ? 'text-amber-400' : 'text-cyan-400'
+                                    }`}>{maintenanceStatus === 'nominal' ? 'VERIFIED' : 'ATTENTION REQUIRED'}</p>
                                 </div>
                             </div>
 
@@ -149,7 +317,7 @@ export const MaintenanceDashboard: React.FC = () => {
                         </div>
 
                         {/* MIDDLE: PROTOCOLS & SCHEDULE */}
-                        <div className="lg:col-span-2 space-y-6">
+                        <div className="lg:col-span-2 space-y-6" id="service-protocols">
                             <GlassCard title="Service Protocols & Schedule" className="bg-slate-900/80">
                                 <div className="space-y-4">
                                     {protocols.map(proto => {
@@ -211,7 +379,7 @@ export const MaintenanceDashboard: React.FC = () => {
                                                             <div className="flex flex-col gap-2 mt-2">
                                                                 <button
                                                                     onClick={async () => {
-                                                                        showToast("SYSTEM ALERT: Bearing Overheat likely. Initializing Work Order...", "info");
+                                                                        showToast(`SYSTEM ALERT: ${proto.name} threshold exceeded. Initializing Work Order...`, "info");
                                                                         await startWorkOrder('seeded-id-placeholder');
                                                                     }}
                                                                     className="px-3 py-1 bg-cyan-500/20 border border-cyan-500/50 rounded text-[9px] font-black text-cyan-400 hover:bg-cyan-500 hover:text-white transition-all uppercase tracking-widest"

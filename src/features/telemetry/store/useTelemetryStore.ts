@@ -59,7 +59,6 @@ type TelemetryUpdatePayload = {
     geodeticData?: { settlement: number; tilt: number };
 };
 
-export type DemoScenario = 'NOMINAL' | 'CAVITATION' | 'BEARING_HAZARD' | 'STRUCTURAL_ANOMALY' | 'CHRONIC_MISALIGNMENT';
 
 interface TelemetryState {
     // High-Frequency Data
@@ -126,9 +125,7 @@ interface TelemetryState {
     setFinancials: (financials: TechnicalProjectState['financials']) => void;
     runDeepAnalysis: () => Promise<void>;
     toggleInvestigation: (componentId: string) => void;
-    loadScenario: (scenario: DemoScenario) => void;
-    toggleCommanderMode: () => void; // Protocol NC-8.0
-    selectDiagnostic: (diagnosticId: string | null) => void; // NC-300: Context awareness
+    // Demo mode removed - loadScenario deleted
     setBaselineFromWizard: (data: CommissioningState) => void; // NC-300: DNA Link
     toggleFilteredMode: () => void; // NC-300: Signal filter toggle
     setFilterType: (filterType: FilterType) => void; // NC-300: Filter type selection
@@ -413,66 +410,12 @@ export const useTelemetryStore = create<TelemetryState>()(
                 });
             },
 
-            loadScenario: (scenario) => {
-                const { updateTelemetry, runDeepAnalysis } = get();
-
-                switch (scenario) {
-                    case 'CAVITATION':
-                        updateTelemetry({
-                            mechanical: { rpm: 480, vibrationX: 5.2, vibrationY: 4.8 },
-                        });
-                        // Trigger analysis to get the converged findings
-                        runDeepAnalysis();
-                        break;
-
-                    case 'BEARING_HAZARD':
-                        updateTelemetry({
-                            mechanical: { rpm: 500, vibrationX: 3.8, bearingTemp: 82 },
-                        });
-                        runDeepAnalysis();
-                        break;
-
-                    case 'STRUCTURAL_ANOMALY':
-                        updateTelemetry({
-                            mechanical: { vibrationX: 6.8, vibrationY: 7.2 },
-                        });
-                        runDeepAnalysis();
-                        break;
-
-                    case 'CHRONIC_MISALIGNMENT':
-                        updateTelemetry({
-                            mechanical: { rpm: 500, vibrationX: 7.2, vibrationY: 1.5, bearingTemp: 68 },
-                            // Inject 2x Harmonic Ratio via specialized specializedState for Rule 1
-                            specializedState: {
-                                ...get().specializedState,
-                                acoustic: {
-                                    fingerprintMatch: 85,
-                                    harmonics: {
-                                        1: 2.0, // 1x Amplitude
-                                        2: 4.5  // 2x Amplitude (> 1.5x of 1x)
-                                    }
-                                }
-                            } as any
-                        });
-                        runDeepAnalysis();
-                        break;
-
-                    case 'NOMINAL':
-                    default:
-                        updateTelemetry({
-                            mechanical: { rpm: 500, vibrationX: 1.2, vibrationY: 1.1, bearingTemp: 52 },
-                            unifiedDiagnosis: null
-                        });
-                        break;
-                }
-            },
-
             toggleCommanderMode: () => {
                 set((state) => ({ isCommanderMode: !state.isCommanderMode }));
             },
 
             // NC-300: Context-aware diagnostic selection
-            selectDiagnostic: (diagnosticId) => {
+            selectDiagnostic: (diagnosticId: string | null) => {
                 set({ selectedDiagnosticId: diagnosticId });
             },
 

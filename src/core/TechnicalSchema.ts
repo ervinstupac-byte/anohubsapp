@@ -143,7 +143,6 @@ export interface TechnicalProjectState {
     diagnosis?: DiagnosisReport;
     riskScore: number;
     lastRecalculation: string;
-    demoMode: DemoState;
     structural: StructuralMetrics;
     hydrology: HydrologyContext;
     market: MarketData;
@@ -224,8 +223,6 @@ export type ProjectAction =
     | { type: 'UPDATE_ACOUSTIC_DATA'; payload: Partial<AcousticMetrics> }
     | { type: 'UPDATE_PARTICLE_DATA'; payload: any[] }
     | { type: 'UPDATE_GOVERNOR'; payload: Partial<GovernorState> }
-    | { type: 'SET_DEMO_MODE'; payload: DemoState }
-    | { type: 'START_SCENARIO'; payload: DemoScenario }
     | { type: 'UPDATE_SIMULATION'; payload: Partial<TechnicalProjectState> }
     | { type: 'UPDATE_STRUCTURAL'; payload: Partial<StructuralMetrics> }
     | { type: 'UPDATE_HYDROLOGY'; payload: Partial<HydrologyContext> }
@@ -434,10 +431,6 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
     investigatedComponents: [],
     riskScore: 0,
     lastRecalculation: new Date().toISOString(),
-    demoMode: {
-        active: false,
-        scenario: null
-    },
     structural: {
         wearIndex: 5,
         remainingLife: 95,

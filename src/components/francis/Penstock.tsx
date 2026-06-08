@@ -6,7 +6,6 @@ import { FRANCIS_PATHS } from '../../routes/paths';
 // NEW: Specialized stores instead of monolithic ProjectContext
 import { useAssetConfig } from '../../contexts/AssetConfigContext';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
-import { useDemoMode } from '../../stores/useAppStore';
 import { useEngineeringMath } from '../../hooks/useEngineeringMath';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
@@ -18,10 +17,8 @@ export const Penstock: React.FC = () => {
     // NEW PATTERN: Specialized stores for different concerns
     // - useAssetConfig: STATIC configuration (penstock.diameter, penstock.material)
     // - useTelemetryStore: LIVE sensor data (physics.hoopStress, physics.surgePressure)
-    // - useDemoMode: UI state (demo scenarios)
     const { config, isLoading } = useAssetConfig(); // Static configuration
     const { physics } = useTelemetryStore(); // Live telemetry data
-    const demoMode = useDemoMode(); // UI state (unused in current render but available)
     const { waterHammer } = useEngineeringMath();
 
     // === MAPPING FROM OLD STATE TO NEW STORES ===

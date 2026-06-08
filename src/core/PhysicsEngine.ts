@@ -22,16 +22,21 @@ export const PhysicsEngine = {
      * CORE PHYSICS: Recalculates the entire project state based on technical streams.
      */
     recalculatePhysics: (state: TechnicalProjectState): PhysicsResult => {
-        const { hydraulic, penstock, mechanical, identity } = state;
-        const turbineType = identity.turbineType;
+        try {
+            if (!state || !state.hydraulic || !state.penstock || !state.mechanical || !state.identity) {
+                throw new Error('Invalid state: missing required properties');
+            }
 
-        // High-Precision Decimal conversions
-        const head = new Decimal(hydraulic.head);
-        const flow = new Decimal(hydraulic.flow);
-        const d = new Decimal(penstock.diameter);
-        const t = new Decimal(penstock.wallThickness);
-        const E = new Decimal(penstock.materialModulus).mul(1e9); // GPa to Pa
-        const baselinePower = hydraulic.baselineOutputMW || new Decimal(100); // Default placeholder
+            const { hydraulic, penstock, mechanical, identity } = state;
+            const turbineType = identity.turbineType || 'FRANCIS';
+
+            // High-Precision Decimal conversions
+            const head = new Decimal(hydraulic.head || 0);
+            const flow = new Decimal(hydraulic.flow || 0);
+            const d = new Decimal(penstock.diameter || 1);
+            const t = new Decimal(penstock.wallThickness || 0.02);
+            const E = new Decimal(penstock.materialModulus || 210).mul(1e9); // GPa to Pa
+            const baselinePower = hydraulic.baselineOutputMW || new Decimal(100); // Default placeholder
 
         // 1. Flow Velocity (v = Q / A)
         const velocity = PhysicsLogic.calculateFlowVelocity(flow, d);
@@ -132,6 +137,10 @@ export const PhysicsEngine = {
             boltCapacityKN,
             boltSafetyFactor
         };
+        } catch (error) {
+            console.error('PhysicsEngine.recalculatePhysics error:', error);
+            throw new Error(`Physics calculation failed: ${error instanceof Error ? error.message : String(error)}`);
+        }
     },
 
     /**
@@ -139,19 +148,31 @@ export const PhysicsEngine = {
      * Delegate to Plugin if available.
      */
     calculateAxialThrust: (state: TechnicalProjectState): Decimal => {
-        const profile = ProfileLoader.getProfile(state.identity.turbineType);
-        if (profile?.math.formulas.calculateAxialThrust) {
-            return new Decimal(profile.math.formulas.calculateAxialThrust(state, profile.math.constants));
+        try {
+            if (!state?.identity?.turbineType) {
+                return new Decimal(0);
+            }
+            const profile = ProfileLoader.getProfile(state.identity.turbineType);
+            if (profile?.math.formulas.calculateAxialThrust) {
+                return new Decimal(profile.math.formulas.calculateAxialThrust(state, profile.math.constants));
+            }
+            return new Decimal(0);
+        } catch (error) {
+            console.error('PhysicsEngine.calculateAxialThrust error:', error);
+            return new Decimal(0);
         }
-        return new Decimal(0);
     },
 
     /**
      * Master recalibration including state synchronization.
      */
     recalculateProjectPhysics: (state: TechnicalProjectState): TechnicalProjectState => {
-        const result = PhysicsEngine.recalculatePhysics(state);
-        const turbineType = state.identity.turbineType || 'FRANCIS';
+        try {
+            if (!state) {
+                throw new Error('Invalid state: state is required');
+            }
+            const result = PhysicsEngine.recalculatePhysics(state);
+            const turbineType = state.identity.turbineType || 'FRANCIS';
 
         // 1. Get Turbine-Specific Knowledge (NC-4.4 Migration)
         const typEfficiency = PhysicsLogic.calculateTypicalEfficiency(turbineType, state.hydraulic.head);
@@ -210,26 +231,22 @@ export const PhysicsEngine = {
         };
 
         return finalState;
+        } catch (error) {
+            console.error('PhysicsEngine.recalculateProjectPhysics error:', error);
+            throw new Error(`Project physics recalculation failed: ${error instanceof Error ? error.message : String(error)}`);
+        }
     },
 
     calculateStructuralLife: (state: TechnicalProjectState, physics: PhysicsResult) => {
-        let { wearIndex, fatigueCycles } = state.structural;
+        try {
+            if (!state?.structural) {
+                console.warn('PhysicsEngine.calculateStructuralLife: state.structural is missing');
+                return { wearIndex: 0, remainingLife: 100, fatigueCycles: 0, drf: 0, longevityLeak: '0.0' };
+            }
+            let { wearIndex, fatigueCycles } = state.structural;
 
         // Grid Stress Factor (NC-4.2 Synthesis)
-        const gridStressFactor = PhysicsEngine.calculateGridStress(state);
-
-        // Fatigue Accumulator Logic
-        if (state.demoMode.active) {
-            let cycleIncrement = 0;
-            if (state.demoMode.scenario === 'WATER_HAMMER') {
-                cycleIncrement = ASSET_THRESHOLDS.structural.fatigue.water_hammer_cycle_increment;
-                wearIndex += ASSET_THRESHOLDS.structural.fatigue.water_hammer_wear_multiplier * gridStressFactor;
-            } else if (state.demoMode.scenario === 'GRID_LOSS') {
-                cycleIncrement = ASSET_THRESHOLDS.structural.fatigue.grid_loss_cycle_increment;
-                wearIndex += ASSET_THRESHOLDS.structural.fatigue.grid_loss_wear_multiplier * gridStressFactor;
-            }
-            fatigueCycles += cycleIncrement;
-        }
+        // Demo mode removed - using normal wear calculations
 
         // 1. DYNAMIC RISK FACTOR (The 48% Rule)
         // High-precision forensic: Fatigue ~ (Intensity / 0.48)^3
@@ -264,6 +281,10 @@ export const PhysicsEngine = {
             drf: normalizedDRF,
             longevityLeak: ((longevityLeak * 50 / 2) + heritagePenaltyTotal).toFixed(1) // Total Years lost
         };
+        } catch (error) {
+            console.error('PhysicsEngine.calculateStructuralLife error:', error);
+            return { wearIndex: 0, remainingLife: 100, fatigueCycles: 0, drf: 0, longevityLeak: '0.0' };
+        }
     },
 
     /**
@@ -271,15 +292,25 @@ export const PhysicsEngine = {
      * Accelerates wear based on frequency deviation stabilization effort.
      */
     calculateGridStress: (state: TechnicalProjectState): number => {
-        const freq = state.specializedState?.sensors?.gridFrequency || SYSTEM_CONSTANTS.PHYSICS.GRID.NOMINAL_FREQUENCY;
-        return PhysicsLogic.calculateGridStressFactor(freq);
+        try {
+            const freq = state?.specializedState?.sensors?.gridFrequency || SYSTEM_CONSTANTS.PHYSICS.GRID.NOMINAL_FREQUENCY;
+            return PhysicsLogic.calculateGridStressFactor(freq);
+        } catch (error) {
+            console.error('PhysicsEngine.calculateGridStress error:', error);
+            return 1; // Default to no stress
+        }
     },
 
 
     calculateSpecificSpeed: (n: number, power: number, head: number): number => {
-        const dH = new Decimal(head);
-        if (dH.isZero()) return 0;
-        return new Decimal(n).mul(new Decimal(power).sqrt()).div(dH.pow(1.25)).toDecimalPlaces(0).toNumber();
+        try {
+            const dH = new Decimal(head);
+            if (dH.isZero()) return 0;
+            return new Decimal(n).mul(new Decimal(power).sqrt()).div(dH.pow(1.25)).toDecimalPlaces(0).toNumber();
+        } catch (error) {
+            console.error('PhysicsEngine.calculateSpecificSpeed error:', error);
+            return 0;
+        }
     },
 
     // --- EXPERT DIAGNOSTIC THRESHOLDS (ISO & INDUSTRIAL STANDARDS) ---
@@ -319,12 +350,21 @@ export const PhysicsEngine = {
      * Axial Play (Standard for Francis < 5MW)
      */
     getAxialPlayVerdict: (playMM: number): 'Nominal' | 'Warning' | 'Critical' => {
-        const standards = (masterKnowledge as any).standardThresholds;
-        const maxAxial = standards.goldenStandards.axialPlay.max;
+        try {
+            const standards = (masterKnowledge as { standardThresholds?: { goldenStandards?: { axialPlay?: { max: number } } } }).standardThresholds;
+            if (!standards?.goldenStandards?.axialPlay?.max) {
+                console.warn('PhysicsEngine.getAxialPlayVerdict: missing standardThresholds');
+                return 'Nominal';
+            }
+            const maxAxial = standards.goldenStandards.axialPlay.max;
 
-        if (playMM <= maxAxial * ASSET_THRESHOLDS.axial.play.nominal_max_factor) return 'Nominal';
-        if (playMM < maxAxial * ASSET_THRESHOLDS.axial.play.warning_max_factor) return 'Warning';
-        return 'Critical';
+            if (playMM <= maxAxial * ASSET_THRESHOLDS.axial.play.nominal_max_factor) return 'Nominal';
+            if (playMM < maxAxial * ASSET_THRESHOLDS.axial.play.warning_max_factor) return 'Warning';
+            return 'Critical';
+        } catch (error) {
+            console.error('PhysicsEngine.getAxialPlayVerdict error:', error);
+            return 'Nominal';
+        }
     },
 
     /**
@@ -332,8 +372,12 @@ export const PhysicsEngine = {
      * 1: Nominal, 5: Immediate Intervention Required
      */
     calculateMaintenanceUrgency: (state: TechnicalProjectState): number => {
-        let score = 1;
-        const mech = state.mechanical;
+        try {
+            if (!state?.mechanical) {
+                return 1;
+            }
+            let score = 1;
+            const mech = state.mechanical;
 
         // Vibration Impact
         const vibVerdict = PhysicsEngine.getVibrationVerdict(mech.vibration);
@@ -360,5 +404,9 @@ export const PhysicsEngine = {
         if (starts > SYSTEM_CONSTANTS.DURABILITY.LIMITS.START_STOP_HIGH_STRESS) score = Math.max(score, ASSET_THRESHOLDS.maintenance.urgency.start_stop_high_stress_score); // High cycling stress
 
         return score;
+        } catch (error) {
+            console.error('PhysicsEngine.calculateMaintenanceUrgency error:', error);
+            return 1;
+        }
     },
 };

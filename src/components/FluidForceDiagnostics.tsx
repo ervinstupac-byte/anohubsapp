@@ -1,12 +1,14 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import idAdapter from '../utils/idAdapter';
+import { AlertTriangle, Droplet, Wrench, TrendingUp } from 'lucide-react';
 
 export const FluidForceDiagnostics: React.FC = () => {
     const { telemetry } = useTelemetry();
     const { selectedAsset } = useAssetContext();
+    const [showRecommendations, setShowRecommendations] = useState(false);
 
     const assetTele = selectedAsset ? telemetry[idAdapter.toStorage(selectedAsset.id)] : null;
 
@@ -66,6 +68,28 @@ export const FluidForceDiagnostics: React.FC = () => {
     return (
         <GlassCard title="Radial Force & Fluid Diagnostics">
             <div className="space-y-4">
+                {/* Actionable Recommendations Panel */}
+                {insights.length > 0 && (
+                    <div className={`p-3 rounded-xl border mb-4 ${
+                        insights.some(i => i.status === 'CRITICAL') ? 'bg-red-500/10 border-red-500/30' : 'bg-amber-500/10 border-amber-500/30'
+                    }`}>
+                        <div className="flex items-center gap-2 mb-2">
+                            <Wrench className={`w-4 h-4 ${insights.some(i => i.status === 'CRITICAL') ? 'text-red-400' : 'text-amber-400'}`} />
+                            <h4 className="text-[10px] font-black uppercase tracking-wider text-white">Recommended Actions</h4>
+                        </div>
+                        <div className="space-y-2">
+                            {insights.map(item => (
+                                <div key={item.id} className="flex items-start gap-2 p-2 bg-slate-900/50 rounded border border-white/5">
+                                    <TrendingUp className={`w-3 h-3 mt-0.5 ${item.status === 'CRITICAL' ? 'text-red-400' : 'text-amber-400'}`} />
+                                    <div className="flex-1">
+                                        <p className="text-[9px] font-bold text-white uppercase">{item.label}</p>
+                                        <p className="text-[8px] text-slate-400 italic">{item.detail}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
                 {insights.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-6 text-emerald-500 opacity-60">
                         <span className="text-3xl mb-2">💎</span>

@@ -3,7 +3,6 @@
 
 import { SiteParameters, Bid, FeasibilityResult } from '../services/StrategicPlanningService';
 import { TurbineType, TurbineFamily } from './turbine/TurbineFactory';
-import { WTFCase } from '../services/LegacyKnowledgeService';
 
 export type ProjectPhase = 'GENESIS' | 'PROCUREMENT' | 'CONSTRUCTION' | 'COMMISSIONING' | 'OPERATIONS' | 'FORENSICS';
 
@@ -74,7 +73,6 @@ export interface ForensicsData {
         date: number;
         type: string;
         blackBoxRecordingId?: string;
-        legacyCaseMatch?: WTFCase;
     }[];
 }
 

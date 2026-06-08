@@ -1,22 +1,29 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import idAdapter from '../utils/idAdapter';
+import { Shield, AlertTriangle, Zap, Thermometer, Activity } from 'lucide-react';
 
 export const MachineProtectionSystem: React.FC = () => {
     const { telemetry } = useTelemetry();
     const { selectedAsset } = useAssetContext();
+    const [protectionStatus, setProtectionStatus] = useState<'protected' | 'warning' | 'critical'>('protected');
 
     const assetTele = selectedAsset ? telemetry[idAdapter.toStorage(selectedAsset.id)] : null;
 
     const insights = useMemo(() => {
         if (!assetTele) return [];
         const reports: { id: string, label: string, status: 'OPTIMAL' | 'WARNING' | 'CRITICAL', info: string, detail: string }[] = [];
+        
+        // Update protection status based on insights
+        let hasCritical = false;
+        let hasWarning = false;
 
         // 1. Hydraulic Shock (dp/dt)
         const dpdt = assetTele.oilPressureRate;
         if (dpdt > 5) {
+            hasCritical = true;
             reports.push({
                 id: 'shock',
                 label: 'Hydraulic Shock Suppression',
@@ -29,6 +36,7 @@ export const MachineProtectionSystem: React.FC = () => {
         // 2. Vibration Phase Analysis
         const phaseShift = Math.abs(assetTele.vibrationPhase - 12); // Assuming 12 deg is nominal
         if (phaseShift > 15) {
+            hasCritical = true;
             reports.push({
                 id: 'phase',
                 label: 'Vibration Phase Analysis',
@@ -45,6 +53,8 @@ export const MachineProtectionSystem: React.FC = () => {
         const temp = assetTele.temperature;
         const thickness = (viscosity * 10) / (load / 100); // Simplified heuristic
         if (thickness < 0.5 || temp > 75) {
+            if (thickness < 0.3) hasCritical = true;
+            else hasWarning = true;
             reports.push({
                 id: 'oil_film',
                 label: 'Oil Film Thickness Monitor',
@@ -57,6 +67,7 @@ export const MachineProtectionSystem: React.FC = () => {
         // 4. Backlash Detection
         const backlash = Math.abs(assetTele.actuatorPosition - assetTele.actualBladePosition);
         if (backlash > 2) {
+            hasCritical = true;
             reports.push({
                 id: 'backlash',
                 label: 'Backlash & Hysteresis',
@@ -72,6 +83,7 @@ export const MachineProtectionSystem: React.FC = () => {
         const avgTemp = statorTemps.reduce((a, b) => a + b, 0) / statorTemps.length;
         const gradient = maxTemp - avgTemp;
         if (gradient > 25) {
+            hasCritical = true;
             reports.push({
                 id: 'thermal',
                 label: 'Thermal Stress Watch',
@@ -81,14 +93,43 @@ export const MachineProtectionSystem: React.FC = () => {
             });
         }
 
+        // Update protection status
+        setProtectionStatus(hasCritical ? 'critical' : hasWarning ? 'warning' : 'protected');
+        
         return reports;
     }, [assetTele]);
 
     if (!selectedAsset || !assetTele) return null;
 
     return (
-        <GlassCard title="Advanced Protection System (Mehanička i Električna Zaštita)">
+        <GlassCard title="Advanced Protection System (Mehanička i Električna Zaštita)" className={protectionStatus === 'critical' ? 'border-l-4 border-l-red-500 bg-red-950/20' : protectionStatus === 'warning' ? 'border-l-4 border-l-amber-500' : 'border-l-4 border-l-emerald-500'}>
             <div className="space-y-4">
+                {/* Protection Status Banner */}
+                <div className={`p-3 rounded-xl border flex items-center justify-between ${
+                    protectionStatus === 'critical' ? 'bg-red-500/10 border-red-500/30' :
+                    protectionStatus === 'warning' ? 'bg-amber-500/10 border-amber-500/30' :
+                    'bg-emerald-500/10 border-emerald-500/30'
+                }`}>
+                    <div className="flex items-center gap-2">
+                        {protectionStatus === 'critical' ? <AlertTriangle className="w-4 h-4 text-red-500" /> :
+                         protectionStatus === 'warning' ? <Zap className="w-4 h-4 text-amber-500" /> :
+                         <Shield className="w-4 h-4 text-emerald-500" />}
+                        <span className={`text-[10px] font-black uppercase tracking-wider ${
+                            protectionStatus === 'critical' ? 'text-red-500' :
+                            protectionStatus === 'warning' ? 'text-amber-500' :
+                            'text-emerald-500'
+                        }`}>
+                            Protection Status: {protectionStatus.toUpperCase()}
+                        </span>
+                    </div>
+                    <span className={`text-[9px] font-mono ${
+                        protectionStatus === 'critical' ? 'text-red-400' :
+                        protectionStatus === 'warning' ? 'text-amber-400' :
+                        'text-emerald-400'
+                    }`}>
+                        {insights.length} {insights.length === 1 ? 'alert' : 'alerts'} active
+                    </span>
+                </div>
                 {insights.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-8 text-emerald-500 opacity-60">
                         <span className="text-4xl mb-2">🛡️</span>

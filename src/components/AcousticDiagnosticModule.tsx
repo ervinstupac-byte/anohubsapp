@@ -1,11 +1,13 @@
-import React, { useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useRef, useMemo, useState } from 'react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { useCerebro } from '../contexts/ProjectContext.tsx';
+import { AlertTriangle, Volume2, Activity, Info } from 'lucide-react';
 
 export const AcousticDiagnosticModule: React.FC = () => {
     const { state } = useCerebro();
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const lastWarningTime = useRef<number>(0);
+    const [showInsights, setShowInsights] = useState(false);
 
     const metrics = state.mechanical.acousticMetrics || {
         cavitationIntensity: 0,
@@ -114,6 +116,38 @@ export const AcousticDiagnosticModule: React.FC = () => {
                         <span>40kHz+</span>
                     </div>
                 </div>
+
+                {/* Acoustic Insights Panel */}
+                {(metrics.cavitationIntensity > 5 || metrics.ultrasonicLeakIndex > 5 || metrics.bearingGrindIndex > 5) && (
+                    <div className={`p-3 rounded-xl border mb-4 ${
+                        metrics.cavitationIntensity > 7 || metrics.ultrasonicLeakIndex > 7 ? 'bg-red-500/10 border-red-500/30' : 'bg-amber-500/10 border-amber-500/30'
+                    }`}>
+                        <div className="flex items-center gap-2 mb-2">
+                            <Info className={`w-4 h-4 ${metrics.cavitationIntensity > 7 || metrics.ultrasonicLeakIndex > 7 ? 'text-red-400' : 'text-amber-400'}`} />
+                            <h4 className="text-[10px] font-black uppercase tracking-wider text-white">Acoustic Analysis Summary</h4>
+                        </div>
+                        <div className="space-y-1 text-[9px] text-slate-300">
+                            {metrics.cavitationIntensity > 5 && (
+                                <div className="flex items-center gap-2">
+                                    <Volume2 className="w-3 h-3 text-red-400" />
+                                    <span>Cavitation intensity at {metrics.cavitationIntensity.toFixed(1)} - check suction pressure</span>
+                                </div>
+                            )}
+                            {metrics.ultrasonicLeakIndex > 5 && (
+                                <div className="flex items-center gap-2">
+                                    <Activity className="w-3 h-3 text-cyan-400" />
+                                    <span>Ultrasonic leak detected - inspect pipe connections</span>
+                                </div>
+                            )}
+                            {metrics.bearingGrindIndex > 5 && (
+                                <div className="flex items-center gap-2">
+                                    <AlertTriangle className="w-3 h-3 text-amber-400" />
+                                    <span>Bearing grind index elevated - schedule inspection</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
 
                 {/* Metrics Grid */}
                 <div className="grid grid-cols-2 gap-3">

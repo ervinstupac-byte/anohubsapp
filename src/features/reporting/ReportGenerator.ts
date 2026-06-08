@@ -637,7 +637,7 @@ export class ReportGenerator {
         doc.text(`${dossierLabel}: ${state.identity.assetName}`, 14, 60);
 
         // --- NC-4.2 FORENSIC DEMO OVERLAY ---
-        if (state.demoMode?.active) {
+        if (false) { // Demo mode removed
             doc.saveGraphicsState();
             doc.setGState(new (doc as any).GState({ opacity: 0.1 }));
             doc.setFontSize(60);

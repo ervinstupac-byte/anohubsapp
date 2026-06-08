@@ -1,14 +1,16 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import idAdapter from '../utils/idAdapter';
 import { useToast } from '../contexts/ToastContext.tsx';
+import { AlertTriangle, Shield, TrendingUp, Calendar } from 'lucide-react';
 
 export const StressCycleCounter: React.FC = () => {
     const { telemetry, resetFatigue } = useTelemetry();
     const { selectedAsset } = useAssetContext();
     const { showToast } = useToast();
+    const [projectedDays, setProjectedDays] = useState<number>(0);
 
     const assetTele = selectedAsset ? telemetry[idAdapter.toStorage(selectedAsset.id)] : null;
 
@@ -18,11 +20,18 @@ export const StressCycleCounter: React.FC = () => {
         const points = assetTele.fatiguePoints || 0;
         const threshold = 100;
         const percentage = Math.min((points / threshold) * 100, 100);
+        
+        // Calculate projected days until NDT limit
+        const avgDailyFatigue = 0.5; // Simulated average daily fatigue accumulation
+        const remainingPoints = Math.max(0, threshold - points);
+        const daysUntilLimit = remainingPoints / avgDailyFatigue;
+        setProjectedDays(Math.round(daysUntilLimit));
 
         return {
             points: points.toFixed(1),
             percentage,
-            isCritical: points >= threshold
+            isCritical: points >= threshold,
+            daysUntilLimit: Math.round(daysUntilLimit)
         };
     }, [assetTele]);
 
@@ -46,6 +55,21 @@ export const StressCycleCounter: React.FC = () => {
                         <p className="text-sm font-mono font-bold text-slate-400">100.0 pts</p>
                     </div>
                 </div>
+
+                {/* Predictive Insights */}
+                {!fatigueData.isCritical && (
+                    <div className={`p-3 rounded-xl border flex items-center gap-3 ${
+                        projectedDays < 30 ? 'bg-amber-500/10 border-amber-500/30' : 'bg-emerald-500/10 border-emerald-500/30'
+                    }`}>
+                        <Calendar className={`w-4 h-4 ${projectedDays < 30 ? 'text-amber-400' : 'text-emerald-400'}`} />
+                        <div>
+                            <p className="text-[10px] font-black text-slate-500 uppercase">Projected NDT Due</p>
+                            <p className={`text-sm font-bold ${projectedDays < 30 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                                {projectedDays} days
+                            </p>
+                        </div>
+                    </div>
+                )}
 
                 {/* Fatigue Progress Bar */}
                 <div className="space-y-2">

@@ -1,9 +1,9 @@
 // Alignment Wizard - Real-time Runout Diagram
 // Interactive tool for 0.05 mm/m shaft centering
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { RotateCw, Bluetooth, Target, CheckCircle, XCircle, AlertTriangle, Lock } from 'lucide-react';
+import { RotateCw, Bluetooth, Target, CheckCircle, XCircle, AlertTriangle, Lock, TrendingUp, Info } from 'lucide-react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { CommissioningService } from '../services/CommissioningService';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
@@ -27,6 +27,22 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, onC
     const [isBluetoothConnected, setIsBluetoothConnected] = useState(false);
     const [finalAlignment, setFinalAlignment] = useState<number | null>(null);
     const [shaftSag, setShaftSag] = useState(0);
+
+    // Alignment quality assessment
+    const alignmentQuality = useMemo(() => {
+        if (runoutPoints.length < 4) return { status: 'insufficient', message: 'Need at least 4 points' };
+        
+        const maxRunout = Math.max(...runoutPoints.map(p => p.runout));
+        const avgRunout = runoutPoints.reduce((sum, p) => sum + p.runout, 0) / runoutPoints.length;
+        
+        if (maxRunout > 0.05) {
+            return { status: 'critical', message: `Max runout ${maxRunout.toFixed(3)}mm exceeds 0.05mm limit` };
+        } else if (maxRunout > 0.03) {
+            return { status: 'warning', message: `Max runout ${maxRunout.toFixed(3)}mm approaching limit` };
+        } else {
+            return { status: 'good', message: `Alignment within tolerance (max: ${maxRunout.toFixed(3)}mm)` };
+        }
+    }, [runoutPoints]);
 
     const assetName = identity?.assetName || '—';
     const isHorizontal = assetName.toLowerCase().includes('horizontal') || identity?.turbineType === 'PELTON';
@@ -143,6 +159,23 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, onC
 
                         {/* Polar Diagram */}
                         <RunoutDiagram points={runoutPoints} shaftSag={shaftSag} isHorizontal={isHorizontal} />
+
+                        {/* Alignment Quality Assessment */}
+                        {runoutPoints.length >= 2 && (
+                            <div className={`p-3 rounded-xl border mb-4 ${
+                                alignmentQuality.status === 'critical' ? 'bg-red-500/10 border-red-500/30' :
+                                alignmentQuality.status === 'warning' ? 'bg-amber-500/10 border-amber-500/30' :
+                                'bg-emerald-500/10 border-emerald-500/30'
+                            }`}>
+                                <div className="flex items-center gap-2 mb-2">
+                                    {alignmentQuality.status === 'critical' ? <AlertTriangle className="w-4 h-4 text-red-400" /> :
+                                     alignmentQuality.status === 'warning' ? <Info className="w-4 h-4 text-amber-400" /> :
+                                     <CheckCircle className="w-4 h-4 text-emerald-400" />}
+                                    <h4 className="text-[10px] font-black uppercase tracking-wider text-white">Alignment Quality</h4>
+                                </div>
+                                <p className="text-[9px] text-slate-300">{alignmentQuality.message}</p>
+                            </div>
+                        )}
 
                         {/* Final Results */}
                         {finalAlignment !== null && (

@@ -50,7 +50,7 @@ export const ProfessionalReportEngine = {
         doc.addPage();
 
         // --- PAGE 3: ANALYSIS ---
-        drawHeader(doc, projectID, state.demoMode.active);
+        drawHeader(doc, projectID, false);
 
         doc.setFontSize(22);
         doc.setTextColor(33, 33, 33);
@@ -86,7 +86,7 @@ export const ProfessionalReportEngine = {
         // --- PAGE 3: BILDERGALERIE ---
         if (state.images && state.images.length > 0) {
             doc.addPage();
-            drawHeader(doc, projectID, state.demoMode.active); // Repeat header
+            drawHeader(doc, projectID, false); // Repeat header
             doc.setFontSize(18);
             doc.setTextColor(0, 0, 0);
             doc.text("Bildergalerie & KI-Inspektion", MARGIN, 50);
@@ -104,7 +104,7 @@ export const ProfessionalReportEngine = {
                 // Check page break
                 if (yCursor + imgHeight > PAGE_HEIGHT - 30) {
                     doc.addPage();
-                    drawHeader(doc, projectID, state.demoMode.active);
+                    drawHeader(doc, projectID, false); // Demo mode removed
                     yCursor = 50;
                     drawFooter(doc, doc.getNumberOfPages());
                 }
@@ -413,7 +413,7 @@ export const ProfessionalReportEngine = {
 };
 
 const drawExecutiveRiskBrief = (doc: jsPDF, state: TechnicalProjectState, id: string) => {
-    drawHeader(doc, id, state.demoMode.active);
+    drawHeader(doc, id, false);
 
     doc.setFontSize(24);
     doc.setTextColor(33, 33, 33);
@@ -820,7 +820,7 @@ const drawFullAssetHealthCertificate = (doc: jsPDF, state: TechnicalProjectState
 
     // --- PAGE 4: PROACTIVE MAINTENANCE ROADMAP (NC-4.2) ---
     doc.addPage();
-    drawHeader(doc, idAdapter.toStorage(state.identity.assetId), state.demoMode.active);
+    drawHeader(doc, idAdapter.toStorage(state.identity.assetId), false);
 
     y = 50;
     doc.setFontSize(18);
@@ -905,7 +905,7 @@ const drawExecutiveActionSummary = (doc: jsPDF, yStart: number, state: Technical
 };
 
 const drawEngineeringRecoveryPlan = (doc: jsPDF, state: TechnicalProjectState, id: string) => {
-    drawHeader(doc, id, state.demoMode.active);
+    drawHeader(doc, id, false);
 
     doc.setFontSize(24);
     doc.setTextColor(33, 33, 33);
@@ -978,7 +978,7 @@ const drawEngineeringRecoveryPlan = (doc: jsPDF, state: TechnicalProjectState, i
 }
 
 const drawLongevityCertificate = (doc: jsPDF, state: TechnicalProjectState, id: string) => {
-    drawHeader(doc, id, state.demoMode.active);
+    drawHeader(doc, id, false);
 
     doc.setFontSize(26);
     doc.setTextColor(30, 41, 59); // Slate 800
@@ -1066,7 +1066,7 @@ const drawLongevityCertificate = (doc: jsPDF, state: TechnicalProjectState, id: 
 };
 
 const drawTribologyAndThermalExpansion = (doc: jsPDF, state: TechnicalProjectState, id: string) => {
-    drawHeader(doc, id, state.demoMode.active);
+    drawHeader(doc, id, false);
 
     doc.setFontSize(24);
     doc.setTextColor(30, 41, 59);
@@ -1164,7 +1164,7 @@ const drawTribologyAndThermalExpansion = (doc: jsPDF, state: TechnicalProjectSta
 };
 
 const drawRevitalizationRoadmap = (doc: jsPDF, state: TechnicalProjectState, id: string) => {
-    drawHeader(doc, id, state.demoMode.active);
+    drawHeader(doc, id, false);
 
     doc.setFontSize(24);
     doc.setTextColor(33, 33, 33);
@@ -1412,7 +1412,7 @@ function generateForensicHash(input: string): string {
 }
 
 const drawMechanicalInstallationSchedule = (doc: jsPDF, state: TechnicalProjectState, id: string) => {
-    drawHeader(doc, id, state.demoMode.active);
+    drawHeader(doc, id, false);
 
     doc.setFontSize(24);
     doc.setTextColor(30, 41, 59);

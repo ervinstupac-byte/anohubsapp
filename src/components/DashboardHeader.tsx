@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { DigitalPanel } from './diagnostic-twin/DigitalPanel';
+import { DigitalPanel } from './diagnostics/DigitalPanel';
 import { LanguageSelector } from './LanguageSelector';
+import { AssetPicker } from './AssetPicker';
 import { ROUTES } from '../routes/paths';
 import { Search, Command, X, ShieldCheck, Activity, Database, ChevronRight, ChevronDown, Settings, BarChart3, Wrench, Zap, Square, Grid } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -10,9 +11,9 @@ import { useCerebro } from '../contexts/ProjectContext';
 import { useRisk } from '../contexts/RiskContext';
 import { useRiskCalculator } from '../hooks/useRiskCalculator';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
-import { useAssetContext } from '../contexts/AssetContext'; // <--- NEW
-import { useContextAwareness } from '../contexts/ContextAwarenessContext'; // <--- NEW
-import { useDensity } from '../contexts/DensityContext'; // <--- Density Control Phase 4
+import { useAssetContext } from '../contexts/AssetContext';
+import { useContextAwareness } from '../contexts/ContextAwarenessContext';
+import { useDensity } from '../contexts/DensityContext';
 
 interface DashboardHeaderProps {
     onToggleSidebar: () => void;
@@ -30,7 +31,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
     const { selectedAsset } = useAssetContext(); // <--- Get Active Asset
     const { activePersona, hiveStatus } = useContextAwareness(); // <--- Get Persona & Sync
     const { mode, toggleDensity } = useDensity();
-    const { isCommanderMode, toggleCommanderMode } = useTelemetryStore();
+    const { isCommanderMode } = useTelemetryStore();
 
     // const [searchQuery, setSearchQuery] = useState(''); // Removed in favor of Global Command Palette
     // const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -205,9 +206,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
                         <Search className="w-5 h-5" />
                     </button>
 
-                    {/* Commander Mode Toggle (NC-8.0 Global) */}
+                    {/* Commander Mode Toggle (NC-8.0 Global) - Demo mode removed */}
                     <button
-                        onClick={toggleCommanderMode}
                         title={isCommanderMode ? "Switch to Developer View" : "Switch to Commander Mode (NC-9.0)"}
                         className={`p-2 rounded-full transition-all duration-500 ${isCommanderMode ? 'bg-h-gold/20 text-h-gold shadow-[0_0_15px_rgba(255,184,0,0.3)] border border-h-gold/50' : 'bg-white/5 text-slate-500 border border-white/5 hover:border-white/20'}`}
                     >
@@ -249,6 +249,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
                             {t('auth.signOut', 'Sign Out')}
                         </button>
                     )}
+                    <AssetPicker />
                     <LanguageSelector />
                 </div>
             </header>

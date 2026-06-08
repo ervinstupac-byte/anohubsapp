@@ -203,8 +203,8 @@ export const ExpertInference = {
         // --- SENTINEL KERNEL: INFRASTRUCTURE CORE (NC-4.7) ---
 
         // 1. Grease Blowout Risk (Standby Watcher)
-        const isStandby = state.demoMode?.active ? true : false; // Simplified for demo
-        const grease = SentinelKernel.checkGreaseRisk(isStandby ? 'STBY' : 'RUNNING', state.identity.startStopCount % 30); // Use modulo as proxy
+        // Demo mode removed - always running
+        const grease = SentinelKernel.checkGreaseRisk('RUNNING', state.identity.startStopCount % 30); // Use modulo as proxy
         if (grease.risk) {
             result.alerts.push({
                 standard: 'NC-4.7 Infrastructure',
@@ -219,9 +219,8 @@ export const ExpertInference = {
         }
 
         // 2. Thermal Inertia (Rate of Rise)
-        // Simulate a history if we are in a heat-related scenario
-        const isBearingFailure = state.demoMode.scenario === 'BEARING_FAILURE';
-        const mockTemps = isBearingFailure ? [55, 62, 71] : [55, 56];
+        // Demo mode removed - using default values
+        const mockTemps = [55, 56];
         const mockTimes = [Date.now() - 120000, Date.now() - 60000, Date.now()];
         const thermal = SentinelKernel.checkThermalInertia(mockTemps, mockTimes);
         if (thermal.risk) {
@@ -237,7 +236,8 @@ export const ExpertInference = {
         }
 
         // 3. Magnetic Unbalance (Stator Variance)
-        const statorTemps = [55, 56, isBearingFailure ? 85 : 55, 55, 55];
+        // Demo mode removed - using default values
+        const statorTemps = [55, 56, 55, 55, 55];
         const magnetic = SentinelKernel.checkMagneticUnbalance(statorTemps, 450);
         if (magnetic.risk) {
             result.conclusions.push({

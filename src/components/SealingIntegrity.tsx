@@ -1,17 +1,25 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import idAdapter from '../utils/idAdapter';
+import { Droplet, AlertTriangle, TrendingUp, CheckCircle } from 'lucide-react';
 
 export const SealingIntegrity: React.FC = () => {
     const { telemetry } = useTelemetry();
     const { selectedAsset } = useAssetContext();
+    const [trendData, setTrendData] = useState<number[]>([]);
 
     const assetTele = selectedAsset ? telemetry[idAdapter.toStorage(selectedAsset.id)] : null;
 
     const integrityStatus = useMemo(() => {
         if (!assetTele) return { isAlert: false, message: '', deviation: 0 };
+        
+        // Simulate trend data collection
+        setTrendData(prev => {
+            const newTrend = [...prev, ((assetTele.drainagePumpFrequency - (assetTele.reservoirLevel * 0.1)) / (assetTele.reservoirLevel * 0.1)) * 100].slice(-10);
+            return newTrend;
+        });
 
         // Requirement: Increase of 20% at the same water level (reservoirLevel)
         // Baseline Frequency (Simulated): For example, 1 cycle per 10m of head
@@ -35,6 +43,24 @@ export const SealingIntegrity: React.FC = () => {
     return (
         <GlassCard title="Shaft Seal Integrity (Zaptivka Vratila)" className={integrityStatus.isAlert ? 'border-l-4 border-l-red-500 bg-red-950/20' : 'border-l-4 border-l-cyan-500'}>
             <div className="space-y-4">
+                {/* Trend Visualization */}
+                {trendData.length > 0 && (
+                    <div className="p-3 bg-slate-900/50 rounded-xl border border-white/5">
+                        <div className="flex items-center justify-between mb-2">
+                            <span className="text-[9px] font-black text-slate-500 uppercase">Deviation Trend (Last 10 readings)</span>
+                            <TrendingUp className={`w-3 h-3 ${trendData[trendData.length - 1] > 15 ? 'text-amber-400' : 'text-emerald-400'}`} />
+                        </div>
+                        <div className="flex items-end gap-1 h-8">
+                            {trendData.map((val, idx) => (
+                                <div
+                                    key={idx}
+                                    className={`flex-1 rounded-t ${val > 20 ? 'bg-red-500' : val > 15 ? 'bg-amber-500' : 'bg-emerald-500'}`}
+                                    style={{ height: `${Math.min(100, Math.abs(val))}%` }}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                )}
                 <div className="flex justify-between items-center">
                     <div>
                         <p className="text-[10px] text-slate-500 uppercase font-black">Drainage Pump Status</p>

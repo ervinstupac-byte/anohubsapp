@@ -7,8 +7,9 @@ interface AuthContextType {
     session: Session | null;
     user: User | null;
     isGuest: boolean; // <--- NOVO
+    userRole: 'MANAGER' | 'OWNER' | 'TECHNICIAN' | 'ENGINEER' | null; // <--- NOVO: Role-based routing
     signIn: (email: string, password: string) => Promise<{ data: any; error: any }>;
-    signInAsGuest: () => Promise<void>; // <--- NOVO
+    signInAsGuest: (role: 'MANAGER' | 'OWNER' | 'TECHNICIAN' | 'ENGINEER') => Promise<void>; // <--- NOVO: Accept role parameter
     signOut: () => Promise<void>;
     loading: boolean;
 }
@@ -20,6 +21,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [session, setSession] = useState<Session | null>(null);
     const [user, setUser] = useState<User | null>(null);
     const [isGuest, setIsGuest] = useState(false); // <--- NOVO STANJE
+    const [userRole, setUserRole] = useState<'MANAGER' | 'OWNER' | 'TECHNICIAN' | 'ENGINEER' | null>(null); // <--- NOVO: Role-based routing
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -67,8 +69,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     // 2. GUEST LOGIN (Lažiramo korisnika)
-    const signInAsGuest = async () => {
+    const signInAsGuest = async (role: 'MANAGER' | 'OWNER' | 'TECHNICIAN' | 'ENGINEER') => {
         setIsGuest(true);
+        setUserRole(role); // <--- NOVO: Set the user role
         // Kreiramo lažni User objekt da zavaramo TypeScript i UI
         const guestUser = {
             id: 'guest-123',
@@ -80,7 +83,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             confirmed_at: new Date().toISOString(),
             last_sign_in_at: new Date().toISOString(),
             app_metadata: { provider: 'email', providers: ['email'] },
-            user_metadata: { full_name: 'Guest Engineer' },
+            user_metadata: { full_name: 'Guest Engineer', role }, // <--- NOVO: Include role in metadata
             identities: [],
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
@@ -88,7 +91,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         setUser(guestUser);
         setLoading(false); // CRITICAL: Allow AuthProvider to render children
-        logAction('AUTH_LOGIN', 'Guest System', 'SUCCESS', { user: 'guest' });
+        logAction('AUTH_LOGIN', 'Guest System', 'SUCCESS', { user: 'guest', role });
     };
 
     // 3. LOGOUT (Pokriva i Guest i Pravi logout)
@@ -99,9 +102,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setIsGuest(false);
             setUser(null);
             setSession(null);
+            setUserRole(null); // <--- NOVO: Reset user role on logout
             logAction('AUTH_LOGOUT', 'Guest System', 'SUCCESS', { user: currentUser });
         } else {
             await supabase.auth.signOut();
+            setUserRole(null); // <--- NOVO: Reset user role on logout
             logAction('AUTH_LOGOUT', 'Supabase Auth', 'SUCCESS', { user: currentUser });
         }
     };
@@ -110,6 +115,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         session,
         user,
         isGuest,
+        userRole, // <--- NOVO: Export user role
         signIn,
         signInAsGuest, // Exportamo novu funkciju
         signOut,

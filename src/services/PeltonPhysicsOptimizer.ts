@@ -1,4 +1,4 @@
-import { calculatePeltonEfficiency } from '../lib/engines/TurbineMath';
+import { calculatePeltonEfficiency } from '../utils/CorePhysics';
 
 export type PeltonInput = {
   jetPressureBar: number;

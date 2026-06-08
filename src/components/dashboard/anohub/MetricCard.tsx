@@ -10,7 +10,7 @@ interface MetricCardProps {
     statusColor?: string; // Optional accent color (e.g. 'text-cyan-400')
 }
 
-export const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit, subtitle, chart, statusColor = 'text-cyan-400' }) => {
+export const MetricCard: React.FC<MetricCardProps> = React.memo(({ title, value, unit, subtitle, chart, statusColor = 'text-cyan-400' }) => {
     const isAmber = statusColor.includes('amber');
     const glowClass = isAmber ? 'bloom-glow-amber' : 'bloom-glow-cyan';
     const accentColor = isAmber ? 'text-amber-400' : 'text-cyan-400';
@@ -61,4 +61,4 @@ export const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit, subt
             <div className={`absolute bottom-0 left-0 right-0 h-[1px] ${isAmber ? 'bg-amber-500/30' : 'bg-cyan-500/30'} ${glowClass}`} />
         </div>
     );
-};
+});

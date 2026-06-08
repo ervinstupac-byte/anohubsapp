@@ -26,8 +26,9 @@ export const useSentinelWatchdog = () => {
         const assetId = techState.identity.assetId;
 
         // 1. Check Standby Grease Risk
-        const status = techState.demoMode.active ? 'STBY' : 'RUNNING';
-        const standbyCycles = techState.demoMode.scenario === 'BEARING_FAILURE' ? 25 : 5;
+        // Demo mode removed - always running
+        const status = 'RUNNING';
+        const standbyCycles = 5;
         const greaseRisk = SentinelKernel.checkGreaseRisk(status, standbyCycles);
 
         if (greaseRisk.risk && !alertedRisks.current.has('grease')) {
@@ -56,7 +57,8 @@ export const useSentinelWatchdog = () => {
         }
 
         // 3. Magnetic Unbalance (Excitation vs Temperature)
-        const statorTemps = [55, 56, 55, techState.demoMode.scenario === 'BEARING_FAILURE' ? 88 : 56, 55, 55];
+        // Demo mode removed - using default values
+        const statorTemps = [55, 56, 55, 56, 55, 55];
         const excitation = 450;
         const magAlert = SentinelKernel.checkMagneticUnbalance(statorTemps, excitation);
 

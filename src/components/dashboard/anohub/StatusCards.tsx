@@ -1,7 +1,7 @@
 import React from 'react';
 import { ShieldCheck, Activity } from 'lucide-react';
 
-export const SystemHealthCard: React.FC = () => {
+export const SystemHealthCard: React.FC = React.memo(() => {
     return (
         <div className="bg-slate-900/60 border border-slate-700/50 p-4 rounded-xl flex items-center justify-between relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent opacity-50" />
@@ -25,9 +25,9 @@ export const SystemHealthCard: React.FC = () => {
             </div>
         </div>
     );
-};
+});
 
-export const RiskStatusCard: React.FC = () => {
+export const RiskStatusCard: React.FC = React.memo(() => {
     return (
         <div className="bg-slate-900/60 border border-slate-700/50 p-4 rounded-xl flex items-center justify-between relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-transparent opacity-50" />
@@ -49,4 +49,4 @@ export const RiskStatusCard: React.FC = () => {
             </div>
         </div>
     );
-};
+});

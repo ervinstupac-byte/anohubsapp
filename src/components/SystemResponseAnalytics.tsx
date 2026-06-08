@@ -1,13 +1,15 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import idAdapter from '../utils/idAdapter';
+import { Activity, AlertTriangle, Zap, TrendingUp } from 'lucide-react';
 
 export const SystemResponseAnalytics: React.FC = () => {
     const { telemetry, updateWicketGateSetpoint } = useTelemetry();
     const { selectedAsset } = useAssetContext();
     const [testValue, setTestValue] = useState(45);
+    const [hysteresisHistory, setHysteresisHistory] = useState<number[]>([]);
 
     const assetTele = selectedAsset ? telemetry[idAdapter.toStorage(selectedAsset.id)] : null;
 
@@ -48,6 +50,13 @@ export const SystemResponseAnalytics: React.FC = () => {
         };
     }, [assetTele, selectedAsset]);
 
+    // Track hysteresis history for visualization
+    useEffect(() => {
+        if (analysis) {
+            setHysteresisHistory(prev => [...prev, parseFloat(analysis.delta)].slice(-20));
+        }
+    }, [analysis]);
+
     if (!selectedAsset || !analysis) return null;
 
     return (
@@ -65,15 +74,29 @@ export const SystemResponseAnalytics: React.FC = () => {
                 </div>
 
                 {/* Hysteresis Visualization */}
-                <div className="h-2 bg-slate-900 rounded-full overflow-hidden relative">
-                    <div
-                        className="absolute h-full bg-slate-700 opacity-30 transition-all duration-500"
-                        style={{ width: `${analysis.setpoint}%` }}
-                    />
-                    <div
-                        className={`absolute h-full transition-all duration-100 ${analysis.severity === 'CRITICAL' ? 'bg-red-500' : 'bg-emerald-500'}`}
-                        style={{ width: `${analysis.actual}%` }}
-                    />
+                <div className="space-y-2">
+                    <div className="h-2 bg-slate-900 rounded-full overflow-hidden relative">
+                        <div
+                            className="absolute h-full bg-slate-700 opacity-30 transition-all duration-500"
+                            style={{ width: `${analysis.setpoint}%` }}
+                        />
+                        <div
+                            className={`absolute h-full transition-all duration-100 ${analysis.severity === 'CRITICAL' ? 'bg-red-500' : 'bg-emerald-500'}`}
+                            style={{ width: `${analysis.actual}%` }}
+                        />
+                    </div>
+                    {/* Hysteresis History Chart */}
+                    {hysteresisHistory.length > 0 && (
+                        <div className="h-12 bg-slate-900/50 rounded-lg border border-white/5 p-2 flex items-end gap-0.5">
+                            {hysteresisHistory.map((val, idx) => (
+                                <div
+                                    key={idx}
+                                    className={`flex-1 rounded-t ${val > 2 ? 'bg-red-500' : val > 1 ? 'bg-amber-500' : 'bg-emerald-500'}`}
+                                    style={{ height: `${Math.min(100, val * 30)}%` }}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest px-1">

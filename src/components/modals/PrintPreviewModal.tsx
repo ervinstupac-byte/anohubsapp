@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, FileText, Download, ShieldCheck, Activity, Droplets, Zap, Ruler } from 'lucide-react';
+import { X, FileText, Download, ShieldCheck, Activity, Droplets, Zap, Ruler, Printer, Share2, Eye, Clock } from 'lucide-react';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { TechnicalProjectState } from '../../core/TechnicalSchema';
 import { ActionEngine } from '../../features/business/logic/ActionEngine';
@@ -19,6 +19,8 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
 
     // NC-85.2: Dynamic dossier count from registry
     const [dossierCount, setDossierCount] = useState<number>(854); // Fallback to 854
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [previewMode, setPreviewMode] = useState<'full' | 'summary'>('full');
 
     useEffect(() => {
         const loadDossierCount = async () => {
@@ -36,6 +38,7 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
     }, [isOpen]);
 
     const handleGenerate = async () => {
+        setIsGenerating(true);
         try {
             const { ForensicReportService } = await import('../../services/ForensicReportService');
             const blob = await ForensicReportService.generateProjectDossier({ state, t });
@@ -46,8 +49,28 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
             });
         } catch (e) {
             console.warn('Print preview generate failed', e);
+        } finally {
+            setIsGenerating(false);
         }
         onClose();
+    };
+
+    const handlePrint = () => {
+        window.print();
+    };
+
+    const handleShare = async () => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: `AnoHUB Audit - ${state.identity.assetName}`,
+                    text: 'Engineering audit report generated via AnoHUB',
+                    url: window.location.href
+                });
+            } catch (e) {
+                console.warn('Share failed', e);
+            }
+        }
     };
 
     return (
@@ -93,17 +116,30 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                                         </div>
                                     </div>
                                 </div>
-                                <button
-                                    onClick={onClose}
-                                    className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-400 hover:text-white relative z-10"
-                                >
-                                    <X className="w-6 h-6" />
-                                </button>
+                                <div className="flex items-center gap-2 relative z-10">
+                                    <button
+                                        onClick={() => setPreviewMode(previewMode === 'full' ? 'summary' : 'full')}
+                                        className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${
+                                            previewMode === 'full' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10'
+                                        }`}
+                                    >
+                                        <Eye className="w-3 h-3 inline mr-1" />
+                                        {previewMode === 'full' ? 'Full View' : 'Summary'}
+                                    </button>
+                                    <button
+                                        onClick={onClose}
+                                        className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-400 hover:text-white"
+                                    >
+                                        <X className="w-6 h-6" />
+                                    </button>
+                                </div>
                             </div>
 
                             {/* Preview Body - Simulated Paper Experience */}
                             <div className="flex-1 overflow-y-auto p-12 bg-[#020617] relative custom-scrollbar">
-                                <div className="max-w-3xl mx-auto space-y-12 bg-white/5 p-12 rounded-2xl border border-white/5 relative overflow-hidden shadow-2xl">
+                                <div className={`max-w-3xl mx-auto space-y-12 bg-white/5 p-12 rounded-2xl border border-white/5 relative overflow-hidden shadow-2xl transition-all ${
+                                    previewMode === 'summary' ? 'scale-95 opacity-90' : ''
+                                }`}>
                                     {/* Forensic Watermark */}
                                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.02] pointer-events-none rotate-[-15deg]">
                                         <ShieldCheck className="w-[500px] h-[500px] text-cyan-500" />
@@ -120,6 +156,10 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                                                 <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Engineering Asset:</p>
                                                 <p className="text-xl font-black text-white tracking-tight">{state.identity.assetName}</p>
                                                 <p className="text-cyan-500/80 text-[10px] font-mono">{state.identity.location.toUpperCase()}</p>
+                                            </div>
+                                            <div className="flex items-center gap-2 text-[9px] text-slate-500 font-mono">
+                                                <Clock className="w-3 h-3" />
+                                                <span>Generated: {new Date().toLocaleString()}</span>
                                             </div>
                                         </div>
                                         <div className="text-right space-y-2">
@@ -346,20 +386,48 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                             </div>
 
                             {/* Footer Actions */}
-                            <div className="p-8 border-t border-white/10 bg-slate-900 flex justify-end gap-6 relative z-[110]">
-                                <button
-                                    onClick={onClose}
-                                    className="px-8 py-4 rounded-xl border border-white/10 text-slate-400 font-black uppercase tracking-widest hover:bg-white/5 hover:text-white transition-all text-xs"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={handleGenerate}
-                                    className="px-10 py-4 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 rounded-xl font-black uppercase tracking-widest text-white text-xs flex items-center gap-4 shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_50px_rgba(6,182,212,0.6)] hover:scale-[1.02] transition-all cursor-pointer"
-                                >
-                                    <Download className="w-5 h-5" />
-                                    Generate Official PDF
-                                </button>
+                            <div className="p-8 border-t border-white/10 bg-slate-900 flex justify-between items-center gap-6 relative z-[110]">
+                                <div className="flex items-center gap-3">
+                                    <button
+                                        onClick={handlePrint}
+                                        className="px-6 py-3 rounded-xl border border-white/10 text-slate-400 font-black uppercase tracking-widest hover:bg-white/5 hover:text-white transition-all text-xs flex items-center gap-2"
+                                    >
+                                        <Printer className="w-4 h-4" />
+                                        Print
+                                    </button>
+                                    <button
+                                        onClick={handleShare}
+                                        className="px-6 py-3 rounded-xl border border-white/10 text-slate-400 font-black uppercase tracking-widest hover:bg-white/5 hover:text-white transition-all text-xs flex items-center gap-2"
+                                    >
+                                        <Share2 className="w-4 h-4" />
+                                        Share
+                                    </button>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <button
+                                        onClick={onClose}
+                                        className="px-8 py-4 rounded-xl border border-white/10 text-slate-400 font-black uppercase tracking-widest hover:bg-white/5 hover:text-white transition-all text-xs"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleGenerate}
+                                        disabled={isGenerating}
+                                        className="px-10 py-4 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 rounded-xl font-black uppercase tracking-widest text-white text-xs flex items-center gap-4 shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_50px_rgba(6,182,212,0.6)] hover:scale-[1.02] transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {isGenerating ? (
+                                            <>
+                                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                                Generating...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Download className="w-5 h-5" />
+                                                Generate Official PDF
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
                             </div>
                         </GlassCard>
                     </motion.div>

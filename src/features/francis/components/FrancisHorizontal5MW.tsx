@@ -4,7 +4,7 @@ import Decimal from 'decimal.js';
 import { useAssetContext } from '../../../contexts/AssetContext';
 import { subscribeLatestSensor } from '../../../hooks/useTelemetrySubscription';
 import { evaluateAging, fetchExpertCurve } from '../../../services/AgingEstimator';
-import DiagnosticAdvisory from '../../../components/DiagnosticAdvisory';
+// DiagnosticAdvisory removed - deleted during dependency sweep
 
 const RHO = new Decimal(1000);
 const G = new Decimal(9.80665);
@@ -391,7 +391,12 @@ export const FrancisHorizontal5MW: React.FC = () => {
                     </div>
                 </div>
             )}
-            {advisory && <DiagnosticAdvisory title="Diagnostic Advisory" message={advisory.message} />}
+            {advisory && (
+                <div className="mt-4 p-4 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
+                    <h3 className="text-cyan-400 font-bold mb-2">Diagnostic Advisory</h3>
+                    <p className="text-slate-300">{advisory.message}</p>
+                </div>
+            )}
         </div>
     );
 };

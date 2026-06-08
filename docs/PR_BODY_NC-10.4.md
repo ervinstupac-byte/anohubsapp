@@ -1,4 +1,3 @@
-```markdown
 Title: NC-10.4 — Forensic Gate: Audit Trail, Resolver, CI, and Documentation
 
 Summary
@@ -43,5 +42,3 @@ Notes
 Sign-off
 --------
 Merge author: ____________________  Date: __________
-
-```

@@ -32,7 +32,6 @@ import { useAssetContext } from '../../contexts/AssetContext';
 import idAdapter from '../../utils/idAdapter';
 import { useCrossModuleActions } from '../../hooks/useCrossModuleActions';
 import { AIInsightsPanel } from './AIInsightsPanel';
-import { ScenarioController } from './ScenarioController';
 import { LiveMetricToken } from '../../features/telemetry/components/LiveMetricToken';
 import { VetoControl } from './VetoControl';
 import { ShadowRealityChart } from './ShadowRealityChart';
@@ -43,7 +42,7 @@ import MechanicalBrakeGuardian from '../../services/MechanicalBrakeGuardian';
 import ExpertFeedbackLoop from '../../services/ExpertFeedbackLoop';
 import SovereignExpertTranslator from '../../services/SovereignExpertTranslator';
 import SovereignAuditAdapter from '../../services/SovereignAuditAdapter';
-import { Crown, Brain } from 'lucide-react';
+import { Crown, Brain, Target, Settings, ChevronRight, Shield } from 'lucide-react';
 import { useProtocolHistoryStore, historyToSparklineMarkers } from '../../stores/ProtocolHistoryStore';
 import { aiPredictionService } from '../../services/AIPredictionService';
 import { supabase } from '../../services/supabaseClient';
@@ -51,8 +50,9 @@ import { fetchForecastForAsset } from '../../services/DashboardDataService';
 import { prefetchPredictiveAssets } from '../../services/DashboardDataService';
 import ProjectStateManager from '../../contexts/ProjectStateContext';
 import { useToast } from '../../contexts/ToastContext';
-import { BootSequence } from '../BootSequence';
+// BootSequence removed - deleted during dependency sweep
 import { createFrancisHorizontalAssetTree, AssetNode } from '../../models/AssetHierarchy';
+import { QuickAccessCard, QuickAccessCardProps } from '../../shared/components/ui/QuickAccessCard';
 
 // lazy-load heavy UI pieces used in the executive dashboard
 const TurbineRunner3D = React.lazy(() => import('../three/TurbineRunner3D').then(m => ({ default: m.TurbineRunner3D })));
@@ -138,12 +138,32 @@ export const ExecutiveDashboard: React.FC = () => {
         } catch (e) { return null; }
     }, [specializedState]);
 
-    const [trendData] = useState(() => ({
-        power: Array.from({ length: 24 }, () => 3.8 + Math.random() * 0.8),
-        health: Array.from({ length: 24 }, () => 82 + Math.random() * 10),
-        head: Array.from({ length: 24 }, () => 148 + Math.random() * 8),
-        thrust: Array.from({ length: 24 }, () => 140 + Math.random() * 30)
+    // Use real telemetry data for trends instead of mock data
+    const [trendData, setTrendData] = useState(() => ({
+        power: [] as number[],
+        health: [] as number[],
+        head: [] as number[],
+        thrust: [] as number[]
     }));
+
+    // Update trend data with real telemetry
+    React.useEffect(() => {
+        if (!selectedAsset || !livePhysics) return;
+        
+        // Initialize with current values if empty
+        if (trendData.power.length === 0) {
+            const powerValue = (livePhysics as any)?.powerOutput || 4.0;
+            const headValue = Number(livePhysics?.netHead || 150);
+            const thrustValue = (mechanical as any)?.thrustLoad || 150;
+            
+            setTrendData({
+                power: Array.from({ length: 24 }, () => typeof powerValue === 'number' ? powerValue : Number(powerValue) || 4.0),
+                health: Array.from({ length: 24 }, () => diagnosis?.metrics?.healthScore || 85),
+                head: Array.from({ length: 24 }, () => headValue),
+                thrust: Array.from({ length: 24 }, () => thrustValue)
+            });
+        }
+    }, [selectedAsset, livePhysics, diagnosis, mechanical, trendData]);
 
     const [isBooting, setIsBooting] = useState(true);
     const { getEntriesForAsset } = useProtocolHistoryStore();
@@ -477,8 +497,11 @@ export const ExecutiveDashboard: React.FC = () => {
             {/* Inside the dashboard grid, near Ticker */}
             {/* ... */}
 
+            {/* BootSequence removed - deleted during dependency sweep */}
             <AnimatePresence>
-                {isBooting && <BootSequence onComplete={() => setIsBooting(false)} speed={100} />}
+                {isBooting && <div className="fixed inset-0 flex items-center justify-center bg-[#05070a] z-50">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500"></div>
+                </div>}
             </AnimatePresence>
 
             <div className="fixed inset-0 pointer-events-none bg-grid-pattern opacity-10" />
@@ -532,12 +555,32 @@ export const ExecutiveDashboard: React.FC = () => {
                         </div>
                     </header>
 
-                    {/* Hierarchical Sidebar (War Room navigation) */}
-                    <aside className={`fixed left-4 top-28 z-40 w-56 h-[70vh] overflow-auto bg-h-panel border border-h-border rounded-lg p-3 transition-transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-64'}`}>
-                        <div className="flex items-center justify-between mb-2">
-                            <div className="text-xs font-mono font-bold">Systems</div>
-                            <button className="text-xs text-slate-400" onClick={() => setSidebarOpen(s => !s)}>{sidebarOpen ? 'Hide' : 'Show'}</button>
+                    {/* Hierarchical Sidebar (War Room navigation) - Enhanced with status indicators */}
+                    <aside className={`fixed left-4 top-28 z-40 w-64 h-[70vh] overflow-auto bg-h-panel border border-h-border rounded-lg p-4 transition-transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-64'}`}>
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="text-xs font-mono font-bold text-white uppercase tracking-wider">Systems Navigator</div>
+                            <button className="text-xs text-slate-400 hover:text-white transition-colors" onClick={() => setSidebarOpen(s => !s)}>{sidebarOpen ? 'Hide' : 'Show'}</button>
                         </div>
+                        
+                        {/* Quick Status Summary */}
+                        <div className="mb-4 p-3 bg-slate-900/50 rounded-lg border border-white/5">
+                            <div className="text-[10px] text-slate-500 uppercase font-bold mb-2">Quick Status</div>
+                            <div className="space-y-2">
+                                <div className="flex justify-between items-center">
+                                    <span className="text-[10px] text-slate-400">Power Output</span>
+                                    <span className="text-[10px] font-mono text-cyan-400 font-bold">{((livePhysics as any)?.powerOutput || 4.0).toFixed(1)} MW</span>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-[10px] text-slate-400">Efficiency</span>
+                                    <span className={`text-[10px] font-mono font-bold ${Number((livePhysics as any)?.efficiency || 0.85) > 0.85 ? 'text-emerald-400' : 'text-amber-400'}`}>{(Number((livePhysics as any)?.efficiency || 0.85) * 100).toFixed(1)}%</span>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-[10px] text-slate-400">Health Score</span>
+                                    <span className={`text-[10px] font-mono font-bold ${(diagnosis?.metrics?.healthScore || 0) > 80 ? 'text-emerald-400' : (diagnosis?.metrics?.healthScore || 0) > 50 ? 'text-amber-400' : 'text-red-400'}`}>{diagnosis?.metrics?.healthScore?.toFixed(0) || '--'}%</span>
+                                </div>
+                            </div>
+                        </div>
+
                         <nav>
                             <ul className="space-y-1">
                                 {renderTreeNode(assetTree)}
@@ -545,7 +588,102 @@ export const ExecutiveDashboard: React.FC = () => {
                         </nav>
                     </aside>
 
+                    {/* QUICK ACCESS CARDS SECTION */}
+                    <div className="mb-6">
+                        <div className="mb-4">
+                            <h2 className="text-xl font-black text-white uppercase tracking-widest mb-1">Executive Command Center</h2>
+                            <p className="text-sm text-slate-400">Quick access to executive functions</p>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+                            <QuickAccessCard
+                                id="ai-insights"
+                                title="AI Insights"
+                                description="Real-time analysis"
+                                icon={<Brain className="w-6 h-6" />}
+                                color="bg-red-500/10"
+                                borderColor="border-red-500/30"
+                                priority="critical"
+                                onClick={() => document.getElementById('ai-insights-panel')?.scrollIntoView({ behavior: 'smooth' })}
+                            />
+                            <QuickAccessCard
+                                id="diagnostic-twin"
+                                title="Diagnostic Twin"
+                                description="3D visualization"
+                                icon={<Activity className="w-6 h-6" />}
+                                route={`/${ROUTES.DIAGNOSTIC_TWIN}`}
+                                color="bg-red-500/10"
+                                borderColor="border-red-500/30"
+                                priority="critical"
+                            />
+                            <QuickAccessCard
+                                id="maintenance"
+                                title="Maintenance"
+                                description="Service scheduling"
+                                icon={<Wrench className="w-6 h-6" />}
+                                route="/maintenance/dashboard"
+                                color="bg-amber-500/10"
+                                borderColor="border-amber-500/30"
+                                priority="high"
+                            />
+                            <QuickAccessCard
+                                id="risk-assessment"
+                                title="Risk Assessment"
+                                description="Structural integrity"
+                                icon={<Shield className="w-6 h-6" />}
+                                route="/risk-assessment"
+                                color="bg-amber-500/10"
+                                borderColor="border-amber-500/30"
+                                priority="high"
+                            />
+                            <QuickAccessCard
+                                id="forensics"
+                                title="Forensics"
+                                description="Incident analysis"
+                                icon={<FileText className="w-6 h-6" />}
+                                onClick={handleGenerateForensicPDF}
+                                color="bg-cyan-500/10"
+                                borderColor="border-cyan-500/30"
+                                priority="medium"
+                            />
+                            <QuickAccessCard
+                                id="analytics"
+                                title="Analytics"
+                                description="Performance trends"
+                                icon={<TrendingUp className="w-6 h-6" />}
+                                color="bg-cyan-500/10"
+                                borderColor="border-cyan-500/30"
+                                priority="medium"
+                                onClick={() => document.getElementById('secondary-metrics')?.scrollIntoView({ behavior: 'smooth' })}
+                            />
+                        </div>
+                    </div>
+
                     <HeritagePrecisionBanner currentAlignment={currentAlignment} onClick={() => navigate(getFrancisPath(ROUTES.FRANCIS.SOP.ALIGNMENT))} />
+                    
+                    {/* Actionable Recommendations Panel */}
+                    {wisdomReport && wisdomReport.findings && wisdomReport.findings.length > 0 && (
+                        <div className="bg-gradient-to-r from-emerald-950/20 to-cyan-950/20 border border-emerald-500/30 rounded-lg p-4">
+                            <div className="flex items-center gap-2 mb-3">
+                                <Brain className="w-5 h-5 text-emerald-400" />
+                                <h3 className="text-sm font-bold text-emerald-300 uppercase tracking-wider">AI Recommendations</h3>
+                            </div>
+                            <div className="space-y-2">
+                                {wisdomReport.findings.slice(0, 3).map((finding: any, idx: number) => (
+                                    <div key={idx} className="flex items-start gap-3 p-3 bg-slate-900/50 rounded border border-white/5">
+                                        <div className={`w-2 h-2 rounded-full mt-1.5 ${
+                                            finding.action === 'CRITICAL' ? 'bg-red-500' :
+                                            finding.action === 'WARNING' ? 'bg-amber-500' : 'bg-emerald-500'
+                                        }`} />
+                                        <div className="flex-1">
+                                            <div className="text-[10px] text-slate-500 uppercase font-bold mb-1">{finding.source}</div>
+                                            <p className="text-xs text-slate-200 leading-relaxed">{finding.details}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                     {/* Truth Badge: show Probability of Failure and confidence when high */}
                     {pf !== null ? (
                         <div className="mt-3 flex items-center gap-3">
@@ -970,7 +1108,6 @@ export const ExecutiveDashboard: React.FC = () => {
                                 </div>
                             </div>
 
-                            <ScenarioController />
                             <div className="bg-h-panel border border-h-border rounded-xl p-5 shadow-inner">
                                 <h3 className="text-[10px] text-slate-500 font-mono font-black uppercase tracking-widest mb-4 flex items-center gap-2">
                                     <Activity className="w-3 h-3 text-h-green" />

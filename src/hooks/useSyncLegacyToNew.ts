@@ -22,7 +22,7 @@ import idAdapter from '../utils/idAdapter';
 export const useSyncLegacyToNew = () => {
     const { state: cerebroState } = useCerebro();
     const { updateConfig, config } = useAssetConfig();
-    const { setDemoMode, demoMode } = useAppStore();
+    const {} = useAppStore(); // Demo mode removed
     const { updateTelemetry, setHydraulic, setMechanical, setConfig: setTelemetryConfig } = useTelemetryStore();
 
     // Track last synced values to prevent infinite loops
@@ -30,7 +30,6 @@ export const useSyncLegacyToNew = () => {
         identityId?: string;
         hydraulicHash?: string;
         mechanicalHash?: string;
-        demoModeHash?: string;
     }>({});
 
     // Sync Asset Config (Static Data) - Only when identity changes
@@ -90,24 +89,6 @@ export const useSyncLegacyToNew = () => {
             lastUpdatedAt: new Date().toISOString()
         });
     }, [cerebroState.identity?.assetId]); // Only trigger on asset ID change
-
-    // Sync Demo Mode (UI State)
-    useEffect(() => {
-        const legacyDemo = cerebroState.demoMode;
-        if (!legacyDemo) return;
-
-        // Create hash to detect actual changes
-        const demoHash = `${legacyDemo.active}-${legacyDemo.scenario}`;
-        if (lastSyncRef.current.demoModeHash === demoHash) return;
-        lastSyncRef.current.demoModeHash = demoHash;
-
-        console.log('[SyncEngine] Syncing DemoMode:', legacyDemo.scenario);
-
-        setDemoMode({
-            active: legacyDemo.active,
-            scenario: legacyDemo.scenario as any
-        });
-    }, [cerebroState.demoMode?.active, cerebroState.demoMode?.scenario, setDemoMode]);
 
     // Sync Telemetry Data (Live Technical Data)
     useEffect(() => {

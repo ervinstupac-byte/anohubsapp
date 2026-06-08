@@ -50,22 +50,52 @@ export interface UnifiedDiagnosis {
     overallHealthScore: number;
     criticality: 'HEALTHY' | 'INVESTIGATE' | 'CRITICAL';
     aiPrediction: {
-        synergeticRisks: any[];
-        rulEstimates: any[];
-        incidentPatterns: any[];
-        prescriptiveActions: any[];
+        synergeticRisks: SynergeticRisk[];
+        rulEstimates: RULEstimate[];
+        incidentPatterns: IncidentPattern[];
+        prescriptiveActions: PrescriptiveAction[];
+        forecast?: {
+            weeksUntil: number | null;
+            confidence: number;
+            tStatistic?: number;
+            sampleCount?: number;
+            pf?: number;
+        };
     };
     acoustic: {
-        classification: any;
-        trendAnalysis: any;
+        classification: { severity: string; type: string } | null;
+        trendAnalysis: null;
     };
-    specialMeasurements: any;
+    specialMeasurements: {
+        correlation?: CorrelationResult;
+        shaftSealTelemetry?: unknown[];
+        thrustBearingTelemetry?: unknown[];
+        wicketGateTelemetry?: unknown[];
+        governorHPUTelemetry?: unknown[];
+        generatorAirGapTelemetry?: unknown[];
+        coolingTelemetry?: unknown[];
+        statorInsulationTelemetry?: unknown[];
+        transformerOilTelemetry?: unknown[];
+    };
     crossCorrelation: {
-        confidenceBoosts: any[];
-        conflictingSignals: any[];
+        confidenceBoosts: Array<{
+            finding: string;
+            originalConfidence: number;
+            boostedConfidence: number;
+            reason: string;
+        }>;
+        conflictingSignals: unknown[];
     };
-    automatedActions: any[];
-    dynamicTolerances: any;
+    automatedActions: Array<{
+        type: string;
+        action: string;
+        status?: string;
+        priority?: string;
+        timeframe?: string;
+        details?: string;
+        message?: string;
+    }>;
+    dynamicTolerances: unknown;
     expertInsights?: {
         oilHealth?: number;
         cavitationSeverity?: 'NOMINAL' | 'WARNING' | 'CRITICAL';
@@ -83,7 +113,7 @@ export interface UnifiedDiagnosis {
     // NC-4.10 Expansion
     trendProjections?: Record<string, { daysUntilCritical: number; projectedDate: string }>;
     operatingZone?: { zone: string; color: string; alert?: string };
-    corrosionAlerts?: any[];
+    corrosionAlerts?: unknown[];
     thermalInertia?: { rate: number; risk: string };
     lifeExtension?: { yearsAdded: number };
     // NC-5.3 Intelligence Absorption
@@ -101,6 +131,24 @@ export interface UnifiedDiagnosis {
     guardianConfidence?: Record<string, number>;
     // Probability of failure (0-1 scale)
     p_fail?: number;
+    // Additional fields
+    turbineClass?: string;
+    bladeCount?: number;
+    turbineCavitation?: {
+        baseSigma: number;
+        adjustedSigma: number;
+        measuredSigma: number | null;
+        proximity: number | null;
+    };
+    recommendedMaintenance?: {
+        outageWindow: { start: Date; end: Date };
+        bundles: unknown[];
+        calculatedAt: Date;
+    };
+    maintenanceBequest?: unknown;
+    wisdomReport?: { id: string; generatedAt: Date; systemConfidence: number };
+    persistedWisdomId?: string;
+    marketForecast?: { hourly: number[] };
 }
 
 import BaseGuardian from './BaseGuardian';
@@ -150,7 +198,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                 overallHealthScore: 100,
                 criticality: 'HEALTHY',
                 aiPrediction: aiResults,
-                acoustic: acousticResults,
+                acoustic: acousticResults as any,
                 specialMeasurements: {
                     ...measurementResults,
                     shaftSealTelemetry: (latest.specialized as any)?.shaftSealTelemetry || [],
@@ -171,9 +219,9 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                 expertInsights: {
                     oilHealth: expertResults.oil?.healthScore,
                     cavitationSeverity: expertResults.cavitation?.severity,
-                    structuralSafetyFactor: expertResults.structural?.safetyFactor
+                    structuralSafetyFactor: expertResults.structural?.margin
                 },
-                rulHours: this.calculateRUL(latest.common.vibration, expertResults.oil?.particlePPM || 15),
+                rulHours: this.calculateRUL(latest.common.vibration, 15),
                 serviceNotes: this.aggregateServiceNotes(expertResults, acousticResults),
 
                 // NC-4.10 Converged Insights
@@ -181,7 +229,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                 operatingZone: PerformanceGuardService.checkOperatingZone(
                     {
                         flow: (latest.specialized as FrancisSensorData)?.flowRate || 40,
-                        netHead: (asset.turbine_config as any).head || 150,
+                        netHead: (asset.turbine_config as { head?: number }).head || 150,
                         powerOutput: latest.common.output_power,
                         efficiency: latest.common.efficiency,
                         gateOpening: (latest.specialized as FrancisSensorData)?.guide_vane_opening || 80
@@ -225,7 +273,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
             // NC-9.0: ETA Break-Even Forecast Advisory
             // If AI forecast predicts efficiency breach within 8 weeks, add Maintenance Advisory
             try {
-                const forecast = (aiResults && (aiResults as any).forecast) || null;
+                const forecast = (aiResults && aiResults.forecast) || null;
                 // Require strong statistical confidence (approx t-stat > 2 or confidence >= 0.95)
                 const significant = forecast && ((forecast.tStatistic && Math.abs(forecast.tStatistic) > 2) || (forecast.confidence && forecast.confidence >= 0.95));
                 // If confidence is low, recommend Data Collection Phase instead of maintenance
@@ -271,7 +319,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                         action: 'SCHEDULE_PREVENTIVE_MAINTENANCE',
                         timeframe: `${Math.max(1, Math.ceil(forecast.weeksUntil))} weeks`,
                         priority: 'HIGH'
-                    } as any);
+                    });
                 }
             } catch (e) {
                 // swallow forecast errors to avoid breaking main analysis
@@ -356,7 +404,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
             const drConsult = DrTurbineAI.consult(
                 { id: asset.id, name: asset.name, machineConfig: { ratedPowerMW: asset.capacity || 4.2 } } as any,
                 (latest.specialized as FrancisSensorData)?.flowRate || 40,
-                (asset.turbine_config as any).head || 150,
+                (asset.turbine_config as { head?: number }).head || 150,
                 50
             );
             drConsult.cards.forEach(card => diagnosis.serviceNotes?.push({
@@ -380,21 +428,21 @@ export class MasterIntelligenceEngine extends BaseGuardian {
 
             // --- Turbine Classification & Kaplan blade physics ---
             try {
-                const detected = TurbineClassifier.detectType(asset, latest) || ((asset.turbine_config as any)?.turbine_type || (asset.turbine_config as any)?.turbineType || null);
-                const bladeCount = (latest.specialized as any)?.bladeCount || (asset.turbine_config as any)?.blade_count || (asset.turbine_config as any)?.runner_blades || (asset.turbine_config as any)?.numberOfBlades || 4;
-                (diagnosis as any).turbineClass = detected;
-                (diagnosis as any).bladeCount = bladeCount;
+                const detected = TurbineClassifier.detectType(asset, latest) || ((asset.turbine_config as { turbine_type?: string; turbineType?: string })?.turbine_type || (asset.turbine_config as { turbineType?: string })?.turbineType || null);
+                const bladeCount = (latest.specialized as any)?.bladeCount || (asset.turbine_config as { blade_count?: number; runner_blades?: number; numberOfBlades?: number })?.blade_count || (asset.turbine_config as { runner_blades?: number })?.runner_blades || (asset.turbine_config as { numberOfBlades?: number })?.numberOfBlades || 4;
+                diagnosis.turbineClass = detected || undefined;
+                diagnosis.bladeCount = bladeCount;
 
                 if (detected) {
                     const consts = TurbineClassifier.getDesignConstants(detected as any);
                     let adjustedSigma = consts.sigma_limit;
                     if (detected === 'VERTICAL_KAPLAN' || detected === 'PROPELLER') {
-                        adjustedSigma = KaplanBladePhysics.adjustedSigmaLimit(consts.sigma_limit, bladeCount as number);
+                        adjustedSigma = KaplanBladePhysics.adjustedSigmaLimit(consts.sigma_limit, bladeCount);
                     }
 
-                    const measuredSigma = (latest.specialized as any)?.sigmaMeasured || (latest.common as any)?.sigma || null;
+                    const measuredSigma = (latest.specialized as any)?.sigmaMeasured || (latest.common as { sigma?: number })?.sigma || null;
                     const proximity = measuredSigma && adjustedSigma ? (measuredSigma / adjustedSigma) : null;
-                    (diagnosis as any).turbineCavitation = { baseSigma: consts.sigma_limit, adjustedSigma, measuredSigma, proximity };
+                    diagnosis.turbineCavitation = { baseSigma: consts.sigma_limit, adjustedSigma, measuredSigma, proximity };
 
                     if (proximity !== null && proximity < 1.0) {
                         diagnosis.serviceNotes?.push({
@@ -418,16 +466,16 @@ export class MasterIntelligenceEngine extends BaseGuardian {
             // --- Outage Optimizer integration ---
             try {
                 // Build Pfail map heuristically from specialMeasurements arrays if available
-                const sm: any = diagnosis.specialMeasurements || {};
+                const sm = diagnosis.specialMeasurements || {};
                 const pfail: Record<string, number> = {};
                 const components = ['shaftSealTelemetry', 'thrustBearingTelemetry', 'generatorAirGapTelemetry', 'statorInsulationTelemetry', 'governorHPUTelemetry', 'transformerOilTelemetry', 'coolingTelemetry'];
 
                 // Cooling guardian: analyze cooling telemetry if available and use its p_fail
-                const coolingSamples = (sm as any).coolingTelemetry || [];
-                if (coolingSamples && coolingSamples.length) {
+                const coolingSamples = sm.coolingTelemetry || [];
+                if (coolingSamples && Array.isArray(coolingSamples) && coolingSamples.length) {
                     try {
                         const cg = new CoolingSystemGuardian();
-                        const analysis = cg.analyze(coolingSamples as any[]);
+                        const analysis = cg.analyze(coolingSamples as any);
                         pfail['cooling'] = analysis.p_fail;
 
                         // If fouling detected and backup not started, trigger immediate load reduction
@@ -447,9 +495,9 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                 // For other components, fallback to reading last sample p_fail or default
                 const otherComponents = ['shaftSealTelemetry', 'thrustBearingTelemetry', 'generatorAirGapTelemetry', 'statorInsulationTelemetry', 'governorHPUTelemetry', 'transformerOilTelemetry'];
                 otherComponents.forEach(c => {
-                    const arr = (sm as any)[c] || [];
-                    if (arr && arr.length) {
-                        const last = arr[arr.length - 1];
+                    const arr = sm[c as keyof typeof sm] || [];
+                    if (arr && Array.isArray(arr) && arr.length) {
+                        const last = arr[arr.length - 1] as any;
                         const p = (last && (last.p_fail || last.pFail || last.P_fail || last.pFailProbability)) || null;
                         pfail[c.replace(/Telemetry$/, '')] = typeof p === 'number' ? Math.max(0, Math.min(1, p)) : 0.1;
                     } else {
@@ -458,13 +506,13 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                 });
 
                 // For MarketOracle: try to fetch a priceForecast if provided in diagnosis (fallback to flat)
-                const priceForecast = (diagnosis as any).marketForecast?.hourly || [];
+                const priceForecast = diagnosis.marketForecast?.hourly || [];
 
-                const opt = OutageOptimizer.findOptimalOutageWindow(pfail, priceForecast || []);
-                (diagnosis as any).recommendedMaintenance = {
-                    outageWindow: opt.optimalWindow,
+                const opt = OutageOptimizer.findOptimalOutageWindow(pfail, priceForecast as any);
+                diagnosis.recommendedMaintenance = {
+                    outageWindow: opt.optimalWindow ? { start: new Date(opt.optimalWindow.start), end: new Date(opt.optimalWindow.end) } : { start: new Date(), end: new Date() },
                     bundles: opt.bundles,
-                    calculatedAt: opt.calculatedAt
+                    calculatedAt: new Date(opt.calculatedAt)
                 };
 
                 // Add a concise automated action to surface on the executive dashboard
@@ -474,8 +522,8 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                 }
 
                 // Maintenance bequest economic report
-                const bequest = MaintenanceBequestReport.generate(pfail, priceForecast || []);
-                (diagnosis as any).maintenanceBequest = bequest;
+                const bequest = MaintenanceBequestReport.generate(pfail, priceForecast as any);
+                diagnosis.maintenanceBequest = bequest;
 
             } catch (e) {
                 // Do not fail main analysis for optimizer errors
@@ -485,27 +533,27 @@ export class MasterIntelligenceEngine extends BaseGuardian {
             // Generate a WisdomReport, annotate confidence, and persist for forensic trail (Phase 55.0)
             try {
                 const translator = new SovereignExpertTranslator();
-                const findings: any[] = [];
+                const findings: Array<{ source: string; severity: string; summary: string; recommendation?: string; details?: string }> = [];
                 if (diagnosis.serviceNotes && diagnosis.serviceNotes.length) {
-                    diagnosis.serviceNotes.forEach((s: any) => findings.push({ source: s.service, severity: s.severity, summary: s.message, recommendation: s.recommendation }));
+                    diagnosis.serviceNotes.forEach((s) => findings.push({ source: s.service, severity: s.severity, summary: s.message, recommendation: s.recommendation }));
                 }
                 if (diagnosis.automatedActions && diagnosis.automatedActions.length) {
-                    diagnosis.automatedActions.forEach((a: any) => findings.push({ source: 'AutomatedAction', severity: a.priority || a.status || 'INFO', summary: a.action || a.details || '', details: a.details }));
+                    diagnosis.automatedActions.forEach((a) => findings.push({ source: 'AutomatedAction', severity: a.priority || a.status || 'INFO', summary: a.action || a.details || '', details: a.details }));
                 }
 
-                const report = translator.generateWisdomReport(asset.id, findings, { diagnosisSnapshot: diagnosis });
+                const report = translator.generateWisdomReport(asset.id, findings as any, { diagnosisSnapshot: diagnosis });
 
                 const analyzer = new SystemBoundaryAnalyzer();
                 const annotated = analyzer.annotateReportWithConfidence(report);
 
                 const adapter = new SovereignAuditAdapter();
-                const telemetryRef = (latest && ((latest as any).id || (latest as any).timestamp)) ? `telemetry:${(latest as any).id || (latest as any).timestamp}` : `telemetry_ts:${Date.now()}`;
+                const telemetryRef = (latest && ((latest as { id?: string }).id || (latest as { timestamp?: number }).timestamp)) ? `telemetry:${(latest as { id?: string }).id || (latest as { timestamp?: number }).timestamp}` : `telemetry_ts:${Date.now()}`;
                 const persisted = adapter.persistWisdom(annotated, asset.id, telemetryRef);
 
                 // Attach a lightweight reference to the diagnosis for UI and downstream consumers
-                (diagnosis as any).wisdomReport = { id: persisted.id, generatedAt: annotated.generatedAt, systemConfidence: annotated.systemConfidence };
+                diagnosis.wisdomReport = { id: persisted.id, generatedAt: annotated.generatedAt, systemConfidence: annotated.systemConfidence };
                 // also attach a clear persisted id field for dashboard linking
-                (diagnosis as any).persistedWisdomId = persisted.id;
+                diagnosis.persistedWisdomId = persisted.id;
             } catch (e) {
                 console.warn('Wisdom generation/persistence failed', e);
             }
@@ -519,28 +567,34 @@ export class MasterIntelligenceEngine extends BaseGuardian {
         }
     }
 
-    private static async runDynamicBaselines(asset: EnhancedAsset, common: any) {
+    private static async runDynamicBaselines(asset: EnhancedAsset, common: CommonSensorData) {
         // Implementation for dynamic baselines
         return null;
     }
 
     private static async runExpertServices(asset: EnhancedAsset, latest: CompleteSensorData) {
-        const results: any = {
-            oil: null,
-            cavitation: null,
-            structural: null,
-            hydraulic: null
+        const results: {
+            oil?: { healthScore: number } | undefined;
+            cavitation?: { severity: 'CRITICAL' | 'WARNING' | 'NOMINAL'; type?: string; message?: string; justification?: string } | undefined;
+            structural?: { margin?: number } | undefined;
+            hydraulic?: { netHead: number; headLoss?: number } | undefined;
+        } = {
+            oil: undefined,
+            cavitation: undefined,
+            structural: undefined,
+            hydraulic: undefined
         };
 
         // 1. Oil Analysis
         if (latest.specialized?.oilData) {
-            results.oil = OilAnalysisService.analyzeOilSample(latest.specialized.oilData as OilSample);
+            const oilResult = OilAnalysisService.analyzeOilSample(latest.specialized.oilData as OilSample);
+            results.oil = { healthScore: oilResult.healthScore };
         }
 
         // 2. Cavitation Analysis
         if (latest.specialized?.acoustic?.cavitationLevel || latest.specialized?.erosionPoints) {
             // Rule 2: Sediment vs Cavitation (Pelton Prioritization)
-            const intakeTurbidity = (latest.specialized as any)?.intakeTurbidity || 0;
+            const intakeTurbidity = (latest.specialized as { intakeTurbidity?: number })?.intakeTurbidity || 0;
             const unitType = asset.turbine_family;
 
             if (unitType === 'PELTON' && intakeTurbidity > 50) {
@@ -551,19 +605,21 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                     justification: 'As per AnoHUB Article-13: Pelton units are highly vulnerable to abrasion from solid particles like sand and silt.'
                 };
             } else {
-                results.cavitation = CavitationErosionService.analyzeErosionTrend(
+                const erosionResult = CavitationErosionService.analyzeErosionTrend(
                     asset.id,
                     asset.turbine_family,
                     latest.specialized?.erosionPoints || [],
                     null,
                     0 // operating hours
-                );
+                ) as any;
+                results.cavitation = erosionResult ? { severity: (erosionResult.severity || 'WARNING') as 'CRITICAL' | 'WARNING' | 'NOMINAL', type: erosionResult.type, message: erosionResult.message } : undefined;
             }
         }
 
         // 3. Structural Integrity
         const projectState = this.synthesizeProjectState(asset, latest);
-        results.structural = StructuralIntegrityService.audit(projectState);
+        const structuralResult = StructuralIntegrityService.audit(projectState) as any;
+        results.structural = structuralResult ? { margin: structuralResult.margin || structuralResult.safetyFactor || 1.5 } : undefined;
 
         // 4. Hydraulic Integrity
         results.hydraulic = HydraulicIntegrity.calculateNetHead({
@@ -577,7 +633,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
         return results;
     }
 
-    private static synthesizeProjectState(asset: EnhancedAsset, latest: CompleteSensorData): any {
+    private static synthesizeProjectState(asset: EnhancedAsset, latest: CompleteSensorData): TechnicalProjectState {
         return {
             penstock: {
                 materialYieldStrength: 355,
@@ -596,7 +652,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
             identity: {
                 machineConfig: { runnerDiameterMM: (asset.turbine_config.runner_diameter || 1) * 1000 }
             }
-        };
+        } as TechnicalProjectState;
     }
 
     private static async runAIPrediction(asset: EnhancedAsset, history: CompleteSensorData[]) {
@@ -652,7 +708,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
         }
 
         const classification = AcousticFingerprintingService.classifyAcousticSignature(
-            acousticData,
+            acousticData as any,
             runningSpeed
         );
 
@@ -669,12 +725,12 @@ export class MasterIntelligenceEngine extends BaseGuardian {
         physics: TurbinePhysics
     ) {
         if (!geodeticData || !magneticData) {
-            return { correlation: null };
+            return { correlation: undefined };
         }
 
         const correlation = SpecialMeasurementsService.correlateSettlementWithEccentricity(
-            geodeticData,
-            magneticData,
+            geodeticData as any,
+            magneticData as any,
             physics.bearingSpan,
             physics.rotorDiameter
         );
@@ -684,11 +740,26 @@ export class MasterIntelligenceEngine extends BaseGuardian {
 
     // ===== CROSS-CORRELATION LOGIC =====
 
-    private static performCrossCorrelation(ai: any, acoustic: any, special: any, expert: any) {
-        const boosts: any[] = [];
+    private static performCrossCorrelation(
+        ai: { synergeticRisks: SynergeticRisk[] },
+        acoustic: { classification: { severity: string } | null },
+        special: { correlation?: CorrelationResult },
+        expert: {
+            oil?: { healthScore: number };
+            cavitation?: { severity: string };
+            structural?: { margin?: number };
+            hydraulic?: { netHead: number; headLoss?: number };
+        }
+    ) {
+        const boosts: Array<{
+            finding: string;
+            originalConfidence: number;
+            boostedConfidence: number;
+            reason: string;
+        }> = [];
 
         // 1. Expert Oil + AI Trend correlation
-        if (expert.oil?.healthScore < 70 && ai.synergeticRisks.length > 0) {
+        if ((expert.oil?.healthScore ?? 0) < 70 && ai.synergeticRisks.length > 0) {
             boosts.push({
                 finding: 'Tribology-linked mechanical degradation',
                 originalConfidence: 60,
@@ -698,7 +769,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
         }
 
         // 2. Cavitation + Hydraulic sync
-        if (expert.cavitation?.severity === 'CRITICAL' && expert.hydraulic?.headLoss > 2.0) {
+        if (expert.cavitation?.severity === 'CRITICAL' && (expert.hydraulic?.headLoss ?? 0) > 2.0) {
             boosts.push({
                 finding: 'Erosive Hydraulic Obstruction',
                 originalConfidence: 75,
@@ -712,14 +783,18 @@ export class MasterIntelligenceEngine extends BaseGuardian {
             expertInsights: {
                 oilHealth: expert.oil?.healthScore,
                 structuralSafety: expert.structural?.margin,
-                hydraulicEfficiency: expert.hydraulic?.netHead ? (expert.hydraulic.netHead / (expert.hydraulic.netHead + (expert.hydraulic.headLoss || 0))) * 100 : 100
+                hydraulicEfficiency: expert.hydraulic?.netHead ? (expert.hydraulic.netHead / (expert.hydraulic.netHead + ((expert.hydraulic.headLoss ?? 0)))) * 100 : 100
             }
         };
     }
 
     // ===== HEALTH SCORE CALCULATION =====
 
-    private static calculateHealthScore(diagnosis: UnifiedDiagnosis, expertResults: any): number {
+    private static calculateHealthScore(diagnosis: UnifiedDiagnosis, expertResults: {
+            oil?: { healthScore: number };
+            structural?: { margin?: number };
+            cavitation?: { severity: string };
+        }): number {
         let score = 100;
 
         // 1. AI Synergetic risks
@@ -728,8 +803,8 @@ export class MasterIntelligenceEngine extends BaseGuardian {
         });
 
         // 2. Expert findings
-        if (expertResults.oil?.healthScore < 50) score -= 30;
-        if (expertResults.structural?.safetyFactor < 1.2) score -= 40;
+        if ((expertResults.oil?.healthScore ?? 0) < 50) score -= 30;
+        if ((expertResults.structural?.margin ?? 0) < 1.2) score -= 40;
         if (expertResults.cavitation?.severity === 'CRITICAL') score -= 25;
 
         // 3. Acoustic
@@ -739,7 +814,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
 
         // 4. Turbine cavitation proximity penalty
         try {
-            const cav = (diagnosis as any).turbineCavitation;
+            const cav = diagnosis.turbineCavitation;
             if (cav && typeof cav.proximity === 'number') {
                 const prox = cav.proximity;
                 if (prox < 1.0) {
@@ -772,6 +847,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
 
         for (const rul of criticalRUL) {
             const action = {
+                type: 'INVENTORY' as const,
                 action: 'CHECK_INVENTORY' as const,
                 status: 'PENDING' as const,
                 details: `Checking stock for ${rul.componentId} (RUL: ${rul.hoursRemaining}h)`
@@ -783,6 +859,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
             if (!inStock) {
                 // Auto-order
                 diagnosis.automatedActions.push({
+                    type: 'MAINTENANCE',
                     action: 'ORDER_PART',
                     status: 'COMPLETED',
                     details: `Auto-ordered ${rul.componentId} - lead time 14 days`
@@ -795,7 +872,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                 action.details += ' - IN STOCK';
             }
 
-            diagnosis.automatedActions.push(action);
+            // action already has type property set above
 
             // Persist audit record for this action (integration mode guarded inside adapter)
             try {
@@ -808,8 +885,8 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                     status: action.status || 'PENDING',
                     source: 'MasterIntelligenceEngine'
                 };
-                const res = await persistAuditRecord(audit as any);
-                if ((res as any).inserted) {
+                const res = await persistAuditRecord(audit);
+                if ((res as { inserted?: boolean }).inserted) {
                     console.log('✅ Persisted audit record for action', action.action);
                 } else {
                     console.log('ℹ️ Audit persistence result:', (res as any).message || (res as any).error || (res as any));
@@ -822,6 +899,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
         // ACTION 2: Notify consultant for critical issues
         if (diagnosis.criticality === 'CRITICAL') {
             const notifyAction = {
+                type: 'NOTIFICATION',
                 action: 'NOTIFY_CONSULTANT',
                 status: 'COMPLETED',
                 details: 'Critical health score - consultant notified via SMS/Email'
@@ -852,6 +930,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
 
         if (hydraulicRunaway && hydraulicRunaway.similarity > 0.8) {
             const lockAction = {
+                type: 'EMERGENCY' as const,
                 action: 'LOCK_SYSTEM',
                 status: 'COMPLETED',
                 details: 'Hydraulic runaway risk detected - system locked pending inspection'
@@ -897,7 +976,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                 const impact = guardian.getHealthImpact();
                 const confidence = guardian.getConfidenceScore();
                 diagnosis.overallHealthScore = Math.max(0, Math.min(100, diagnosis.overallHealthScore + impact.overallDelta));
-                diagnosis.automatedActions.push({ action: 'SHAFT_SEAL_GUARD', status: 'COMPLETED', details: impact.details });
+                diagnosis.automatedActions.push({ type: 'GUARD', action: 'SHAFT_SEAL_GUARD', status: 'COMPLETED', details: impact.details });
 
                 // Store guardian confidence score
                 if (!(diagnosis as any).guardianConfidence) (diagnosis as any).guardianConfidence = {};
@@ -922,12 +1001,14 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                 if (lastAction) {
                     if (lastAction.action === 'PROBABILISTIC_WARNING') {
                         diagnosis.automatedActions.push({
+                            type: 'OPERATIONAL',
                             action: 'DERATE',
                             status: 'PENDING',
                             details: `Recommend derate ${lastAction.recommendedDerateMw} MW (P_fail=${lastAction.probability}).`
                         });
                     } else if (lastAction.action === 'HARD_TRIP') {
                         diagnosis.automatedActions.push({
+                            type: 'EMERGENCY',
                             action: 'HARD_TRIP',
                             status: 'PENDING',
                             details: lastAction.reason
@@ -964,7 +1045,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                 if (lastAction) {
                     const impact = thrustMaster.getHealthImpactForAction(lastAction);
                     diagnosis.overallHealthScore = Math.max(0, Math.min(100, diagnosis.overallHealthScore + impact.overallDelta));
-                    diagnosis.automatedActions.push({ action: 'THRUST_BEARING_GUARD', status: 'COMPLETED', details: impact.details });
+                    diagnosis.automatedActions.push({ type: 'GUARD', action: 'THRUST_BEARING_GUARD', status: 'COMPLETED', details: impact.details });
 
                     // Persist audit
                     try {
@@ -985,14 +1066,14 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                     try {
                         const confidence = (thrustMaster as any).getConfidenceScore ? (thrustMaster as any).getConfidenceScore(thrustTelemetry as any[], (history || []).map(h => (h as any).common?.vibration)) : null;
                         diagnosis.serviceNotes?.push({ service: 'ThrustBearingConfidence', severity: confidence !== null && confidence < 70 ? 'WARNING' : 'INFO', message: `confidence:${confidence}`, recommendation: 'Include sensor cross-check or manual verification if <70%' });
-                        diagnosis.automatedActions.push({ action: 'THRUST_CONFIDENCE', status: 'INFO', metrics: { confidence } });
+                        diagnosis.automatedActions.push({ type: 'METRIC', action: 'THRUST_CONFIDENCE', status: 'INFO', details: `Confidence: ${confidence}` });
                     } catch (e) {
                         // ignore
                     }
 
                     // Translate to operative automated actions
                     if (lastAction.action === 'LUBRICATION_CRISIS') {
-                        diagnosis.automatedActions.push({ action: 'DERATE', status: 'PENDING', details: `Recommend derate due to lubrication crisis: ${lastAction.reason}` });
+                        diagnosis.automatedActions.push({ type: 'OPERATIONAL', action: 'DERATE', status: 'PENDING', details: `Recommend derate due to lubrication crisis: ${lastAction.reason}` });
                     } else if (lastAction.action === 'SOVEREIGN_TRIP') {
                         // Phase 52.0: Pass sovereign trip through SensorIntegritySentinel
                         const latestSnapshot = (history && history.length) ? history[history.length - 1] : null;
@@ -1025,17 +1106,18 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                             });
 
                             diagnosis.automatedActions.push({
+                                type: 'OPERATIONAL',
                                 action: 'SET_THROTTLED_SAFE',
                                 status: 'PENDING',
                                 details: `Throttle to ${integrity.recommendedSafeState?.throttlePct ?? 50}% - mode ${integrity.recommendedSafeState?.mode || 'RUN_THROTTLED'}`
                             });
                         } else {
-                            diagnosis.automatedActions.push({ action: 'HARD_TRIP', status: 'PENDING', details: lastAction.reason });
+                            diagnosis.automatedActions.push({ type: 'EMERGENCY', action: 'HARD_TRIP', status: 'PENDING', details: lastAction.reason });
                         }
                     } else if (lastAction.action === 'BLOCK_START') {
-                        diagnosis.automatedActions.push({ action: 'BLOCK_START', status: 'PENDING', details: lastAction.reason });
+                        diagnosis.automatedActions.push({ type: 'OPERATIONAL', action: 'BLOCK_START', status: 'PENDING', details: lastAction.reason });
                     } else if (lastAction.action === 'MECHANICAL_MISALIGNMENT') {
-                        diagnosis.automatedActions.push({ action: 'SCHEDULE_ALIGNMENT', status: 'PENDING', details: lastAction.reason });
+                        diagnosis.automatedActions.push({ type: 'MAINTENANCE', action: 'SCHEDULE_ALIGNMENT', status: 'PENDING', details: lastAction.reason });
                     }
                 }
             }
@@ -1063,7 +1145,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                 if (lastAction) {
                     const impact = wicket.getHealthImpactForAction(lastAction);
                     diagnosis.overallHealthScore = Math.max(0, Math.min(100, diagnosis.overallHealthScore + impact.overallDelta));
-                    diagnosis.automatedActions.push({ action: 'WICKET_KINEMATICS_GUARD', status: 'COMPLETED', details: impact.details });
+                    diagnosis.automatedActions.push({ type: 'GUARD', action: 'WICKET_KINEMATICS_GUARD', status: 'COMPLETED', details: impact.details });
 
                     // persist audit
                     try {
@@ -1082,11 +1164,11 @@ export class MasterIntelligenceEngine extends BaseGuardian {
 
                     // map to operative actions
                     if (lastAction.action === 'SHEAR_PIN_BROKEN') {
-                        diagnosis.automatedActions.push({ action: 'LIMIT_GATE_OPENING', status: 'PENDING', details: `Limit gate opening to ${impact.limitGateOpenPct}% due to shear pin broken.` });
+                        diagnosis.automatedActions.push({ type: 'OPERATIONAL', action: 'LIMIT_GATE_OPENING', status: 'PENDING', details: `Limit gate opening to ${impact.limitGateOpenPct}% due to shear pin broken.` });
                     } else if (lastAction.action === 'BACKLASH_CRITICAL') {
-                        diagnosis.automatedActions.push({ action: 'LIMIT_GATE_OPENING', status: 'PENDING', details: `Reduce max gate opening to ${impact.limitGateOpenPct}% (backlash critical).` });
+                        diagnosis.automatedActions.push({ type: 'OPERATIONAL', action: 'LIMIT_GATE_OPENING', status: 'PENDING', details: `Reduce max gate opening to ${impact.limitGateOpenPct}% (backlash critical).` });
                     } else if (lastAction.action === 'LUBRICATION_DEFICIENCY') {
-                        diagnosis.automatedActions.push({ action: 'SCHEDULE_LUBRICATION', status: 'PENDING', details: lastAction.reason });
+                        diagnosis.automatedActions.push({ type: 'MAINTENANCE', action: 'SCHEDULE_LUBRICATION', status: 'PENDING', details: lastAction.reason });
                     }
                 }
             }
@@ -1118,7 +1200,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                     const impact = guardian.getHealthImpactForAction(lastAction);
                     const confidence = guardian.getConfidenceScore();
                     diagnosis.overallHealthScore = Math.max(0, Math.min(100, diagnosis.overallHealthScore + impact.overallDelta));
-                    diagnosis.automatedActions.push({ action: 'GOVERNOR_HPU_GUARD', status: 'COMPLETED', details: impact.details });
+                    diagnosis.automatedActions.push({ type: 'GUARD', action: 'GOVERNOR_HPU_GUARD', status: 'COMPLETED', details: impact.details });
 
                     // Store guardian confidence score
                     if (!(diagnosis as any).guardianConfidence) (diagnosis as any).guardianConfidence = {};
@@ -1141,18 +1223,18 @@ export class MasterIntelligenceEngine extends BaseGuardian {
 
                     // Map to executive actions
                     if (lastAction.action === 'BLOCK_OPENING') {
-                        diagnosis.automatedActions.push({ action: 'BLOCK_OPENING', status: 'PENDING', details: lastAction.reason });
-                        diagnosis.automatedActions.push({ action: 'FAILSAFE_CLOSE', status: 'PENDING', details: 'Prepare failsafe close due to low HPU pressure.' });
+                        diagnosis.automatedActions.push({ type: 'EMERGENCY', action: 'BLOCK_OPENING', status: 'PENDING', details: lastAction.reason });
+                        diagnosis.automatedActions.push({ type: 'EMERGENCY', action: 'FAILSAFE_CLOSE', status: 'PENDING', details: 'Prepare failsafe close due to low HPU pressure.' });
                     } else if (lastAction.action === 'SAFETY_SYSTEM_DEGRADED') {
-                        diagnosis.automatedActions.push({ action: 'SCHEDULE_SAFETY_INSPECTION', status: 'PENDING', details: lastAction.reason });
+                        diagnosis.automatedActions.push({ type: 'MAINTENANCE', action: 'SCHEDULE_SAFETY_INSPECTION', status: 'PENDING', details: lastAction.reason });
                     } else if (lastAction.action === 'VARNISH_RISK_ALERT') {
-                        diagnosis.automatedActions.push({ action: 'SCHEDULE_FILTER_REPLACEMENT', status: 'PENDING', details: lastAction.reason });
+                        diagnosis.automatedActions.push({ type: 'MAINTENANCE', action: 'SCHEDULE_FILTER_REPLACEMENT', status: 'PENDING', details: lastAction.reason });
                     }
                     // Append governor confidence for boundary analysis
                     try {
                         const confidence = (guardian as any).getConfidenceScore ? (guardian as any).getConfidenceScore(governorTelemetry as any[]) : null;
                         diagnosis.serviceNotes?.push({ service: 'GovernorConfidence', severity: confidence !== null && confidence < 70 ? 'WARNING' : 'INFO', message: `confidence:${confidence}`, recommendation: 'If <70% verify hydraulic response and emergency close timings.' });
-                        diagnosis.automatedActions.push({ action: 'GOVERNOR_CONFIDENCE', status: 'INFO', metrics: { confidence } });
+                        diagnosis.automatedActions.push({ type: 'METRIC', action: 'GOVERNOR_CONFIDENCE', status: 'INFO', details: `Confidence: ${confidence}` });
                     } catch (e) {
                         // ignore
                     }
@@ -1182,7 +1264,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                 if (lastAction) {
                     const impact = sentinel.getHealthImpactForAction(lastAction);
                     diagnosis.overallHealthScore = Math.max(0, Math.min(100, diagnosis.overallHealthScore + impact.overallDelta));
-                    diagnosis.automatedActions.push({ action: 'GENERATOR_AIRGAP_GUARD', status: 'COMPLETED', details: impact.details });
+                    diagnosis.automatedActions.push({ type: 'GUARD', action: 'GENERATOR_AIRGAP_GUARD', status: 'COMPLETED', details: impact.details });
 
                     try {
                         const numeric = idAdapter.toNumber(asset.id);
@@ -1200,12 +1282,12 @@ export class MasterIntelligenceEngine extends BaseGuardian {
 
                     // map to executive actions
                     if (lastAction.action === 'EXCITATION_TRIP') {
-                        diagnosis.automatedActions.push({ action: 'EXCITATION_TRIP', status: 'PENDING', details: lastAction.reason });
+                        diagnosis.automatedActions.push({ type: 'EMERGENCY', action: 'EXCITATION_TRIP', status: 'PENDING', details: lastAction.reason });
                     } else if (lastAction.action === 'CRITICAL_GAP_REDUCTION') {
-                        diagnosis.automatedActions.push({ action: 'EXCITATION_TRIP', status: 'PENDING', details: lastAction.reason });
-                        diagnosis.automatedActions.push({ action: 'MECHANICAL_TRIP', status: 'PENDING', details: 'Mechanical trip recommended following excitation removal.' });
+                        diagnosis.automatedActions.push({ type: 'EMERGENCY', action: 'EXCITATION_TRIP', status: 'PENDING', details: lastAction.reason });
+                        diagnosis.automatedActions.push({ type: 'EMERGENCY', action: 'MECHANICAL_TRIP', status: 'PENDING', details: 'Mechanical trip recommended following excitation removal.' });
                     } else if (lastAction.action === 'MAGNETIC_INSTABILITY_WARNING') {
-                        diagnosis.automatedActions.push({ action: 'SCHEDULE_BORE_SCOPE', status: 'PENDING', details: lastAction.reason });
+                        diagnosis.automatedActions.push({ type: 'MAINTENANCE', action: 'SCHEDULE_BORE_SCOPE', status: 'PENDING', details: lastAction.reason });
                     }
                 }
             }
@@ -1234,7 +1316,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                     const impact = guardian.getHealthImpactForAction(lastAction as any);
                     const confidence = guardian.getConfidenceScore();
                     diagnosis.overallHealthScore = Math.max(0, Math.min(100, diagnosis.overallHealthScore + (impact.overallDelta || 0)));
-                    diagnosis.automatedActions.push({ action: 'STATOR_INSULATION_GUARD', status: 'COMPLETED', details: impact.recommendation || (impact as any).details || lastAction.reason });
+                    diagnosis.automatedActions.push({ type: 'GUARD', action: 'STATOR_INSULATION_GUARD', status: 'COMPLETED', details: impact.recommendation || (impact as any).details || lastAction.reason });
                     // Store guardian confidence score
                     if (!(diagnosis as any).guardianConfidence) (diagnosis as any).guardianConfidence = {};
                     (diagnosis as any).guardianConfidence.statorInsulation = confidence;
@@ -1255,10 +1337,10 @@ export class MasterIntelligenceEngine extends BaseGuardian {
 
                     // map to executive actions
                     if (lastAction.action === 'CRITICAL_INSULATION_DEGRADATION') {
-                        diagnosis.automatedActions.push({ action: 'SCHEDULE_EMERGENCY_OUTAGE', status: 'PENDING', details: lastAction.reason });
-                        diagnosis.automatedActions.push({ action: 'BOROSCOPE_INSPECTION', status: 'PENDING', details: 'Immediate boroscope inspection recommended.' });
+                        diagnosis.automatedActions.push({ type: 'EMERGENCY', action: 'SCHEDULE_EMERGENCY_OUTAGE', status: 'PENDING', details: lastAction.reason });
+                        diagnosis.automatedActions.push({ type: 'MAINTENANCE', action: 'BOROSCOPE_INSPECTION', status: 'PENDING', details: 'Immediate boroscope inspection recommended.' });
                     } else if (lastAction.action === 'BOROSCOPE_INSPECTION_RECOMMENDED') {
-                        diagnosis.automatedActions.push({ action: 'BOROSCOPE_INSPECTION', status: 'PENDING', details: lastAction.reason });
+                        diagnosis.automatedActions.push({ type: 'MAINTENANCE', action: 'BOROSCOPE_INSPECTION', status: 'PENDING', details: lastAction.reason });
                     }
                 }
             }
@@ -1287,7 +1369,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                     const impact = guardian.getHealthImpactForAction(lastAction as any);
                     const confidence = guardian.getConfidenceScore();
                     diagnosis.overallHealthScore = Math.max(0, Math.min(100, diagnosis.overallHealthScore + (impact.overallDelta || 0)));
-                    diagnosis.automatedActions.push({ action: 'TRANSFORMER_OIL_GUARD', status: 'COMPLETED', details: impact.recommendation || lastAction.reason });
+                    diagnosis.automatedActions.push({ type: 'GUARD', action: 'TRANSFORMER_OIL_GUARD', status: 'COMPLETED', details: impact.recommendation || lastAction.reason });
 
                     // Store guardian confidence score
                     if (!(diagnosis as any).guardianConfidence) (diagnosis as any).guardianConfidence = {};
@@ -1309,8 +1391,8 @@ export class MasterIntelligenceEngine extends BaseGuardian {
 
                     // Map to executive actions
                     if (lastAction.action === 'CRITICAL_FAULT') {
-                        diagnosis.automatedActions.push({ action: 'TRANSFORMER_CRITICAL_TRIP', status: 'PENDING', details: lastAction.reason });
-                        diagnosis.automatedActions.push({ action: 'RESTRICT_POWER', status: 'PENDING', details: 'Transformer critical - restrict plant power until inspected.' });
+                        diagnosis.automatedActions.push({ type: 'EMERGENCY', action: 'TRANSFORMER_CRITICAL_TRIP', status: 'PENDING', details: lastAction.reason });
+                        diagnosis.automatedActions.push({ type: 'OPERATIONAL', action: 'RESTRICT_POWER', status: 'PENDING', details: 'Transformer critical - restrict plant power until inspected.' });
                         // Persist critical flag into SovereignMemory for system-wide interlocks
                         try {
                             const memory = new SovereignMemory();
@@ -1319,13 +1401,13 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                             console.warn('Failed to persist transformerCritical flag to SovereignMemory', e);
                         }
                     } else if (lastAction.action === 'SCHEDULE_TRANSFORMER_INSPECTION') {
-                        diagnosis.automatedActions.push({ action: 'SCHEDULE_TRANSFORMER_INSPECTION', status: 'PENDING', details: lastAction.reason });
+                        diagnosis.automatedActions.push({ type: 'MAINTENANCE', action: 'SCHEDULE_TRANSFORMER_INSPECTION', status: 'PENDING', details: lastAction.reason });
                     }
                     // Append transformer confidence for boundary analysis
                     try {
                         const confidence = (guardian as any).getConfidenceScore ? (guardian as any).getConfidenceScore(txTelemetry as any[]) : null;
                         diagnosis.serviceNotes?.push({ service: 'TransformerConfidence', severity: confidence !== null && confidence < 70 ? 'WARNING' : 'INFO', message: `confidence:${confidence}`, recommendation: 'If <70% verify DGA lab and manual sampling.' });
-                        diagnosis.automatedActions.push({ action: 'TRANSFORMER_CONFIDENCE', status: 'INFO', metrics: { confidence } });
+                        diagnosis.automatedActions.push({ type: 'METRIC', action: 'TRANSFORMER_CONFIDENCE', status: 'INFO', details: `Confidence: ${confidence}` });
                     } catch (e) {
                         // ignore
                     }

@@ -1,7 +1,7 @@
 import { BaseEngine } from './BaseEngine';
 import { RecommendationResult, TurbineSpecs, TurbineType } from './types';
 import Decimal from 'decimal.js';
-import { calculatePeltonEfficiency } from './TurbineMath';
+import { calculatePeltonEfficiency } from '../../utils/CorePhysics';
 
 /**
  * THE IMPULSE ENGINE (PELTON)

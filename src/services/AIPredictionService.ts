@@ -78,8 +78,19 @@ export interface PredictionReport {
 const telemetryHistory = new Map<string, TelemetryData[]>();
 const HISTORY_WINDOW_SIZE = 30; // Last 30 measurements
 
+interface HistoricalIncident {
+    id: string;
+    type: 'HYDRAULIC_RUNAWAY' | 'BEARING_SEIZURE' | 'CAVITATION_COLLAPSE' | 'ALIGNMENT_DRIFT';
+    description: string;
+    pressureSignature?: number[];
+    hoseTensionSignature?: number[];
+    temperatureSignature?: number[];
+    vibrationSignature?: number[];
+    triggerCondition: Record<string, unknown>;
+}
+
 // Simulated incident database (in production, this would come from Supabase)
-const HISTORICAL_INCIDENTS = [
+const HISTORICAL_INCIDENTS: HistoricalIncident[] = [
     {
         id: '2024-KM-HC-001',
         type: 'HYDRAULIC_RUNAWAY',
@@ -106,6 +117,15 @@ class AIPredictionService {
      * Detects synergetic risk when all 3 parameters oscillate simultaneously
      */
     detectSynergeticRisk(assetId: number, telemetry: TelemetryData): SynergeticRisk {
+        if (!telemetry) {
+            return {
+                detected: false,
+                probability: 0,
+                triggers: { acoustic: false, thermal: false, hydraulic: false },
+                timestamp: Date.now(),
+                message: 'Invalid telemetry data'
+            };
+        }
         // Store historical data
         const key = String(assetId);
         if (!telemetryHistory.has(key)) {
@@ -336,9 +356,9 @@ class AIPredictionService {
                         }
                         return null;
                     })
-                    .filter((p: any): p is { t: number; y: number; d: string } => !!p && typeof p.d === 'string')
-                    .filter((p: any) => !excludeDates.includes(p.d))
-                    .map((p: any) => ({ t: p.t, y: p.y }));
+                    .filter((p): p is { t: number; y: number; d: string } => !!p && typeof p.d === 'string')
+                    .filter((p) => !excludeDates.includes(p.d))
+                    .map((p) => ({ t: p.t, y: p.y }));
 
                 if (filtered.length >= 5) return this._computeLinearForecast(filtered, threshold);
             }
@@ -412,6 +432,12 @@ class AIPredictionService {
         operatingHours: number,
         telemetry: TelemetryData
     ): RULEstimate {
+        if (!telemetry || !telemetry.assetId) {
+            throw new Error('Invalid telemetry data for RUL calculation');
+        }
+        if (operatingHours < 0) {
+            throw new Error('Operating hours cannot be negative');
+        }
         // Base life hours for each component type
         const baseLifeHours: Record<string, number> = {
             bearing: 30000,
@@ -469,6 +495,9 @@ class AIPredictionService {
      * Pattern matching with historical incidents using Dynamic Time Warping
      */
     matchHistoricalPattern(assetId: number, telemetry: TelemetryData): IncidentPattern | null {
+        if (!telemetry) {
+            return null;
+        }
         const history = telemetryHistory.get(String(assetId)) || [];
 
         if (history.length < 5) return null;
@@ -577,6 +606,9 @@ class AIPredictionService {
         component: string,
         failureProbability: number
     ): PrescriptiveRecommendation {
+        if (failureProbability < 0 || failureProbability > 100) {
+            throw new Error('Failure probability must be between 0 and 100');
+        }
         const actions: PrescriptiveAction[] = [];
 
         if (failureProbability >= 90) {
@@ -694,6 +726,15 @@ class AIPredictionService {
      * Uses telemetry and optional physics-derived head/rpm to estimate cavitation probability
      */
     assessCavitationRisk(telemetry: TelemetryData, opts?: { rpm?: number; netHead?: number; temperatureC?: number; atmosphericPressurePa?: number }, projectState?: TechnicalProjectState): PredictionReport {
+        if (!telemetry) {
+            return {
+                probability: 0,
+                timeToFailureHours: null,
+                confidenceScore: 0,
+                mitigationAction: 'Invalid telemetry data',
+                details: { error: 'telemetry is required' }
+            };
+        }
         // Gather inputs
         const rho = 1000; // kg/m3
         const g = 9.80665;
@@ -774,6 +815,24 @@ class AIPredictionService {
      * Uses recent telemetry history to linear-regress bearing temperature and estimate Time-To-Threshold (hours)
      */
     predictBearingThermalTTT(assetId: number, telemetry: TelemetryData, criticalTemp: number = 75, projectState?: TechnicalProjectState): PredictionReport {
+        if (!telemetry) {
+            return {
+                probability: 0,
+                timeToFailureHours: null,
+                confidenceScore: 0,
+                mitigationAction: 'Invalid telemetry data',
+                details: { error: 'telemetry is required' }
+            };
+        }
+        if (criticalTemp <= 0) {
+            return {
+                probability: 0,
+                timeToFailureHours: null,
+                confidenceScore: 0,
+                mitigationAction: 'Invalid critical temperature',
+                details: { error: 'criticalTemp must be positive' }
+            };
+        }
         const key = String(assetId);
         const history = telemetryHistory.get(key) || [];
         // Use last 12 samples or up to history length
@@ -822,6 +881,15 @@ class AIPredictionService {
      * Monitors eta change over a sliding window and flags potential runner erosion or seal wear
      */
     predictEfficiencyDecay(assetId: number, lookbackHours: number = 72): PredictionReport {
+        if (lookbackHours <= 0) {
+            return {
+                probability: 0,
+                timeToFailureHours: null,
+                confidenceScore: 0,
+                mitigationAction: 'Invalid lookback hours',
+                details: { error: 'lookbackHours must be positive' }
+            };
+        }
         const history = telemetryHistory.get(String(assetId)) || [];
         if (history.length < 3) return { probability: 0, timeToFailureHours: null, confidenceScore: 0, mitigationAction: 'Insufficient data', details: { samples: history.length } };
 
@@ -864,6 +932,31 @@ class AIPredictionService {
 
     /** Aggregate prediction report combining primary failure modes */
     generatePredictionReport(assetId: number, telemetry: TelemetryData): { cavitation: PredictionReport; bearing: PredictionReport; efficiency: PredictionReport } {
+        if (!telemetry) {
+            return {
+                cavitation: {
+                    probability: 0,
+                    timeToFailureHours: null,
+                    confidenceScore: 0,
+                    mitigationAction: 'Invalid telemetry data',
+                    details: { error: 'telemetry is required' }
+                },
+                bearing: {
+                    probability: 0,
+                    timeToFailureHours: null,
+                    confidenceScore: 0,
+                    mitigationAction: 'Invalid telemetry data',
+                    details: { error: 'telemetry is required' }
+                },
+                efficiency: {
+                    probability: 0,
+                    timeToFailureHours: null,
+                    confidenceScore: 0,
+                    mitigationAction: 'Invalid telemetry data',
+                    details: { error: 'telemetry is required' }
+                }
+            };
+        }
         // Try to call PhysicsEngine to enrich inputs (best-effort)
         let physics: PhysicsResult | null = null;
         // Prefer canonical state from ProjectStateManager if available

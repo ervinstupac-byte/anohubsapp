@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, ReactNode } from 'react';
 import { useAssetContext } from './AssetContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 import { loggingService } from '../services/LoggingService.ts';
@@ -91,7 +91,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
     const [telemetry, setTelemetry] = useState<Record<string, TelemetryData>>({});
     const [activeIncident, setActiveIncident] = useState<{ type: string, assetId: number, timestamp: number } | null>(null);
 
-    const triggerEmergency = (assetId: number, type: 'vibration_excess' | 'bearing_overheat' | 'hydraulic_interlock' | 'mechanical_blockage' | 'metal_scraping' | 'grid_frequency_critical') => {
+    const triggerEmergency = useCallback((assetId: number, type: 'vibration_excess' | 'bearing_overheat' | 'hydraulic_interlock' | 'mechanical_blockage' | 'metal_scraping' | 'grid_frequency_critical') => {
         const timestamp = Date.now();
         setActiveIncident({ type, assetId, timestamp });
 
@@ -156,15 +156,15 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
             vibration: type === 'vibration_excess' ? 0.085 : 0.035,
             temperature: type === 'bearing_overheat' ? 85 : 55
         });
-    };
+    }, [telemetry]);
 
-    const clearEmergency = () => {
+    const clearEmergency = useCallback(() => {
         if (activeIncident) {
             loggingService.logReset(activeIncident.assetId);
         }
         setActiveIncident(null);
         generateSignal();
-    };
+    }, [activeIncident]);
 
     useEffect(() => {
         if (!supabase || typeof (supabase as any).channel !== 'function') {
@@ -471,7 +471,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
         }
     }, [assets]);
 
-    const updatePipeDiameter = (assetId: number, diameter: number) => {
+    const updatePipeDiameter = useCallback((assetId: number, diameter: number) => {
         // Route canonical penstock diameter change through ProjectStateManager
         try {
             ProjectStateManager.setState({ penstock: { diameter } } as any);
@@ -487,9 +487,9 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                 }
             }));
         }
-    };
+    }, [telemetry]);
 
-    const shutdownExcitation = (assetId: number) => {
+    const shutdownExcitation = useCallback((assetId: number) => {
         // Preferred: update ProjectState canonical flags via ProjectStateManager
         try {
             ProjectStateManager.setState({ specializedState: { sensors: { excitationActive: false } } as any });
@@ -505,9 +505,9 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
             }));
             loggingService.logAction(assetId, 'EXCITATION_SHUTDOWN', { cause: 'METAL_SCRAPING_DETECTED (fallback)' });
         }
-    };
+    }, [telemetry]);
 
-    const updateWicketGateSetpoint = (assetId: number, setpoint: number) => {
+    const updateWicketGateSetpoint = useCallback((assetId: number, setpoint: number) => {
         try {
             // Represent as specializedState.sensor wicket gate setpoint in canonical state
             ProjectStateManager.setState({ specializedState: { sensors: { wicketGateSetpoint: setpoint } } as any });
@@ -524,9 +524,9 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
             }));
             loggingService.logAction(assetId, 'WICKET_GATE_COMMAND', { setpoint, fallback: true });
         }
-    };
+    }, [telemetry]);
 
-    const resetFatigue = (assetId: number) => {
+    const resetFatigue = useCallback((assetId: number) => {
         try {
             ProjectStateManager.setState({ specializedState: { sensors: { fatiguePoints: 0 } } as any });
             loggingService.logAction(assetId, 'FATIGUE_RESET', { cause: 'NDT_COMPLETED' });
@@ -541,20 +541,22 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
             }));
             loggingService.logAction(assetId, 'FATIGUE_RESET', { cause: 'NDT_COMPLETED (fallback)' });
         }
-    };
+    }, [telemetry]);
+
+    const contextValue = useMemo(() => ({
+        telemetry,
+        activeIncident,
+        triggerEmergency,
+        clearEmergency,
+        forceUpdate: generateSignal,
+        updatePipeDiameter,
+        shutdownExcitation,
+        updateWicketGateSetpoint,
+        resetFatigue
+    }), [telemetry, activeIncident, triggerEmergency, clearEmergency, updatePipeDiameter, shutdownExcitation, updateWicketGateSetpoint, resetFatigue]);
 
     return (
-        <TelemetryContext.Provider value={{
-            telemetry,
-            activeIncident,
-            triggerEmergency,
-            clearEmergency,
-            forceUpdate: generateSignal,
-            updatePipeDiameter,
-            shutdownExcitation,
-            updateWicketGateSetpoint,
-            resetFatigue
-        }}>
+        <TelemetryContext.Provider value={contextValue}>
             {children}
         </TelemetryContext.Provider>
     );

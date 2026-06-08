@@ -7,8 +7,7 @@ import { useAssetContext } from '../../contexts/AssetContext';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { useDensity } from '../../contexts/DensityContext';
 import { useWorkflow, ModuleType } from '../../contexts/WorkflowContext';
-import { SystemOverviewModal } from '../modals/SystemOverviewModal'; // NEW
-import { Map, ZapOff } from 'lucide-react'; // NEW Icons
+import { ZapOff } from 'lucide-react'; // NEW Icons
 
 interface WorkflowHeaderProps {
     className?: string;
@@ -40,7 +39,6 @@ export const WorkflowHeader: React.FC<WorkflowHeaderProps> = ({ className = '' }
     const { diagnosis, mechanical } = useTelemetryStore();
     const { mode } = useDensity();
     const { logNavigation } = useWorkflow();
-    const [showMap, setShowMap] = React.useState(false); // NEW
     const [isOffline, setIsOffline] = React.useState(!navigator.onLine); // NEW
 
     React.useEffect(() => {
@@ -166,19 +164,6 @@ export const WorkflowHeader: React.FC<WorkflowHeaderProps> = ({ className = '' }
                     </div>
                 )}
 
-                {/* NEW: System Overview Trigger */}
-                <button
-                    onClick={() => setShowMap(true)}
-                    className={`
-                        p-1.5 rounded hover:bg-white/10 text-slate-400 hover:text-cyan-400
-                        transition-colors border border-transparent hover:border-white/5
-                        ${isCompact ? 'scale-90' : ''}
-                    `}
-                    title="System Topology Map"
-                >
-                    <Map className="w-4 h-4" />
-                </button>
-
                 {/* EXTREME DEFENSE: Guard against null/undefined selectedAsset or missing properties */}
                 {selectedAsset && selectedAsset?.id ? (
                     <>
@@ -212,9 +197,6 @@ export const WorkflowHeader: React.FC<WorkflowHeaderProps> = ({ className = '' }
                     <div className="h-4 w-px bg-white/10" />
                 )}
             </div>
-
-            {/* NEW: Map Modal */}
-            <SystemOverviewModal isOpen={showMap} onClose={() => setShowMap(false)} />
         </motion.div>
     );
 };

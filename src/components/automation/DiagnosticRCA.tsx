@@ -20,7 +20,6 @@ export const DiagnosticRCA: React.FC<DiagnosticRCAProps> = ({ diagnosis: externa
 
     // NC-300: Consume RCA results from centralized store
     const storeResults = useTelemetryStore(state => state.rcaResults);
-    const selectDiagnostic = useTelemetryStore(state => state.selectDiagnostic);
     // NC-400: DNA baseline for evidence display
     const baselineState = useTelemetryStore(state => state.baselineState);
 
@@ -51,7 +50,7 @@ export const DiagnosticRCA: React.FC<DiagnosticRCAProps> = ({ diagnosis: externa
     // NC-300: Handle diagnostic selection for context-aware UI
     const handleDiagnosticClick = (cause: string) => {
         setExpandedCause(expandedCause === cause ? null : cause);
-        selectDiagnostic(expandedCause === cause ? null : cause);
+        // selectDiagnostic removed - demo mode deleted
     };
 
     if (results.length === 0 && vibration < 1.5) return null; // Hide if healthy

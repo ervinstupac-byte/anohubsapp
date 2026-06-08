@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 // ISPRAVKA IMPORTA: Uvozimo hook izravno iz konteksta
 import { useAssetContext } from '../contexts/AssetContext.tsx';
@@ -11,6 +11,8 @@ import { useRisk } from '../contexts/RiskContext.tsx';
 // DODANO: Import AssetPicker-a koji je nedostajao
 import { AssetPicker } from './AssetPicker.tsx';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
+import { QuickAccessCard } from '../shared/components/ui/QuickAccessCard';
+import { Shield, AlertTriangle, FileText, Activity, TrendingUp, CheckCircle, Info, AlertCircle } from 'lucide-react';
 
 // --- EMERGENCY PROTOCOL ACTIONS ---
 const EmergencyProtocol: React.FC<{ type: string }> = ({ type }) => {
@@ -47,9 +49,23 @@ const EmergencyProtocol: React.FC<{ type: string }> = ({ type }) => {
 export const RiskAssessment: React.FC<{ onShowSummary: () => void }> = ({ onShowSummary }) => {
     const { t } = useTranslation();
     const { selectedAsset } = useAssetContext();
-    const { updateRiskState } = useRisk();
+    const { updateRiskState, riskState } = useRisk();
     const { activeIncident } = useTelemetry();
     const numericSelected = selectedAsset ? idAdapter.toNumber(selectedAsset.id) : null;
+    const [riskLevel, setRiskLevel] = useState<'low' | 'medium' | 'high' | 'critical'>('low');
+
+    // Calculate risk level based on risk state and active incident
+    useEffect(() => {
+        if (activeIncident && numericSelected !== null && activeIncident.assetId === numericSelected) {
+            setRiskLevel('critical');
+        } else if (riskState && riskState.riskScore > 75) {
+            setRiskLevel('high');
+        } else if (riskState && riskState.riskScore > 50) {
+            setRiskLevel('medium');
+        } else {
+            setRiskLevel('low');
+        }
+    }, [activeIncident, numericSelected, riskState]);
 
     // Ova funkcija se aktivira kada korisnik klikne "Finalize Analysis" u upitniku
     const handleRiskSync = (score: number, criticalCount: number) => {
@@ -74,6 +90,111 @@ export const RiskAssessment: React.FC<{ onShowSummary: () => void }> = ({ onShow
             {/* 1. ASSET PICKER (Global) */}
             <div className="relative z-20">
                 <AssetPicker />
+            </div>
+
+            {/* QUICK ACCESS CARDS SECTION */}
+            <div className="mb-6">
+                {/* Risk Status Banner */}
+                {selectedAsset && (
+                    <div className={`mb-4 p-4 rounded-xl border-2 flex items-center justify-between ${
+                        riskLevel === 'critical' ? 'bg-red-500/10 border-red-500/30' :
+                        riskLevel === 'high' ? 'bg-orange-500/10 border-orange-500/30' :
+                        riskLevel === 'medium' ? 'bg-amber-500/10 border-amber-500/30' :
+                        'bg-emerald-500/10 border-emerald-500/30'
+                    }`}>
+                        <div className="flex items-center gap-3">
+                            {riskLevel === 'critical' ? <AlertCircle className="w-5 h-5 text-red-500" /> :
+                             riskLevel === 'high' ? <AlertTriangle className="w-5 h-5 text-orange-500" /> :
+                             riskLevel === 'medium' ? <AlertTriangle className="w-5 h-5 text-amber-500" /> :
+                             <CheckCircle className="w-5 h-5 text-emerald-500" />}
+                            <div>
+                                <div className={`text-xs font-bold uppercase tracking-wider ${
+                                    riskLevel === 'critical' ? 'text-red-500' :
+                                    riskLevel === 'high' ? 'text-orange-500' :
+                                    riskLevel === 'medium' ? 'text-amber-500' :
+                                    'text-emerald-500'
+                                }`}>
+                                    Risk Level: {riskLevel.toUpperCase()}
+                                </div>
+                                <div className="text-[10px] text-slate-400">
+                                    {riskState ? `Risk Score: ${riskState.riskScore.toFixed(0)}/100` : 'No assessment data'}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="text-right">
+                            <div className="text-[10px] text-slate-500 uppercase tracking-wider">Critical Issues</div>
+                            <div className="text-sm font-bold text-white">{riskState?.criticalFlags || 0}</div>
+                        </div>
+                    </div>
+                )}
+
+                <div className="mb-4">
+                    <h2 className="text-xl font-black text-white uppercase tracking-widest mb-1">Risk Assessment Command Center</h2>
+                    <p className="text-sm text-slate-400">Quick access to risk analysis tools</p>
+                </div>
+                
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+                    <QuickAccessCard
+                        id="questionnaire"
+                        title="Questionnaire"
+                        description="Risk assessment"
+                        icon={<Shield className="w-6 h-6" />}
+                        color="bg-red-500/10"
+                        borderColor="border-red-500/30"
+                        priority="critical"
+                        onClick={() => document.getElementById('questionnaire-section')?.scrollIntoView({ behavior: 'smooth' })}
+                    />
+                    <QuickAccessCard
+                        id="structural"
+                        title="Structural"
+                        description="Integrity check"
+                        icon={<Activity className="w-6 h-6" />}
+                        route="/executive"
+                        color="bg-red-500/10"
+                        borderColor="border-red-500/30"
+                        priority="critical"
+                    />
+                    <QuickAccessCard
+                        id="barlow-audit"
+                        title="Barlow Audit"
+                        description="Pressure safety"
+                        icon={<AlertTriangle className="w-6 h-6" />}
+                        route="/executive"
+                        color="bg-amber-500/10"
+                        borderColor="border-amber-500/30"
+                        priority="high"
+                    />
+                    <QuickAccessCard
+                        id="longevity"
+                        title="Longevity"
+                        description="Asset lifespan"
+                        icon={<TrendingUp className="w-6 h-6" />}
+                        route="/executive"
+                        color="bg-amber-500/10"
+                        borderColor="border-amber-500/30"
+                        priority="high"
+                    />
+                    <QuickAccessCard
+                        id="forensics"
+                        title="Forensics"
+                        description="Incident analysis"
+                        icon={<FileText className="w-6 h-6" />}
+                        route="/forensics"
+                        color="bg-cyan-500/10"
+                        borderColor="border-cyan-500/30"
+                        priority="medium"
+                    />
+                    <QuickAccessCard
+                        id="summary"
+                        title="Summary"
+                        description="Risk report"
+                        icon={<CheckCircle className="w-6 h-6" />}
+                        onClick={onShowSummary}
+                        color="bg-cyan-500/10"
+                        borderColor="border-cyan-500/30"
+                        priority="medium"
+                    />
+                </div>
             </div>
 
             {/* 2. LOGIC DISPLAY */}
@@ -102,7 +223,38 @@ export const RiskAssessment: React.FC<{ onShowSummary: () => void }> = ({ onShow
                     </GlassCard>
                 ) : (
                     // ACTIVE MODULE
-                    <div className="space-y-8">
+                    <div className="space-y-8" id="questionnaire-section">
+                        {/* Risk Insights Panel */}
+                        {riskState && (
+                            <GlassCard className={`bg-gradient-to-r ${
+                                riskLevel === 'critical' ? 'from-red-950/20 to-orange-950/20 border-red-500/30' :
+                                riskLevel === 'high' ? 'from-orange-950/20 to-amber-950/20 border-orange-500/30' :
+                                riskLevel === 'medium' ? 'from-amber-950/20 to-yellow-950/20 border-amber-500/30' :
+                                'from-emerald-950/20 to-cyan-950/20 border-emerald-500/30'
+                            } border`}>
+                                <div className="flex items-center gap-2 mb-3">
+                                    <Info className="w-5 h-5 text-cyan-400" />
+                                    <h3 className="text-sm font-bold text-cyan-300 uppercase tracking-wider">Risk Assessment Summary</h3>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="p-3 bg-slate-900/50 rounded border border-white/5">
+                                        <div className="text-[10px] text-slate-500 uppercase font-bold mb-1">Overall Risk Score</div>
+                                        <div className={`text-2xl font-black ${
+                                            riskState.riskScore > 75 ? 'text-red-400' :
+                                            riskState.riskScore > 50 ? 'text-amber-400' :
+                                            'text-emerald-400'
+                                        }`}>{riskState.riskScore.toFixed(0)}/100</div>
+                                    </div>
+                                    <div className="p-3 bg-slate-900/50 rounded border border-white/5">
+                                        <div className="text-[10px] text-slate-500 uppercase font-bold mb-1">Critical Issues</div>
+                                        <div className={`text-2xl font-black ${
+                                            riskState.criticalFlags > 0 ? 'text-red-400' : 'text-emerald-400'
+                                        }`}>{riskState.criticalFlags}</div>
+                                    </div>
+                                </div>
+                            </GlassCard>
+                        )}
+
                         {activeIncident && numericSelected !== null && activeIncident.assetId === numericSelected && (
                             <EmergencyProtocol type={activeIncident.type} />
                         )}

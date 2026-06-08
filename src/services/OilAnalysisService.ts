@@ -51,6 +51,16 @@ export class OilAnalysisService {
      * Analyze oil sample and detect anomalies
      */
     static analyzeOilSample(sample: OilSample, baseline?: OilSample): OilAnalysisResult {
+        if (!sample) {
+            throw new Error('Oil sample is required');
+        }
+        if (!sample.sampleId || !sample.assetId) {
+            throw new Error('Oil sample must have sampleId and assetId');
+        }
+        if (sample.viscosityIndex < 0 || sample.tan < 0 || sample.waterContent < 0) {
+            throw new Error('Oil sample values must be non-negative');
+        }
+
         const findings: OilAnalysisResult['findings'] = [];
         let healthScore = 100;
 
@@ -246,6 +256,13 @@ export class OilAnalysisService {
         bearingTemp: number,
         baselineTemp: number
     ): string | null {
+        if (!oilSample) {
+            throw new Error('Oil sample is required');
+        }
+        if (typeof bearingTemp !== 'number' || typeof baselineTemp !== 'number') {
+            throw new Error('Bearing temperature and baseline must be numbers');
+        }
+
         const { tin, lead, copper } = oilSample.metalContent;
         const babbittTotal = tin + lead + copper;
         const tempIncrease = bearingTemp - baselineTemp;

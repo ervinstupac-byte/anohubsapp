@@ -1,6 +1,52 @@
 export const ROUTES = {
     HOME: '/',
     LOGIN: '/login',
+    PREDICTIVE_INTELLIGENCE: 'predictive-intelligence',
+    LABS: {
+        ROOT: 'lab',
+        // Mechanical Forensics
+        SHAFT_PLUMBNESS: 'shaft-plumbness',
+        COUPLING_BOLT_TENSIONING: 'coupling-bolt-tensioning',
+        GUIDE_BEARING_CLEARANCE: 'guide-bearing-clearance',
+        HEAD_COVER_DEFLECTION: 'head-cover-deflection',
+        JACKING_OIL_SYSTEM: 'jacking-oil-system',
+        KAPLAN_BLADE_TRUNNION: 'kaplan-blade-trunnion',
+        MECHANICAL_BRAKE_WEAR: 'mechanical-brake-wear',
+        RUNNER_LABYRINTH_SEAL: 'runner-labyrinth-seal',
+        SHEAR_PIN_FATIGUE: 'shear-pin-fatigue',
+        THRUST_BEARING_LOAD: 'thrust-bearing-load',
+        STAY_VANE_CRACK: 'stay-vane-crack',
+        // Electrical Diagnostics
+        GENERATOR_AIRGAP: 'generator-airgap',
+        EXCITATION_HEAT: 'excitation-heat',
+        PARTIAL_DISCHARGE: 'partial-discharge',
+        ROTOR_POLE_IMPEDANCE: 'rotor-pole-impedance',
+        STATOR_CORE_CLAMPING: 'stator-core-clamping',
+        STATOR_WINDING_THERMAL: 'stator-winding-thermal',
+        TRANSFORMER_GAS: 'transformer-gas',
+        // Hydraulic Analytics
+        DRAFT_TUBE_AIR: 'draft-tube-air',
+        DRAFT_TUBE_SURGE: 'draft-tube-surge',
+        FRANCIS_CAVITATION: 'francis-cavitation',
+        KAPLAN_CAM_CURVE: 'kaplan-cam-curve',
+        MIV_BYPASS: 'miv-bypass',
+        OIL_COOLER: 'oil-cooler',
+        PELTON_INJECTOR: 'pelton-injector',
+        PELTON_NEEDLE: 'pelton-needle',
+        PENSTOCK_HAMMER: 'penstock-hammer',
+        SPIRAL_CASE: 'spiral-case',
+        TRASH_RACK: 'trash-rack',
+        // Operational Scenarios
+        BLACK_START: 'black-start',
+        GOVERNOR_DEADBAND: 'governor-deadband',
+        INDEX_TESTING: 'index-testing',
+        LOAD_REJECTION: 'load-rejection',
+        OIL_DEGRADATION: 'oil-degradation',
+        ROUGH_ZONE: 'rough-zone',
+        RUNUP_VIBRATION: 'runup-vibration',
+        STARTUP_SEQUENCE: 'startup-sequence',
+        BEARING_COOLING: 'bearing-cooling',
+    },
     MAINTENANCE: {
         ROOT: 'maintenance',
         DASHBOARD: 'dashboard',
@@ -75,11 +121,22 @@ export const ROUTES = {
     STRUCTURAL_INTEGRITY: 'structural-integrity',
     INSTALLATION_GUARANTEE: 'installation-guarantee',
     LEARNING_LAB: 'learning-lab',
+    PREDICTION_LAB: 'prediction-lab',
+    VIBRATION_LAB: 'vibration-lab',
+    // Knowledge Base — serves static AnoHub_site HTML via iframe wrapper
+    KNOWLEDGE_BASE: {
+        ROOT: 'knowledge-base',
+        TURBINE_FRIEND: 'turbine-friend',
+        CASE_STUDIES: 'case-studies',
+        INSIGHTS: 'insights',
+        PROTOCOL: 'protocol',
+    },
 } as const;
 
 // Helper to build full paths
 export const getMaintenancePath = (subPath: string) => `/${ROUTES.MAINTENANCE.ROOT}/${subPath}`;
 export const getFrancisPath = (subPath: string) => `/${ROUTES.FRANCIS.ROOT}/${subPath}`;
+export const getLabPath = (subPath: string) => `/${ROUTES.LABS.ROOT}/${subPath}`;
 
 // Commonly used full paths
 export const FRANCIS_PATHS = {
@@ -98,4 +155,50 @@ export const MAINTENANCE_PATHS = {
     HYDRAULIC: getMaintenancePath(ROUTES.MAINTENANCE.HYDRAULIC),
     SHADOW_ENGINEER: getMaintenancePath(ROUTES.MAINTENANCE.SHADOW_ENGINEER),
     ASSET_PASSPORT: getMaintenancePath(ROUTES.MAINTENANCE.ASSET_PASSPORT),
+} as const;
+
+export const LAB_PATHS = {
+    ROOT: `/${ROUTES.PREDICTIVE_INTELLIGENCE}`,
+    // Mechanical Forensics
+    SHAFT_PLUMBNESS: getLabPath(ROUTES.LABS.SHAFT_PLUMBNESS),
+    COUPLING_BOLT_TENSIONING: getLabPath(ROUTES.LABS.COUPLING_BOLT_TENSIONING),
+    GUIDE_BEARING_CLEARANCE: getLabPath(ROUTES.LABS.GUIDE_BEARING_CLEARANCE),
+    HEAD_COVER_DEFLECTION: getLabPath(ROUTES.LABS.HEAD_COVER_DEFLECTION),
+    JACKING_OIL_SYSTEM: getLabPath(ROUTES.LABS.JACKING_OIL_SYSTEM),
+    KAPLAN_BLADE_TRUNNION: getLabPath(ROUTES.LABS.KAPLAN_BLADE_TRUNNION),
+    MECHANICAL_BRAKE_WEAR: getLabPath(ROUTES.LABS.MECHANICAL_BRAKE_WEAR),
+    RUNNER_LABYRINTH_SEAL: getLabPath(ROUTES.LABS.RUNNER_LABYRINTH_SEAL),
+    SHEAR_PIN_FATIGUE: getLabPath(ROUTES.LABS.SHEAR_PIN_FATIGUE),
+    THRUST_BEARING_LOAD: getLabPath(ROUTES.LABS.THRUST_BEARING_LOAD),
+    STAY_VANE_CRACK: getLabPath(ROUTES.LABS.STAY_VANE_CRACK),
+    // Electrical Diagnostics
+    GENERATOR_AIRGAP: getLabPath(ROUTES.LABS.GENERATOR_AIRGAP),
+    EXCITATION_HEAT: getLabPath(ROUTES.LABS.EXCITATION_HEAT),
+    PARTIAL_DISCHARGE: getLabPath(ROUTES.LABS.PARTIAL_DISCHARGE),
+    ROTOR_POLE_IMPEDANCE: getLabPath(ROUTES.LABS.ROTOR_POLE_IMPEDANCE),
+    STATOR_CORE_CLAMPING: getLabPath(ROUTES.LABS.STATOR_CORE_CLAMPING),
+    STATOR_WINDING_THERMAL: getLabPath(ROUTES.LABS.STATOR_WINDING_THERMAL),
+    TRANSFORMER_GAS: getLabPath(ROUTES.LABS.TRANSFORMER_GAS),
+    // Hydraulic Analytics
+    DRAFT_TUBE_AIR: getLabPath(ROUTES.LABS.DRAFT_TUBE_AIR),
+    DRAFT_TUBE_SURGE: getLabPath(ROUTES.LABS.DRAFT_TUBE_SURGE),
+    FRANCIS_CAVITATION: getLabPath(ROUTES.LABS.FRANCIS_CAVITATION),
+    KAPLAN_CAM_CURVE: getLabPath(ROUTES.LABS.KAPLAN_CAM_CURVE),
+    MIV_BYPASS: getLabPath(ROUTES.LABS.MIV_BYPASS),
+    OIL_COOLER: getLabPath(ROUTES.LABS.OIL_COOLER),
+    PELTON_INJECTOR: getLabPath(ROUTES.LABS.PELTON_INJECTOR),
+    PELTON_NEEDLE: getLabPath(ROUTES.LABS.PELTON_NEEDLE),
+    PENSTOCK_HAMMER: getLabPath(ROUTES.LABS.PENSTOCK_HAMMER),
+    SPIRAL_CASE: getLabPath(ROUTES.LABS.SPIRAL_CASE),
+    TRASH_RACK: getLabPath(ROUTES.LABS.TRASH_RACK),
+    // Operational Scenarios
+    BLACK_START: getLabPath(ROUTES.LABS.BLACK_START),
+    GOVERNOR_DEADBAND: getLabPath(ROUTES.LABS.GOVERNOR_DEADBAND),
+    INDEX_TESTING: getLabPath(ROUTES.LABS.INDEX_TESTING),
+    LOAD_REJECTION: getLabPath(ROUTES.LABS.LOAD_REJECTION),
+    OIL_DEGRADATION: getLabPath(ROUTES.LABS.OIL_DEGRADATION),
+    ROUGH_ZONE: getLabPath(ROUTES.LABS.ROUGH_ZONE),
+    RUNUP_VIBRATION: getLabPath(ROUTES.LABS.RUNUP_VIBRATION),
+    STARTUP_SEQUENCE: getLabPath(ROUTES.LABS.STARTUP_SEQUENCE),
+    BEARING_COOLING: getLabPath(ROUTES.LABS.BEARING_COOLING),
 } as const;

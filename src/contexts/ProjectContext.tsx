@@ -137,19 +137,6 @@ const cerebroReducer = (state: TechnicalProjectState, action: ProjectAction): Te
                 }
             };
         }
-        case 'SET_DEMO_MODE':
-            return {
-                ...state,
-                demoMode: action.payload
-            };
-        case 'START_SCENARIO':
-            return {
-                ...state,
-                demoMode: {
-                    active: action.payload !== 'NORMAL',
-                    scenario: action.payload
-                }
-            };
         case 'UPDATE_SIMULATION':
             return {
                 ...state,
@@ -218,8 +205,7 @@ export const ProjectProvider = ({ children, initialState }: { children: ReactNod
                     physics: { ...initial.physics, ...(parsed.physics || {}) },
                     governor: { ...initial.governor, ...(parsed.governor || {}) },
                     structural: { ...initial.structural, ...(parsed.structural || {}) },
-                    specializedState: { ...initial.specializedState, ...(parsed.specializedState || {}) },
-                    demoMode: { ...initial.demoMode, ...(parsed.demoMode || {}) }
+                    specializedState: { ...initial.specializedState, ...(parsed.specializedState || {}) }
                 };
 
                 // Re-hydrate Decimal instances safely

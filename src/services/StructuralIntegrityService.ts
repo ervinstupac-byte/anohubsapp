@@ -15,6 +15,15 @@ export const StructuralIntegrityService = {
      * @returns MAWP in Bar
      */
     calculateMAWP: (yieldStrength: number, wallThickness: number, diameter: number): number => {
+        if (yieldStrength <= 0) {
+            throw new Error('Yield strength must be positive');
+        }
+        if (wallThickness <= 0) {
+            throw new Error('Wall thickness must be positive');
+        }
+        if (diameter <= 0) {
+            throw new Error('Diameter must be positive');
+        }
         const S = new Decimal(yieldStrength);
         const t = new Decimal(wallThickness);
         const D = new Decimal(diameter);
@@ -33,7 +42,12 @@ export const StructuralIntegrityService = {
      * @returns Percentage (0-100)
      */
     calculateMargin: (currentPressureBar: number, mawpBar: number): number => {
-        if (mawpBar <= 0) return 0;
+        if (currentPressureBar < 0) {
+            throw new Error('Current pressure cannot be negative');
+        }
+        if (mawpBar <= 0) {
+            throw new Error('MAWP must be positive');
+        }
         const margin = ((mawpBar - currentPressureBar) / mawpBar) * 100;
         return Math.max(0, Math.min(100, margin));
     },
@@ -42,6 +56,9 @@ export const StructuralIntegrityService = {
      * Full audit of technical state
      */
     audit: (state: TechnicalProjectState) => {
+        if (!state || !state.penstock || !state.physics) {
+            throw new Error('Invalid state: missing penstock or physics data');
+        }
         const { penstock, physics } = state;
         const mawp = StructuralIntegrityService.calculateMAWP(
             penstock.materialYieldStrength,

@@ -10,9 +10,7 @@ import { useSyncWatcher } from '../../hooks/useSyncWatcher';
 import { useDocumentViewer } from '../../contexts/DocumentContext';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { LocalLedger } from '../../services/LocalLedger';
-import { SyncBadge } from './SyncBadge';
 import { useProtocolHistoryStore } from '../../stores/ProtocolHistoryStore';
-import { FieldAuditForm } from './FieldAuditForm';
 // ForensicReportService is heavy (pdf/html2canvas/jspdf) — dynamically import where needed to avoid bundling into dashboard chunk
 import reportService from '../../services/reportService';
 
@@ -261,7 +259,6 @@ export const ProtocolLaunchpad: React.FC = () => {
                         >
                             New Field Audit
                         </ModernButton>
-                        <SyncBadge showLabel={false} />
                     </div>
                 </div>
 
@@ -350,13 +347,6 @@ export const ProtocolLaunchpad: React.FC = () => {
                     ))}
                 </div>
             </GlassCard>
-
-            {/* Field Audit Modal */}
-            <FieldAuditForm
-                isOpen={fieldAuditOpen}
-                onClose={() => setFieldAuditOpen(false)}
-                onSubmitSuccess={() => pushNotification('INFO', 'Field audit logged successfully')}
-            />
         </>
     );
 };
