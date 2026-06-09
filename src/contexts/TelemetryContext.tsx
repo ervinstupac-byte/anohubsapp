@@ -184,10 +184,10 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                     if (updatedData && updatedData.asset_id) {
                         // Validate realtime payload shape using Zod
                         const parsed = HppStatusSchema.safeParse(updatedData);
-                        if (!parsed.success) {
+                            if (!parsed.success) {
                             try {
                                 loggingService.logEvent({ assetId: null, eventType: 'STRESS_TEST', severity: 'WARNING', details: { message: 'hpp_status validation failed', error: parsed.error } });
-                            } catch (e) { /* swallow */ }
+                            } catch { /* swallow */ }
                         }
                         const u: any = parsed.success ? parsed.data : updatedData;
                         // REVERT to String/BigInt safe handling (NC-11.3)
@@ -245,19 +245,19 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                             }
                         }));
                         // non-blocking journal append for each incoming sample
-                        try {
+                            try {
                             const journalPayload = { assetId: rawId, ts: Date.now(), data: updatedData };
                             setTimeout(() => {
-                                try { EventJournal.append('TELEMETRY_INGEST', journalPayload); } catch (e) { /* swallow */ }
+                                try { EventJournal.append('TELEMETRY_INGEST', journalPayload); } catch { /* swallow */ }
                             }, 0);
-                        } catch (e) { /* swallow */ }
+                        } catch { /* swallow */ }
                     }
                 }
             )
             .subscribe();
 
         return () => {
-            try { (supabase as any).removeChannel(channel); } catch (e) { }
+            try { (supabase as any).removeChannel(channel); } catch { }
         };
     }, [supabase]);
 
@@ -459,10 +459,10 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
             Object.keys(newTelemetry).forEach(k => {
                 const t = (newTelemetry as any)[k];
                 setTimeout(() => {
-                    try { EventJournal.append('TELEMETRY_INGEST', { assetId: t.assetId, ts: t.timestamp || Date.now(), payload: t }); } catch (e) { }
+                    try { EventJournal.append('TELEMETRY_INGEST', { assetId: t.assetId, ts: t.timestamp || Date.now(), payload: t }); } catch { }
                 }, 0);
             });
-        } catch (e) { }
+        } catch { }
     };
 
     useEffect(() => {
@@ -476,7 +476,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
         try {
             ProjectStateManager.setState({ penstock: { diameter } } as any);
             loggingService.logAction(assetId, 'PIPE_DIAMETER_CHANGE', { newDiameter: diameter });
-        } catch (e) {
+        } catch {
             // Fallback to local telemetry change if manager unavailable
             const key = idAdapter.toStorage(assetId);
             setTelemetry(prev => ({
@@ -494,7 +494,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
         try {
             ProjectStateManager.setState({ specializedState: { sensors: { excitationActive: false } } as any });
             loggingService.logAction(assetId, 'EXCITATION_SHUTDOWN', { cause: 'METAL_SCRAPING_DETECTED' });
-        } catch (e) {
+        } catch {
             const key = idAdapter.toStorage(assetId);
             setTelemetry(prev => ({
                 ...prev,
@@ -512,7 +512,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
             // Represent as specializedState.sensor wicket gate setpoint in canonical state
             ProjectStateManager.setState({ specializedState: { sensors: { wicketGateSetpoint: setpoint } } as any });
             loggingService.logAction(assetId, 'WICKET_GATE_COMMAND', { setpoint });
-        } catch (e) {
+        } catch {
             const key = idAdapter.toStorage(assetId);
             setTelemetry(prev => ({
                 ...prev,
@@ -530,7 +530,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
         try {
             ProjectStateManager.setState({ specializedState: { sensors: { fatiguePoints: 0 } } as any });
             loggingService.logAction(assetId, 'FATIGUE_RESET', { cause: 'NDT_COMPLETED' });
-        } catch (e) {
+        } catch {
             const key = idAdapter.toStorage(assetId);
             setTelemetry(prev => ({
                 ...prev,

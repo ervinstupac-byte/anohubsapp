@@ -55,8 +55,9 @@ export class ArchiveSearchEngine extends BaseGuardian {
         );
     }
 
-    public getConfidenceScore(..._args: any[]): number {
+    public getConfidenceScore(..._args: Parameters<BaseGuardian['getConfidenceScore']>): number {
         // Archive searches are deterministic; return neutral confidence
+        void _args; // intentionally unused
         return this.corrToScore(0);
     }
 }

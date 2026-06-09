@@ -18,6 +18,7 @@ export class WisdomProfitCalculator {
      * Adds a "Virtual Save" to the bank.
      */
     registerSave(type: 'FALSE_TRIP_PREVENTED' | 'EFFICIENCY_GAIN' | 'LEAK_FIXED', details: string): number {
+        void details;
         let value = 0;
 
         switch (type) {

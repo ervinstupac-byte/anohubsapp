@@ -77,9 +77,11 @@ export class PulseArchiver {
     /**
      * Persist sample to database
      */
-    private static async persistSample(sample: PulseSample): Promise<void> {
+    private static async persistSample(_sample: PulseSample): Promise<void> {
+        // Mark parameter as used to satisfy linter (persistence disabled in dev)
+        void _sample;
         // In production: Save to Supabase
-        // await supabase.from('pulse_archive').insert(sample)
+        // await supabase.from('pulse_archive').insert(_sample)
     }
 
     /**

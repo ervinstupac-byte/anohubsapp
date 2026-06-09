@@ -27,7 +27,7 @@ function estimateKinematicViscosity_cP(tempC: number) {
 }
 
 export function computeBearingOilCooling(input: BearingOilCoolingInput): BearingOilCoolingResult {
-  const { oilInC, oilOutC, waterInC, valvePositionPct, currentWaterFlow_m3h } = input;
+  const { oilOutC, valvePositionPct, currentWaterFlow_m3h } = input;
 
   // Golden viscosity range for thrust bearing (example): 60 - 120 cP
   const targetRange: [number, number] = [60, 120];

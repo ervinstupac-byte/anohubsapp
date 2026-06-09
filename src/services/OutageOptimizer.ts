@@ -1,4 +1,4 @@
-import { addHours, addDays } from 'date-fns';
+import { addHours } from 'date-fns';
 
 export type PfailMap = Record<string, number>; // component -> P_fail (0-1)
 export type PricePoint = { timestamp: number; priceEURperMWh: number };
@@ -12,11 +12,9 @@ export default class OutageOptimizer {
     public static findOptimalOutageWindow(pfail: PfailMap, priceForecast: PricePoint[], now = Date.now()) {
         // Build hourly price array for next 30 days (720 hours)
         const horizonHours = 24 * 30;
-        const horizonEnd = addHours(new Date(now), horizonHours).getTime();
-
         // Aggregate total risk (sum of Pfail) and track high-priority flags
         const totalRisk = Object.values(pfail).reduce((s, v) => s + (v || 0), 0);
-        const maxRisk = Math.max(...Object.values(pfail).map(v => v || 0), 0.0001);
+        // const _maxRisk = Math.max(...Object.values(pfail).map(v => v || 0), 0.0001);
 
         // Normalize function helpers
         const normalize = (v: number, min: number, max: number) => {
@@ -82,7 +80,7 @@ export default class OutageOptimizer {
         };
     }
 
-    public static getConfidenceScore(..._args: any[]): number {
+    public static getConfidenceScore(): number {
         // Outage optimization works on deterministic inputs; return conservative neutral score
         return 50;
     }

@@ -166,9 +166,11 @@ export class GovernorHPUGuardian extends BaseGuardian {
         // High confidence: analyze response lag and operational history
         const times = data.map(s => Date.parse(s.timestamp));
         const runTimes = data.map(s => s.pumpRunTimeSec || 0);
+        void times;
+        void runTimes;
         
         // Compute average response lag: detect when pumpRunTime increases after prior zero -> event
-        let lags: number[] = [];
+        const lags: number[] = [];
         for (let i = 1; i < data.length; i++) {
             const prev = data[i-1];
             const cur = data[i];

@@ -65,7 +65,7 @@ export class MarketBridge {
      */
     public static getPriceForecast(hours: number = 24): MarketPrice[] {
         const forecast: MarketPrice[] = [];
-        let basePrice = this.currentPrice;
+        const basePrice = this.currentPrice;
 
         for (let i = 0; i < hours; i++) {
             const hour = new Date(Date.now() + i * 60 * 60 * 1000).getHours();

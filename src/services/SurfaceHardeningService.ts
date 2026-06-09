@@ -34,6 +34,7 @@ export class SurfaceHardeningService {
         // Impacts ~ Freq / (Speed * Width) ... simplified logic
         // We want high saturation.
 
+        void traverseSpeedMmS;
         // 3. Estimate Residual Stress
         // Correctly applied UIT induces -200 to -400 MPa compressive stress
         let stress = 0;
@@ -45,14 +46,13 @@ export class SurfaceHardeningService {
 
         let status: HardeningResult['status'] = 'IN_PROGRESS';
         if (scannedCoverage >= 100) status = 'COMPLETE';
-        else if (scannedCoverage > 100) status = 'COMPLETE'; // Clamp
 
         return {
             zoneId,
             coveragePct: scannedCoverage,
             impactDensity: 1200, // Mock
             residualStressMpa: stress,
-            status: (scannedCoverage < 98) ? 'IN_PROGRESS' : 'COMPLETE'
+            status
         };
     }
 }

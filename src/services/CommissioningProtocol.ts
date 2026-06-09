@@ -3,7 +3,7 @@
  * Guardian's Checklist for post-repair startup
  */
 
-import { ServiceLogEntry, ServiceActionType } from '../models/MaintenanceChronicles';
+// MaintenanceChronicles types were previously imported here but are unused in this file
 
 // ========================================
 // COMMISSIONING CHECKLIST
@@ -357,10 +357,10 @@ export interface CommissioningCertificate {
  */
 export function generateCommissioningCertificate(
     assetId: string,
-    checkResults: any,
+    checkResults: { passed: boolean; itemId: string; measuredValue?: string; notes?: string; }[],
     warmUpData: WarmUpDataPoint[]
 ): CommissioningCertificate {
-    const allPassed = checkResults.every((r: any) => r.passed);
+    const allPassed = checkResults.every(r => r.passed);
 
     return {
         certificateId: `COMM-CERT-${Date.now()}`,

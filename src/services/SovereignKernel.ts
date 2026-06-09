@@ -9,12 +9,10 @@
  */
 
 import { TelemetryStream } from '../lib/engines/BaseTurbineEngine';
-import { KaplanOptimizer, FrancisOptimizer, PeltonOptimizer, TurbineType } from './TurbinePhysicsOptimizer';
-import { CrossCorrelationService } from './CrossCorrelationService';
 import { ForensicDiagnosticService, CausalChain } from './ForensicDiagnosticService';
 import { SovereignHealerService, HealingResult } from './SovereignHealerService';
 import { ROIMonitorService } from './ROIMonitorService';
-import { SovereignGlobalState, GlobalState } from './SovereignGlobalState';
+import { SovereignGlobalState } from './SovereignGlobalState';
 
 // Enriched telemetry with embedded diagnosis
 export interface EnrichedTelemetry extends TelemetryStream {
@@ -60,7 +58,7 @@ export class SovereignKernel {
             totalLatency: 0
         };
 
-        let enriched: EnrichedTelemetry = { ...telemetry };
+        const enriched: EnrichedTelemetry = { ...telemetry };
 
         // STAGE 1: CORRELATION (CNS)
         const corrStart = performance.now();

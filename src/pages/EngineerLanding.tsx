@@ -8,7 +8,7 @@ export const EngineerLanding: React.FC = () => {
             <p className="text-slate-300 mb-6">Tools and workflows tailored for engineering staff: HPP Builder, diagnostics, and configuration.</p>
             <div className="space-x-3">
                 <Link to="/hpp-builder" className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded">Open HPP Builder</Link>
-                <Link to="/francis/hub" className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded">Open Francis Hub</Link>
+                <Link to="/turbines/francis" className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded">Open Francis Hub</Link>
             </div>
         </div>
     );

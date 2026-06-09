@@ -29,7 +29,7 @@ export class AIFindingService {
         const expectedHash = await this.generateFindingHash({
             ...finding,
             dataIntegrityHash: ''
-        } as any);
+        } as Omit<AIFinding, 'dataIntegrityHash'>);
 
         return expectedHash === finding.dataIntegrityHash;
     }

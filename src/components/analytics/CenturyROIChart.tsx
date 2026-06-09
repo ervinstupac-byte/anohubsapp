@@ -37,7 +37,7 @@ export default function CenturyROIChart({ assetId, pricePerKwh = 0.08 }: { asset
           const basePrice = 0.08;
           const adjustedSeedLoss = seedLoss * (pricePerKwh / basePrice);
           let cumulative = 0;
-          let bookValue = 1000000; // default starting book value
+          const bookValue = 1000000; // default starting book value
           yearSeries = [];
           for (let y = START_YEAR; y <= END_YEAR; y++) {
             // simple model: annual profit = -adjustedSeedLoss (loss reduces profit), escalate by 1% inflation

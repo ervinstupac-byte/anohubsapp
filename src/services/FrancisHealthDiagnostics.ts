@@ -1,6 +1,6 @@
 import { FrancisHorizontalEngine } from '../lib/engines/FrancisHorizontalEngine';
 import { TelemetryStream, HealthCheckResult } from '../lib/engines/BaseTurbineEngine';
-import { HydraulicStream, MechanicalStream } from '../core/TechnicalSchema';
+// import { HydraulicStream, MechanicalStream } from '../core/TechnicalSchema';
 
 /**
  * Health Diagnostic Service for Francis Horizontal Turbine

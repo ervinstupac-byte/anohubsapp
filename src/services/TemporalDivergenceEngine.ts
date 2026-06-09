@@ -78,7 +78,7 @@ export class TemporalDivergenceEngine {
         initialState: StateVector,
         minutes: number
     ): SimulationOutcome {
-        let state = { ...initialState };
+        const state = { ...initialState };
         let stabilityBreach = false;
         let breachType: string | undefined;
 

@@ -20,6 +20,7 @@ export const injectExpertInsights = (
     currentHeadM: number = 152,
     frontClearanceMM: number = 0.35 // Default safe
 ): InsightResult => {
+    void currentHeadM;
     // Clone health to avoid mutation
     const health = JSON.parse(JSON.stringify(currentHealth));
     let expertDiagnosis: string | null = null;

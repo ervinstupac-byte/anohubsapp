@@ -95,6 +95,7 @@ export class MasterDashboardService extends BaseGuardian {
     }
 
     public getConfidenceScore(..._args: any[]): number {
+        void _args;
         return this.corrToScore(0);
     }
 }

@@ -6,11 +6,11 @@
  * Integrates Physics, Finance, Safety, Memory, and Supply Chain.
  */
 
-import { MolecularIntegrityMonitor, CrystalHealth } from './MolecularIntegrityMonitor';
+import { MolecularIntegrityMonitor } from './MolecularIntegrityMonitor';
 import { TruthJudge, Verdict } from './TruthJudge';
-import { VibrationBaseline, VibrationProfile } from './VibrationBaseline';
-import { EfficiencyCurveHardener, GoldenPoint } from './EfficiencyCurveHardener';
-import { Drawing42Link, DocumentLink } from './Drawing42Link';
+import { VibrationBaseline } from './VibrationBaseline';
+import { EfficiencyCurveHardener } from './EfficiencyCurveHardener';
+import { Drawing42Link } from './Drawing42Link';
 
 // PHASE 26-30 INTEGRATIONS
 import { SafetyInterlockEngine } from './SafetyInterlockEngine';
@@ -125,6 +125,7 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
 
         // 1. DATA PULSE & SAFETY CHECK (Dead Man Switch)
         const heartbeatAge = Date.now() - inputs.scadaTimestamp;
+        void heartbeatAge;
         const deadManStatus = SafetyInterlockEngine.checkDeadManSwitch('GOOD', inputs.scadaTimestamp);
         if (!deadManStatus.safe) {
             if (metadata?.isReplay) {
@@ -174,7 +175,7 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
         this.factory.checkAndOrder(molecularHealth.integrityScore, 'D42-Rev9');
 
         // 4. MARKET DECISION
-        let wearCost = 50 * erosionSynergy.synergyFactor;
+        const wearCost = 50 * erosionSynergy.synergyFactor;
 
         // Check SovereignMemory for any transformer critical override persisted by MasterIntelligenceEngine
         const overrides = this.memory.getOverrideHistory ? this.memory.getOverrideHistory() : [];
@@ -312,6 +313,7 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
      * Default confidence score calculation
      */
     public getConfidenceScore(..._args: any[]): number {
+        void _args;
         return this.corrToScore(0);
     }
 }

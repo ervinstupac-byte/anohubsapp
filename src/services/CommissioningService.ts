@@ -155,8 +155,8 @@ export class CommissioningService {
         sensorData: {
             acousticSpectrum: number[];
             vibration: { horizontal: number; vertical: number; axial: number };
-            temperatures: any;
-            pressures: any;
+            temperatures: { bearing_upper: number; bearing_lower: number; generator_stator: number; oil_temperature: number };
+            pressures: { inlet: number; outlet: number; servo?: number };
             powerOutput: number;
             efficiency: number;
             waterFlow: number;
@@ -173,7 +173,7 @@ export class CommissioningService {
             horizontal: sensorData.vibration.horizontal,
             vertical: sensorData.vibration.vertical,
             axial: sensorData.vibration.axial,
-            dominantFrequencies: this.extractDominantFrequencies(sensorData.vibration),
+            dominantFrequencies: this.extractDominantFrequencies(),
             phase: 0 // TBD: Calculate phase from raw data
         };
 
@@ -427,7 +427,7 @@ export class CommissioningService {
         };
     }
 
-    private static extractDominantFrequencies(vibration: any): number[] {
+    private static extractDominantFrequencies(): number[] {
         // Simplified - in production would use FFT on time-domain data
         return [16.67, 33.33, 50]; // Mock: 1x, 2x, 3x running speed
     }

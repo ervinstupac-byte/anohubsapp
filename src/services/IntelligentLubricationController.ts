@@ -149,7 +149,6 @@ export class FilterMonitor {
         const deltaP = telemetry.filterInletPressure - telemetry.filterOutletPressure;
 
         // Thresholds for duplex filter system
-        const CLEAN_THRESHOLD = 0.2;      // bar - new filter
         const DIRTY_THRESHOLD = 0.8;      // bar - schedule cleaning
         const CLOGGED_THRESHOLD = 1.5;    // bar - clean immediately
         const CRITICAL_THRESHOLD = 2.0;   // bar - switch to bypass!
@@ -248,6 +247,7 @@ export class HeatExchangerMonitor {
         const waterInlet = telemetry.coolingWaterInletTemp;
         const waterOutlet = telemetry.coolingWaterOutletTemp;
         const waterTempRise = waterOutlet - waterInlet;
+        void waterTempRise;
 
         // Expected temperature drop for healthy heat exchanger
         const expectedOilDrop = 15;  // °C - should cool oil by ~15°C

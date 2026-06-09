@@ -35,9 +35,10 @@ export class SandErosionTracker {
         sedimentPPM: number,
         jetVelocity: number,
         currentBucketThickness: number, // mm
-        coatingHealthy: boolean = true  // Default: Coating is Intact
+        _coatingHealthy: boolean = true  // Default: Coating is Intact
     ): ErosionStatus {
         const timestamp = Date.now();
+        void _coatingHealthy;
 
         // 1. Calculate Thinning Rate (Simplified Model)
         // Rate (microns/year) = K * PPM * v^2 (Wait, typically erosion is v^3)

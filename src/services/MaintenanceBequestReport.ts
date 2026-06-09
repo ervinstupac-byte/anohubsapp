@@ -1,4 +1,4 @@
-import OutageOptimizer, { PfailMap, PricePoint } from './OutageOptimizer';
+import { PfailMap, PricePoint } from './OutageOptimizer';
 
 export type BequestResult = {
     stopNow: {
@@ -27,11 +27,8 @@ export default class MaintenanceBequestReport {
         const scheduledCostEUR = options?.scheduledCostEUR ?? 50_000; // base scheduled outage cost
         const emergencyCostEUR = options?.emergencyCostEUR ?? 250_000; // emergency repair cost
         const emergencyDowntimeHours = options?.emergencyDowntimeHours ?? 120; // 5 days
-        const now = options?.now ?? Date.now();
-
         // Expected time until failure: naive exponential approx using total Pfail
         const totalP = Object.values(pfail).reduce((s, v) => s + (v || 0), 0);
-        const hoursInMonth = 24 * 30;
 
         // If totalP is zero, expected hours until fail is null
         const expectedHoursUntilFail = totalP > 0 ? Math.max(1, Math.round((1 / totalP) * 24)) : null;

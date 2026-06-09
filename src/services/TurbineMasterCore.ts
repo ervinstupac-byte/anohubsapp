@@ -54,6 +54,7 @@ export class TurbineMasterCore {
         let oilWhirlLikelihood = 0;
 
         const ratio = Math.abs(sensorX / (sensorY || 0.001));
+        void rpm;
 
         // Shape classification
         if (ratio > 5 || ratio < 0.2) orbitShape = 'FLAT'; // High unbalance in one plane or misalignment
@@ -111,6 +112,7 @@ export class TurbineMasterCore {
         // Heuristic: If Pressure is lower than expected for this Stroke/Flow, a vane might be flailing (broken pin).
         // Or if Position differs from Command by a specific "slop" amount.
 
+        void numberOfVanes;
         // Simulating a mismatch
         const theoreticalStroke = expectedOpeningPct * 5; // e.g. 5mm per %
         const deviation = Math.abs(servoStrokeMM - theoreticalStroke);
@@ -166,7 +168,6 @@ export class TurbineMasterCore {
 
         // 2. Assess Deviation
         for (const s of states) {
-            const dev = Math.abs(s.jetForceN - (avgForce * 1000)) / (avgForce * 1000 || 1) * 100; // % driven by inputs
             s.deviation = ((s.jetForceN / 1000) - avgForce) / avgForce * 100;
 
             if (Math.abs(s.deviation) > 10) s.status = 'DRIFTING';

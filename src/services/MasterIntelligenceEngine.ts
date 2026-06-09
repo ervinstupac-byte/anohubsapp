@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- temporary: mechanical pass; will replace with proper types in Phase B */
 import { aiPredictionService, SynergeticRisk, RULEstimate, IncidentPattern, PrescriptiveAction } from './AIPredictionService';
 import { AcousticFingerprintingService } from './AcousticFingerprintingService';
 import { SpecialMeasurementsService, CorrelationResult } from './SpecialMeasurementsService';
@@ -707,8 +708,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
         }
 
         const classification = AcousticFingerprintingService.classifyAcousticSignature(
-            acousticData as any,
-            runningSpeed
+            acousticData as any
         );
 
         return {

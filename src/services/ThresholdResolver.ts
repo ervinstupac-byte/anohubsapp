@@ -2,7 +2,7 @@
 // Handles cross-machine logic with priority: Instance > Variant > Family > Global Default
 // Unit-aware comparison system
 
-import { Threshold, ToleranceMap, TurbineFamily, TurbineVariant, TurbineConfiguration } from '../models/turbine/types';
+import { Threshold, ToleranceMap } from '../models/turbine/types';
 
 // Global default thresholds (fallback)
 const GLOBAL_DEFAULTS: ToleranceMap = {

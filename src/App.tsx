@@ -1,8 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy, useMemo, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { HashRouter, useLocation, useNavigate, Route, Routes, useParams, Navigate } from 'react-router-dom';
-import { ChevronDown, ChevronRight, Plus } from 'lucide-react';
 
 // --- 1. CONTEXTS ---
 import { GlobalProvider } from './contexts/GlobalProvider.tsx';
@@ -11,15 +9,10 @@ import { NavigationProvider } from './contexts/NavigationContext.tsx';
 import { useRisk } from './contexts/RiskContext.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { useAudit } from './contexts/AuditContext.tsx';
-import { ProjectProvider } from './contexts/ProjectContext.tsx'; // Technical Backbone
-import { DEFAULT_TECHNICAL_STATE } from './core/TechnicalSchema.ts';
-// ClientProvider removed (Simulation)
-import { NotificationProvider } from './contexts/NotificationContext.tsx'; // Live Notifications
-import { MaintenanceProvider } from './contexts/MaintenanceContext.tsx'; // Logbook
-import { AssetProvider } from './contexts/AssetContext.tsx'; // <--- NEW
-import { RiskProvider } from './contexts/RiskContext.tsx'; // <--- NEW (Ensuring it exists)
+// Providers removed or handled elsewhere to reduce bundle and avoid unused imports
+// (ProjectProvider, DEFAULT_TECHNICAL_STATE, NotificationProvider,
+// MaintenanceProvider, AssetProvider, RiskProvider, DocumentProvider)
 import { useRiskCalculator } from './hooks/useRiskCalculator.ts'; // <--- NEW
-import { DocumentProvider } from './contexts/DocumentContext.tsx'; // <--- NEW
 import { ContextAwarenessProvider } from './contexts/ContextAwarenessContext.tsx';
 import { DrillDownProvider } from './contexts/DrillDownContext.tsx'; // <--- NEW Phase 3
 import { CommandPalette } from './components/ui/CommandPalette.tsx'; // <--- NEW Phase 3
@@ -28,17 +21,12 @@ import { CommandPalette } from './components/ui/CommandPalette.tsx'; // <--- NEW
 import { Login } from './components/Login.tsx';
 import { Feedback } from './components/Feedback.tsx';
 // ClientDashboard removed (Simulation)
-import { MaintenanceLogbook } from './components/MaintenanceLogbook.tsx'; // Logbook
 import { Onboarding } from './components/Onboarding.tsx';
 import { Spinner } from './shared/components/ui/Spinner';
-import { LanguageSelector } from './components/LanguageSelector.tsx';
 import { SystemStressTest } from './components/debug/SystemStressTest.tsx'; // Debug
 
-import { Hub } from './components/Hub.tsx';
 import { Sidebar } from './components/diagnostics/Sidebar.tsx';
 import { NeuralFlowMap } from './components/diagnostics/NeuralFlowMap.tsx';
-import { FleetOverview } from './components/diagnostics/FleetOverview.tsx';
-import { DigitalPanel } from './components/diagnostics/DigitalPanel.tsx';
 import { AssetRegistrationWizard } from './components/AssetRegistrationWizard.tsx';
 import { UnderConstruction } from './components/ui/UnderConstruction.tsx';
 import { LoadingShimmer } from './shared/components/ui/LoadingShimmer';
@@ -95,8 +83,7 @@ const AdminHealth = lazy(() => import('./pages/AdminHealth').then(m => ({ defaul
 // Maintenance components moved to MaintenanceRouter
 const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDashboard').then(m => ({ default: m.ForensicDashboard })));
 
-const ToolboxLaunchpad = lazy(() => import('./components/ToolboxLaunchpad.tsx').then(m => ({ default: m.ToolboxLaunchpad })));
-const SpecializedDiagnostics = lazy(() => import('./components/SpecializedDiagnostics.tsx').then(m => ({ default: m.SpecializedDiagnostics })));
+// ToolboxLaunchpad and SpecializedDiagnostics removed (unused)
 const LearningLab = lazy(() => import('./components/diagnostics/LearningLab.tsx').then(m => ({ default: m.LearningLab })));
 const PrecisionAudit = lazy(() => import('./components/PrecisionAudit.tsx').then(m => ({ default: m.PrecisionAudit })));
 const SystemPredictionLab = lazy(() => import('./components/SystemPredictionLab.tsx').then(m => ({ default: m.SystemPredictionLab })));
@@ -149,14 +136,17 @@ const RunUpVibrationLab = lazy(() => import('./components/RunUpVibrationLab.tsx'
 const UnitStartupSequenceLab = lazy(() => import('./components/UnitStartupSequenceLab.tsx').then(m => ({ default: m.UnitStartupSequenceLab })));
 const BearingCoolingWaterFlowLab = lazy(() => import('./components/BearingCoolingWaterFlowLab.tsx').then(m => ({ default: m.BearingCoolingWaterFlowLab })));
 
-const FrancisHub = React.lazy(() => import('./features/francis/components/FrancisHub').then(module => ({ default: module.FrancisHub })));
-const SOPViewer = React.lazy(() => import('./components/francis/SOPViewer').then(module => ({ default: module.SOPViewer })));
+// FrancisHub and SOPViewer removed (routes moved to dedicated router)
 // Francis Turbine Module - All routes extracted to dedicated sub-router
 // Francis Turbine Module - All routes extracted to dedicated sub-router
 const FrancisRouter = React.lazy(() => import('./routes/FrancisRouter'));
 
 // Maintenance Module - Extracted to dedicated sub-router
 const MaintenanceRouter = React.lazy(() => import('./routes/MaintenanceRouter.tsx'));
+
+// Moved lazy imports for components that were previously declared inside AppLayout
+const MapModule = lazy(() => import('./components/MapModule.tsx').then(m => ({ default: m.MapModule })));
+const AssetTypeSelector = lazy(() => import('./components/navigation/AssetTypeSelector').then(m => ({ default: m.AssetTypeSelector })));
 
 // Multi-tier entry points (Engineer / Owner / Hydroschool)
 const EngineerLanding = React.lazy(() => import('./pages/EngineerLanding').then(m => ({ default: m.EngineerLanding })));
@@ -165,6 +155,12 @@ const HydroschoolLanding = React.lazy(() => import('./pages/HydroschoolLanding')
 
 // Knowledge Base — static AnoHub_site HTML served via iframe wrapper
 const KnowledgeBaseViewer = React.lazy(() => import('./pages/KnowledgeBaseViewer').then(m => ({ default: m.KnowledgeBaseViewer })));
+
+// New visual navigation pages
+const HomeHub = React.lazy(() => import('./pages/HomeHub').then(m => ({ default: m.HomeHub })));
+const DigitalLogbook = React.lazy(() => import('./pages/DigitalLogbook').then(m => ({ default: m.DigitalLogbook })));
+const ProblemDetector = React.lazy(() => import('./pages/ProblemDetector').then(m => ({ default: m.ProblemDetector })));
+const TurbineHub = React.lazy(() => import('./pages/TurbineHub').then(m => ({ default: m.TurbineHub })));
 
 
 
@@ -208,16 +204,13 @@ const AppLayout: React.FC = () => {
     useSentinelWatchdog(); // Infrastructure Watchdog
     useSafeExit(); // INFRASTRUCTURE: Guard unsaved data - NEW
     const location = useLocation();
-    const { t } = useTranslation();
     const navigate = useNavigate();
-    const { riskState: questionnaireRisk } = useRisk(); // Renamed Risk Context
-    const { status: assetRiskStatus, reason: riskReasons } = useRiskCalculator(); // Calculated Asset Risk
-    const { logAction } = useAudit();
-    const { user, signOut } = useAuth(); // Auth integration
+    useRisk(); // initialize risk context hook
+    useRiskCalculator(); // initialize risk calculator hook
+    useAudit();
+    const { user } = useAuth(); // Auth integration
 
     // Unified Navigation States
-    const MapModule = lazy(() => import('./components/MapModule.tsx').then(m => ({ default: m.MapModule }))); // Import MapModule
-    const AssetTypeSelector = lazy(() => import('./components/navigation/AssetTypeSelector').then(m => ({ default: m.AssetTypeSelector }))); // <--- NEW Phase 4
 
 
     // Unified Navigation States
@@ -226,35 +219,23 @@ const AppLayout: React.FC = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1024);
     const [isWizardOpen, setIsWizardOpen] = useState(false);
     const [isMapOpen, setIsMapOpen] = useState(false); // Map State
-    const [showSignOutDialog, setShowSignOutDialog] = useState(false); // Sign Out Dialog
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [reconstructing, setReconstructing] = useState(false);
     const [reconstructProgress, setReconstructProgress] = useState<number | null>(null);
-    const { state: cerebroState } = useCerebro();
     const { state: technicalState } = useCerebro();
 
     const isHub = location.pathname === '/';
     const isFullPage = isHub || location.pathname === '/map';
 
-    // RISK CALCULATION LOGIC
-    const isCritical = questionnaireRisk.criticalFlags > 0 || assetRiskStatus === 'CRITICAL';
-    const isWarning = assetRiskStatus === 'WARNING';
+    // RISK CALCULATION LOGIC (detailed badge rendering moved to DashboardHeader)
 
-    const badgeLabel = isCritical ? "CRITICAL" : isWarning ? "WARNING" : "OPTIMAL";
-    const badgeStatus = isCritical ? "critical" : isWarning ? "warning" : "normal";
-
-    const handleBadgeClick = () => {
-        if (assetRiskStatus !== 'SAFE') {
-            console.log("Risk Reasons:", riskReasons);
-        }
-        navigateTo('riskAssessment');
-    };
+    // badgeLabel/badgeStatus/handleBadgeClick removed (moved to DashboardHeader)
 
     // Listen for custom wizard trigger event from NeuralFlowMap
     useEffect(() => {
-        const onStart = (e: any) => { setReconstructing(true); setReconstructProgress(0); };
+        const onStart = () => { setReconstructing(true); setReconstructProgress(0); };
         const onProgress = (e: any) => { setReconstructProgress(e?.detail?.processed || null); };
-        const onComplete = (e: any) => { setReconstructing(false); setReconstructProgress(null); };
+        const onComplete = () => { setReconstructing(false); setReconstructProgress(null); };
         window.addEventListener('reconstruction:start', onStart as any);
         window.addEventListener('reconstruction:progress', onProgress as any);
         window.addEventListener('reconstruction:complete', onComplete as any);
@@ -276,7 +257,10 @@ const AppLayout: React.FC = () => {
 
     useEffect(() => {
         const hasCompleted = localStorage.getItem('hasCompletedOnboarding') === 'true';
-        if (!hasCompleted) setShowOnboarding(true);
+        if (!hasCompleted) {
+            // Defer to avoid calling setState synchronously in effect
+            setTimeout(() => setShowOnboarding(true), 0);
+        }
     }, []);
 
     // Lazy hydration: prefetch physics snapshots shortly after user session starts
@@ -285,7 +269,7 @@ const AppLayout: React.FC = () => {
             if (user) {
                 lazyHydratePhysicsSnapshots(2000, 3);
             }
-        } catch (e) { /* noop */ }
+        } catch { /* noop */ }
     }, [user]);
 
     const handleOnboardingComplete = () => {
@@ -377,7 +361,7 @@ const AppLayout: React.FC = () => {
         <NavigationProvider value={navValue}>
             <DrillDownProvider>
                 {/* Fix 3: Layout "Hidden Corners" & Space Efficiency */}
-                <div className={`field-mode h-screen w-screen bg-[#05070a] text-slate-100 overflow-hidden selection:bg-cyan-500/30 font-sans relative grid ${isSidebarOpen ? 'lg:grid-cols-[280px_1fr]' : 'grid-cols-[0px_1fr]'} transition-[grid-template-columns] duration-300 bg-[#020617]`}>
+                <div className={`h-screen w-screen bg-[#020617] text-slate-100 overflow-hidden selection:bg-cyan-500/30 font-sans relative grid grid-rows-[1fr] ${isSidebarOpen ? 'lg:grid-cols-[280px_1fr]' : 'grid-cols-[0px_1fr]'} transition-[grid-template-columns] duration-300`}>
                     {/* The "Elite" Background Glows */}
                     <div className="fixed inset-0 pointer-events-none z-0">
                         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-900/20 blur-[120px] rounded-full" />
@@ -409,7 +393,7 @@ const AppLayout: React.FC = () => {
                     />
 
                     {/* MAIN AREA */}
-                    <div className="flex-1 flex flex-col min-h-0 relative z-20 overflow-y-auto custom-scrollbar">
+                    <div className="row-start-1 col-start-2 min-h-0 h-full flex flex-col relative z-20 overflow-y-auto custom-scrollbar">
 
                         {/* NEW: Global Workflow Header - Machine Health & Navigation */}
                         <WorkflowHeader />
@@ -443,9 +427,12 @@ const AppLayout: React.FC = () => {
                                         </div>
                                     }>
                                         <div className="w-full">
-                                            <Routes location={location}>
-                                                <Route index element={<RoleBasedRedirect />} />
-                                                <Route path={ROUTES.DIAGNOSTIC_TWIN} element={<NeuralFlowMap />} />
+                                                <Routes location={location}>
+                                                 <Route index element={<HomeHub />} />
+                                                 <Route path="logbook" element={<DigitalLogbook />} />
+                                                 <Route path="problems" element={<ProblemDetector />} />
+                                                 <Route path="turbines/*" element={<TurbineHub />} />
+                                                 <Route path={ROUTES.DIAGNOSTIC_TWIN} element={<NeuralFlowMap />} />
                                                 {/* Francis Turbine Module - All routes handled by dedicated sub-router */}
                                                 <Route path="/francis/*" element={<FrancisRouter />} />
                                                 <Route path="profile" element={<UserProfile />} />

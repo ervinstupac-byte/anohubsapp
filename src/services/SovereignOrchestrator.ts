@@ -136,7 +136,7 @@ export class SovereignOrchestrator {
      */
     private static wireKernelObservers(): void {
         // Observer 1: Cryptographic locking
-        SovereignKernel.subscribe((enriched: EnrichedTelemetry) => {
+        SovereignKernel.subscribe(() => {
             const trace = SovereignKernel.getLastTrace();
             if (trace) {
                 SovereigntyLock.lockTrace(trace);

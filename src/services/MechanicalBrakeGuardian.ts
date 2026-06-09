@@ -24,7 +24,6 @@ export default class MechanicalBrakeGuardian extends BaseGuardian {
         if (start > this.safeThresholdPct) {
             const fastSteps = Math.ceil((start - this.safeThresholdPct) / 10);
             for (let i = 0; i < fastSteps; i++) {
-                const stepUpper = start - i * 10;
                 const stepLower = Math.max(this.safeThresholdPct, start - (i + 1) * 10);
                 seq.push({ targetRpmPct: stepLower, brakeTorquePct: Math.min(60, 20 + i * 10), durationSec: 6 });
             }
@@ -52,7 +51,7 @@ export default class MechanicalBrakeGuardian extends BaseGuardian {
                 const scale = (safeClose * 0.5) / Math.max(0.1, totalDuration);
                 seq.forEach(step => { step.durationSec = Math.ceil((step.durationSec || 1) * scale); });
             }
-        } catch (e) {
+        } catch {
             // if governor not available, keep original seq
         }
 

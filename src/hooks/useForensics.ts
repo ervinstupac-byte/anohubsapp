@@ -28,7 +28,7 @@ export const useForensics = () => {
     const generateTraffic = useCallback(() => {
         setTrafficHistory(prev => {
             const now = Date.now();
-            let inbound = Math.random() * 50 + 10;
+            const inbound = Math.random() * 50 + 10;
             let outbound = Math.random() * 20 + 5;
             let latency = NORMAL_LATENCY + (Math.random() * 20);
 

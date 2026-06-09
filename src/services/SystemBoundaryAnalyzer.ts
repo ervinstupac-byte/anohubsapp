@@ -32,7 +32,7 @@ export default class SystemBoundaryAnalyzer {
         reasons.push('Low statistical confidence detected in one or more findings');
         score -= 20 * lowConfidence;
       }
-    } catch (e) { /* ignore */ }
+    } catch { /* ignore */ }
 
     // 3. If sentinel flagged anomalies (sensorAnomaly true) but action is HARD_TRIP, reduce confidence
     if (JSON.stringify(diagnosis).toLowerCase().includes('sensor anomaly')) {

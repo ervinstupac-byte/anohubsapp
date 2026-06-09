@@ -84,7 +84,7 @@ export class PeltonJetSyncService {
      */
     static syncMultiNozzle(
         nozzleAnalyses: JetAnalysis[],
-        runnerRadius: number // meters
+        runnerRadius?: number
     ): RotorForceBalance {
         const nozzleForces: number[] = [];
 

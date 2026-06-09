@@ -38,7 +38,7 @@ export const ContractManagement: React.FC = () => {
         if (!selectedAsset) return;
 
         // Default Status
-        let newStatus: ContractStatus = {
+        const newStatus: ContractStatus = {
             status: 'ACTIVE',
             warranty_valid: true,
             penalty_amount: 0,

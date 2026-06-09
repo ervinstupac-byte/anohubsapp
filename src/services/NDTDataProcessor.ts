@@ -27,8 +27,7 @@ export class NDTDataProcessor {
      */
     public static processScan(
         scanId: string,
-        method: ScanResult['method'],
-        rawDataPoints: number // count
+        method: ScanResult['method']
     ): ScanResult {
 
         // Mock Analysis Logic

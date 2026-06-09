@@ -169,13 +169,13 @@ export const VoiceAssistantProvider: React.FC<{ children: React.ReactNode }> = (
             console.error('[VoiceAssistant] Error:', event.error);
             if (event.error === 'no-speech' && isAssistantActive.current) {
                 // Restart if it timed out but should be active
-                try { recognition.start(); } catch (e) { }
+                try { recognition.start(); } catch { }
             }
         };
 
         recognition.onend = () => {
             if (isAssistantActive.current) {
-                try { recognition.start(); } catch (e) { }
+                try { recognition.start(); } catch { }
             }
         };
 

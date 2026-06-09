@@ -226,7 +226,7 @@ class AIPredictionService {
                         .filter(Boolean) as { t: number; y: number }[];
                     if (points.length >= 5) return this._computeLinearForecast(points, threshold);
                 }
-            } catch (e) {
+            } catch {
                 // ignore cache errors and fall back to raw logs
             }
 
@@ -319,7 +319,7 @@ class AIPredictionService {
                     reason: `Efficiency decay detected (σ = ${residualStd.toFixed(4)})`
                 };
             }
-        } catch (e) {
+        } catch {
             // ignore formatting issues
         }
 
@@ -362,7 +362,7 @@ class AIPredictionService {
 
                 if (filtered.length >= 5) return this._computeLinearForecast(filtered, threshold);
             }
-        } catch (e) {
+        } catch {
             // swallow and return null-ish
         }
 
@@ -772,7 +772,7 @@ class AIPredictionService {
                 const n_rps = rpm / 60;
                 ns = n_rps * Math.sqrt(Math.max(1e-9, Q_m3s)) / Math.pow(Math.max(1e-9, head), 0.75);
             }
-        } catch (e) {
+        } catch {
             ns = null;
         }
 
@@ -963,7 +963,7 @@ class AIPredictionService {
         let projectState: TechnicalProjectState | null = null;
         try {
             projectState = ProjectStateManager.getState() as TechnicalProjectState;
-        } catch (e) {
+        } catch {
             projectState = null;
         }
 
@@ -971,7 +971,7 @@ class AIPredictionService {
             if (projectState) {
                 physics = PhysicsEngine.recalculatePhysics(projectState);
             }
-        } catch (e) {
+        } catch {
             physics = null;
         }
 

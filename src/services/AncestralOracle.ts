@@ -37,7 +37,7 @@ export class AncestralOracle {
      * LEARN FROM OVERRIDE (PHASE 30.0)
      * Captures the "Why" behind manual interventions.
      */
-    learnFromOverride(reason: string, context: any): void {
+    learnFromOverride(reason: string, context: unknown): void {
         console.log(`[ORACLE] Absorbing Wisdom: "${reason}"`);
         this.memory.saveOverrideRecord({
             timestamp: Date.now(),

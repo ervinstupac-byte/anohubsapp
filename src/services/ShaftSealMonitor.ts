@@ -23,6 +23,7 @@ export class ShaftSealMonitor {
         sealPressureBar: number
     ): SealDiagnosis {
         const freqIncrease = (drainagePumpFreqPerHour - basePumpFreqPerHour) / basePumpFreqPerHour;
+        void sealPressureBar;
 
         // Condition 1: Pump running > 20% more often
         if (freqIncrease > 0.20) {

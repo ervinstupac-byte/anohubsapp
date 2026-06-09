@@ -29,7 +29,9 @@ export default class SovereignAuditAdapter {
     log.push(entry);
     this.memory.saveOverrideRecord({ type: 'WISDOM_PERSIST', timestamp: entry.timestamp, id: entry.id, assetId, telemetryRef });
     // store full log
-    (this.memory as any).setItem && (this.memory as any).setItem('wisdom_audit_log', log);
+    if ((this.memory as any).setItem) {
+      (this.memory as any).setItem('wisdom_audit_log', log);
+    }
     return entry;
   }
 

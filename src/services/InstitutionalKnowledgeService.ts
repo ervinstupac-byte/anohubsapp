@@ -120,7 +120,7 @@ export class InstitutionalKnowledgeService {
     ): Promise<KnowledgeSearchResult[]> {
         const results: KnowledgeSearchResult[] = [];
 
-        for (const [id, entry] of this.knowledgeBase.entries()) {
+        for (const entry of this.knowledgeBase.values()) {
             // Filter by turbine family if specified
             if (turbineFamily && entry.turbineFamily !== turbineFamily) continue;
 

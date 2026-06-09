@@ -7,7 +7,6 @@
  */
 
 import type { AssetNode } from '../models/AssetHierarchy';
-import type { ProtectionVoice } from './SCADAHeartbeat';
 
 // ============================================================================
 // DATA STRUCTURES
@@ -174,6 +173,7 @@ export class CubicleInterface {
     ): ExcitationAlarm[] {
         const alarms: ExcitationAlarm[] = [];
         const now = new Date();
+        void fieldVoltage;
 
         // ALARM: Field Resistance Drop > 15% (SHORTED TURNS!)
         if (resistanceDeviation < -15) {

@@ -22,7 +22,7 @@ export class OilHealthMonitor {
         waterContentPPM: number
     ): OilHealthStatus {
         let score = 100;
-        let reasons: string[] = [];
+        const reasons: string[] = [];
         let tanStatus: OilHealthStatus['tanStatus'] = 'GOOD';
 
         // 1. TAN Rule (The Acid Test)

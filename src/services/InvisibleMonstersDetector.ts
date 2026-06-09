@@ -96,7 +96,6 @@ export class InvisibleMonstersDetector {
         telemetry: TelemetryStream,
         waterQuality?: { sedimentPPM: number; particleSize: number }
     ): ErosionStatus {
-        const flow = telemetry.hydraulic.flow;
         const head = telemetry.hydraulic.head;
         const velocity = Math.sqrt(2 * 9.81 * head); // Jet velocity approximation
 

@@ -202,8 +202,8 @@ export class QuantumResistantSovereignty {
      */
     public static decrypt(
         keyId: string,
-        ciphertext: Uint8Array,
-        encapsulatedKey: Uint8Array
+        _ciphertext: Uint8Array,
+        _encapsulatedKey: Uint8Array
     ): string {
         const keyPair = this.keyPairs.get(keyId);
         if (!keyPair) {
@@ -214,7 +214,10 @@ export class QuantumResistantSovereignty {
         // const sharedSecret = await pqcrypto.kyber.decapsulate(encapsulatedKey, keyPair.privateKey);
         // const decrypted = AES.decrypt(ciphertext, sharedSecret);
 
-        // Mock decryption
+        // Mark params as used to satisfy linter (mock decryption)
+        void _ciphertext;
+        void _encapsulatedKey;
+
         console.log(`[QuantumSov] Data decrypted with Kyber-1024`);
 
         return '[DECRYPTED_DATA]';

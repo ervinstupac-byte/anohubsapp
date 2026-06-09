@@ -53,6 +53,7 @@ export class StepResponseValidator {
 
         // 3. Settling Time (2% band)
         const band = Math.abs(stepSize) * 0.02;
+        void band;
         // Search backwards
         // (Similar logic to Rejection Analyzer)
 

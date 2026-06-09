@@ -32,8 +32,7 @@ export class ConsultingEngine extends BaseGuardian {
         if (geodeticMeasurements.length > 0) {
             findings.push(...this.analyzeAlignment(
                 geodeticMeasurements,
-                turbineModel.getTolerances(),
-                asset.turbine_family
+                turbineModel.getTolerances()
             ));
         }
 
@@ -52,8 +51,7 @@ export class ConsultingEngine extends BaseGuardian {
         const thermoMeasurements = measurements.filter(m => m.type === 'thermography');
         if (thermoMeasurements.length > 0) {
             findings.push(...this.analyzeThermalSignature(
-                thermoMeasurements,
-                asset.turbine_family
+                thermoMeasurements
             ));
         }
 
@@ -85,8 +83,7 @@ export class ConsultingEngine extends BaseGuardian {
 
     private static analyzeAlignment(
         measurements: SpecialMeasurement[],
-        tolerances: ToleranceMap,
-        turbineFamily: string
+        tolerances: ToleranceMap
     ): Finding[] {
         const findings: Finding[] = [];
         const latest = measurements[measurements.length - 1];
@@ -99,7 +96,7 @@ export class ConsultingEngine extends BaseGuardian {
 
         if (shaftDeviation > alignmentTolerance) {
             const excessDeviation = shaftDeviation - alignmentTolerance;
-            const severityLevel: any = excessDeviation > 0.1 ? 'CRITICAL' : excessDeviation > 0.03 ? 'HIGH' : 'MEDIUM';
+            const severityLevel: 'CRITICAL' | 'HIGH' | 'MEDIUM' = excessDeviation > 0.1 ? 'CRITICAL' : excessDeviation > 0.03 ? 'HIGH' : 'MEDIUM';
 
             findings.push({
                 severity: severityLevel,
@@ -183,8 +180,7 @@ export class ConsultingEngine extends BaseGuardian {
     }
 
     private static analyzeThermalSignature(
-        measurements: SpecialMeasurement[],
-        turbineFamily: string
+        measurements: SpecialMeasurement[]
     ): Finding[] {
         const findings: Finding[] = [];
         const latest = measurements[measurements.length - 1];
@@ -229,7 +225,7 @@ export class ConsultingEngine extends BaseGuardian {
 
         const waterContent = latest.data?.water_content || 0; // ppm
         const particleCount = latest.data?.particle_count || 0; // particles > 4µm per ml
-        const viscosity = latest.data?.viscosity || 46; // cSt
+        // viscosity (cSt) is available in data but not used by rules here
 
         if (waterContent > 500) {
             findings.push({
@@ -315,7 +311,8 @@ export class ConsultingEngine extends BaseGuardian {
         return [...recommendations].sort((a, b) => a.priority - b.priority);
     }
     
-    public getConfidenceScore(..._args: any[]): number {
+    public getConfidenceScore(..._args: unknown[]): number {
+        void _args;
         return this.corrToScore(0);
     }
 }

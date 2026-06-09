@@ -17,7 +17,7 @@ export class SmartStartService {
     /**
      * Generates the dynamic Pre-Start Checklist based on machine state and Legacy Knowledge
      */
-    static generateChecklist(turbineId: string): CheckItem[] {
+    static generateChecklist(): CheckItem[] {
         const checks: CheckItem[] = [];
 
         // Mock State (Simulating DB reads)

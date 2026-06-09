@@ -25,7 +25,7 @@ export class SafeControlAdapter {
       if (typeof requestedClose === 'number' && requestedClose < safeClose * 0.5) {
         return { applied: false, reason: `Requested close duration ${requestedClose}s violates governor safe close time ${safeClose}s` };
       }
-    } catch (e) {
+    } catch {
       // ignore and continue
     }
 

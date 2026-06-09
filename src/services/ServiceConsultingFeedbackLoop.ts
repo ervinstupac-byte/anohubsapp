@@ -262,6 +262,7 @@ export class ServiceConsultingFeedbackLoop {
         cost_multiplier: number;
         payback_multiplier: number;
     }> {
+        void turbineFamily;
         const familyEntries = Array.from(this.trackingDatabase.values())
             .filter(e => e.correctionFactors && Object.keys(e.correctionFactors).length > 0);
 

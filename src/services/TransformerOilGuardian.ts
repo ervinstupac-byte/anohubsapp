@@ -143,7 +143,6 @@ export class TransformerOilGuardian extends BaseGuardian {
 
         const hydroTotal = ch4 + c2h6 + c2h4 + c2h2;
         const pctC2H4 = hydroTotal > 0 ? (c2h4 / hydroTotal) * 100 : 0;
-        const pctCH4 = hydroTotal > 0 ? (ch4 / hydroTotal) * 100 : 0;
 
         // Heuristic classification
         if (pctC2H4 > 50 || (c2h4 > c2h6 && c2h4 > ch4 && (m.topOilTempC || 40) > 90)) {

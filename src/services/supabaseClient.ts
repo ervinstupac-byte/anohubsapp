@@ -29,7 +29,7 @@ export interface ConnectionState {
     error: string | null;
 }
 
-let connectionState: ConnectionState = {
+const connectionState: ConnectionState = {
     isConnected: false,
     isVerified: false,
     lastCheck: null,

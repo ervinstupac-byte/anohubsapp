@@ -128,7 +128,7 @@ export const Hub: React.FC = () => {
             title: 'Francis Hub',
             description: 'Turbine operations',
             icon: <Gauge className="w-6 h-6" />,
-            route: '/francis/hub',
+            route: '/turbines/francis',
             color: 'bg-amber-500/10',
             borderColor: 'border-amber-500/30',
             priority: 'high'

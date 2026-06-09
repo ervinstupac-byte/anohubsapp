@@ -44,7 +44,7 @@ export class ROIMonitorService {
         let marketGains = 0;
         let productionLoss = 0;
         let healingActions = 0;
-        let totalHealingEffectiveness = 0;
+        const totalHealingEffectiveness = 0;
 
         for (const event of relevantEvents) {
             switch (event.type) {

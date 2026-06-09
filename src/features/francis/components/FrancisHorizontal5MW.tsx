@@ -197,7 +197,7 @@ export const FrancisHorizontal5MW: React.FC = () => {
         try {
             if (!telemetry) return new Decimal(0);
             // Expect output_power in kW or W; try to handle both
-            let P = telemetry.output_power ?? telemetry.power ?? telemetry.francis_data?.output_power;
+            const P = telemetry.output_power ?? telemetry.power ?? telemetry.francis_data?.output_power;
             if (P == null) return new Decimal(0);
             let Pd = new Decimal(P);
             // Heuristic: if > 1e4 assume W

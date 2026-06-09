@@ -1,8 +1,11 @@
 // Auto-Report Service - AI-Powered Service Report Generation
 // Generates As-Found / As-Left / Recommendations PDF reports
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { ReportGenerator } from '../features/reporting/ReportGenerator';
 import { EnhancedAsset } from '../models/turbine/types';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 export interface ServiceMeasurement {
     parameter: string;
@@ -203,10 +206,8 @@ export class AutoReportService {
      * Generate complete service report
      */
     public generateServiceReport(data: ServiceReportData): Blob {
-        const doc = (this.reportGen as any).doc;
-
         // Reset document
-        (this.reportGen as any).doc = new (require('jspdf'))();
+        (this.reportGen as any).doc = new jsPDF();
         const newDoc = (this.reportGen as any).doc;
 
         // Apply professional header
@@ -255,7 +256,7 @@ export class AutoReportService {
             m.improvement < 0 ? '✓' : m.improvement === 0 ? '-' : '⚠'
         ]);
 
-        require('jspdf-autotable')(newDoc, {
+        autoTable(newDoc, {
             startY: yPos,
             head: [['Parametar', 'As-Found', 'As-Left', 'Standard', 'Promjena', 'Status']],
             body: tableData,
@@ -277,7 +278,7 @@ export class AutoReportService {
 
         yPos += 10;
 
-        data.aiInsights.forEach((insight, index) => {
+        data.aiInsights.forEach((insight) => {
             // Insight box
             newDoc.setFillColor(249, 250, 251); // gray-50
             newDoc.rect(14, yPos - 5, 182, 18, 'F');
@@ -315,7 +316,7 @@ export class AutoReportService {
 
         yPos += 5;
 
-        const recTableData = data.recommendations.map((rec, index) => {
+        const recTableData = data.recommendations.map((rec) => {
             const priorityColors = {
                 CRITICAL: '🔴',
                 HIGH: '🟡',
@@ -331,7 +332,7 @@ export class AutoReportService {
             ];
         });
 
-        require('jspdf-autotable')(newDoc, {
+        autoTable(newDoc, {
             startY: yPos,
             head: [['Prioritet', 'Akcija', 'Rok', 'Posljedice neispunjavanja']],
             body: recTableData,

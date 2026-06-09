@@ -52,7 +52,7 @@ export class FleetOrchestratorV2 {
             }
 
             // Calculate target load
-            let targetLoad = Math.min(remainingDemand, maxAllowableLoad);
+            const targetLoad = Math.min(remainingDemand, maxAllowableLoad);
 
             // Priority scoring (higher = better)
             // Factors: efficiency, capacity headroom, health status

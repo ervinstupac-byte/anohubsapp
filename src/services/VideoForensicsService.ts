@@ -23,6 +23,7 @@ export class VideoForensicsService {
      * In a real app, this would send frame buffers to Gemini Pro Vision API
      */
     static async analyzeFrame(frameData: any): Promise<VideoAnalysisResult> {
+        void frameData;
         // Simulate processing delay
         await new Promise(resolve => setTimeout(resolve, 800));
 

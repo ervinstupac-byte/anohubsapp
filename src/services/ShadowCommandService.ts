@@ -1,6 +1,5 @@
 import { SovereignStrategist, FinancialContext } from './SovereignStrategist';
 import { TelemetryStream } from '../lib/engines/BaseTurbineEngine';
-import Decimal from 'decimal.js';
 
 export interface ShadowLogEntry {
     timestamp: number;

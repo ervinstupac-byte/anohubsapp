@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- temporary: mechanical pass, will replace with proper types in Phase B */
+
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { robotoBase64 } from '../utils/fonts/Roboto-Regular-base64';
@@ -75,7 +77,7 @@ export class ForensicReportService {
         t: TFunction;
         onProgress?: (pct: number, note?: string) => void;
     }): Promise<Blob> {
-        const { asset, diagnosis, projectState, threeRef, t, onProgress } = params as any;
+        const { asset, diagnosis, projectState, threeRef, onProgress } = params as any;
 
         return await new Promise<Blob>((resolve, reject) => {
             try {
@@ -125,10 +127,9 @@ export class ForensicReportService {
         projectState: TechnicalProjectState;
         t: TFunction;
     }): Blob {
-        const { asset, projectState, t } = params;
+        const { projectState } = params;
         const doc = new jsPDF();
         this.addCustomFont(doc);
-        const pageWidth = doc.internal.pageSize.width;
 
         this.applyCerebroBranding(doc, "Technical Specification");
 
@@ -166,7 +167,7 @@ export class ForensicReportService {
         auditData: any;
         t: TFunction;
     }): Blob {
-        const { auditData, t } = params;
+        const { auditData } = params;
         const doc = new jsPDF();
         this.addCustomFont(doc);
 
@@ -209,7 +210,7 @@ export class ForensicReportService {
         t: TFunction;
         description?: string;
     }): Blob {
-        const { riskData, engineerEmail, assetName, t, description } = params;
+        const { riskData, engineerEmail, assetName, description } = params;
         const doc = new jsPDF();
         this.addCustomFont(doc);
 
@@ -254,7 +255,7 @@ export class ForensicReportService {
         engineerEmail: string;
         t: TFunction;
     }): Blob {
-        const { assetName, riskData, designData, engineerEmail, t } = params;
+        const { assetName, riskData, designData, engineerEmail } = params;
         const doc = new jsPDF();
         this.addCustomFont(doc);
 
@@ -339,7 +340,7 @@ export class ForensicReportService {
         ledgerId?: string | null;
         t: TFunction;
     }): Blob {
-        const { caseId, insight, engineerName, snapshotImage, ledgerId, t } = params;
+        const { caseId, insight, snapshotImage } = params;
         const doc = new jsPDF();
         this.addCustomFont(doc);
 
@@ -389,7 +390,7 @@ export class ForensicReportService {
         logs: AssetHistoryEntry[];
         t: TFunction;
     }): Blob {
-        const { asset, logs, t } = params;
+        const { asset, logs } = params;
         const doc = new jsPDF();
         this.addCustomFont(doc);
 
@@ -458,7 +459,7 @@ export class ForensicReportService {
         t: TFunction;
         ledgerId?: string;
     }): Blob {
-        const { contextTitle, slogan, metrics, diagnostics, logs, physicsData, engineerName, t, ledgerId } = params;
+        const { contextTitle, slogan, metrics, diagnostics, ledgerId } = params;
         const doc = new jsPDF();
         this.addCustomFont(doc);
 
@@ -580,10 +581,9 @@ export class ForensicReportService {
         rchAnalysis: any | null; // RootCauseAnalysis
         t: TFunction;
     }): Blob {
-        const { snapshot, rchAnalysis, t } = params;
+        const { snapshot, rchAnalysis } = params;
         const doc = new jsPDF();
         this.addCustomFont(doc);
-        const pageWidth = doc.internal.pageSize.width;
 
         this.applyCerebroBranding(doc, "Neural Root Cause Dossier");
 
@@ -672,7 +672,7 @@ export class ForensicReportService {
         assumptions: any;
         t: TFunction;
     }): Blob {
-        const { assetName, kpis, assumptions, t } = params;
+        const { assetName, kpis, assumptions } = params;
         const doc = new jsPDF();
         this.addCustomFont(doc);
 
@@ -737,7 +737,7 @@ export class ForensicReportService {
         timestamp: string;
         t: TFunction;
     }): Blob {
-        const { assetName, incidentType, deviation, timestamp, t } = params;
+        const { assetName, incidentType, deviation, timestamp } = params;
         const doc = new jsPDF();
         this.addCustomFont(doc);
 
@@ -797,7 +797,7 @@ export class ForensicReportService {
         parts: any[];
         t: TFunction;
     }): Blob {
-        const { vendorName, parts, t } = params;
+        const { vendorName, parts } = params;
         const doc = new jsPDF();
         this.addCustomFont(doc);
 
@@ -850,7 +850,7 @@ export class ForensicReportService {
         state: TechnicalProjectState;
         t: TFunction;
     }): Blob {
-        const { state, t } = params;
+        const { state } = params;
         const doc = new jsPDF();
         this.addCustomFont(doc);
 
@@ -909,7 +909,7 @@ export class ForensicReportService {
         measurements: any[];
         t: TFunction;
     }): Blob {
-        const { assetName, serviceType, engineerName, measurements, t } = params;
+        const { assetName, serviceType, engineerName, measurements } = params;
         const doc = new jsPDF();
         this.addCustomFont(doc);
 
@@ -1007,11 +1007,7 @@ export class ForensicReportService {
             rcaResult,
             baselineData,
             telemetrySnapshot,
-            spectrumBefore,
-            spectrumAfter,
-            sparklineData,
-            fieldTip,
-            t
+            fieldTip
         } = params;
 
         const doc = new jsPDF();

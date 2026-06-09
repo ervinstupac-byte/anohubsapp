@@ -27,7 +27,7 @@ export class PeltonNozzleSequencer {
         availableNozzles: number[] // e.g. [1, 2, 3, 4, 5, 6]
     ): NozzleSequence {
         const loadPct = (targetLoadMW / maxCapacityMW) * 100;
-        const totalNozzles = 6; // Standard 6-jet Pelton
+        // Standard 6-jet Pelton
 
         // Logic Table derived from specific efficiency curves
         // Single Jet optimal: 0-15% Load

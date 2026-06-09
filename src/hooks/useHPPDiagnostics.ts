@@ -37,7 +37,7 @@ export const useHPPDiagnostics = () => {
 
         let health = ExpertDiagnosisEngine.calculateHealthScore(baseDiagnostics);
         let likelyCause = "System Optimal";
-        let symptoms: string[] = [];
+        const symptoms: string[] = [];
 
         // 2. INJECT EXPERT INSIGHTS (The Final Layer)
         // Replaces manual logic with Knowledge Base rules

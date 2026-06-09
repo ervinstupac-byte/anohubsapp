@@ -116,7 +116,7 @@ function generateMorphingConfig(context: UserContext): MorphingConfig {
     const { role, expertise, currentTask, preferences } = context;
 
     // Default config
-    let config: MorphingConfig = {
+    const config: MorphingConfig = {
         showComponents: {
             technicalDiagnostics: false,
             financialROI: false,

@@ -18,8 +18,7 @@ export class TrueWearScheduler {
      */
     predictNextOverhaul(
         currentSandErosionMm: number,
-        sandWearRateMmPerDay: number,
-        currentCavitationHours: number
+        sandWearRateMmPerDay: number
     ): MaintenancePrediction {
         // Limits
         const MAX_EROSION_MM = 5.0; // Labyrinth gap limit

@@ -68,6 +68,7 @@ export class SnapshotService {
 
         // Aggregate ROI from ValueCompounder
         const ledgerStats = ValueCompounder.getStats();
+        void ledgerStats;
         const recentEntries = ValueCompounder.getRecentEntries(1000); // Last 1000 entries
 
         const periodEntries = recentEntries.filter(

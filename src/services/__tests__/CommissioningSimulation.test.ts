@@ -15,7 +15,6 @@ describe('Commissioning Simulation (24h)', () => {
     const history: any[] = [];
     for (let h = 0; h < 24; h++) {
       const drift = h * 0.05; // slow increasing vibration/temp
-      const gridEvent = (h === 12) ? { gridFrequency: 47.5 } : { gridFrequency: 50.0 };
       history.push({
         assetId: asset.id,
         timestamp: Date.now() - ((24 - h) * 3600 * 1000),
@@ -28,7 +27,8 @@ describe('Commissioning Simulation (24h)', () => {
         specialized: {
           flowRate: 42 + (Math.random() - 0.5) * 2,
           governorHPUTelemetry: [],
-          magneticData: null
+          magneticData: null,
+          gridEvent: (h === 12) ? { gridFrequency: 47.5 } : { gridFrequency: 50.0 }
         }
       });
     }

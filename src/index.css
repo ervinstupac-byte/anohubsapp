@@ -25,6 +25,18 @@
   --glass-blur-sovereign: 12px;
   --glass-saturation-sovereign: 180%;
   --stale-pulse-duration: 0.8s;
+
+  /* --- TURBINE IDENTITY COLOURS --- */
+  --turbine-francis: #06b6d4;   /* Cyan  */
+  --turbine-pelton:  #f59e0b;   /* Amber/Gold */
+  --turbine-kaplan:  #10b981;   /* Emerald */
+  --turbine-crossflow: #a78bfa; /* Violet */
+
+  /* --- STATUS COLOURS --- */
+  --status-ok:      #34d399;
+  --status-warn:    #fbbf24;
+  --status-crit:    #ef4444;
+  --status-unknown: #64748b;
 }
 
 /* ============================================================================
@@ -451,7 +463,6 @@ textarea::placeholder {
 .glow-red {
   box-shadow: none !important;
   border-color: inherit !important;
-  animation: none !important;
 }
 
 @keyframes pulse-purple {
@@ -478,7 +489,6 @@ textarea::placeholder {
 .glow-red {
   filter: none !important;
   box-shadow: none !important;
-  animation: none !important;
 }
 
 @keyframes pulse-amber {
@@ -493,18 +503,8 @@ textarea::placeholder {
   }
 }
 
-/* Disabled utility overrides (safe to keep) */
-.animate-pulse-glow {
-  animation: none !important;
-}
-
-.animate-pulse {
-  animation: none !important;
-}
-
-.animate-glow {
-  animation: none !important;
-}
+/* animate-pulse-glow is a custom keyframe — suppression removed */
+/* animate-pulse, animate-ping, animate-bounce are restored (Tailwind built-ins) */
 
 @keyframes glow-oath {
   from {
@@ -517,15 +517,14 @@ textarea::placeholder {
 }
 
 .glow-oath {
-  animation: none !important;
   box-shadow: none !important;
 }
 
 /* --- CUSTOM SCROLLBAR (Stealth Mode) --- */
+/* NOTE: shadow-* is intentionally excluded here to preserve layout depth */
 [class*="glow-"],
 [class*="bloom-"],
-[class*="neon-"],
-[class*="shadow-"] {
+[class*="neon-"] {
   box-shadow: none !important;
   filter: none !important;
 }
@@ -1021,19 +1020,16 @@ textarea::placeholder {
   opacity: 0.5;
 }
 
-/* Final visual hardening: remove residual pulses/neon at global level */
-.animate-pulse,
-.animate-ping,
-.animate-glow,
-.animate-bounce,
-.animate-spin-slow {
-  animation: none !important;
+/* animate-pulse, animate-ping, animate-bounce, animate-spin-slow: Tailwind built-ins — not suppressed */
+/* animate-glow: custom glow class — animation enabled */
+.animate-glow {
+  animation: pulse-glow 3s infinite;
 }
 
+/* shadow-* excluded intentionally — preserves layout depth & glassmorphism */
 [class*="glow-"],
 [class*="bloom-"],
-[class*="neon-"],
-[class*="shadow-"] {
+[class*="neon-"] {
   box-shadow: none !important;
   filter: none !important;
 }

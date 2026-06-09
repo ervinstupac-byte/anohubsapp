@@ -77,12 +77,12 @@ export default class SensorIntegritySentinel extends BaseGuardian {
 
       // If nothing anomalous detected
       return { sensorAnomaly: false, confidence: 0.05, note: 'Correlated OK' };
-    } catch (e) {
+    } catch {
       return { sensorAnomaly: false, confidence: 0.0, note: 'Sentinel internal error' };
     }
   }
 
-  public getConfidenceScore(..._args: any[]): number {
+  public getConfidenceScore(): number {
     return this.corrToScore(0);
   }
 }

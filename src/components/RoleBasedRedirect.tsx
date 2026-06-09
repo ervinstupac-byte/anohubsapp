@@ -3,35 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 /**
- * RoleBasedRedirect - Automatically redirects users based on their role
- * 
- * Redirect logic:
- * - MANAGER -> /executive
- * - OWNER -> /owner
- * - TECHNICIAN or ENGINEER -> /predictive-intelligence
- * - No role -> / (ToolboxLaunchpad)
+ * RoleBasedRedirect — All roles land on HomeHub ('/').
+ * HomeHub adapts its content and quick-actions based on userRole.
  */
 export const RoleBasedRedirect: React.FC = () => {
-    const { userRole, loading } = useAuth();
+    const { loading } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
         if (loading) return;
+        navigate('/', { replace: true });
+    }, [loading, navigate]);
 
-        // Redirect based on user role
-        if (userRole === 'MANAGER') {
-            navigate('/executive');
-        } else if (userRole === 'OWNER') {
-            navigate('/owner');
-        } else if (userRole === 'TECHNICIAN' || userRole === 'ENGINEER') {
-            navigate('/predictive-intelligence');
-        } else {
-            // Default: no role or unknown role -> stay at root (ToolboxLaunchpad)
-            navigate('/');
-        }
-    }, [userRole, loading, navigate]);
-
-    // Show loading state while checking auth
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-[#05070a] text-slate-400">
@@ -43,6 +26,5 @@ export const RoleBasedRedirect: React.FC = () => {
         );
     }
 
-    // Return null while redirecting
     return null;
 };

@@ -30,7 +30,7 @@ export class PredictiveProcurementService {
     public static checkComponentProcurement(
         componentId: string,
         rulDays: number,
-        assetId: string
+        unitId?: string
     ): ProcurementRequisition | null {
         const part = WarehouseIntegrationService.getPart(componentId);
 

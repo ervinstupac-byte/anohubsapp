@@ -1,5 +1,4 @@
 import { TelemetryData } from '../contexts/TelemetryContext';
-import Decimal from 'decimal.js';
 
 /**
  * SENTINEL KERNEL (NC-4.7)
@@ -100,10 +99,11 @@ export class SentinelKernel {
      */
     static crossReferenceLegacy(telemetry: TelemetryData): string[] {
         // Legacy knowledge base removed - returning empty findings
+        void telemetry;
         return [];
     }
 
-    public static getConfidenceScore(..._args: any[]): number {
+    public static getConfidenceScore(): number {
         return 50;
     }
 }

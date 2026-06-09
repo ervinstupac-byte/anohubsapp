@@ -43,7 +43,7 @@ export class MeshResilienceManager {
         // Prune old peers
         const now = Date.now();
         let activeCount = 0;
-        this.peers.forEach((p, k) => {
+        this.peers.forEach((p) => {
             if (now - p.lastHeartbeat > 5000) {
                 p.reachable = false;
             } else {
