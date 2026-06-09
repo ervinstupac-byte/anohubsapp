@@ -118,7 +118,7 @@ export const ProfessionalReportEngine = {
                     doc.setFontSize(8);
                     const watermark = `${img.metadata.gps} | ${img.metadata.timestamp}`;
                     doc.text(watermark, MARGIN + 2, yCursor + imgHeight - 2);
-                } catch (e) {
+                } catch {
                     doc.text("[Image Error]", MARGIN, yCursor + 20);
                 }
 
@@ -258,7 +258,7 @@ export const ProfessionalReportEngine = {
 
         // Fetch threshold configs for assets present
         const assetIds = Array.from(new Set(list.map(r => String(r.asset_id)).filter(Boolean)));
-        let thresholdsMap: Record<string, number> = {};
+        const thresholdsMap: Record<string, number> = {};
         if (assetIds.length > 0) {
             const { data: tcfgs } = await supabase.from('threshold_configs').select('asset_id, vibration_mm_s').in('asset_id', assetIds);
             (tcfgs || []).forEach((t: any) => { thresholdsMap[String(t.asset_id)] = Number(t.vibration_mm_s || 4.5); });
@@ -295,7 +295,7 @@ export const ProfessionalReportEngine = {
                 // prefer the financial view's computed loss if it's non-zero
                 if (sumFin > 0) totalLoss = sumFin;
             }
-        } catch (e) {
+        } catch {
             // ignore and keep totalLoss from aggregates
         }
 
@@ -404,7 +404,7 @@ export const ProfessionalReportEngine = {
             const ab = doc.output('arraybuffer');
             fs.writeFileSync(outPath, Buffer.from(ab));
             return { pdfPath: outPath, trend, alerts, totalLoss };
-        } catch (e) {
+        } catch {
             // Browser: trigger save dialog
             doc.save(`management_summary_30d_${startStr}_to_${endStr}.pdf`);
             return { trend, alerts, totalLoss };
