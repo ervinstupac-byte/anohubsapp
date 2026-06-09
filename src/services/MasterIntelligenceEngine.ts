@@ -1,7 +1,7 @@
 import { aiPredictionService, SynergeticRisk, RULEstimate, IncidentPattern, PrescriptiveAction } from './AIPredictionService';
 import { AcousticFingerprintingService } from './AcousticFingerprintingService';
 import { SpecialMeasurementsService, CorrelationResult } from './SpecialMeasurementsService';
-import { DynamicToleranceCalculator, TurbinePhysics } from './DynamicToleranceCalculator';
+import { TurbinePhysics } from './DynamicToleranceCalculator';
 import { OilAnalysisService } from './OilAnalysisService';
 import idAdapter from '../utils/idAdapter';
 import { CavitationErosionService } from './CavitationErosionService';
@@ -9,7 +9,6 @@ import { StructuralIntegrityService } from './StructuralIntegrityService';
 import { HistoricalTrendAnalyzer } from './HistoricalTrendAnalyzer';
 import { PerformanceGuardService } from './PerformanceGuardService';
 import { GalvanicCorrosionService } from './GalvanicCorrosionService';
-import { SentinelKernel } from './SentinelKernel';
 import { LifeExtensionEngine } from './LifeExtensionEngine';
 import { PeltonJetSyncService } from './PeltonJetSyncService';
 import { HydraulicTransientSafety } from './HydraulicTransientSafety';
@@ -35,7 +34,7 @@ import MaintenanceBequestReport from './MaintenanceBequestReport';
 import CoolingSystemGuardian from './CoolingSystemGuardian';
 import TurbineClassifier from './TurbineClassifier';
 import KaplanBladePhysics from './KaplanBladePhysics';
-import { ITurbineModel, Anomaly, CompleteSensorData, FrancisSensorData } from '../models/turbine/types';
+import { CompleteSensorData, FrancisSensorData } from '../models/turbine/types';
 import { EnhancedAsset, CommonSensorData } from '../models/turbine/types';
 import { OilSample } from './OilAnalysisService';
 
@@ -321,7 +320,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                         priority: 'HIGH'
                     });
                 }
-            } catch (e) {
+            } catch {
                 // swallow forecast errors to avoid breaking main analysis
             }
 
@@ -453,7 +452,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                         });
                     }
                 }
-            } catch (e) {
+            } catch {
                 // ignore classification errors
             }
 
@@ -468,7 +467,6 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                 // Build Pfail map heuristically from specialMeasurements arrays if available
                 const sm = diagnosis.specialMeasurements || {};
                 const pfail: Record<string, number> = {};
-                const components = ['shaftSealTelemetry', 'thrustBearingTelemetry', 'generatorAirGapTelemetry', 'statorInsulationTelemetry', 'governorHPUTelemetry', 'transformerOilTelemetry', 'coolingTelemetry'];
 
                 // Cooling guardian: analyze cooling telemetry if available and use its p_fail
                 const coolingSamples = sm.coolingTelemetry || [];
@@ -485,7 +483,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                         if (analysis.foulingDetected && backupStarted === false) {
                             diagnosis.automatedActions.push({ type: 'IMMEDIATE', action: 'LOAD_REDUCTION', priority: 'CRITICAL', message: 'Cooling fouling detected and backup pump not started.' });
                         }
-                    } catch (e) {
+                    } catch {
                         pfail['cooling'] = 0.1;
                     }
                 } else {
@@ -567,8 +565,9 @@ export class MasterIntelligenceEngine extends BaseGuardian {
         }
     }
 
-    private static async runDynamicBaselines(asset: EnhancedAsset, common: CommonSensorData) {
+    private static async runDynamicBaselines(_asset: EnhancedAsset, _common: CommonSensorData) {
         // Implementation for dynamic baselines
+        void _asset; void _common;
         return null;
     }
 
@@ -826,7 +825,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                     score -= 5;
                 }
             }
-        } catch (e) {
+        } catch {
             // ignore
         }
 
@@ -1067,7 +1066,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                         const confidence = (thrustMaster as any).getConfidenceScore ? (thrustMaster as any).getConfidenceScore(thrustTelemetry as any[], (history || []).map(h => (h as any).common?.vibration)) : null;
                         diagnosis.serviceNotes?.push({ service: 'ThrustBearingConfidence', severity: confidence !== null && confidence < 70 ? 'WARNING' : 'INFO', message: `confidence:${confidence}`, recommendation: 'Include sensor cross-check or manual verification if <70%' });
                         diagnosis.automatedActions.push({ type: 'METRIC', action: 'THRUST_CONFIDENCE', status: 'INFO', details: `Confidence: ${confidence}` });
-                    } catch (e) {
+                    } catch {
                         // ignore
                     }
 
@@ -1235,7 +1234,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                         const confidence = (guardian as any).getConfidenceScore ? (guardian as any).getConfidenceScore(governorTelemetry as any[]) : null;
                         diagnosis.serviceNotes?.push({ service: 'GovernorConfidence', severity: confidence !== null && confidence < 70 ? 'WARNING' : 'INFO', message: `confidence:${confidence}`, recommendation: 'If <70% verify hydraulic response and emergency close timings.' });
                         diagnosis.automatedActions.push({ type: 'METRIC', action: 'GOVERNOR_CONFIDENCE', status: 'INFO', details: `Confidence: ${confidence}` });
-                    } catch (e) {
+                    } catch {
                         // ignore
                     }
                 }
@@ -1408,7 +1407,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                         const confidence = (guardian as any).getConfidenceScore ? (guardian as any).getConfidenceScore(txTelemetry as any[]) : null;
                         diagnosis.serviceNotes?.push({ service: 'TransformerConfidence', severity: confidence !== null && confidence < 70 ? 'WARNING' : 'INFO', message: `confidence:${confidence}`, recommendation: 'If <70% verify DGA lab and manual sampling.' });
                         diagnosis.automatedActions.push({ type: 'METRIC', action: 'TRANSFORMER_CONFIDENCE', status: 'INFO', details: `Confidence: ${confidence}` });
-                    } catch (e) {
+                    } catch {
                         // ignore
                     }
                 }
@@ -1420,9 +1419,8 @@ export class MasterIntelligenceEngine extends BaseGuardian {
 
     // ===== HELPER FUNCTIONS =====
 
-    private static extractPhysics(asset: EnhancedAsset, history: CompleteSensorData[]): TurbinePhysics {
-        const latest = history[history.length - 1];
-
+    private static extractPhysics(asset: EnhancedAsset): TurbinePhysics {
+        
         return {
             runningSpeed: asset.turbine_config.rated_speed || 500,
             head: asset.turbine_config.design_head || 100,
@@ -1625,7 +1623,8 @@ export class MasterIntelligenceEngine extends BaseGuardian {
         }
     }
 
-    private static compareWithHistoricalBaseline(latest: CompleteSensorData, asset: EnhancedAsset) {
+    private static compareWithHistoricalBaseline(latest: CompleteSensorData, _asset: EnhancedAsset) {
+        void _asset;
         // NC-8.0: Mocks the comparison against the 854 technical dossiers
         // In a real system, this would index the physical HTML files
         const baselines: Record<string, number> = {
@@ -1650,6 +1649,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
 
     public getConfidenceScore(..._args: any[]): number {
         // Master engine synthesizes many modules; default to conservative neutral score
+        void _args;
         return this.corrToScore(0);
     }
 }
