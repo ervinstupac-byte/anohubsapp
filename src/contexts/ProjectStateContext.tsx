@@ -101,7 +101,7 @@ class ProjectStateManagerClass {
                 try {
                     if (found) return; // ignore further streamed events once found
                     processed += 1;
-                    try { window.dispatchEvent(new CustomEvent('reconstruction:progress', { detail: { processed } })); } catch { }
+                    try { window.dispatchEvent(new CustomEvent('reconstruction:progress', { detail: { processed } })); } catch { /* ignore */ }
                     const p = rec.payload as any;
                     if (p && p.snapshot) {
                         reconstructed = cloneDeep(p.snapshot);
@@ -120,18 +120,18 @@ class ProjectStateManagerClass {
                         if (this.history.length > 50) this.history.pop();
                         EventJournal.append('snapback_reconstructed', { requestedId: id, base: oldest.id, entryId });
                         this.notify();
-                        try { window.dispatchEvent(new CustomEvent('reconstruction:complete', { detail: { requestedId: id, entryId } })); } catch {}
+                        try { window.dispatchEvent(new CustomEvent('reconstruction:complete', { detail: { requestedId: id, entryId } })); } catch { /* ignore */ }
                         // done — further streamed events will be ignored
                     }
                 } catch {
                     // ignore per-record errors
                 }
-            }).then(({ count }) => {
+            }).then(() => {
                 if (!found) {
-                    try { window.dispatchEvent(new CustomEvent('reconstruction:complete', { detail: { requestedId: id, entryId: null } })); } catch {}
+                    try { window.dispatchEvent(new CustomEvent('reconstruction:complete', { detail: { requestedId: id, entryId: null } })); } catch { /* ignore */ }
                 }
             }).catch((err) => {
-                try { window.dispatchEvent(new CustomEvent('reconstruction:error', { detail: { message: String(err?.message || err) } })); } catch {}
+                try { window.dispatchEvent(new CustomEvent('reconstruction:error', { detail: { message: String(err?.message || err) } })); } catch { /* ignore */ }
             });
 
             // return false now — reconstruction will finish asynchronously and update state when ready
@@ -204,7 +204,7 @@ class ProjectStateManagerClass {
                     this.history.unshift({ id: entryId, ts: new Date().toISOString(), snapshot: cloneDeep(this.state) });
                     if (this.history.length > 50) this.history.pop();
                     EventJournal.append('telemetry_update', { id: entryId, source: 'telemetry', snapshot: cloneDeep(this.state) });
-                } catch { }
+                } catch { /* ignore */ }
             this.notify();
         }
     }
