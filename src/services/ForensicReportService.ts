@@ -51,7 +51,7 @@ export class ForensicReportService {
         const pageWidth = doc.internal.pageSize.width;
         doc.setFontSize(14);
         doc.setTextColor(220, 38, 38);
-        try { doc.setFont("Roboto", "bold"); } catch (e) { }
+        try { doc.setFont("Roboto", "bold"); } catch { /* ignore font load failures */ }
         doc.text("VERIFIED ANOMALIES (INVESTIGATION LOG)", 15, y);
         y += 8;
         doc.setDrawColor(220, 38, 38);
@@ -86,7 +86,7 @@ export class ForensicReportService {
                     const m = ev.data;
                     if (!m) return;
                     if (m.type === 'progress') {
-                        try { if (onProgress) onProgress(m.pct, m.note); } catch (e) { }
+                        try { if (onProgress) onProgress(m.pct, m.note); } catch { /* ignore progress handler errors */ }
                     } else if (m.type === 'done') {
                         try { clearTimeout(timeout); worker.terminate(); resolve(m.blob); } catch (e) { reject(e); }
                     } else if (m.type === 'error') {
@@ -95,9 +95,9 @@ export class ForensicReportService {
                             (async () => {
                                 try {
                                     await supabase.from('telemetry_samples').insert([{ kind: 'worker_error', component: 'forensicPdfWorker', message: String(m.error || 'worker error'), created_at: new Date().toISOString() }]);
-                                } catch (e) { /* ignore telemetry write failures */ }
+                                } catch { /* ignore telemetry write failures */ }
                             })();
-                        } catch (e) { }
+                        } catch { /* ignore */ }
                         clearTimeout(timeout); worker.terminate(); reject(new Error(m.error || 'worker error'));
                     }
                 };
@@ -107,9 +107,9 @@ export class ForensicReportService {
                         (async () => {
                             try {
                                 await supabase.from('telemetry_samples').insert([{ kind: 'worker_onerror', component: 'forensicPdfWorker', message: String(err.message || err.filename || 'worker onerror'), created_at: new Date().toISOString() }]);
-                            } catch (e) { /* ignore */ }
+                            } catch { /* ignore */ }
                         })();
-                    } catch (e) { }
+                    } catch { /* ignore */ }
                     clearTimeout(timeout); worker.terminate(); reject(err);
                 };
             } catch (e) { reject(e); }
