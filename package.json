@@ -6,7 +6,8 @@
   "homepage": "https://anohubs.com",
   "scripts": {
     "dev": "npm run i18n:sync && vite",
-    "lint": "tsc --noEmit",
+    "lint": "eslint \"src/**/*.{ts,tsx,js,jsx}\" --ext .ts,.tsx,.js,.jsx --fix",
+    "type-check": "tsc --noEmit",
     "build:verify": "npx tsx scripts/verify_env.ts",
     "build": "npm run build:verify && npm run i18n:sync && npm run test && tsc && vite build",
     "preview": "vite preview",
