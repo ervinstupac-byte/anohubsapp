@@ -12,6 +12,8 @@
     "build": "npm run build:verify && npm run i18n:sync && npm run test && tsc && vite build",
     "preview": "vite preview",
     "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "i18n:sync": "node scripts/sync_i18n.mjs",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
