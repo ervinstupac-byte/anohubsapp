@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 const cloneDeep = <T,>(v: T): T => {
     try {
         return JSON.parse(JSON.stringify(v));
-    } catch (e) {
+    } catch {
         return v;
     }
 };
@@ -79,9 +79,9 @@ class ProjectStateManagerClass {
                         this.notify();
                         return true;
                     }
-                } catch (e) { /* swallow per-event errors */ }
+                } catch { /* swallow per-event errors */ }
             }
-        } catch (e) {
+        } catch {
             // fallthrough
         }
 
@@ -91,7 +91,7 @@ class ProjectStateManagerClass {
             if (!oldest) return false;
 
             // notify UI that reconstruction is starting
-            try { window.dispatchEvent(new CustomEvent('reconstruction:start', { detail: { requestedId: id, base: oldest.id } })); } catch (e) { /* ignore */ }
+            try { window.dispatchEvent(new CustomEvent('reconstruction:start', { detail: { requestedId: id, base: oldest.id } })); } catch { /* ignore */ }
 
             let reconstructed = cloneDeep(oldest.snapshot);
             let processed = 0;
@@ -101,7 +101,7 @@ class ProjectStateManagerClass {
                 try {
                     if (found) return; // ignore further streamed events once found
                     processed += 1;
-                    try { window.dispatchEvent(new CustomEvent('reconstruction:progress', { detail: { processed } })); } catch (e) { }
+                    try { window.dispatchEvent(new CustomEvent('reconstruction:progress', { detail: { processed } })); } catch { }
                     const p = rec.payload as any;
                     if (p && p.snapshot) {
                         reconstructed = cloneDeep(p.snapshot);
@@ -120,18 +120,18 @@ class ProjectStateManagerClass {
                         if (this.history.length > 50) this.history.pop();
                         EventJournal.append('snapback_reconstructed', { requestedId: id, base: oldest.id, entryId });
                         this.notify();
-                        try { window.dispatchEvent(new CustomEvent('reconstruction:complete', { detail: { requestedId: id, entryId } })); } catch (e) {}
+                        try { window.dispatchEvent(new CustomEvent('reconstruction:complete', { detail: { requestedId: id, entryId } })); } catch {}
                         // done — further streamed events will be ignored
                     }
-                } catch (e) {
+                } catch {
                     // ignore per-record errors
                 }
             }).then(({ count }) => {
                 if (!found) {
-                    try { window.dispatchEvent(new CustomEvent('reconstruction:complete', { detail: { requestedId: id, entryId: null } })); } catch (e) {}
+                    try { window.dispatchEvent(new CustomEvent('reconstruction:complete', { detail: { requestedId: id, entryId: null } })); } catch {}
                 }
             }).catch((err) => {
-                try { window.dispatchEvent(new CustomEvent('reconstruction:error', { detail: { message: String(err?.message || err) } })); } catch (e) {}
+                try { window.dispatchEvent(new CustomEvent('reconstruction:error', { detail: { message: String(err?.message || err) } })); } catch {}
             });
 
             // return false now — reconstruction will finish asynchronously and update state when ready
@@ -161,7 +161,7 @@ class ProjectStateManagerClass {
                 if (this.history.length > 50) this.history.pop();
                 // store full snapshot in the journal to enable reconstruction
                 EventJournal.append('state_update', { id: entryId, snapshot: cloneDeep(this.state), summary: { keys: Object.keys(newState) } });
-            } catch (e) { /* swallow */ }
+            } catch { /* swallow */ }
         this.notify();
     }
 
@@ -184,7 +184,7 @@ class ProjectStateManagerClass {
                     if (result) {
                         s.physics = { ...(s.physics as any), netHead: result.netHead ?? (s.physics as any).netHead, volumetricLoss: result.volumetricLoss ?? (s.physics as any).volumetricLoss, eccentricity: result.eccentricity ?? (s.physics as any).eccentricity } as any;
                     }
-                } catch (e) {
+                } catch {
                     // ignore physics failures — keep previous physics values
                 }
             }
@@ -204,7 +204,7 @@ class ProjectStateManagerClass {
                     this.history.unshift({ id: entryId, ts: new Date().toISOString(), snapshot: cloneDeep(this.state) });
                     if (this.history.length > 50) this.history.pop();
                     EventJournal.append('telemetry_update', { id: entryId, source: 'telemetry', snapshot: cloneDeep(this.state) });
-                } catch (e) { }
+                } catch { }
             this.notify();
         }
     }
@@ -214,7 +214,7 @@ class ProjectStateManagerClass {
         return () => { this.subs = this.subs.filter(s => s !== fn); };
     }
 
-    private notify() { const snapshot = cloneDeep(this.state); this.subs.forEach(s => { try { s(snapshot); } catch (e) { /* swallow */ } }); }
+    private notify() { const snapshot = cloneDeep(this.state); this.subs.forEach(s => { try { s(snapshot); } catch { /* swallow */ } }); }
 }
 
 export const ProjectStateManager = new ProjectStateManagerClass();
@@ -236,7 +236,7 @@ export const ProjectStateProvider: React.FC<{ children: ReactNode }> = ({ childr
     useEffect(() => {
         try {
             ProjectStateManager.updateFromTelemetry(telemetryCtx.telemetry, assetCtx.assets);
-        } catch (e) {
+        } catch {
             // ignore
         }
     }, [telemetryCtx.telemetry, assetCtx.assets]);
