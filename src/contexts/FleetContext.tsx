@@ -91,7 +91,7 @@ export const FleetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
             // 5. SATELLITE INFLOW SIMULATION
             const currentMonth = new Date().getMonth();
-            let snowCover = (currentMonth >= 10 || currentMonth <= 3) ? 65 + Math.random() * 20 : 10 + Math.random() * 15;
+            const snowCover = (currentMonth >= 10 || currentMonth <= 3) ? 65 + Math.random() * 20 : 10 + Math.random() * 15;
             const baseMWh = (asset.capacity || 10) * 24;
             const inflow: InflowPrediction = {
                 snowCoverPercent: snowCover,

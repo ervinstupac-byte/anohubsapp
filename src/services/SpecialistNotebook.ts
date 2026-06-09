@@ -358,7 +358,7 @@ export class SpecialistNotebook {
         // Find best match
         let bestType = DamageType.UNKNOWN;
         let bestScore = 0;
-        let bestMatches: string[] = [];
+        const bestMatches: string[] = [];
 
         for (const [type, score] of scores.entries()) {
             if (score > bestScore) {

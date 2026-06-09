@@ -1,4 +1,4 @@
-import { TechnicalProjectState, ENGINEERING_CONSTANTS } from '../core/TechnicalSchema';
+import { TechnicalProjectState } from '../core/TechnicalSchema';
 import { SiteParameters } from './StrategicPlanningService';
 import Decimal from 'decimal.js';
 import * as PhysicsLogic from '../features/physics-core/PhysicsCalculations.logic';
@@ -77,8 +77,7 @@ export const LiveMathSync = {
             case 'CONCRETE': waveSpeed = new Decimal(900); break;
         }
 
-        const PI = Decimal.acos(-1);
-        const area = PI.mul(new Decimal(penstock.diameter).div(1000).div(2).pow(2));
+        // const PI = Decimal.acos(-1);
         // Removed redundant velocity declaration to use the one from line 36
 
         const surgePressurePa = WATER_DENSITY.mul(waveSpeed).mul(velocity);

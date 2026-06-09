@@ -25,7 +25,7 @@ test('stress integrity: 1000 rapid state changes then snapback to #500', async (
         return;
     }
 
-    const payloadId = (target.payload && (target.payload.id || target.payload.stateId)) || null;
+    const payloadId = (target.payload && ((target.payload as any).id || (target.payload as any).stateId)) || null;
     const snapId = payloadId || target.id;
     const snapResult = ProjectStateManager.snapback(snapId as string);
     console.log('Attempted snapback to id', snapId, '->', snapResult ? 'SUCCESS' : 'FAILED');
@@ -42,7 +42,7 @@ test('stress integrity: 1000 rapid state changes then snapback to #500', async (
             if (p && p.snapshot && p.snapshot.simulated && typeof p.snapshot.simulated.seq === 'number') seqs.push(p.snapshot.simulated.seq);
             if (p && p.state && typeof p.state.seq === 'number') seqs.push(p.state.seq);
             if (p && p.payload && p.payload.simulated && typeof p.payload.simulated.seq === 'number') seqs.push(p.payload.simulated.seq);
-        } catch (e) { }
+        } catch { }
     });
     const drift = seqs.some((v, i, arr) => i > 0 && v < arr[i - 1]);
     console.log('Event drifting detected in journal sequence: ', drift ? 'YES' : 'NO');

@@ -69,7 +69,7 @@ export class AuditorExportService {
         // Limit: 2.5 m (mock limit based on river regulator)
         const ECOLOGICAL_MINIMUM = 2.5;
         let minLevel = 999;
-        const breaches: any[] = [];
+        const breaches: Array<{ timestamp: string; level: number; durationMinutes: number; explanation?: string }> = [];
 
         periodHistory.forEach(snap => {
             const level = snap.civilVoice.riverLevel || 999;
@@ -87,7 +87,7 @@ export class AuditorExportService {
 
         // 2. SAFETY AUDIT
         // Match trips with service logs
-        const safetyIncidents: any[] = [];
+        const safetyIncidents: Array<{ timestamp: string; type: string; resolutionLogId: string }> = [];
         let totalTrips = 0;
         let resolvedTrips = 0;
 
@@ -140,6 +140,7 @@ export class AuditorExportService {
         // Mock logic: Find a LOG with "REPAIR" action after the trip
         // In real life, we'd query the actual journal
         // This is a placeholder for the logic connecting logs to trips
+        void trip; void timestamp; // intentionally unused in mechanical pass
         return undefined;
     }
 

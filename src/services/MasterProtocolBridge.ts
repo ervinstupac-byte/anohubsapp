@@ -60,7 +60,7 @@ export class MasterProtocolBridge extends BaseGuardian {
         return conn.status === 'CONNECTED';
     }
 
-    public getConfidenceScore(..._args: any[]): number {
+    public getConfidenceScore(): number {
         return 50;
     }
 }

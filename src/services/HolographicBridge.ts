@@ -6,7 +6,7 @@
  * to AR/VR devices with <20ms latency
  */
 
-import { KKSAssetTagger, KKSTag } from './KKSAssetTagger';
+import { KKSAssetTagger } from './KKSAssetTagger';
 
 export interface ARDataFrame {
     timestamp: number;
@@ -135,8 +135,10 @@ export class HolographicBridge {
 
         // Serialize and send to all subscribers
         const payload = JSON.stringify(frame);
+        void payload;
 
         for (const [clientId, ws] of this.subscribers.entries()) {
+            void ws;
             try {
                 // In production: ws.send(payload);
                 // For now: just log
@@ -201,6 +203,7 @@ export class HolographicBridge {
      */
     private static getSensorStatus(kksCode: string): 'NORMAL' | 'WARNING' | 'ALARM' {
         // In production: Check against thresholds
+        void kksCode;
         return Math.random() > 0.95 ? 'WARNING' : 'NORMAL';
     }
 

@@ -26,6 +26,7 @@ export class VisualInspectionService {
      * Analyze blade image using simulated Gemini Vision
      */
     static async analyzeImage(imageFile: File): Promise<InspectionResult> {
+        void imageFile;
         return new Promise((resolve) => {
             // Simulate API latency
             setTimeout(() => {

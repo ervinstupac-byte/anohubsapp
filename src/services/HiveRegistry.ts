@@ -11,7 +11,7 @@ export interface HiveConsensus {
 }
 
 // SIMULATED CLOUD DATABASE
-let MOCK_GLOBAL_STATE: HiveConsensus = {
+const MOCK_GLOBAL_STATE: HiveConsensus = {
     globalWeights: {
         'PAT-001': 1.2, // Pre-learned basic vibration pattern
         'PAT-003': 1.5  // Highly confirmed cavitation pattern

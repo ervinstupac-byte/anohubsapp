@@ -6,8 +6,8 @@
  * to update Dam Safety Factor based on physical findings
  */
 
-import { CivilSecurityModule } from './CivilSecurityModule';
-import { ComputerVisionService, DetectionResult } from './ComputerVisionService';
+// CivilSecurityModule is referenced in comments; actual integration occurs elsewhere.
+import type { DetectionResult } from './ComputerVisionService';
 import { InspectionMission } from './RoboticFleetOrchestrator';
 
 export interface TelemetryUpdate {

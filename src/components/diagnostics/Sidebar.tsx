@@ -6,7 +6,8 @@ import { useTranslation } from 'react-i18next';
 import {
     ChevronDown, ChevronRight, Plus, Search, X,
     FileText, Shield, Settings, Zap, BookOpen, Target,
-    AlertTriangle, Cpu, Gauge, Map, ChevronLeft
+    AlertTriangle, Cpu, Gauge, Map, ChevronLeft,
+    Home, ClipboardList, Wrench, User
 } from 'lucide-react';
 import { FleetOverview } from './FleetOverview.tsx';
 import { ErrorBoundary } from '../ErrorBoundary.tsx';
@@ -206,93 +207,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
     const navigate = useNavigate();
     const { logAction } = useAudit();
     const { t } = useTranslation();
-    const { activeDefinition, hiveStatus, activePersona } = useContextAwareness();
+    const { activeDefinition, hiveStatus } = useContextAwareness();
 
     const [searchQuery, setSearchQuery] = useState('');
     const searchInputRef = useRef<HTMLInputElement>(null);
+    const [isTurbinesExpanded, setIsTurbinesExpanded] = useState(true);
 
-    const [expandedSectors, setExpandedSectors] = useState<Record<string, boolean>>(() => ({ criticalOps: true }));
-
-    const missionSectors: MissionSector[] = useMemo(() => {
-        const allSectors: MissionSector[] = [
-            {
-                id: 'criticalOps',
-                title: t('sidebar.sectors.critical_ops'),
-                icon: <Target className="w-3.5 h-3.5" />,
-                color: 'text-red-500',
-                borderColor: 'border-red-500/20',
-                glowColor: '#ef4444',
-                modules: [
-                    { id: 'missionControl', title: t('sidebar.modules.mission_control'), icon: '🎯', route: ROUTES.HOME },
-                    { id: 'francisHub', title: t('sidebar.modules.francis_hub'), icon: '🧠', route: getFrancisPath(ROUTES.FRANCIS.HUB) },
-                    { id: 'diagnosticTwin', title: t('sidebar.modules.diagnostic_twin'), icon: '♊', route: `/${ROUTES.DIAGNOSTIC_TWIN}` },
-                ]
-            },
-            {
-                id: 'mechanical',
-                title: t('sidebar.sectors.mechanical'),
-                icon: <Settings className="w-3.5 h-3.5" />,
-                color: 'text-amber-500',
-                borderColor: 'border-amber-500/20',
-                glowColor: '#06b6d4',
-                modules: [
-                    { id: 'shaftAlignment', title: t('sidebar.modules.shaft_alignment'), icon: '🔄', route: getFrancisPath(ROUTES.FRANCIS.SOP.ALIGNMENT), isoRef: 'ISO 13705' },
-                    { id: 'boltTorque', title: t('sidebar.modules.bolt_torque'), icon: '🔩', route: getMaintenancePath(ROUTES.MAINTENANCE.BOLT_TORQUE), isoRef: 'EN 1591-1' },
-                    { id: 'labyrinthHealth', title: t('sidebar.modules.labyrinth_health'), icon: '🌀', route: getMaintenancePath(ROUTES.MAINTENANCE.HYDRAULIC), isoRef: 'API 610' },
-                    { id: 'maintenanceEngine', title: t('sidebar.modules.maintenance_engine'), icon: '⚙️', route: getMaintenancePath(ROUTES.MAINTENANCE.DASHBOARD) },
-                ]
-            },
-            {
-                id: 'electrical',
-                title: t('sidebar.sectors.electrical'),
-                icon: <Zap className="w-3.5 h-3.5" />,
-                color: 'text-yellow-500',
-                borderColor: 'border-yellow-500/20',
-                glowColor: '#eab308',
-                modules: [
-                    { id: 'gridSync', title: t('sidebar.modules.grid_sync'), icon: '📡', route: '/executive', isoRef: 'IEC 61850' },
-                    { id: 'generatorIntegrity', title: t('sidebar.modules.generator_integrity'), icon: '⚡', route: `/${ROUTES.INFRASTRUCTURE.ROOT}`, isoRef: 'IEEE C50' },
-                    { id: 'executive', title: t('sidebar.modules.executive'), icon: '📊', route: '/executive' },
-                ]
-            },
-            {
-                id: 'risk',
-                title: t('sidebar.sectors.risk'),
-                icon: <Shield className="w-3.5 h-3.5" />,
-                color: 'text-purple-500',
-                borderColor: 'border-purple-500/20',
-                glowColor: '#a855f7',
-                modules: [
-                    { id: 'barlowAudit', title: t('sidebar.modules.barlow_audit'), icon: '🔬', route: `/${ROUTES.STRUCTURAL_INTEGRITY}`, isoRef: 'ASME B31.1' },
-                    { id: 'longevityRoadmap', title: t('sidebar.modules.longevity_roadmap'), icon: '🗺️', route: `/${ROUTES.RISK_ASSESSMENT}` },
-                    { id: 'forensicAnalysis', title: t('sidebar.modules.forensic_analysis'), icon: '🔍', route: '/forensics' },
-                ]
-            },
-            {
-                id: 'knowledge',
-                title: t('sidebar.sectors.knowledge'),
-                icon: <BookOpen className="w-3.5 h-3.5" />,
-                color: 'text-cyan-500',
-                borderColor: 'border-cyan-500/20',
-                glowColor: '#3b82f6',
-                modules: [
-                    { id: 'healthMonitor', title: 'System Health', icon: '🩺', route: '/knowledge/health-monitor', isoRef: 'SOURCES: 202' },
-                    { id: 'sopManager', title: t('sidebar.modules.sop_manager'), icon: '👻', route: getMaintenancePath(ROUTES.MAINTENANCE.SHADOW_ENGINEER) },
-                    { id: 'learningLab', title: t('sidebar.modules.learning_lab'), icon: '🎓', route: `/${ROUTES.LEARNING_LAB}` },
-                            { id: 'hppBuilder', title: t('sidebar.modules.hpp_studio'), icon: '⚡', route: getFrancisPath(ROUTES.FRANCIS.DESIGNER) },
-                            { id: 'engineerPortal', title: t('sidebar.modules.engineer_portal', 'Engineer Console'), icon: '🛠️', route: '/engineer' },
-                            { id: 'ownerPortal', title: t('sidebar.modules.owner_portal', 'Owner Portal'), icon: '🏛️', route: '/owner' },
-                            { id: 'hydroschool', title: t('sidebar.modules.hydroschool', 'Hydroschool — Pro‑Bono'), icon: '🎓', route: '/hydroschool' },
-                ]
-            }
-        ];
-
-        return allSectors; // Force show all sectors for all personas (NC-9.0 Requirement)
-    }, [t, activePersona]);
-
-    const toggleSector = (id: string) => {
-        setExpandedSectors(prev => ({ ...prev, [id]: !prev[id] }));
-    };
+    const menuItems = useMemo(() => [
+        { id: 'home', title: t('sidebar.modules.mission_control', 'Početna'), route: '/', icon: <Home className="w-4 h-4 text-cyan-600" /> },
+        { id: 'logbook', title: t('sidebar.modules.logbook', 'Moj Logbook'), route: '/logbook', icon: <ClipboardList className="w-4 h-4 text-amber-600" /> },
+        { id: 'problems', title: t('sidebar.modules.problems', 'Detekcija problema'), route: '/problems', icon: <Cpu className="w-4 h-4 text-red-500" /> },
+        { id: 'francis', title: 'Francis', route: '/turbines/francis', icon: <span className="text-sm">🌊</span>, parent: 'turbines' },
+        { id: 'pelton', title: 'Pelton', route: '/turbines/pelton', icon: <span className="text-sm">💧</span>, parent: 'turbines' },
+        { id: 'kaplan', title: 'Kaplan', route: '/turbines/kaplan', icon: <span className="text-sm">🔄</span>, parent: 'turbines' },
+        { id: 'tools', title: t('sidebar.modules.engineering_tools', 'Inžinjerski alati'), route: '/hpp-builder', icon: <Wrench className="w-4 h-4 text-purple-600" /> },
+        { id: 'knowledge', title: t('sidebar.modules.knowledge', 'Znanje'), route: '/knowledge-base', icon: <BookOpen className="w-4 h-4 text-cyan-600" /> },
+        { id: 'profile', title: t('sidebar.modules.profile', 'Profil & Postavke'), route: '/profile', icon: <User className="w-4 h-4 text-slate-600" /> }
+    ], [t]);
 
     const handleNavigate = (route: string, title: string) => {
         logAction('NAVIGATION', `Accessed ${title}`);
@@ -311,20 +242,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
+    const isVisible = (id: string) => {
+        if (!searchQuery) return true;
+        const query = searchQuery.toLowerCase();
+        const item = menuItems.find(m => m.id === id);
+        if (!item) return false;
+        return item.title.toLowerCase().includes(query);
+    };
+
+    // Auto-expand turbines if searching for a sub-item
     useEffect(() => {
         if (searchQuery) {
             const query = searchQuery.toLowerCase();
-            const matchingSectors: Record<string, boolean> = {};
-            missionSectors.forEach(sector => {
-                const hasMatch = sector.modules.some(m =>
-                    m.title.toLowerCase().includes(query) ||
-                    m.isoRef?.toLowerCase().includes(query)
-                );
-                matchingSectors[sector.id] = hasMatch;
-            });
-            setExpandedSectors(prev => ({ ...prev, ...matchingSectors }));
+            const matchingSub = menuItems.some(m => m.parent === 'turbines' && m.title.toLowerCase().includes(query));
+            if (matchingSub) {
+                setIsTurbinesExpanded(true);
+            }
         }
-    }, [searchQuery, missionSectors]);
+    }, [searchQuery, menuItems]);
 
     const industrialGradient = "bg-gradient-to-br from-[#f1f2f6] via-[#ced6e0] to-[#747d8c]";
 
@@ -360,10 +295,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         <div className="p-6 border-b border-black/10 relative z-10 bg-black/5">
                             <div className="flex justify-between items-start mb-4">
                                 <div>
-                                    <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">MISSION SECTORS</h2>
+                                    <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">COMMAND CENTER</h2>
                                     <div className="text-sm font-black text-slate-900 tracking-tighter flex items-center gap-2">
-                                        <div className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.8)] animate-pulse" />
-                                        CRITICAL OPS
+                                        <div className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_12px_rgba(6,182,212,0.8)] animate-pulse" />
+                                        ANOHUB NAV
                                     </div>
                                 </div>
                                 <button onClick={onClose} className="p-2 text-slate-600 hover:text-black transition-colors" title="Collapse sidebar">
@@ -379,7 +314,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="SCANNING..."
+                                    placeholder="PRETRAGA..."
                                     className="bg-transparent border-none outline-none ml-2 text-[10px] font-mono text-slate-800 placeholder:text-slate-400 w-full"
                                 />
                             </div>
@@ -393,21 +328,130 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                 onRegisterAsset={onRegisterAsset}
                             />
 
-                            <div className="p-2 space-y-1">
-                                {missionSectors.map((sector) => (
-                                    <SectorAccordion
-                                        key={sector.id}
-                                        sector={sector}
-                                        isExpanded={expandedSectors[sector.id] || false}
-                                        onToggle={() => toggleSector(sector.id)}
-                                        currentPath={location.pathname}
-                                        onNavigate={handleNavigate}
-                                        searchQuery={searchQuery}
-                                    />
-                                ))}
+                            <div className="p-3 space-y-1 bg-black/5">
+                                {/* Početna */}
+                                {isVisible('home') && (
+                                    <button
+                                        onClick={() => handleNavigate('/', 'Početna')}
+                                        className={`w-full text-left px-4 py-2.5 rounded-lg text-[10px] font-mono font-black uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/' ? 'bg-white/40 text-black font-black shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                    >
+                                        <Home className="w-4 h-4 text-cyan-600" />
+                                        <span>{menuItems[0].title}</span>
+                                    </button>
+                                )}
+
+                                {/* Moj Logbook */}
+                                {isVisible('logbook') && (
+                                    <button
+                                        onClick={() => handleNavigate('/logbook', 'Moj Logbook')}
+                                        className={`w-full text-left px-4 py-2.5 rounded-lg text-[10px] font-mono font-black uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/logbook' ? 'bg-white/40 text-black font-black shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                    >
+                                        <ClipboardList className="w-4 h-4 text-amber-600" />
+                                        <span>{menuItems[1].title}</span>
+                                    </button>
+                                )}
+
+                                {/* Detekcija problema */}
+                                {isVisible('problems') && (
+                                    <button
+                                        onClick={() => handleNavigate('/problems', 'Detekcija problema')}
+                                        className={`w-full text-left px-4 py-2.5 rounded-lg text-[10px] font-mono font-black uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/problems' ? 'bg-white/40 text-black font-black shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                    >
+                                        <Cpu className="w-4 h-4 text-red-500" />
+                                        <span>{menuItems[2].title}</span>
+                                    </button>
+                                )}
+
+                                {/* Turbine section */}
+                                {(isVisible('francis') || isVisible('pelton') || isVisible('kaplan')) && (
+                                    <div className="border-t border-black/5 pt-2 mt-2">
+                                        <button
+                                            onClick={() => setIsTurbinesExpanded(!isTurbinesExpanded)}
+                                            className="w-full text-left px-4 py-2 flex items-center justify-between text-[10px] font-mono font-black uppercase tracking-widest text-slate-700 hover:text-black transition-all"
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <Settings className="w-4 h-4 text-slate-600 animate-gear" />
+                                                <span>Turbine</span>
+                                            </div>
+                                            {isTurbinesExpanded ? <ChevronDown className="w-4 h-4 text-slate-500" /> : <ChevronRight className="w-4 h-4 text-slate-500" />}
+                                        </button>
+
+                                        {isTurbinesExpanded && (
+                                            <div className="pl-6 pr-2 py-1 space-y-0.5 mt-1 bg-black/5 rounded-lg">
+                                                {/* Francis */}
+                                                {isVisible('francis') && (
+                                                    <button
+                                                        onClick={() => handleNavigate('/turbines/francis', 'Francis Hub')}
+                                                        className={`w-full text-left px-3 py-2 rounded text-[10px] font-mono flex items-center gap-3 transition-all ${location.pathname.startsWith('/francis') || location.pathname === '/turbines/francis' || location.pathname === '/turbines' ? 'text-black font-black bg-white/40 shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                                    >
+                                                        <span>🌊</span>
+                                                        <span>Francis</span>
+                                                    </button>
+                                                )}
+
+                                                {/* Pelton */}
+                                                {isVisible('pelton') && (
+                                                    <button
+                                                        onClick={() => handleNavigate('/turbines/pelton', 'Pelton Hub')}
+                                                        className={`w-full text-left px-3 py-2 rounded text-[10px] font-mono flex items-center gap-3 transition-all ${location.pathname === '/turbines/pelton' ? 'text-black font-black bg-white/40 shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                                    >
+                                                        <span>💧</span>
+                                                        <span>Pelton</span>
+                                                    </button>
+                                                )}
+
+                                                {/* Kaplan */}
+                                                {isVisible('kaplan') && (
+                                                    <button
+                                                        onClick={() => handleNavigate('/turbines/kaplan', 'Kaplan Hub')}
+                                                        className={`w-full text-left px-3 py-2 rounded text-[10px] font-mono flex items-center gap-3 transition-all ${location.pathname === '/turbines/kaplan' ? 'text-black font-black bg-white/40 shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                                    >
+                                                        <span>🔄</span>
+                                                        <span>Kaplan</span>
+                                                    </button>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Inžinjerski alati */}
+                                {isVisible('tools') && (
+                                    <button
+                                        onClick={() => handleNavigate('/hpp-builder', 'Inžinjerski alati')}
+                                        className={`w-full text-left px-4 py-2.5 rounded-lg text-[10px] font-mono font-black uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/hpp-builder' ? 'bg-white/40 text-black font-black shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                    >
+                                        <Wrench className="w-4 h-4 text-purple-600" />
+                                        <span>{menuItems[6].title}</span>
+                                    </button>
+                                )}
+
+                                {/* Znanje */}
+                                {isVisible('knowledge') && (
+                                    <button
+                                        onClick={() => handleNavigate('/knowledge-base', 'Znanje')}
+                                        className={`w-full text-left px-4 py-2.5 rounded-lg text-[10px] font-mono font-black uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname.startsWith('/knowledge-base') ? 'bg-white/40 text-black font-black shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                    >
+                                        <BookOpen className="w-4 h-4 text-cyan-600" />
+                                        <span>{menuItems[7].title}</span>
+                                    </button>
+                                )}
+
+                                <div className="border-t border-black/10 my-3" />
+
+                                {/* Profil & Postavke */}
+                                {isVisible('profile') && (
+                                    <button
+                                        onClick={() => handleNavigate('/profile', 'Profil & Postavke')}
+                                        className={`w-full text-left px-4 py-2.5 rounded-lg text-[10px] font-mono font-black uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/profile' ? 'bg-white/40 text-black font-black shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                    >
+                                        <User className="w-4 h-4 text-slate-600" />
+                                        <span>{menuItems[8].title}</span>
+                                    </button>
+                                )}
 
                                 {/* ACTION BUTTON */}
-                                <div className="pt-4 px-2 pb-6">
+                                <div className="pt-4 px-2">
                                     <button
                                         className="w-full py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded border-b-4 border-slate-950 active:translate-y-0.5 active:border-b-1 transition-all flex items-center justify-center gap-2 group shadow-lg"
                                         onClick={() => window.dispatchEvent(new CustomEvent(TRIGGER_FORENSIC_EXPORT))}

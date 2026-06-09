@@ -102,7 +102,7 @@ export default class SovereignExpertTranslator {
         const a = Architect.generateArchitectReport();
         architectSummary = a.summary;
       }
-    } catch (e) {
+    } catch {
       architectSummary = 'Architect report unavailable.';
     }
 
@@ -122,7 +122,6 @@ export default class SovereignExpertTranslator {
 
       // Grid stability path
       if (/GRID|KineticKick|KINETIC/i.test(f.source) || /KINETIC/i.test(f.action)) {
-        const g = new GridStabilityGuardian();
         const inertia = (f.metrics && f.metrics.inertia) ? f.metrics.inertia as InertiaAction : null;
         const vcurve = (f.metrics && f.metrics.vcurve) ? f.metrics.vcurve as VCurveOutput : null;
         entries.push(this.explainKineticKick(f, inertia, vcurve));

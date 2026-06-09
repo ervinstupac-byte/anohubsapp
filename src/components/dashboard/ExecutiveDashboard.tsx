@@ -113,7 +113,7 @@ export const ExecutiveDashboard: React.FC = () => {
             const decision = MarketDrivenStrategy.decideMode(oracle, input, baseline, (assetIdentity?.ratedPowerMW || 10), 200);
             const gain = +(seq.expectedEfficiencyPct - baseline);
             return { seq, baseline, decision, gain };
-        } catch (e) {
+        } catch {
             return null;
         }
     }, [specializedState, scadaHead, mechanical, identity, financials, assetIdentity]);
@@ -238,7 +238,7 @@ export const ExecutiveDashboard: React.FC = () => {
         try {
             if (!selectedAsset) return;
             prefetchPredictiveAssets(selectedAsset);
-        } catch (e) { /* noop */ }
+        } catch { /* noop */ }
     }, [selectedAsset]);
 
     // Run SovereignExpertTranslator when unifiedDiagnosis changes
@@ -259,7 +259,7 @@ export const ExecutiveDashboard: React.FC = () => {
                 const sample = translator.sampleBearingCoolingReport();
                 setWisdomReport(sample);
             }
-        } catch (e) {
+        } catch {
             // ignore translator errors
         }
     }, [unifiedDiagnosis, selectedAsset]);
@@ -356,7 +356,7 @@ export const ExecutiveDashboard: React.FC = () => {
         } catch (error: any) {
             console.error("Forensic PDF Generation failed:", error);
             setPdfError(error instanceof Error ? error : new Error(String(error)));
-            try { showToast(t('forensics.toasts.pdfError', 'Forensic PDF generation failed. Tap retry.'), 'error'); } catch (e) { }
+                try { showToast(t('forensics.toasts.pdfError', 'Forensic PDF generation failed. Tap retry.'), 'error'); } catch { /* ignore */ }
         } finally {
             setPdfProgress(null);
         }
@@ -439,7 +439,7 @@ export const ExecutiveDashboard: React.FC = () => {
                 // fallback: attempt to coerce to numbers
                 data = Array.from(series || []).map((x: any) => Number(x)).filter(n => !Number.isNaN(n)).slice(-60);
             }
-        } catch (e) { data = []; }
+        } catch { data = []; }
 
         if (!data || data.length === 0) return null;
         const n = data.length;
@@ -484,12 +484,12 @@ export const ExecutiveDashboard: React.FC = () => {
                 onVeto={(reason) => {
                     console.log('Action Vetoed:', reason);
                     setPendingAction(null);
-                    try { showToast('AI Action Vetoed. Learning recorded.', 'warning'); } catch (e) { }
+                    try { showToast('AI Action Vetoed. Learning recorded.', 'warning'); } catch { /* ignore */ }
                 }}
                 onApprove={() => {
                     console.log('Action Approved (Auto-execution)');
                     setPendingAction(null);
-                    try { showToast('AI Action Executed.', 'success'); } catch (e) { }
+                    try { showToast('AI Action Executed.', 'success'); } catch { /* ignore */ }
                 }}
             />
             {/* ... rest of JSX ... */}

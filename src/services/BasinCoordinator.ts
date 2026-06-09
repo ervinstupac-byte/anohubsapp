@@ -42,7 +42,6 @@ export class BasinCoordinator {
      * Use Case: Unit 1 in Chem Danger -> Unit 2 picks up the load.
      */
     coordinateFleet(unit1: UnitStatus, unit2: UnitStatus, gridTargetMw: number): FleetAction {
-        const totalCapacity = unit1.maxCapacityMw + unit2.maxCapacityMw;
         const actions = [];
 
         // 1. Check for DANGER

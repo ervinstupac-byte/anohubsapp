@@ -157,7 +157,7 @@ export class StrategicPlanningService {
             // If Q_min / Q_max ratio is small (< 10%), a single turbine struggles.
             const fdcSafe = site.flowDurationCurve && site.flowDurationCurve.length > 0 ? site.flowDurationCurve : [{ flow: 10, probability: 0 }, { flow: 1, probability: 100 }];
             const variability = fdcSafe[fdcSafe.length - 1].flow / fdcSafe[0].flow;
-            let recommendation = { count: 1, type: 'Unknown', reasoning: '' };
+            const recommendation = { count: 1, type: 'Unknown', reasoning: '' };
 
             if (hNet.lt(30)) {
                 recommendation.type = 'Kaplan';
@@ -210,6 +210,7 @@ export class StrategicPlanningService {
         const pressureMPa = (1000 * 9.81 * staticHead) / 1000000;
 
         const r_outer = site.pipeDiameter / 2;
+        void r_outer;
         const thickness = site.wallThickness || 10; // Default safety
 
         // sigma = (P * D) / (2 * t)

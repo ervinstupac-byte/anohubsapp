@@ -69,6 +69,7 @@ const DETAILED_KNOWLEDGE_BASE: Record<string, { steps: ActionStep[], priority: '
 };
 
 export function getConfidenceScore(..._args: any[]): number {
+    void _args;
     return 50;
 }
 

@@ -6,7 +6,7 @@
  * Uses MultiAgentSwarm to find sweet spot: max power vs cavitation onset
  */
 
-import { MultiAgentSwarm } from './MultiAgentSwarm';
+// MultiAgentSwarm import removed (unused) to satisfy lint
 
 export interface AcousticSensor {
     sensorId: string;

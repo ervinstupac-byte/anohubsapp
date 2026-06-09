@@ -34,7 +34,7 @@ export class ThermalManagementCore extends BaseGuardian {
         if ((this.coolingGuardian as any).getConfidenceScore) {
             try {
                 return (this.coolingGuardian as any).getConfidenceScore(samples, vibrationSeries);
-            } catch (e) {
+            } catch {
                 // fallback to safeCorrelation-based conservative estimate
             }
         }

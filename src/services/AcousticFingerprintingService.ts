@@ -70,7 +70,7 @@ export class AcousticFingerprintingService {
      * Classifies acoustic signature using pattern matching
      * Filters generator noise to isolate mechanical issues
      */
-    static classifyAcousticSignature(signature: AcousticSignature, runningSpeed: number): AcousticClassification {
+    static classifyAcousticSignature(signature: AcousticSignature): AcousticClassification {
         // Step 1: Apply notch filter to remove generator harmonics (100, 200, 300, 400 Hz)
         const filteredSpectrum = this.filterGeneratorNoise(signature.spectrum);
 
@@ -82,8 +82,7 @@ export class AcousticFingerprintingService {
 
             scores[key] = this.calculatePatternMatch(
                 filteredSpectrum,
-                pattern,
-                runningSpeed
+                pattern
             );
         }
 
@@ -147,8 +146,7 @@ export class AcousticFingerprintingService {
      */
     private static calculatePatternMatch(
         spectrum: number[],
-        pattern: AcousticPattern,
-        runningSpeed: number
+        pattern: AcousticPattern
     ): number {
         const sampleRate = 48000;
         const fftSize = spectrum.length;
@@ -247,8 +245,7 @@ export class AcousticFingerprintingService {
      * Real-time acoustic monitoring with trend analysis
      */
     static analyzeAcousticTrend(
-        historicalSignatures: AcousticSignature[],
-        runningSpeed: number
+        historicalSignatures: AcousticSignature[]
     ): {
         trend: 'IMPROVING' | 'STABLE' | 'DEGRADING';
         degradationRate: number; // dB/day
@@ -260,7 +257,7 @@ export class AcousticFingerprintingService {
 
         // Calculate RMS trend
         const rmsValues = historicalSignatures.map(s => s.rmsLevel);
-        const timeSpanDays = (historicalSignatures[historicalSignatures.length - 1].timestamp - historicalSignatures[0].timestamp) / (1000 * 60 * 60 * 24);
+        // timespan calculation intentionally omitted; trend computed from index-based slope
 
         // Linear regression
         const slope = this.linearRegression(rmsValues);

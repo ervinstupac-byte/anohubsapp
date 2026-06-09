@@ -28,7 +28,7 @@ import BaseGuardian from './BaseGuardian';
 
 export class ServiceChecklistEngine extends BaseGuardian {
 
-    public getConfidenceScore(..._args: any[]): number {
+    public getConfidenceScore(): number {
         return 50; // conservative default
     }
 

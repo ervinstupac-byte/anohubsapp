@@ -92,27 +92,47 @@
       if (loader) {
         console.warn('[index.html] ⚠️  KILL-SWITCH CHECK: Loader still present after 3s');
 
-        // Hide loader
-        loader.style.display = 'none';
+        // Hide and remove loader to avoid blocking interaction
+        try {
+          loader.style.display = 'none';
+          if (loader.parentNode) loader.parentNode.removeChild(loader);
+        } catch (e) { console.warn('[index.html] Failed to remove loader element', e); }
 
-        // If Root is empty, it means React totally failed
+        // If Root appears empty, append a non-destructive emergency banner rather than replacing the whole body
         if (!root || root.children.length === 0 || (root.children.length === 1 && root.children[0].id === 'initial-loader')) {
-          console.error('[index.html] 🚨 REACT MOUNT FAILED');
+          console.error('[index.html] 🚨 REACT MOUNT FAILED - showing emergency banner');
 
-          // Show Emergency Error Screen directly in Body to bypass React
-          document.body.innerHTML = `
-            <div style="position:fixed;inset:0;background:#020617;color:#94A3B8;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:sans-serif;">
-              <h1 style="color:#EF4444;margin-bottom:20px;">SYSTEM BOOT FAILURE</h1>
-              <p>Critical initialization error. React failed to mount.</p>
-              <div style="background:#0F172A;padding:20px;border-radius:8px;margin-top:20px;font-family:monospace;border:1px solid #1E293B;">
-                 Tip: Check F12 Console for "Expected" or "SyntaxError"
+          var banner = document.createElement('div');
+          banner.id = 'emergency-banner';
+          banner.style.position = 'fixed';
+          banner.style.left = '16px';
+          banner.style.right = '16px';
+          banner.style.bottom = '16px';
+          banner.style.zIndex = 10000;
+          banner.style.background = '#0B1220';
+          banner.style.color = '#E2E8F0';
+          banner.style.padding = '12px 16px';
+          banner.style.border = '1px solid #1E293B';
+          banner.style.borderRadius = '8px';
+          banner.style.boxShadow = '0 6px 24px rgba(2,6,23,0.6)';
+
+          banner.innerHTML = `
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+              <div style="flex:1">
+                <strong style="color:#F97316">SYSTEM BOOT WARNING</strong>
+                <div style="font-size:12px;opacity:0.85;margin-top:6px;">React did not mount in time. Check Console (F12) for errors. You may continue to interact with the page.</div>
               </div>
-              <p style="margin-top:40px;font-size:12px;opacity:0.5;">NC-76.3 Kill-Switch Active</p>
+              <div style="margin-left:12px;">
+                <button id="dismiss-emergency" style="background:#0F172A;color:#60A5FA;border:1px solid #1E293B;padding:6px 10px;border-radius:6px;cursor:pointer;">Dismiss</button>
+              </div>
             </div>
-           `;
+          `;
+
+          document.body.appendChild(banner);
+          document.getElementById('dismiss-emergency')?.addEventListener('click', function () { banner.remove(); });
         }
       } else {
-        console.log('[index.html] ✅ Boot successful (Loader gone)');
+        console.log('[index.html] ✅ Boot successful (Loader removed)');
       }
     }, 3000);
   </script>

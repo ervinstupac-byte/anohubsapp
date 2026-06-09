@@ -46,7 +46,7 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             const stored = localStorage.getItem(STORAGE_KEY);
             console.log('[WorkflowContext] Step 1b: Loaded from storage:', stored ? 'YES' : 'NO');
             return stored ? JSON.parse(stored) : defaultState;
-        } catch (e) {
+        } catch {
             console.warn('[WorkflowContext] Step 1b: Storage parse failed, using default.');
             return defaultState;
         }
@@ -64,7 +64,7 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                     setState(event.data.state);
                 }
             };
-        } catch (e) {
+        } catch {
             // BroadcastChannel not supported, fallback to storage events
             console.warn('[Workflow] BroadcastChannel not supported, using fallback');
         }

@@ -41,19 +41,19 @@ export class ConnectivityManager {
      * CACHE STRATEGY
      * Save critical Sovereign State to LocalStorage for offline hydration.
      */
-    public static saveLocalState(key: string, data: any) {
+    public static saveLocalState(key: string, data: unknown) {
         try {
             localStorage.setItem(key, JSON.stringify(data));
-        } catch (e) {
+        } catch {
             console.warn('LocalStorage save failed');
         }
     }
 
-    public static loadLocalState(key: string): any | null {
+    public static loadLocalState(key: string): unknown | null {
         try {
             const raw = localStorage.getItem(key);
             return raw ? JSON.parse(raw) : null;
-        } catch (e) {
+        } catch {
             return null;
         }
     }

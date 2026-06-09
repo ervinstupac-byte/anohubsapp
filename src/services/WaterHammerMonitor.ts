@@ -23,10 +23,11 @@ export class WaterHammerMonitor {
      * Called on high-speed Tick (e.g. 100ms)
      */
     checkPressure(currentPressureBar: number, gateMovement: boolean): HammerEvent {
+        void gateMovement;
         const now = Date.now();
         const dt = (now - this.lastTime) / 1000; // seconds
 
-        let event: HammerEvent = {
+        const event: HammerEvent = {
             timestamp: new Date(),
             peakPressureBar: currentPressureBar,
             riseRateBarPerSec: 0,

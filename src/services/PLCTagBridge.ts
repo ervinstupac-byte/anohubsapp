@@ -72,7 +72,7 @@ export class PLCTagBridge {
         const rawRange = config.rawMax - config.rawMin;
         const euRange = config.euMax - config.euMin;
 
-        let normalized = ((input.rawValue - config.rawMin) * (euRange / rawRange)) + config.euMin;
+        const normalized = ((input.rawValue - config.rawMin) * (euRange / rawRange)) + config.euMin;
 
         // Clamp logic can be added here, for now raw math
         return {

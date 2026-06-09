@@ -53,7 +53,7 @@ export class VibrationExpert {
 
         // 3. Evaluate Severity
         // NC-130: Dynamic Threshold Adjustment
-        let bpfThreshold = 2.0;
+        const bpfThreshold = 2.0;
         let unbalanceThreshold = 3.0;
 
         let warningSuffix = "";

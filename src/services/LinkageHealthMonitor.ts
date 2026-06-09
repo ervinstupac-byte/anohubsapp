@@ -20,6 +20,7 @@ export class LinkageHealthMonitor {
      * effectively checking the mechanical chain.
      */
     checkLinkage(servoStrokePercent: number, vaneOpeningPercent: number, direction: 'OPENING' | 'CLOSING' | 'STABLE'): LinkageHealth {
+        void direction;
 
         // In a perfect machine, Servo 50% = Vane 50% (linearized).
         // Hysteresis appears as a lag when changing direction.

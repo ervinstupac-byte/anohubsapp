@@ -1,9 +1,7 @@
 // Lifecycle Manager Service
 // Orchestrates the transition between project phases and ensures data integrity
 
-import { ProjectDNA, ProjectPhase, GenesisData, BuildData, OperationsData } from '../models/ProjectLifecycle';
-import { StrategicPlanningService } from './StrategicPlanningService';
-import { TurbineFactory } from '../models/turbine/TurbineFactory';
+import { ProjectDNA } from '../models/ProjectLifecycle';
 
 export class LifecycleManager {
     private static currentProject: ProjectDNA | null = null;
@@ -12,7 +10,6 @@ export class LifecycleManager {
      * Start a new project (Genesis Phase)
      */
     static initializeProject(name: string, location: { lat: number; lng: number; region: string }): ProjectDNA {
-        const projectRef = `PROJ-${Date.now().toString(36).toUpperCase()}`;
         const id = Date.now(); // numeric asset id for ProjectIdentity
 
         // Default scaffolding
@@ -193,6 +190,7 @@ export class LifecycleManager {
      * UPDATE OPERATIONS DATA
      */
     static updateOperations(telemetry: any) {
+        void telemetry;
         // This would be called by the telemetry ingestion service
         if (this.currentProject) {
             // Update running hours, etc.

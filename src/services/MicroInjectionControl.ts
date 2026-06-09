@@ -6,7 +6,7 @@
  * Modulates based on acoustic cavitation detection
  */
 
-import { CavitationAcousticAnalyser } from './CavitationAcousticAnalyser';
+// import { CavitationAcousticAnalyser } from './CavitationAcousticAnalyser';
 
 export interface InjectionValve {
     valveId: string;
@@ -45,8 +45,7 @@ export class MicroInjectionControl {
     }
 
     public static modulateInjection(
-        cavitationSeverity: 'NONE' | 'INCIPIENT' | 'MODERATE' | 'SEVERE',
-        operatingLoad: number // MW
+        cavitationSeverity: 'NONE' | 'INCIPIENT' | 'MODERATE' | 'SEVERE'
     ): BoundaryLayerStatus {
         let targetFlowRate = 0;
         let targetPressure = 0;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Node-only modules are required at runtime to avoid bundling them into browser code
 // `ts` (TypeScript AST) will be loaded dynamically when running in a Node environment
 import * as ts from 'typescript';
@@ -67,10 +68,10 @@ export function generateArchitectReport(srcRoot?: string): ArchitectReport {
       try {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         tsRuntime = require('typescript');
-      } catch (e) {
+      } catch {
         tsRuntime = null;
       }
-    } catch (e) {
+    } catch {
       // fall through to dynamic loader
     }
   }
@@ -80,28 +81,24 @@ export function generateArchitectReport(srcRoot?: string): ArchitectReport {
     pathImpl = req('path');
     try {
       tsRuntime = req('typescript');
-    } catch (e) {
+    } catch {
       tsRuntime = null;
     }
-  } catch (e) {
-    // Try fallback to global require in some test runtimes
-    try {
-      // @ts-ignore
-      if (typeof (globalThis as any).require === 'function') {
-        // @ts-ignore
-        fsImpl = (globalThis as any).require('fs');
-        // @ts-ignore
-        pathImpl = (globalThis as any).require('path');
-        try {
-          // @ts-ignore
-          tsRuntime = (globalThis as any).require('typescript');
-        } catch (e2) {
-          tsRuntime = null;
+    } catch {
+      // Try fallback to global require in some test runtimes
+      try {
+        if (typeof (globalThis as any).require === 'function') {
+          fsImpl = (globalThis as any).require('fs');
+          pathImpl = (globalThis as any).require('path');
+          try {
+            tsRuntime = (globalThis as any).require('typescript');
+          } catch {
+            tsRuntime = null;
+          }
         }
+      } catch {
+        // ignore
       }
-    } catch (e2) {
-      // ignore
-    }
   }
   if (!fsImpl || !pathImpl) {
     if (underVitest) {
@@ -150,14 +147,14 @@ export function generateArchitectReport(srcRoot?: string): ArchitectReport {
   const kaplanIssues: string[] = [];
 
   // Helper: AST scan to detect Bayesian vs static patterns
-  function analyzeAST(content: string, fileName: string) {
+  const analyzeAST = (content: string, fileName: string) => {
     try {
       if (!tsRuntime) throw new Error('TypeScript runtime not available');
       const sf = tsRuntime.createSourceFile(fileName, content, tsRuntime.ScriptTarget.ESNext, true);
       let hasBayes = false;
       let hasStatic = false;
 
-      function visit(node: any) {
+      const visit = (node: any) => {
         // Detect comparisons against numeric literals (static threshold)
         if (tsRuntime.isBinaryExpression(node)) {
           const op = node.operatorToken.kind;
@@ -180,17 +177,17 @@ export function generateArchitectReport(srcRoot?: string): ArchitectReport {
         }
 
         tsRuntime.forEachChild(node, visit);
-      }
+      };
 
       visit(sf);
       if (hasBayes) usesBayesian.push(fileName);
       if (hasStatic) usesStaticThresholds.push(fileName);
-    } catch (e) {
+    } catch {
       // fallback to text heuristics
       if (/p_fail|prior|posterior|bayes|bayesian|likelihood/i.test(content)) usesBayesian.push(fileName);
       if (/[<>=]\s*\d+(\.\d+)?/.test(content)) usesStaticThresholds.push(fileName);
     }
-  }
+  };
 
   for (const f of files) {
     const name = pathImpl.basename(f, pathImpl.extname(f));
@@ -241,7 +238,7 @@ export function generateArchitectReport(srcRoot?: string): ArchitectReport {
   const summary = `I am aware of ${subsystemsCount} subsystems. I have identified ${missingFeatures.length} missing features: ${missingFeatures.join(', ') || 'none'}. Pelton optimization potential: ${peltonOptimizationPotentialPct ? peltonOptimizationPotentialPct + '%' : 'N/A'}.`;
 
   // Check SystemManifest.md for expected subsystems and compute architectural drift
-  let architecturalDrift: string[] = [];
+  const architecturalDrift: string[] = [];
   try {
     const manifestPath = pathImpl.resolve(process.cwd(), 'SystemManifest.md');
     if (fsImpl.existsSync(manifestPath)) {
@@ -262,13 +259,13 @@ export function generateArchitectReport(srcRoot?: string): ArchitectReport {
           for (const found of subsystems) {
             if (!expected.includes(found)) architecturalDrift.push(`Subsystem present in code but not in manifest: ${found}`);
           }
-        } catch (e) {
-          // ignore parse errors
+        } catch {
+          void 0;
         }
       }
     }
-  } catch (e) {
-    // ignore manifest read errors
+  } catch {
+    void 0;
   }
 
   return {
@@ -290,5 +287,6 @@ export function generateArchitectReport(srcRoot?: string): ArchitectReport {
 export default { generateArchitectReport };
 
 export function getConfidenceScore(..._args: any[]): number {
+  void _args;
   return 50;
 }

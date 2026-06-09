@@ -1,6 +1,7 @@
 import Decimal from 'decimal.js';
 import { supabase } from './supabaseClient';
 
+/* eslint-disable @typescript-eslint/no-explicit-any -- temporary: mechanical pass; will add proper types in Phase B */
 export type AgingResult = {
     agingScore: number; // 0-100 heuristic
     warningLevel: 'OK' | 'NOTICE' | 'WARNING' | 'CRITICAL';
@@ -27,7 +28,7 @@ export function computeEtaFromSample(s: any): Decimal {
         const eta = P_W.dividedBy(rho.times(g).times(Qd).times(Hd));
         if (!eta.isFinite() || eta.lte(0)) return new Decimal(0);
         return Decimal.min(eta, new Decimal(1));
-    } catch (e) {
+    } catch {
         return new Decimal(0);
     }
 }
@@ -115,7 +116,7 @@ export function evaluateAging(telemetryWindow: any[], designEta?: number, contex
             try {
                 const design = new Decimal(designEta);
                 dev = Math.max(0, design.minus(meanEta).times(100).toNumber());
-            } catch (e) {
+            } catch {
                 dev = Math.max(0, 92 - meanEtaPercent);
             }
         } else {
@@ -137,7 +138,7 @@ export function evaluateAging(telemetryWindow: any[], designEta?: number, contex
             else if (ratio < 0.9) reasons.push('Operating below design flow (partial loading) — efficiency reduced.');
             else reasons.push('Flow near design — loading is appropriate.');
         }
-    } catch (e) {}
+    } catch { /* ignore */ }
 
     try {
         const heads = telemetryWindow.map(s => {
@@ -149,7 +150,7 @@ export function evaluateAging(telemetryWindow: any[], designEta?: number, contex
             const ratioH = meanHead / (context.gross_head_m || 1);
             if (ratioH < 0.8) reasons.push('Head mismatch — actual head below design, shifting operating point and reducing η.');
         }
-    } catch (e) {}
+    } catch { /* ignore */ }
 
     try {
         const vibSamples = telemetryWindow.map(s => (s.francis_data && (s.francis_data.stay_ring_vibration || s.francis_data.vibration)) ?? s.vibration ?? 0).filter(n => Number(n) > 0);
@@ -158,7 +159,7 @@ export function evaluateAging(telemetryWindow: any[], designEta?: number, contex
             if (meanVib > 4.0) reasons.push('Elevated vibration — mechanical fatigue risk increases; fatigue shortens operational lifetime.');
             else if (meanVib > 1.5) reasons.push('Mild vibration observed — monitor for trend.');
         }
-    } catch (e) {}
+    } catch { /* ignore */ }
 
     const agingScore = Math.min(100, Math.round(dev * 1.5));
     let warningLevel: AgingResult['warningLevel'] = 'OK';
@@ -189,7 +190,7 @@ export function computeRevenueLoss(actualEta: number | string | Decimal, optimal
         const delta = Decimal.max(o.minus(a), new Decimal(0));
         const loss = delta.times(p).times(price);
         return loss;
-    } catch (e) {
+    } catch {
         return new Decimal(0);
     }
 }
@@ -226,7 +227,7 @@ export function estimateAnnualDegradationRate(telemetryWindow: any[]) : Decimal 
         const msPerYear = 1000 * 60 * 60 * 24 * 365;
         const annualSlope = slope * msPerYear; // change in eta (fraction) per year
         return new Decimal(annualSlope);
-    } catch (e) {
+    } catch {
         return new Decimal(0);
     }
 }

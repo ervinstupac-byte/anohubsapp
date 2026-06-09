@@ -53,6 +53,8 @@ export const BaselineFingerprintWizard: React.FC<BaselineFingerprintWizardProps>
             temperatures: {
                 bearing_upper: tData.temperature || 65,
                 bearing_lower: tData.temperature + 3 || 68,
+                generator_stator: tData.temperature - 5 || 60,
+                oil_temperature: tData.temperature - 10 || 55
             },
             pressures: {
                 inlet: 100,

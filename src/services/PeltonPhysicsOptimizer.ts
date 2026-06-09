@@ -70,7 +70,7 @@ export function optimizeNozzles(input: PeltonInput, options?: { maxNozzles?: num
 
 export default { detectNeedleErosion, optimizeNozzles };
 
-export function getConfidenceScore(..._args: any[]): number {
+export function getConfidenceScore(): number {
   // Heuristic utilities - neutral confidence
   return 50;
 }

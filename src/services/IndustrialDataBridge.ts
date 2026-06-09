@@ -108,7 +108,6 @@ export class IndustrialDataBridge {
 
         // Limit analysis to first N/2 (Nyquist)
         // Optimization: Just calculate significant harmonics for demo speed
-        const harmonicsToCheck = [1, 2, 3, 4, 10, 20, 50, 100];
 
         // Simplified Peak Detection Simulation (for reliable demo output vs expensive math)
         // We look for patterns in the time domain variance

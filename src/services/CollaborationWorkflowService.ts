@@ -14,7 +14,7 @@ export interface MeasurementSubmission {
     submittedBy: User;
     assetId: number;
     measurementType: 'GEODETIC' | 'VIBRATION' | 'THERMAL' | 'OIL_ANALYSIS' | 'HYDRAULIC_CHANGE';
-    data: any;
+    data: unknown;
     timestamp: number;
     status: 'PENDING_AI_VALIDATION' | 'AI_VALIDATED' | 'REJECTED_BY_AI' | 'PENDING_CONSULTANT_REVIEW' | 'APPROVED' | 'REJECTED';
     aiValidationResult?: AIValidationResult;
@@ -56,7 +56,7 @@ export class CollaborationWorkflowService {
         fieldWorker: User,
         assetId: number,
         measurementType: MeasurementSubmission['measurementType'],
-        data: any
+        data: unknown
     ): Promise<MeasurementSubmission> {
         const submission: MeasurementSubmission = {
             id: `MEAS-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -182,9 +182,14 @@ export class CollaborationWorkflowService {
 
     // ===== AI VALIDATION METHODS =====
 
-    private static async validateGeodeticMeasurement(data: any): Promise<AIValidationResult> {
+    private static async validateGeodeticMeasurement(data: unknown): Promise<AIValidationResult> {
         const STANDARD_005_MM_M = 0.05; // The sacred 0.05 mm/m standard
-        const shaftDeviation = data.shaftDeviation || 0;
+        let shaftDeviation = 0;
+        if (typeof data === 'object' && data !== null && 'shaftDeviation' in data) {
+            const sd = (data as Record<string, unknown>).shaftDeviation;
+            if (typeof sd === 'number') shaftDeviation = sd;
+            else if (typeof sd === 'string' && !Number.isNaN(Number(sd))) shaftDeviation = Number(sd);
+        }
 
         const passed = shaftDeviation <= STANDARD_005_MM_M;
         const deviations: string[] = [];
@@ -209,12 +214,13 @@ export class CollaborationWorkflowService {
         };
     }
 
-    private static async validateHydraulicChange(data: any): Promise<AIValidationResult> {
+    private static async validateHydraulicChange(_data: unknown): Promise<AIValidationResult> {
+        void _data;
         // Mock validation for missing module
         const result = {
             safe: true,
-            risks: [],
-            warnings: [],
+            risks: [] as string[],
+            warnings: [] as string[],
             recommendation: 'APPROVE'
         };
 
@@ -229,8 +235,13 @@ export class CollaborationWorkflowService {
         };
     }
 
-    private static async validateVibrationMeasurement(data: any): Promise<AIValidationResult> {
-        const vibrationLevel = data.rmsLevel || 0;
+    private static async validateVibrationMeasurement(data: unknown): Promise<AIValidationResult> {
+        let vibrationLevel = 0;
+        if (typeof data === 'object' && data !== null && 'rmsLevel' in data) {
+            const v = (data as Record<string, unknown>).rmsLevel;
+            if (typeof v === 'number') vibrationLevel = v;
+            else if (typeof v === 'string' && !Number.isNaN(Number(v))) vibrationLevel = Number(v);
+        }
         const THRESHOLD = 4.5; // mm/s
 
         const passed = vibrationLevel <= THRESHOLD;
@@ -260,12 +271,16 @@ export class CollaborationWorkflowService {
             phone: '+387...'
         };
 
+        const score = submission.aiValidationResult?.complianceScore;
+        const urgency = (typeof score === 'number' && score < 70) ? 'CRITICAL' : 'HIGH';
+        const message = `New measurement requires your review: ${submission.measurementType} for asset ${submission.assetId}. AI Score: ${typeof score === 'number' ? score.toFixed(0) : 'N/A'}%`;
+
         await this.sendNotification({
             recipient: mockConsultant,
             type: 'CONSULTANT_REVIEW_REQUIRED',
             submissionId: submission.id,
-            message: `New measurement requires your review: ${submission.measurementType} for asset ${submission.assetId}. AI Score: ${submission.aiValidationResult?.complianceScore?.toFixed(0)}%`,
-            urgency: submission.aiValidationResult?.complianceScore! < 70 ? 'CRITICAL' : 'HIGH'
+            message,
+            urgency
         });
     }
 
@@ -293,6 +308,7 @@ export class CollaborationWorkflowService {
      * Get pending reviews for a consultant
      */
     static async getPendingReviews(consultantId: string): Promise<MeasurementSubmission[]> {
+        void consultantId;
         // return await supabase
         //     .from('measurement_submissions')
         //     .select('*')
@@ -305,6 +321,7 @@ export class CollaborationWorkflowService {
      * Get submission history for an asset
      */
     static async getSubmissionHistory(assetId: number): Promise<MeasurementSubmission[]> {
+        void assetId;
         // return await supabase
         //     .from('measurement_submissions')
         //     .select('*')

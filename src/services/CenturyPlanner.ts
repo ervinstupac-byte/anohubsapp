@@ -11,7 +11,7 @@ export type CenturyPlanInput = {
     capex?: number; // upfront capital cost
     capacityFactor?: number; // 0-1 fraction (defaults to 0.45)
     degradationRatePerYear?: number; // optional override (fraction per year)
-    telemetryWindow?: any[]; // optional samples for estimating degradation
+    telemetryWindow?: unknown[]; // optional samples for estimating degradation
 };
 
 export function computeAnnualRevenue(currentPowerKw: number, pricePerKwh: number, capacityFactor = 0.45) {
@@ -39,7 +39,7 @@ export function centuryPlan(input: CenturyPlanInput, horizons = [10,20,50]) {
     // estimateAnnualDegradationRate returns change in eta per year; if negative, convert to positive degradation
     if (degr.lessThan(0)) degr = degr.neg();
 
-    const results: any = {};
+    const results: Record<number, { horizon: number; projectedAnnualRevenue: number; cumulativeProfit: number; roi: number | null; }> = {};
 
     for (const y of horizons) {
         let cumulativeProfit = new D(0);

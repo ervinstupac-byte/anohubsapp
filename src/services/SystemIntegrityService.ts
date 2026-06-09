@@ -21,7 +21,7 @@ export async function runForensicPulseCheck(): Promise<IntegrityReport> {
 
   // 1) Table existence and simple counts
   for (const t of TABLES_TO_CHECK) {
-    try {
+  try {
       const { data, error } = await supabase.from(t).select('id', { count: 'exact', head: false }).limit(1);
       if (error) {
         report.tableStatuses[t] = { exists: false };
@@ -29,7 +29,7 @@ export async function runForensicPulseCheck(): Promise<IntegrityReport> {
         // If count returned, use getTableCount pattern is heavier; here we only confirm select works
         report.tableStatuses[t] = { exists: true, count: Array.isArray(data) ? data.length : undefined };
       }
-    } catch (e: any) {
+    } catch {
       report.tableStatuses[t] = { exists: false };
     }
   }
@@ -74,7 +74,7 @@ export async function runForensicPulseCheck(): Promise<IntegrityReport> {
       const aggId = insData.id;
       // ensure there's a pricing row for null asset — fallback price
       const { data: pData } = await supabase.from('pricing_history').select('price_per_kwh').order('effective_from', { ascending: false }).limit(1).maybeSingle();
-      let price = pData?.price_per_kwh ?? 0.05;
+      void pData;
       // call RPC to compute loss
       const { data: lossRes, error: lossErr } = await supabase.rpc('compute_loss_from_aggregates', { agg_id: aggId });
       let lossVal = 0;

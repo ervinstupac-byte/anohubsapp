@@ -232,8 +232,6 @@ class AssetGuardian extends BaseAgent {
  */
 class GridStabilizer extends BaseAgent {
     vote(context: any): Omit<AgentVote, 'agentId'> {
-        const frequencyError = Math.abs(context.gridFrequency - 50);
-
         let recommendation: AgentVote['recommendation'];
         let expectedValue: number;
 

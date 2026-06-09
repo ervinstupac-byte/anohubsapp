@@ -1,6 +1,15 @@
 export const ROUTES = {
     HOME: '/',
+    HOME_HUB: '/',
     LOGIN: '/login',
+    LOGBOOK: 'logbook',
+    PROBLEMS: 'problems',
+    TURBINES: {
+        ROOT: 'turbines',
+        FRANCIS: 'francis',
+        PELTON: 'pelton',
+        KAPLAN: 'kaplan',
+    },
     PREDICTIVE_INTELLIGENCE: 'predictive-intelligence',
     LABS: {
         ROOT: 'lab',

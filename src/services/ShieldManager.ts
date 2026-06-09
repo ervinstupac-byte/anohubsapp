@@ -6,7 +6,7 @@
  * Blocks "Legal but Dangerous" commands by checking against Safety Interlocks.
  */
 
-import { SafetyInterlockEngine } from './SafetyInterlockEngine';
+// SafetyInterlockEngine integration occurs in higher-level controllers
 
 export interface CommandRequest {
     id: string;

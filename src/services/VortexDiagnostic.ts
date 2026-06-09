@@ -22,6 +22,8 @@ export class VortexDiagnostic {
         pressureWaveform: number[], // Time series
         samplingRateHz: number
     ): VortexState {
+        void pressureWaveform;
+        void samplingRateHz;
 
         // 1. FFT (Simulated)
         // In real code: Perform FFT to get Spectrum

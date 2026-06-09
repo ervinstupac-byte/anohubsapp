@@ -50,6 +50,7 @@ describe('FinancialImpactEngine - probabilistic maintenance model', () => {
 
     const annualKWh = P_avg_MW * 1000 * 24 * 365;
     const annualBenefit = annualKWh * C_kWh * deltaEta; // simplistic benefit from efficiency uplift
+    void annualBenefit;
 
     // Annual net considering maintenance buffer effect (higher expectedMaintenanceCost reduces net)
     const annualNetLowInv = (P_avg_MW * 1000 * 24 * 365 * (pricePerMWh / 1000)) - (invLow.expectedMaintenanceCost || 0);

@@ -6,7 +6,6 @@
  * Uses MultiAgentSwarm for adversarial simulation
  */
 
-import { MultiAgentSwarm } from './MultiAgentSwarm';
 
 export interface CollapseScenario {
     scenarioId: string;
@@ -52,7 +51,7 @@ export class AdversarialSimulator {
         console.log('\n' + '💀'.repeat(40));
         console.log('RED TEAM SIMULATION: TOTAL MARKET COLLAPSE');
         console.log('💀'.repeat(40) + '\n');
-
+        // Analyze with multi-agent swarm is performed below
         const scenario: CollapseScenario = {
             scenarioId: 'BLACK_SWAN_MARKET',
             name: 'Total Energy Market Collapse',
@@ -85,7 +84,7 @@ export class AdversarialSimulator {
         const strategy = this.developSurvivalStrategy(scenario);
 
         // Analyze with multi-agent swarm
-        const analysis = this.analyzeWithSwarm(scenario, strategy);
+        const analysis = this.analyzeWithSwarm();
 
         return { scenario, strategy, analysis };
     }
@@ -161,10 +160,7 @@ export class AdversarialSimulator {
     /**
      * Analyze strategy with multi-agent swarm
      */
-    private static analyzeWithSwarm(
-        scenario: CollapseScenario,
-        strategy: SurvivalStrategy
-    ): string {
+    private static analyzeWithSwarm(): string {
         console.log('\n' + '🧠'.repeat(40));
         console.log('MULTI-AGENT SWARM ANALYSIS');
         console.log('🧠'.repeat(40) + '\n');

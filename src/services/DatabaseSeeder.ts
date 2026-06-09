@@ -201,7 +201,7 @@ export class DatabaseSeeder {
                 // ... (simplified logic for concise tool call, respecting existing fallback pattern)
                 // NOTE: Since tool calls replace text, I will replace the single insert block with a loop block.
 
-                let assetPayload = { ...unit };
+                const assetPayload = { ...unit };
 
                 const { data: assetData, error: assetError } = await supabase.from('assets').insert([assetPayload]).select().single();
 

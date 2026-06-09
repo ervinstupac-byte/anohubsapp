@@ -53,9 +53,10 @@ export class ResonanceHarvesterManager {
 
     public static harvestVibrationEnergy(
         vibrationLevel: number, // mm/s RMS
-        operatingLoad: number // MW
+        _operatingLoad: number // MW
     ): EnergyRecovery {
         const baseFrequency = 50; // Hz (grid frequency)
+        void _operatingLoad;
 
         // Update sensors based on vibration
         for (const sensor of this.piezoSensors.values()) {

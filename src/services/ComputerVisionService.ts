@@ -34,7 +34,7 @@ export interface DetectionResult {
 export class ComputerVisionService {
     private static readonly CONFIDENCE_THRESHOLD = 0.7;
     private static detectionHistory: DetectionResult[] = [];
-    private static patterns: Map<string, any> = new Map(); // Pattern library
+    private static patterns: Map<string, Record<string, unknown>> = new Map(); // Pattern library
 
     /**
      * Initialize AI models and pattern library
@@ -185,7 +185,7 @@ export class ComputerVisionService {
     } {
         const recentResults = this.detectionHistory
             .slice(-lastNFrames)
-            .filter(r => r.detections.some(d => true)); // Has detections from any source
+            .filter(r => r.detections.length > 0); // Has detections from any source
 
         const byType = new Map<string, number>();
         let totalDetections = 0;

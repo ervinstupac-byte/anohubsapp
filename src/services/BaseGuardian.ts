@@ -10,7 +10,7 @@ export default abstract class BaseGuardian {
      * Get confidence score (0-100) based on sample count and data quality
      * Subclasses must implement to provide domain-specific confidence calculation
      */
-    public abstract getConfidenceScore(...args: any[]): number;
+    public abstract getConfidenceScore(...args: unknown[]): number;
 
     /**
      * Safe Pearson correlation calculation with bounds checking
@@ -46,7 +46,7 @@ export default abstract class BaseGuardian {
         const den = Math.sqrt(denA * denB);
         if (!isFinite(den) || den === 0) return 0;
         
-        let corr = num / den;
+        const corr = num / den;
         if (!isFinite(corr) || Number.isNaN(corr)) return NaN;
         
         // Clamp to [-1,1] to avoid tiny numerical drift

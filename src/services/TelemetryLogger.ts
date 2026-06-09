@@ -27,6 +27,8 @@ export class TelemetryLogger {
     }
 
     private static sendToExternalMonitor(payload: any) {
+        // Mark payload as used in mocked environment
+        void payload;
         // Mock external ingestion (e.g. fetch to Sentry DSN)
         if (DeploymentConfig.isProduction) {
             // fetch('https://sentry.io/api/...', { method: 'POST', body: JSON.stringify(payload) });

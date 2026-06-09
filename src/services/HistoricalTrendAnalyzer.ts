@@ -30,7 +30,6 @@ export class HistoricalTrendAnalyzer {
         const sumY = points.reduce((sum, p) => sum + p.y, 0);
         const sumXY = points.reduce((sum, p) => sum + p.x * p.y, 0);
         const sumX2 = points.reduce((sum, p) => sum + p.x * p.x, 0);
-        const sumY2 = points.reduce((sum, p) => sum + p.y * p.y, 0);
 
         // Linear regression: y = mx + b
         const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
@@ -214,7 +213,7 @@ export class HistoricalTrendAnalyzer {
         const data: Array<{ day: number; date: string; actual?: number; projected?: number }> = [];
 
         // Add actual measurements
-        history.measurements.forEach((m, idx) => {
+        history.measurements.forEach((m) => {
             const measurementDate = new Date(m.timestamp);
             const daysSinceFirst = Math.floor(
                 (measurementDate.getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24)

@@ -1,9 +1,10 @@
 import { supabase } from './supabaseClient';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 type EventRecord = {
     id: string;
     type: string;
-    payload: any;
+    payload: unknown;
     ts: string;
 };
 
@@ -17,15 +18,14 @@ class EventJournalService {
         // try to create a journal worker in browser environments
         try {
             if (typeof window !== 'undefined' && typeof Worker !== 'undefined') {
-                // @ts-ignore
                 this.worker = new Worker(new URL('../workers/journal.worker.ts', import.meta.url), { type: 'module' });
             }
-        } catch (e) {
+        } catch {
             this.worker = null;
         }
     }
 
-    append(eventType: string, payload: any) {
+    append(eventType: string, payload: unknown) {
         const rec: EventRecord = { id: `${Date.now()}-${Math.random().toString(36).slice(2,8)}`, type: eventType, payload, ts: new Date().toISOString() };
         this.store.unshift(rec);
         if (this.store.length > MAX_IN_MEMORY) this.store.pop();
@@ -33,16 +33,16 @@ class EventJournalService {
         // If a worker is available, post to it for non-blocking batched persistence.
         try {
             if (this.worker) {
-                try { this.worker.postMessage({ action: 'append', record: rec }); } catch (e) { /* swallow */ }
+                try { this.worker.postMessage({ action: 'append', record: rec }); } catch { void 0; }
             } else {
                 // fallback: best-effort direct persist
                 (async () => {
                     try {
                         await supabase.from('event_journal').insert([{ id: rec.id, kind: rec.type, payload: JSON.stringify(rec.payload || {}), created_at: rec.ts }]);
-                    } catch (e) { /* ignore persistence errors */ }
+                    } catch { void 0; }
                 })();
             }
-        } catch (e) { /* swallow */ }
+        } catch { void 0; }
 
         return rec;
     }
@@ -64,7 +64,7 @@ class EventJournalService {
                         const rows = (data as any[]) || [];
                         for (const r of rows) {
                             let payload = r.payload;
-                            try { payload = typeof payload === 'string' ? JSON.parse(payload) : payload; } catch (e) {}
+                            try { payload = typeof payload === 'string' ? JSON.parse(payload) : payload; } catch { void 0; }
                             onRecord({ id: r.id, type: r.kind, payload, ts: r.created_at });
                         }
                         resolve({ count: rows.length });
@@ -77,17 +77,17 @@ class EventJournalService {
                 const m = ev.data as any;
                 if (!m || !m.action) return;
                 if (m.action === 'streamEvent') {
-                    try { onRecord(m.record); } catch (e) { /* swallow */ }
+                    try { onRecord(m.record); } catch { void 0; }
                 } else if (m.action === 'streamComplete') {
-                    this.worker?.removeEventListener('message', handler as any);
+                    this.worker?.removeEventListener('message', handler as EventListener);
                     resolve({ count: m.count || 0 });
                 } else if (m.action === 'streamError') {
-                    this.worker?.removeEventListener('message', handler as any);
+                    this.worker?.removeEventListener('message', handler as EventListener);
                     reject(new Error(m.message || 'streamError'));
                 }
             };
 
-            this.worker.addEventListener('message', handler as any);
+            this.worker.addEventListener('message', handler as EventListener);
             try {
                 this.worker.postMessage({ action: 'fetchOlderEvents', fromTs, batchSize });
             } catch (e) {

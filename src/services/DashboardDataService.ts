@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { aiPredictionService } from './AIPredictionService';
 import { supabase } from './supabaseClient';
 import idAdapter from '../utils/idAdapter';
@@ -13,7 +14,7 @@ export async function fetchForecastForAsset(selectedAsset: any) {
         const f = await aiPredictionService.forecastEtaBreakEven(numeric);
         result.forecast = f;
         result.residualStd = (f && typeof f.residualStd === 'number') ? f.residualStd : null;
-    } catch (e) {
+    } catch {
         // ignore forecast failure
     }
 
@@ -24,7 +25,7 @@ export async function fetchForecastForAsset(selectedAsset: any) {
         const histCount = Array.isArray(hist) ? hist.length : 0;
         result.sampleCount = histCount;
         const hasDec25 = (hist || []).some((p: any) => {
-            try { const d = new Date(p.t); return d.getUTCFullYear() === 2025 && d.getUTCMonth() === 11 && d.getUTCDate() === 25; } catch(e){return false}
+            try { const d = new Date(p.t); return d.getUTCFullYear() === 2025 && d.getUTCMonth() === 11 && d.getUTCDate() === 25; } catch { return false }
         });
         result.dec25Present = !!hasDec25;
 
@@ -55,7 +56,7 @@ export async function fetchForecastForAsset(selectedAsset: any) {
             const pfVal = z < 0 ? 1 - prob : prob;
             result.pf = Math.min(99.99, Math.max(0.01, pfVal * 100));
         }
-    } catch (e) {
+    } catch {
         // ignore cache errors
     }
 
@@ -72,7 +73,7 @@ export async function forecastExcludingDates(selectedAsset: any, excludeDates: s
             return await (aiPredictionService as any).forecastExcludingDates(numeric, excludeDates);
         }
         return null;
-    } catch (e) {
+    } catch {
         return null;
     }
 }
@@ -96,11 +97,11 @@ export function prefetchPredictiveAssets(selectedAsset: any) {
 
                 // Prefetch predictive forecast & telemetry cache for instant open
                 if (selectedAsset) await fetchForecastForAsset(selectedAsset);
-            } catch (e) {
+            } catch {
                 // noop — best-effort only
             }
         });
-    } catch (e) {
+    } catch {
         // noop
     }
 }
@@ -116,9 +117,9 @@ export function lazyHydratePhysicsSnapshots(delayMs = 2000, maxAssets = 3) {
                     try {
                         // best-effort: fetch forecast which will warm telemetry cache + any physics snapshots
                         await fetchForecastForAsset(a);
-                    } catch (e) { /* ignore per-asset errors */ }
+                    } catch { /* ignore per-asset errors */ }
                 }
-            } catch (e) { /* ignore */ }
+            } catch { /* ignore */ }
         }, delayMs);
-    } catch (e) { /* noop */ }
+    } catch { /* noop */ }
 }

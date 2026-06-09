@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export async function runBackfill(startDate: string, endDate: string) {
   // call RPC backfill_eta_aggregates

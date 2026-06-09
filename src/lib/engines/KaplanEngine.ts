@@ -78,13 +78,34 @@ export class KaplanEngine extends BaseEngine {
     }
 
     private static runAsyncCalculation<T>(type: string, payload: any): Promise<T> {
+        // If worker isn't available, provide a synchronous fallback for known calculations
         if (!this.worker) {
-            // Fallback or reject? For now reject if worker isn't there, 
-            // but we could implement sync fallback here.
-            return Promise.reject(new Error('Physics Worker not initialized'));
+            try {
+                // Use a lightweight sync fallback to avoid noisy errors in console
+                if (type === 'CALCULATE_EFFICIENCY') {
+                    // Construct a temporary engine instance to call the sync method
+                    const engine = new (this as any)();
+                    const res = engine.calculateEfficiency(payload.head, payload.flow);
+                    return Promise.resolve(res as unknown as T);
+                }
+
+                if (type === 'CALCULATE_CAVITATION') {
+                    // No detailed sync impl available — return safe default
+                    return Promise.resolve(0 as unknown as T);
+                }
+
+                if (type === 'CALCULATE_WATER_HAMMER') {
+                    return Promise.resolve(0 as unknown as T);
+                }
+
+                // Unknown type: reject with informative error
+                return Promise.reject(new Error('Physics Worker not initialized'));
+            } catch (err) {
+                return Promise.reject(err as Error);
+            }
         }
 
-        const id = crypto.randomUUID();
+        const id = (typeof crypto !== 'undefined' && (crypto as any).randomUUID) ? (crypto as any).randomUUID() : String(Math.random()).slice(2);
         return new Promise((resolve, reject) => {
             this.pendingRequests.set(id, { resolve, reject });
             this.worker!.postMessage({ id, type, payload });

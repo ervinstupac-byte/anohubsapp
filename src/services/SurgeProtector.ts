@@ -25,6 +25,7 @@ export class SurgeProtector {
         ratedHead: number
     ): ClosingLaw {
         // Allievi Characteristic (rho)
+        void ratedHead;
         // Safe time > 2L/a
         const criticalTime = (2 * penstockLength) / waveVelocity;
 

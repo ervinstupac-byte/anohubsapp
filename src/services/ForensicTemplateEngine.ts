@@ -22,7 +22,7 @@ export function applyCerebroBranding(doc: any, title: string) {
     doc.rect(0, 0, pageWidth, 40, 'F');
     doc.setTextColor(34, 211, 238);
     doc.setFontSize(22);
-    try { doc.setFont("Roboto", "bold"); } catch (e) { }
+    try { doc.setFont("Roboto", "bold"); } catch { void 0; }
     doc.text("CEREBRO AI", 15, 18);
     doc.setFontSize(8);
     doc.setTextColor(71, 85, 105);
@@ -34,11 +34,11 @@ export function applyCerebroBranding(doc: any, title: string) {
     doc.text("ISO IMS VERIFIED // 2024", 35, 32.5, { align: 'center' });
     doc.setTextColor(34, 211, 238);
     doc.setFontSize(7);
-    try { doc.setFont("Roboto", "bold"); } catch (e) { }
+    try { doc.setFont("Roboto", "bold"); } catch { void 0; }
     doc.text("DATABASE STRENGTH: 50 IEC 60041 Compliant Sources", 60, 32.5);
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(10);
-    try { doc.setFont("Roboto", "normal"); } catch (e) { }
+    try { doc.setFont("Roboto", "normal"); } catch { void 0; }
     doc.text(title.toUpperCase(), pageWidth - 15, 18, { align: 'right' });
     const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
     doc.setTextColor(234, 179, 8);
@@ -55,9 +55,9 @@ export function applyForensicFooter(doc: any) {
         doc.setPage(i);
         doc.setTextColor(234, 179, 8);
         doc.setFontSize(60);
-        try { doc.setGState(new (doc as any).GState({ opacity: 0.05 })); } catch (e) { }
+        try { doc.setGState(new (doc as any).GState({ opacity: 0.05 })); } catch { void 0; }
         doc.text("NC-9.0 ISO 9001:2015 INTEGRITY AUDIT", pageWidth / 2, pageHeight / 2, { align: 'center', angle: 45 });
-        try { doc.setGState(new (doc as any).GState({ opacity: 1 })); } catch (e) { }
+        try { doc.setGState(new (doc as any).GState({ opacity: 1 })); } catch { void 0; }
         doc.setDrawColor(234, 179, 8);
         doc.setLineWidth(0.1);
         doc.line(15, pageHeight - 20, pageWidth - 15, pageHeight - 20);
@@ -67,7 +67,7 @@ export function applyForensicFooter(doc: any) {
         doc.text(sig, 15, pageHeight - 15);
         doc.text(`PAGE ${i} OF ${pageCount}`, pageWidth - 15, pageHeight - 15, { align: 'right' });
         doc.setTextColor(234, 179, 8);
-        try { doc.setFont("Roboto", "bold"); } catch (e) { }
+        try { doc.setFont("Roboto", "bold"); } catch { void 0; }
         doc.text("ISO 9001/14001/45001 INTEGRATED SYSTEMS VERIFIED", pageWidth / 2, pageHeight - 10, { align: 'center' });
     }
 }
