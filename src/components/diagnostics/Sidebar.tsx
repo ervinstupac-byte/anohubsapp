@@ -213,6 +213,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
     const searchInputRef = useRef<HTMLInputElement>(null);
     const [isTurbinesExpanded, setIsTurbinesExpanded] = useState(true);
 
+    const overlaysDisabled = typeof window !== 'undefined' && (document.body?.getAttribute('data-anohub-overlays-disabled') === 'true');
+
     const menuItems = useMemo(() => [
         { id: 'home', title: t('sidebar.modules.mission_control', 'Početna'), route: '/', icon: <Home className="w-4 h-4 text-cyan-600" /> },
         { id: 'logbook', title: t('sidebar.modules.logbook', 'Moj Logbook'), route: '/logbook', icon: <ClipboardList className="w-4 h-4 text-amber-600" /> },
@@ -281,6 +283,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         exit={{ x: -280, opacity: 0 }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
                         className={`fixed lg:relative left-0 top-0 bottom-0 h-full w-[280px] bg-slate-950 border-r border-slate-800 z-[100] flex flex-col overflow-hidden transition-transform lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                        style={overlaysDisabled ? { pointerEvents: 'none' as const } : undefined}
                     >
                         {/* HEADER */}
                         <div className="p-6 border-b border-slate-800 relative z-10 bg-slate-900">

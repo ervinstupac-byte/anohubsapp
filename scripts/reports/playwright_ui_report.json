@@ -1,0 +1,77 @@
+[
+  {
+    "target": "🇬🇧\nEN",
+    "skipped": true,
+    "reason": "not-visible-or-disabled",
+    "visible": false,
+    "enabled": false
+  },
+  {
+    "target": "Authenticate",
+    "success": true,
+    "dialogs": 0,
+    "modalSteps": []
+  },
+  {
+    "target": "👤\nContinue as Guest",
+    "skipped": true,
+    "reason": "not-visible-or-disabled",
+    "visible": false,
+    "enabled": false
+  },
+  {
+    "flow": "Asset Onboarding",
+    "triggered": false,
+    "reason": "not-found"
+  },
+  {
+    "flow": "Open Asset Onboarding",
+    "triggered": false,
+    "reason": "not-found"
+  },
+  {
+    "flow": "Add Asset",
+    "triggered": false,
+    "reason": "not-found"
+  },
+  {
+    "flow": "Logbook",
+    "triggered": false,
+    "reason": "not-found"
+  },
+  {
+    "flow": "ProblemDetection",
+    "triggered": false,
+    "reason": "not-found"
+  },
+  {
+    "flow": "Problem Detection",
+    "triggered": false,
+    "reason": "not-found"
+  },
+  {
+    "flow": "Alignment",
+    "triggered": false,
+    "reason": "not-found"
+  },
+  {
+    "flow": "Alignment Wizard",
+    "triggered": false,
+    "reason": "not-found"
+  },
+  {
+    "flow": "FleetView",
+    "triggered": false,
+    "reason": "not-found"
+  },
+  {
+    "flow": "Maintenance Logbook",
+    "triggered": false,
+    "reason": "not-found"
+  },
+  {
+    "flow": "Register New Asset",
+    "triggered": false,
+    "reason": "not-found"
+  }
+]

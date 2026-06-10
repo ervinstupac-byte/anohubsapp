@@ -26,6 +26,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     useEffect(() => {
         // Provjeri pravu sesiju SAMO ako nismo u guest modu
+        // Test hook: if tests set a localStorage flag, auto-sign-in as guest to ease E2E flows
+        try {
+            const autoGuest = localStorage.getItem('ANOHUB_AUTO_GUEST') === 'true';
+            if (autoGuest) {
+                const guestUser = {
+                    id: 'guest-auto-1',
+                    aud: 'authenticated',
+                    role: 'authenticated',
+                    email: 'guest@anohub.com',
+                    email_confirmed_at: new Date().toISOString(),
+                    phone: '',
+                    confirmed_at: new Date().toISOString(),
+                    last_sign_in_at: new Date().toISOString(),
+                    app_metadata: { provider: 'email', providers: ['email'] },
+                    user_metadata: { full_name: 'Auto Guest', role: 'ENGINEER' },
+                    identities: [],
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                } as User;
+                setIsGuest(true);
+                setUserRole('ENGINEER');
+                setUser(guestUser);
+                setLoading(false);
+                try { window.location.hash = '#/'; } catch(e) { /* noop */ }
+                logAction('AUTH_LOGIN', 'AutoGuest', 'SUCCESS', {});
+                return;
+            }
+        } catch (e) { /* ignore */ }
         if (!isGuest) {
             // Safety Timeout: if Supabase doesn't respond in 5s, continue as anonymous
             const timeout = setTimeout(() => {

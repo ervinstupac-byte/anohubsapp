@@ -187,7 +187,7 @@ const AppLayout: React.FC = () => {
     useRisk();
     useRiskCalculator();
     useAudit();
-    const { user } = useAuth();
+    const { user, signInAsGuest } = useAuth();
 
     const [isFeedbackVisible, setIsFeedbackVisible] = useState(false);
     const [showOnboarding, setShowOnboarding] = useState(false);
@@ -199,6 +199,38 @@ const AppLayout: React.FC = () => {
         const handleOpenAlignment = () => setIsAlignmentWizardOpen(true);
         window.addEventListener('openAlignmentWizard', handleOpenAlignment);
         return () => window.removeEventListener('openAlignmentWizard', handleOpenAlignment);
+    }, []);
+
+    // Testing helper: allow tests to disable overlays (onboarding, sidebars, modals)
+    useEffect(() => {
+        const disableOverlays = () => {
+            try {
+                setIsSidebarOpen(false);
+                setShowOnboarding(false);
+                setIsWizardOpen(false);
+                setIsAlignmentWizardOpen(false);
+                setIsMapOpen(false);
+                setIsPreviewOpen(false);
+                setIsFeedbackVisible(false);
+                try { document.body.setAttribute('data-anohub-overlays-disabled', 'true'); } catch (e) {}
+            } catch (e) {
+                // noop
+            }
+        };
+
+        const enableOverlays = () => {
+            try {
+                setIsSidebarOpen(window.innerWidth >= 1024);
+                try { document.body.removeAttribute('data-anohub-overlays-disabled'); } catch (e) {}
+            } catch (e) {}
+        };
+
+        window.addEventListener('ANOHUB_DISABLE_OVERLAYS', disableOverlays as any);
+        window.addEventListener('ANOHUB_ENABLE_OVERLAYS', enableOverlays as any);
+        return () => {
+            window.removeEventListener('ANOHUB_DISABLE_OVERLAYS', disableOverlays as any);
+            window.removeEventListener('ANOHUB_ENABLE_OVERLAYS', enableOverlays as any);
+        };
     }, []);
 
     const [isMapOpen, setIsMapOpen] = useState(false);
@@ -238,6 +270,19 @@ const AppLayout: React.FC = () => {
         const hasCompleted = localStorage.getItem('hasCompletedOnboarding') === 'true';
         if (!hasCompleted) setTimeout(() => setShowOnboarding(true), 0);
     }, []);
+
+    // Testing helper: allow tests to trigger guest sign-in
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const handler = (evt: Event) => {
+            try {
+                // default to ENGINEER role for tests
+                signInAsGuest && signInAsGuest('ENGINEER');
+            } catch (e) { /* noop */ }
+        };
+        window.addEventListener('ANOHUB_SIGNIN_GUEST', handler as any);
+        return () => window.removeEventListener('ANOHUB_SIGNIN_GUEST', handler as any);
+    }, [signInAsGuest]);
 
     useEffect(() => {
         try {

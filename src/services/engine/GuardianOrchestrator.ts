@@ -8,6 +8,8 @@ import TransformerOilGuardian from '../TransformerOilGuardian';
 import WicketGateKinematics from '../WicketGateKinematics';
 import OutageOptimizer from '../OutageOptimizer';
 import MaintenanceBequestReport from '../MaintenanceBequestReport';
+import { persistAuditRecord as dpPersistAuditRecord } from './DiagnosticPersister';
+import idAdapter from '../../utils/idAdapter';
 
 /**
  * GuardianOrchestrator
@@ -66,6 +68,68 @@ export async function runGuardians(diagnosis: any, latest: any, history: any[]) 
                 pfail['thrustBearing'] = 0.1;
             }
         } else pfail['thrustBearing'] = 0.05;
+
+        // Wicket Gate Kinematics
+        const wicketTelemetry = sm.wicketGateTelemetry || [];
+        if (wicketTelemetry && Array.isArray(wicketTelemetry) && wicketTelemetry.length > 0) {
+            try {
+                const wicket = new WicketGateKinematics();
+                let lastAction: any = null;
+
+                for (const s of wicketTelemetry) {
+                    lastAction = wicket.addMeasurement({
+                        timestamp: s.timestamp || new Date().toISOString(),
+                        servoCommandPct: Number(s.servoCommandPct || s.commandPct || 0),
+                        gateActualPct: typeof s.gateActualPct === 'number' ? Number(s.gateActualPct) : undefined,
+                        regulatingRingForceN: typeof s.regulatingRingForceN === 'number' ? Number(s.regulatingRingForceN) : undefined,
+                        dP_servoBar: typeof s.dP_servoBar === 'number' ? Number(s.dP_servoBar) : undefined
+                    });
+                }
+
+                if (lastAction) {
+                    const impact = wicket.getHealthImpactForAction(lastAction);
+                    // map impact to pfail estimate
+                    pfail['wicket'] = impact.overallDelta ? Math.abs(impact.overallDelta) / 100 : 0.02;
+
+                    // update diagnosis summary (mutating diagnosis passed in)
+                    if (diagnosis) {
+                        diagnosis.overallHealthScore = Math.max(0, Math.min(100, (diagnosis.overallHealthScore || 100) + (impact.overallDelta || 0)));
+                        if (!diagnosis.automatedActions) diagnosis.automatedActions = [];
+                        diagnosis.automatedActions.push({ type: 'GUARD', action: 'WICKET_KINEMATICS_GUARD', status: 'COMPLETED', details: impact.details });
+                    }
+
+                    // persist audit
+                    try {
+                        const numeric = idAdapter.toNumber(diagnosis?.assetId);
+                        const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : (diagnosis?.assetId || 'unknown');
+                        await dpPersistAuditRecord({
+                            asset_id: assetDbId,
+                            action_type: 'WICKET_KINEMATICS_DECISION',
+                            payload: { lastAction, impact },
+                            status: 'COMPLETED',
+                            source: 'GuardianOrchestrator'
+                        } as any);
+                    } catch (err) {
+                        // best-effort: do not break orchestrator
+                        // eslint-disable-next-line no-console
+                        console.error('Failed to persist WicketGateKinematics audit', err);
+                    }
+
+                    // map to operative actions
+                    if (lastAction.action === 'SHEAR_PIN_BROKEN') {
+                        diagnosis?.automatedActions.push({ type: 'OPERATIONAL', action: 'LIMIT_GATE_OPENING', status: 'PENDING', details: `Limit gate opening to ${impact.limitGateOpenPct}% due to shear pin broken.` });
+                    } else if (lastAction.action === 'BACKLASH_CRITICAL') {
+                        diagnosis?.automatedActions.push({ type: 'OPERATIONAL', action: 'LIMIT_GATE_OPENING', status: 'PENDING', details: `Reduce max gate opening to ${impact.limitGateOpenPct}% (backlash critical).` });
+                    } else if (lastAction.action === 'LUBRICATION_DEFICIENCY') {
+                        diagnosis?.automatedActions.push({ type: 'MAINTENANCE', action: 'SCHEDULE_LUBRICATION', status: 'PENDING', details: lastAction.reason });
+                    }
+                }
+            } catch (e) {
+                // eslint-disable-next-line no-console
+                console.error('WicketGateKinematics orchestrator error:', e);
+                pfail['wicket'] = 0.1;
+            }
+        } else pfail['wicket'] = 0.05;
 
         // Additional guardians omitted for brevity; preserve existing logic in MasterIntelligenceEngine if needed
 

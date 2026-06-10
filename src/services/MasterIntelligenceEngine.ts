@@ -1069,56 +1069,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
             console.error('ThrustBearingMaster integration error:', e);
         }
 
-        // ACTION 6: Wicket Gate Kinematics integration
-        try {
-            const wicketTelemetry = (diagnosis.specialMeasurements as any)?.wicketGateTelemetry;
-            if (wicketTelemetry && Array.isArray(wicketTelemetry) && wicketTelemetry.length > 0) {
-                const wicket = new WicketGateKinematics();
-                let lastAction: any = null;
-
-                for (const s of wicketTelemetry) {
-                    lastAction = wicket.addMeasurement({
-                        timestamp: s.timestamp || new Date().toISOString(),
-                        servoCommandPct: Number(s.servoCommandPct || s.commandPct || 0),
-                        gateActualPct: typeof s.gateActualPct === 'number' ? Number(s.gateActualPct) : undefined,
-                        regulatingRingForceN: typeof s.regulatingRingForceN === 'number' ? Number(s.regulatingRingForceN) : undefined,
-                        dP_servoBar: typeof s.dP_servoBar === 'number' ? Number(s.dP_servoBar) : undefined
-                    });
-                }
-
-                if (lastAction) {
-                    const impact = wicket.getHealthImpactForAction(lastAction);
-                    diagnosis.overallHealthScore = Math.max(0, Math.min(100, diagnosis.overallHealthScore + impact.overallDelta));
-                    diagnosis.automatedActions.push({ type: 'GUARD', action: 'WICKET_KINEMATICS_GUARD', status: 'COMPLETED', details: impact.details });
-
-                    // persist audit
-                    try {
-                        const numeric = idAdapter.toNumber(asset.id);
-                        const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : (asset.id || 'unknown');
-                        await dpPersistAuditRecord({
-                            asset_id: assetDbId,
-                            action_type: 'WICKET_KINEMATICS_DECISION',
-                            payload: { lastAction, impact },
-                            status: 'COMPLETED',
-                            source: 'MasterIntelligenceEngine'
-                        } as any);
-                    } catch (err) {
-                        console.error('Failed to persist WicketGateKinematics audit', err);
-                    }
-
-                    // map to operative actions
-                    if (lastAction.action === 'SHEAR_PIN_BROKEN') {
-                        diagnosis.automatedActions.push({ type: 'OPERATIONAL', action: 'LIMIT_GATE_OPENING', status: 'PENDING', details: `Limit gate opening to ${impact.limitGateOpenPct}% due to shear pin broken.` });
-                    } else if (lastAction.action === 'BACKLASH_CRITICAL') {
-                        diagnosis.automatedActions.push({ type: 'OPERATIONAL', action: 'LIMIT_GATE_OPENING', status: 'PENDING', details: `Reduce max gate opening to ${impact.limitGateOpenPct}% (backlash critical).` });
-                    } else if (lastAction.action === 'LUBRICATION_DEFICIENCY') {
-                        diagnosis.automatedActions.push({ type: 'MAINTENANCE', action: 'SCHEDULE_LUBRICATION', status: 'PENDING', details: lastAction.reason });
-                    }
-                }
-            }
-        } catch (e) {
-            console.error('WicketGateKinematics integration error:', e);
-        }
+        // WicketGateKinematics: logic migrated to `GuardianOrchestrator.runGuardians`
 
         // ACTION 7: Governor HPU Guardian integration
         try {
