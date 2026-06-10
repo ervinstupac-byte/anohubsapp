@@ -22,6 +22,8 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
 
     const [currentStep, setCurrentStep] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [validationError, setValidationError] = useState<string | null>(null);
+    const [wasOpen, setWasOpen] = useState(false);
 
     // Form Data
     const [specificType, setSpecificType] = useState<string>('Kaplan');
@@ -34,6 +36,18 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
         criticalKpi: 'Availability',
         specs: {} as any
     });
+
+    // Reset when opening/closing
+    React.useEffect(() => {
+        if (isOpen && !wasOpen) {
+            setWasOpen(true);
+            setValidationError(null);
+        }
+        if (!isOpen && wasOpen) {
+            setWasOpen(false);
+            setValidationError(null);
+        }
+    }, [isOpen, wasOpen]);
 
     if (!isOpen) return null;
 
@@ -52,12 +66,20 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
     const handleSubmit = async () => {
         const capacityValue = parseFloat(formData.capacity);
 
-        if (!formData.name || !formData.location || isNaN(capacityValue) || capacityValue <= 0) {
-            // Basic validation for final submit
-            // Ideally we validate step by step, but this is a fail-safe
+        if (!formData.name) {
+            setValidationError('Asset name is required!');
+            return;
+        }
+        if (!formData.location) {
+            setValidationError('Location is required!');
+            return;
+        }
+        if (isNaN(capacityValue) || capacityValue <= 0) {
+            setValidationError('Please enter a valid capacity greater than 0!');
             return;
         }
 
+        setValidationError(null);
         setIsSubmitting(true);
         try {
             await addAsset({
@@ -67,11 +89,24 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                 coordinates: [45.0 + Math.random(), 16.0 + Math.random()], // Simulation
                 capacity: capacityValue,
                 status: 'Operational',
+                turbine_type: specificType.toUpperCase() as any,
                 specs: formData.specs
             });
 
             showToast(t('assetWizard.success'), 'success');
             onClose();
+            // Reset form
+            setCurrentStep(0);
+            setFormData({
+                name: '',
+                type: 'HPP' as Asset['type'],
+                location: '',
+                capacity: '',
+                units: '',
+                criticalKpi: 'Availability',
+                specs: {} as any
+            });
+            setSpecificType('Kaplan');
         } catch (error) {
             console.error(error);
             showToast(t('assetPicker.failToast'), 'error');
@@ -313,6 +348,11 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                 <div className="min-h-[250px]">
                     {renderStepContent()}
                 </div>
+                {validationError && (
+                    <div className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                        <p className="text-sm text-red-400 font-bold">{validationError}</p>
+                    </div>
+                )}
 
                 {/* FOOTER */}
                 <div className="flex justify-between gap-4 mt-6 pt-6 border-t border-white/5">

@@ -43,6 +43,17 @@ import ExpertFeedbackLoop from '../../services/ExpertFeedbackLoop';
 import SovereignExpertTranslator from '../../services/SovereignExpertTranslator';
 import SovereignAuditAdapter from '../../services/SovereignAuditAdapter';
 import { Crown, Brain, Target, Settings, ChevronRight, Shield } from 'lucide-react';
+import { ExecutiveSummary } from './ExecutiveSummary';
+import { ManagementSummary } from './ManagementSummary';
+import { FleetOverview } from './FleetOverview';
+import { SovereignPulse } from './SovereignPulse';
+import { HydroForecaster } from './HydroForecaster';
+import { SovereignView } from './SovereignView';
+import { CenturyROIChart } from './CenturyROIChart';
+import { ActionCard, LiveAnalytics, SystemAlerts } from './anohub/AnalyticsPanel';
+import { MetricCard } from './anohub/MetricCard';
+import { SystemHealthCard, RiskStatusCard } from './anohub/StatusCards';
+import { ThermalCard, ShaftLiftCard, LabyrinthCard } from './anohub/VisualCards';
 import { useProtocolHistoryStore, historyToSparklineMarkers } from '../../stores/ProtocolHistoryStore';
 import { aiPredictionService } from '../../services/AIPredictionService';
 import { supabase } from '../../services/supabaseClient';
@@ -76,6 +87,47 @@ export const ExecutiveDashboard: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const threeContainerRef = useRef<HTMLDivElement>(null);
+
+    // Mock Hydro Forecast data
+    const hydroForecasts = useMemo(() => {
+        const now = Date.now();
+        return Array.from({ length: 24 }, (_, i) => ({
+            timestamp: now + i * 3600000,
+            predictedInflow: 40 + Math.sin(i * 0.3) * 20 + Math.random() * 10,
+            actualInflow: i < 12 ? 40 + Math.sin(i * 0.3) * 20 + Math.random() * 5 : undefined,
+            confidence: 90 - Math.abs(i - 12) * 2
+        }));
+    }, []);
+
+    const upstreamStations = [
+        { name: 'Alpine Gauge A', distance: 12, currentFlow: 25, rainIntensity: 3 },
+        { name: 'Alpine Gauge B', distance: 8, currentFlow: 30, rainIntensity: 8 },
+        { name: 'Valley Sensor', distance: 22, currentFlow: 18, rainIntensity: 1 },
+        { name: 'Mountain Stream', distance: 5, currentFlow: 45, rainIntensity: 12 }
+    ];
+
+    // Mock Sovereign View data
+    const sovereignData = {
+        strategy: {
+            mode: 'EFFICIENCY_FIRST',
+            rationale: 'Market conditions favor maximizing output with minimal turbine stress'
+        },
+        pulse: {
+            index: 92,
+            status: 'OPTIMAL',
+            risks: ['Minor bearing vibration trending up']
+        },
+        hierarchy: {
+            winner: 'FrancisOptimizer',
+            overrides: 0
+        },
+        indices: {
+            phy: 88,
+            fin: 91,
+            eco: 76,
+            cyb: 95
+        }
+    };
 
     const {
         financials,
@@ -660,6 +712,68 @@ export const ExecutiveDashboard: React.FC = () => {
                     </div>
 
                     <HeritagePrecisionBanner currentAlignment={currentAlignment} onClick={() => navigate(getFrancisPath(ROUTES.FRANCIS.SOP.ALIGNMENT))} />
+
+                    {/* Executive Summary Panel */}
+                    <ExecutiveSummary />
+                    
+                    {/* AnoHub Dashboard Hub */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <MetricCard 
+                            title="Total Assets" 
+                            value="12" 
+                            unit="" 
+                            subtitle="Operational Turbines" 
+                        />
+                        <MetricCard 
+                            title="Risk Score" 
+                            value="18.5" 
+                            unit="%" 
+                            subtitle="System Criticality"
+                            statusColor="text-amber-400"
+                        />
+                        <SystemHealthCard />
+                        <RiskStatusCard />
+                    </div>
+                    
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
+                        <div className="lg:col-span-2">
+                            <LiveAnalytics />
+                        </div>
+                        <SystemAlerts />
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                        <ThermalCard />
+                        <ShaftLiftCard />
+                        <LabyrinthCard />
+                    </div>
+                    
+                    <div className="mt-4">
+                        <ActionCard />
+                    </div>
+                    
+                    {/* Management Summary Panel */}
+                    <ManagementSummary />
+                    
+                    {/* Fleet Overview Panel */}
+                    <FleetOverview />
+                    
+                    {/* Sovereign Pulse Panel */}
+                    <SovereignPulse />
+                    
+                    {/* Hydro Forecaster Panel */}
+                    <HydroForecaster 
+                        forecasts={hydroForecasts} 
+                        currentReservoirLevel={75.5} 
+                        reservoirCapacity={10000000} 
+                        upstreamStations={upstreamStations} 
+                    />
+                    
+                    {/* Sovereign View Panel */}
+                    <SovereignView data={sovereignData} />
+                    
+                    {/* Century ROI Panel */}
+                    <CenturyROIChart />
                     
                     {/* Actionable Recommendations Panel */}
                     {wisdomReport && wisdomReport.findings && wisdomReport.findings.length > 0 && (

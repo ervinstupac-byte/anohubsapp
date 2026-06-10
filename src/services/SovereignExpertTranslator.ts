@@ -1,5 +1,6 @@
 import SensorIntegritySentinel, { IntegrityResult } from './SensorIntegritySentinel';
-import GridStabilityGuardian, { InertiaAction, VCurveOutput } from './GridStabilityGuardian';
+export type InertiaAction = { triggered: boolean; dfdt?: number; durationSec?: number };
+export type VCurveOutput = { excitationPct: number; reactiveSupportMVar: number; note?: string };
 import ExpertFeedbackLoop from './ExpertFeedbackLoop';
 import { SovereignMemory } from './SovereignMemory';
 import Architect from './SovereignArchitectReflector';

@@ -9,11 +9,12 @@ import {
 } from 'recharts';
 import { 
     FileText, Clipboard, Settings, Calendar, User, 
-    AlertTriangle, Shield, CheckCircle, Download, ListFilter, Trash2, Activity 
+    AlertTriangle, Shield, CheckCircle, Download, ListFilter, Trash2, Activity, Play 
 } from 'lucide-react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { ThresholdResolver } from '../services/ThresholdResolver';
 import { supabase } from '../services/supabaseClient';
+import { AdversarialSimulator } from '../services/AdversarialSimulator';
 
 interface LogbookEntry {
     id: string;
@@ -76,6 +77,10 @@ export const DigitalLogbook: React.FC = () => {
     const [filterTurbine, setFilterTurbine] = useState('ALL');
     const [filterType, setFilterType] = useState('ALL');
     const [saveStatus, setSaveStatus] = useState<{ type: 'success' | 'error' | null; msg: string }>({ type: null, msg: '' });
+
+    // Red Team Simulation states
+    const [simReport, setSimReport] = useState<string | null>(null);
+    const [isSimulating, setIsSimulating] = useState(false);
 
     // Active turbine helper
     const activeTurbine = useMemo(() => {
@@ -362,6 +367,27 @@ export const DigitalLogbook: React.FC = () => {
             localStorage.removeItem('anohub_local_logbooks');
             loadLogs();
         }
+    };
+
+    // Trigger Red Team Simulation
+    const handleRedTeamSim = async () => {
+        setIsSimulating(true);
+        setSimReport(null);
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate AI think time
+        
+        // Capture console output of the simulation
+        const originalLog = console.log;
+        let capturedOutput = '';
+        console.log = (msg: string) => {
+            capturedOutput += msg + '\n';
+        };
+        
+        AdversarialSimulator.simulateScenario('MARKET_COLLAPSE');
+        const report = AdversarialSimulator.generateRedTeamReport();
+        
+        console.log = originalLog;
+        setSimReport(report);
+        setIsSimulating(false);
     };
 
     return (
@@ -796,7 +822,43 @@ export const DigitalLogbook: React.FC = () => {
                             )}
                         </div>
                     </div>
+
+                    {/* RED TEAM ADVERSARIAL SIMULATOR PANEL */}
+                    <GlassCard className="p-5 border-red-500/20 bg-red-950/10 mt-8">
+                        <h2 className="text-xs font-black uppercase tracking-widest text-red-400 font-mono mb-4 flex items-center gap-2">
+                            <Shield className="w-3.5 h-3.5" />
+                            Adversarial Stress Test (Red Team)
+                        </h2>
+                        <p className="text-[10px] text-slate-400 font-mono mb-4">
+                            Simulirajte ekstremne "Black Swan" događaje kako biste testirali anti-fragilnost sistema (npr. Total Market Collapse, Cyber Napad).
+                        </p>
+                        
+                        <button
+                            onClick={handleRedTeamSim}
+                            disabled={isSimulating}
+                            className="w-full py-2 bg-red-600/20 hover:bg-red-600/40 border border-red-500/30 text-red-300 font-bold uppercase tracking-wider font-mono text-xs rounded-lg transition-all flex items-center justify-center gap-2"
+                        >
+                            {isSimulating ? (
+                                <>
+                                    <div className="w-3.5 h-3.5 border-2 border-red-300/30 border-t-red-300 rounded-full animate-spin" />
+                                    Generisanje simulacije...
+                                </>
+                            ) : (
+                                <>
+                                    <Play className="w-3.5 h-3.5" />
+                                    Pokreni "Market Collapse"
+                                </>
+                            )}
+                        </button>
+
+                        {simReport && (
+                            <div className="mt-4 p-3 bg-black/60 border border-red-500/20 rounded-lg text-[9px] text-red-200 font-mono whitespace-pre-wrap overflow-x-auto max-h-[300px] overflow-y-auto custom-scrollbar">
+                                {simReport}
+                            </div>
+                        )}
+                    </GlassCard>
                 </div>
+
 
             </div>
 

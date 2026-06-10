@@ -10,6 +10,8 @@ import {
     Cpu, AlertTriangle, CheckCircle, Activity, ShieldAlert,
     TrendingUp, ShieldCheck, Gem, ChevronRight, Info, Play, Plus, BookOpen, ExternalLink, Calendar, Wrench, RefreshCw, AlertCircle, Terminal, Eye
 } from 'lucide-react';
+import { DiagnosticRCA } from '../components/automation/DiagnosticRCA';
+import { PredictiveProcurementService } from '../services/PredictiveProcurementService';
 
 export const ProblemDetector: React.FC = () => {
     const { assets, selectedAsset, logActivity } = useAssetContext();
@@ -260,6 +262,8 @@ export const ProblemDetector: React.FC = () => {
                 hoopStressMPa: symptoms.vibration ? 218.0 : 125.0,
                 flowRateRateOfChange: symptoms.efficiency ? -1.2 : 0.05,
                 acoustic: {
+                    spectrum: Array.from({ length: 1024 }, () => Math.random() * 0.5),
+                    rmsLevel: symptoms.vibration ? 5.8 : 1.4,
                     cavitationLevel: symptoms.acoustic ? 86.5 : 12.4, 
                     severity: symptoms.acoustic ? 'CRITICAL' : 'NOMINAL',
                     type: symptoms.acoustic ? 'Cavitation' : 'Nominal',
@@ -306,10 +310,25 @@ export const ProblemDetector: React.FC = () => {
                 `Kreiran hitni Radni Nalog (Work Order) za agregat ${activeTurbine.name}. Detektovani problemi: ${criticalIssues.join(', ')}`
             );
 
-            setStatusMsg({ 
-                type: 'success', 
-                msg: `Radni Nalog (WO-${Math.floor(Math.random() * 9000) + 1000}) uspješno kreiran u CMMS sistemu i upisan u Golden Thread dnevnik.` 
-            });
+            // Trigger Predictive Procurement Service check
+            const rulDays = diagnosis.rulHours ? Math.floor(diagnosis.rulHours / 24) : 90;
+            let componentId = 'GENERIC-PART';
+            if (symptoms.vibration) componentId = 'SERVO-BLADE-ACTUATOR';
+            if (symptoms.acoustic) componentId = 'RUNNER-BUCKET';
+            
+            const req = PredictiveProcurementService.checkComponentProcurement(componentId, rulDays, String(activeTurbine.id));
+            
+            if (req && req.urgency === 'CRITICAL') {
+                setStatusMsg({ 
+                    type: 'error', 
+                    msg: `Radni Nalog kreiran (WO-${Math.floor(Math.random() * 9000) + 1000}). UPOZORENJE LOGISTIKE: ${req.reason}` 
+                });
+            } else {
+                setStatusMsg({ 
+                    type: 'success', 
+                    msg: `Radni Nalog (WO-${Math.floor(Math.random() * 9000) + 1000}) uspješno kreiran u CMMS sistemu i upisan u Golden Thread dnevnik.` 
+                });
+            }
         } catch (err: any) {
             console.error('Failed to log work order activity:', err);
             setStatusMsg({ type: 'success', msg: `Radni Nalog kreiran (Upozorenje: Golden Thread logovanje nedostupno).` });
@@ -794,6 +813,17 @@ export const ProblemDetector: React.FC = () => {
                                             )}
                                         </div>
                                     </div>
+
+                                    {/* Diagnostic RCA Section */}
+                                    {diagnosis && (
+                                        <div className="mt-6">
+                                            <h4 className="text-[10px] font-black uppercase tracking-wider text-slate-400 font-mono flex items-center gap-2 mb-4">
+                                                <Activity className="w-3.5 h-3.5 text-cyan-400" />
+                                                Root Cause Analysis (RCA)
+                                            </h4>
+                                            <DiagnosticRCA />
+                                        </div>
+                                    )}
                                 </GlassCard>
 
                                 {/* Service Notes Findings */}

@@ -99,12 +99,13 @@ for (const file of allFiles) {
 
 // Okay, let's reset and do it properly:
 const properEntryPoints = new Set<string>([
-  path.resolve(srcDir, 'main.tsx'),
-  path.resolve(srcDir, 'App.tsx'),
-  path.resolve(srcDir, 'vite-env.d.ts'),
-  path.resolve(srcDir, 'setupTests.ts'),
-  path.resolve(srcDir, 'routes/FrancisRouter.tsx'),
-  path.resolve(srcDir, 'routes/MaintenanceRouter.tsx'),
+    path.resolve(srcDir, 'main.tsx'),
+    path.resolve(srcDir, 'App.tsx'),
+    path.resolve(srcDir, 'vite-env.d.ts'),
+    path.resolve(srcDir, 'setupTests.ts'),
+    path.resolve(srcDir, 'routes/FrancisRouter.tsx'),
+    path.resolve(srcDir, 'routes/MaintenanceRouter.tsx'),
+    path.resolve(srcDir, 'routes/PeltonRouter.tsx'),
 ]);
 
 // Now, let's collect all files reachable from entry points via imports
@@ -133,6 +134,11 @@ while (queue.length > 0) {
 
 const unusedFilesProper = allFiles.filter(f => !reachableFiles.has(f));
 const relativeUnused = unusedFilesProper.map(f => path.relative(process.cwd(), f));
+
+const outputPath = path.resolve(process.cwd(), 'unused-files.json');
+fs.writeFileSync(outputPath, JSON.stringify(relativeUnused, null, 2));
+
 console.log('Unused files (not reachable from entry points):');
 console.log(JSON.stringify(relativeUnused, null, 2));
 console.log('\nCount of unused files:', relativeUnused.length);
+console.log('\nResults saved to:', outputPath);

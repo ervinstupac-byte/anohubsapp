@@ -10,6 +10,11 @@ export const ROUTES = {
         PELTON: 'pelton',
         KAPLAN: 'kaplan',
     },
+    PELTON: {
+        ROOT: 'pelton',
+        VERTICAL: 'vertical',
+        HORIZONTAL: 'horizontal',
+    },
     PREDICTIVE_INTELLIGENCE: 'predictive-intelligence',
     LABS: {
         ROOT: 'lab',

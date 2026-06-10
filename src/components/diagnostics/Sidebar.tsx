@@ -7,7 +7,7 @@ import {
     ChevronDown, ChevronRight, Plus, Search, X,
     FileText, Shield, Settings, Zap, BookOpen, Target,
     AlertTriangle, Cpu, Gauge, Map, ChevronLeft,
-    Home, ClipboardList, Wrench, User
+    Home, ClipboardList, Wrench, User, Activity
 } from 'lucide-react';
 import { FleetOverview } from './FleetOverview.tsx';
 import { ErrorBoundary } from '../ErrorBoundary.tsx';
@@ -261,8 +261,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
         }
     }, [searchQuery, menuItems]);
 
-    const industrialGradient = "bg-gradient-to-br from-[#f1f2f6] via-[#ced6e0] to-[#747d8c]";
-
     return (
         <AnimatePresence>
             {isOpen && (
@@ -282,40 +280,36 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         animate={{ x: 0, opacity: 1 }}
                         exit={{ x: -280, opacity: 0 }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className={`fixed lg:relative left-0 top-0 bottom-0 h-full w-[280px] ${industrialGradient} border-r border-[#2f3542]/40 z-[100] flex flex-col shadow-[12px_0_32px_rgba(0,0,0,0.5)] overflow-hidden transition-transform lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                        className={`fixed lg:relative left-0 top-0 bottom-0 h-full w-[280px] bg-slate-950 border-r border-slate-800 z-[100] flex flex-col overflow-hidden transition-transform lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
                     >
-                        {/* BRUSHED METAL TEXTURE */}
-                        <div className="absolute inset-0 opacity-40 bg-[url('https://www.transparenttextures.com/patterns/brushed-alum.png')] pointer-events-none mix-blend-overlay" />
-
-                        {/* EDGE ACCENTS */}
-                        <div className="absolute inset-y-0 left-0 w-[2px] bg-white/40 pointer-events-none" />
-                        <div className="absolute inset-y-0 right-0 w-[1px] bg-black/20 pointer-events-none" />
-
                         {/* HEADER */}
-                        <div className="p-6 border-b border-black/10 relative z-10 bg-black/5">
+                        <div className="p-6 border-b border-slate-800 relative z-10 bg-slate-900">
                             <div className="flex justify-between items-start mb-4">
-                                <div>
-                                    <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">COMMAND CENTER</h2>
-                                    <div className="text-sm font-black text-slate-900 tracking-tighter flex items-center gap-2">
-                                        <div className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_12px_rgba(6,182,212,0.8)] animate-pulse" />
-                                        ANOHUB NAV
+                                <div 
+                                    className="cursor-pointer hover:opacity-80 transition-opacity"
+                                    onClick={() => handleNavigate('/', 'Home')}
+                                >
+                                    <h2 className="text-[10px] font-semibold text-slate-500 uppercase tracking-[0.2em] mb-1">ANOHUB</h2>
+                                    <div className="text-sm font-semibold text-slate-200 tracking-tighter flex items-center gap-2">
+                                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                        ONLINE
                                     </div>
                                 </div>
-                                <button onClick={onClose} className="p-2 text-slate-600 hover:text-black transition-colors" title="Collapse sidebar">
+                                <button onClick={onClose} className="p-2 text-slate-500 hover:text-slate-200 transition-colors" title="Collapse sidebar">
                                     <ChevronLeft className="w-5 h-5" />
                                 </button>
                             </div>
 
                             {/* SEARCH */}
-                            <div className="relative flex items-center bg-black/5 rounded-lg border border-white/10 shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] px-3 py-2 transition-all focus-within:border-cyan-500/50">
+                            <div className="relative flex items-center bg-slate-900 rounded border border-slate-700 px-3 py-2 transition-all focus-within:border-slate-600">
                                 <Search className="w-4 h-4 text-slate-500" />
                                 <input
                                     ref={searchInputRef}
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="PRETRAGA..."
-                                    className="bg-transparent border-none outline-none ml-2 text-[10px] font-mono text-slate-800 placeholder:text-slate-400 w-full"
+                                    placeholder="Search..."
+                                    className="bg-transparent border-none outline-none ml-2 text-[10px] font-mono text-slate-200 placeholder:text-slate-500 w-full"
                                 />
                             </div>
                         </div>
@@ -328,15 +322,56 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                 onRegisterAsset={onRegisterAsset}
                             />
 
-                            <div className="p-3 space-y-1 bg-black/5">
+                            <div className="p-3 space-y-1 bg-slate-950">
                                 {/* Početna */}
                                 {isVisible('home') && (
                                     <button
                                         onClick={() => handleNavigate('/', 'Početna')}
-                                        className={`w-full text-left px-4 py-2.5 rounded-lg text-[10px] font-mono font-black uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/' ? 'bg-white/40 text-black font-black shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                        className={`w-full text-left px-4 py-2.5 rounded text-[10px] font-mono font-semibold uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/' ? 'bg-slate-800 text-slate-50 border border-slate-700' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'}`}
                                     >
-                                        <Home className="w-4 h-4 text-cyan-600" />
+                                        <Home className="w-4 h-4 text-slate-400" />
                                         <span>{menuItems[0].title}</span>
+                                    </button>
+                                )}
+
+                                {/* Management Summary */}
+                                {isVisible('home') && (
+                                    <button
+                                        onClick={() => handleNavigate('/management-summary', 'Management Summary')}
+                                        className={`w-full text-left px-4 py-2.5 rounded text-[10px] font-mono font-semibold uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/management-summary' ? 'bg-slate-800 text-slate-50 border border-slate-700' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'}`}
+                                    >
+                                        <Target className="w-4 h-4 text-slate-400" />
+                                        <span>Management Summary</span>
+                                    </button>
+                                )}
+                                {/* Strategic Planning Dashboard */}
+                                {isVisible('home') && (
+                                    <button
+                                        onClick={() => handleNavigate('/strategic-planning', 'Strategic Planning')}
+                                        className={`w-full text-left px-4 py-2.5 rounded text-[10px] font-mono font-semibold uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/strategic-planning' ? 'bg-slate-800 text-slate-50 border border-slate-700' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'}`}
+                                    >
+                                        <Activity className="w-4 h-4 text-slate-400" />
+                                        <span>Strategic Planning</span>
+                                    </button>
+                                )}
+                                {/* Strategic Decision Lab */}
+                                {isVisible('home') && (
+                                    <button
+                                        onClick={() => handleNavigate('/strategic-decision-lab', 'Strategic Decision Lab')}
+                                        className={`w-full text-left px-4 py-2.5 rounded text-[10px] font-mono font-semibold uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/strategic-decision-lab' ? 'bg-slate-800 text-slate-50 border border-slate-700' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'}`}
+                                    >
+                                        <Activity className="w-4 h-4 text-slate-400" />
+                                        <span>Strategic Decision Lab</span>
+                                    </button>
+                                )}
+                                {/* Long Term Forecast Lab */}
+                                {isVisible('home') && (
+                                    <button
+                                        onClick={() => handleNavigate('/long-term-forecast-lab', 'Long Term Forecast Lab')}
+                                        className={`w-full text-left px-4 py-2.5 rounded text-[10px] font-mono font-semibold uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/long-term-forecast-lab' ? 'bg-slate-800 text-slate-50 border border-slate-700' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'}`}
+                                    >
+                                        <Activity className="w-4 h-4 text-slate-400" />
+                                        <span>Long Term Forecast Lab</span>
                                     </button>
                                 )}
 
@@ -344,9 +379,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                 {isVisible('logbook') && (
                                     <button
                                         onClick={() => handleNavigate('/logbook', 'Moj Logbook')}
-                                        className={`w-full text-left px-4 py-2.5 rounded-lg text-[10px] font-mono font-black uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/logbook' ? 'bg-white/40 text-black font-black shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                        className={`w-full text-left px-4 py-2.5 rounded text-[10px] font-mono font-semibold uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/logbook' ? 'bg-slate-800 text-slate-50 border border-slate-700' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'}`}
                                     >
-                                        <ClipboardList className="w-4 h-4 text-amber-600" />
+                                        <ClipboardList className="w-4 h-4 text-slate-400" />
                                         <span>{menuItems[1].title}</span>
                                     </button>
                                 )}
@@ -355,36 +390,36 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                 {isVisible('problems') && (
                                     <button
                                         onClick={() => handleNavigate('/problems', 'Detekcija problema')}
-                                        className={`w-full text-left px-4 py-2.5 rounded-lg text-[10px] font-mono font-black uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/problems' ? 'bg-white/40 text-black font-black shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                        className={`w-full text-left px-4 py-2.5 rounded text-[10px] font-mono font-semibold uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/problems' ? 'bg-slate-800 text-slate-50 border border-slate-700' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'}`}
                                     >
-                                        <Cpu className="w-4 h-4 text-red-500" />
+                                        <Cpu className="w-4 h-4 text-slate-400" />
                                         <span>{menuItems[2].title}</span>
                                     </button>
                                 )}
 
                                 {/* Turbine section */}
                                 {(isVisible('francis') || isVisible('pelton') || isVisible('kaplan')) && (
-                                    <div className="border-t border-black/5 pt-2 mt-2">
+                                    <div className="border-t border-slate-800 pt-2 mt-2">
                                         <button
                                             onClick={() => setIsTurbinesExpanded(!isTurbinesExpanded)}
-                                            className="w-full text-left px-4 py-2 flex items-center justify-between text-[10px] font-mono font-black uppercase tracking-widest text-slate-700 hover:text-black transition-all"
+                                            className="w-full text-left px-4 py-2 flex items-center justify-between text-[10px] font-mono font-semibold uppercase tracking-widest text-slate-400 hover:text-slate-200 transition-all"
                                         >
                                             <div className="flex items-center gap-3">
-                                                <Settings className="w-4 h-4 text-slate-600 animate-gear" />
+                                                <Settings className="w-4 h-4 text-slate-400" />
                                                 <span>Turbine</span>
                                             </div>
                                             {isTurbinesExpanded ? <ChevronDown className="w-4 h-4 text-slate-500" /> : <ChevronRight className="w-4 h-4 text-slate-500" />}
                                         </button>
 
                                         {isTurbinesExpanded && (
-                                            <div className="pl-6 pr-2 py-1 space-y-0.5 mt-1 bg-black/5 rounded-lg">
+                                            <div className="pl-6 pr-2 py-1 space-y-0.5 mt-1 bg-slate-900 rounded">
                                                 {/* Francis */}
                                                 {isVisible('francis') && (
                                                     <button
                                                         onClick={() => handleNavigate('/turbines/francis', 'Francis Hub')}
-                                                        className={`w-full text-left px-3 py-2 rounded text-[10px] font-mono flex items-center gap-3 transition-all ${location.pathname.startsWith('/francis') || location.pathname === '/turbines/francis' || location.pathname === '/turbines' ? 'text-black font-black bg-white/40 shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                                        className={`w-full text-left px-3 py-2 rounded text-[10px] font-mono flex items-center gap-3 transition-all ${location.pathname.startsWith('/francis') || location.pathname === '/turbines/francis' || location.pathname === '/turbines' ? 'text-slate-50 bg-slate-800 border border-slate-700' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'}`}
                                                     >
-                                                        <span>🌊</span>
+                                                        <span className="text-sm font-semibold text-slate-300">F</span>
                                                         <span>Francis</span>
                                                     </button>
                                                 )}
@@ -393,9 +428,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                                 {isVisible('pelton') && (
                                                     <button
                                                         onClick={() => handleNavigate('/turbines/pelton', 'Pelton Hub')}
-                                                        className={`w-full text-left px-3 py-2 rounded text-[10px] font-mono flex items-center gap-3 transition-all ${location.pathname === '/turbines/pelton' ? 'text-black font-black bg-white/40 shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                                        className={`w-full text-left px-3 py-2 rounded text-[10px] font-mono flex items-center gap-3 transition-all ${location.pathname === '/turbines/pelton' ? 'text-slate-50 bg-slate-800 border border-slate-700' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'}`}
                                                     >
-                                                        <span>💧</span>
+                                                        <span className="text-sm font-semibold text-slate-300">P</span>
                                                         <span>Pelton</span>
                                                     </button>
                                                 )}
@@ -404,9 +439,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                                 {isVisible('kaplan') && (
                                                     <button
                                                         onClick={() => handleNavigate('/turbines/kaplan', 'Kaplan Hub')}
-                                                        className={`w-full text-left px-3 py-2 rounded text-[10px] font-mono flex items-center gap-3 transition-all ${location.pathname === '/turbines/kaplan' ? 'text-black font-black bg-white/40 shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                                        className={`w-full text-left px-3 py-2 rounded text-[10px] font-mono flex items-center gap-3 transition-all ${location.pathname === '/turbines/kaplan' ? 'text-slate-50 bg-slate-800 border border-slate-700' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'}`}
                                                     >
-                                                        <span>🔄</span>
+                                                        <span className="text-sm font-semibold text-slate-300">K</span>
                                                         <span>Kaplan</span>
                                                     </button>
                                                 )}
@@ -419,9 +454,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                 {isVisible('tools') && (
                                     <button
                                         onClick={() => handleNavigate('/hpp-builder', 'Inžinjerski alati')}
-                                        className={`w-full text-left px-4 py-2.5 rounded-lg text-[10px] font-mono font-black uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/hpp-builder' ? 'bg-white/40 text-black font-black shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                        className={`w-full text-left px-4 py-2.5 rounded text-[10px] font-mono font-semibold uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/hpp-builder' ? 'bg-slate-800 text-slate-50 border border-slate-700' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'}`}
                                     >
-                                        <Wrench className="w-4 h-4 text-purple-600" />
+                                        <Wrench className="w-4 h-4 text-slate-400" />
                                         <span>{menuItems[6].title}</span>
                                     </button>
                                 )}
@@ -430,22 +465,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                 {isVisible('knowledge') && (
                                     <button
                                         onClick={() => handleNavigate('/knowledge-base', 'Znanje')}
-                                        className={`w-full text-left px-4 py-2.5 rounded-lg text-[10px] font-mono font-black uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname.startsWith('/knowledge-base') ? 'bg-white/40 text-black font-black shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                        className={`w-full text-left px-4 py-2.5 rounded text-[10px] font-mono font-semibold uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname.startsWith('/knowledge-base') ? 'bg-slate-800 text-slate-50 border border-slate-700' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'}`}
                                     >
-                                        <BookOpen className="w-4 h-4 text-cyan-600" />
+                                        <BookOpen className="w-4 h-4 text-slate-400" />
                                         <span>{menuItems[7].title}</span>
                                     </button>
                                 )}
 
-                                <div className="border-t border-black/10 my-3" />
+                                <div className="border-t border-slate-800 my-3" />
 
                                 {/* Profil & Postavke */}
                                 {isVisible('profile') && (
                                     <button
                                         onClick={() => handleNavigate('/profile', 'Profil & Postavke')}
-                                        className={`w-full text-left px-4 py-2.5 rounded-lg text-[10px] font-mono font-black uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/profile' ? 'bg-white/40 text-black font-black shadow-sm' : 'text-slate-700 hover:text-black hover:bg-white/20'}`}
+                                        className={`w-full text-left px-4 py-2.5 rounded text-[10px] font-mono font-semibold uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/profile' ? 'bg-slate-800 text-slate-50 border border-slate-700' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'}`}
                                     >
-                                        <User className="w-4 h-4 text-slate-600" />
+                                        <User className="w-4 h-4 text-slate-400" />
                                         <span>{menuItems[8].title}</span>
                                     </button>
                                 )}
@@ -453,29 +488,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                 {/* ACTION BUTTON */}
                                 <div className="pt-4 px-2">
                                     <button
-                                        className="w-full py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded border-b-4 border-slate-950 active:translate-y-0.5 active:border-b-1 transition-all flex items-center justify-center gap-2 group shadow-lg"
+                                        className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded border border-slate-700 transition-all flex items-center justify-center gap-2 group"
                                         onClick={() => window.dispatchEvent(new CustomEvent(TRIGGER_FORENSIC_EXPORT))}
                                     >
-                                        <FileText className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
-                                        <span className="text-[10px] font-black uppercase tracking-widest">GENERATE_FORENSIC</span>
+                                        <FileText className="w-4 h-4 text-slate-300" />
+                                        <span className="text-[10px] font-semibold uppercase tracking-widest">EXPORT</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
 
                         {/* FOOTER */}
-                        <div className="p-4 border-t border-black/10 relative z-10 bg-black/5 flex flex-col items-center">
+                        <div className="p-4 border-t border-slate-800 relative z-10 bg-slate-900 flex flex-col items-center">
                             <div className="w-full flex justify-between items-center text-[7px] font-mono text-slate-500 mb-2 uppercase tracking-tighter">
                                 <div className="flex items-center gap-1">
                                     <Cpu className="w-3 h-3" />
-                                    <span>LINK_{hiveStatus?.connected ? 'ESTABLISHED' : 'STANDBY'} // NC-9.0</span>
+                                    <span>{hiveStatus?.connected ? 'CONNECTED' : 'OFFLINE'}</span>
                                 </div>
-                                <span className={hiveStatus?.connected ? 'text-emerald-600 font-black' : 'text-slate-500'}>
-                                    {hiveStatus?.connected ? 'ENCRYPTED' : 'OFFLINE'}
+                                <span className={hiveStatus?.connected ? 'text-emerald-500 font-semibold' : 'text-slate-500'}>
+                                    {hiveStatus?.connected ? 'SYNCED' : 'OFFLINE'}
                                 </span>
-                            </div>
-                            <div className="opacity-40 grayscale hover:grayscale-0 transition-all cursor-crosshair">
-                                <QrCode size={40} value={`anohub-nc42:${activeDefinition?.id || 'null'}`} />
                             </div>
                         </div>
                     </motion.div>

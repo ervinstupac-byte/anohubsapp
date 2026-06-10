@@ -71,8 +71,10 @@ export class AcousticFingerprintingService {
      * Filters generator noise to isolate mechanical issues
      */
     static classifyAcousticSignature(signature: AcousticSignature): AcousticClassification {
-        // Step 1: Apply notch filter to remove generator harmonics (100, 200, 300, 400 Hz)
-        const filteredSpectrum = this.filterGeneratorNoise(signature.spectrum);
+        // Step 1: Ensure spectrum exists
+        const spectrum = Array.isArray(signature.spectrum) ? signature.spectrum : [];
+        // Step 2: Apply notch filter to remove generator harmonics (100, 200, 300, 400 Hz)
+        const filteredSpectrum = this.filterGeneratorNoise(spectrum);
 
         // Step 2: Calculate pattern match scores
         const scores: Record<string, number> = {};
@@ -120,6 +122,7 @@ export class AcousticFingerprintingService {
      * Applies notch filter at 100, 200, 300, 400 Hz to remove generator noise
      */
     private static filterGeneratorNoise(spectrum: number[]): number[] {
+        if (spectrum.length === 0) return [];
         const filtered = [...spectrum];
         const sampleRate = 48000; // Assumed sample rate
         const fftSize = spectrum.length;
@@ -148,6 +151,7 @@ export class AcousticFingerprintingService {
         spectrum: number[],
         pattern: AcousticPattern
     ): number {
+        if (spectrum.length === 0) return 0;
         const sampleRate = 48000;
         const fftSize = spectrum.length;
         const binWidth = sampleRate / fftSize;
@@ -157,14 +161,15 @@ export class AcousticFingerprintingService {
         // Calculate energy in pattern's frequency range
         const startBin = Math.round(pattern.frequencyRange[0] / binWidth);
         const endBin = Math.round(pattern.frequencyRange[1] / binWidth);
+        const rangeLength = endBin - startBin;
 
         let energyInRange = 0;
         for (let i = startBin; i < Math.min(endBin, fftSize); i++) {
             energyInRange += spectrum[i] * spectrum[i];
         }
 
-        // Normalize energy
-        energyInRange = Math.sqrt(energyInRange / (endBin - startBin));
+        // Normalize energy (avoid division by zero)
+        energyInRange = rangeLength > 0 ? Math.sqrt(energyInRange / rangeLength) : 0;
 
         // Check for characteristic frequencies
         let charFreqMatches = 0;

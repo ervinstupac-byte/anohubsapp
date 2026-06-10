@@ -9,9 +9,8 @@ import { NavigationProvider } from './contexts/NavigationContext.tsx';
 import { useRisk } from './contexts/RiskContext.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { useAudit } from './contexts/AuditContext.tsx';
-// Providers removed or handled elsewhere to reduce bundle and avoid unused imports
-// (ProjectProvider, DEFAULT_TECHNICAL_STATE, NotificationProvider,
-// MaintenanceProvider, AssetProvider, RiskProvider, DocumentProvider)
+import { ProjectProvider } from './contexts/ProjectContext';
+import { DEFAULT_TECHNICAL_STATE } from './core/TechnicalSchema';
 import { useRiskCalculator } from './hooks/useRiskCalculator.ts'; // <--- NEW
 import { ContextAwarenessProvider } from './contexts/ContextAwarenessContext.tsx';
 import { DrillDownProvider } from './contexts/DrillDownContext.tsx'; // <--- NEW Phase 3
@@ -79,6 +78,8 @@ const StructuralIntegrity = lazy(() => import('./components/StructuralIntegrity.
 
 const AdminApproval = lazy(() => import('./components/AdminApproval.tsx').then(m => ({ default: m.AdminApproval })));
 const AdminHealth = lazy(() => import('./pages/AdminHealth').then(m => ({ default: m.default })));
+const ManagementSummary = lazy(() => import('./pages/analytics/management-summary').then(m => ({ default: m.default })));
+const StrategicPlanningDashboard = lazy(() => import('./components/StrategicPlanningDashboard').then(m => ({ default: m.StrategicPlanningDashboard })));
 
 // Maintenance components moved to MaintenanceRouter
 const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDashboard').then(m => ({ default: m.ForensicDashboard })));
@@ -141,6 +142,9 @@ const BearingCoolingWaterFlowLab = lazy(() => import('./components/BearingCoolin
 // Francis Turbine Module - All routes extracted to dedicated sub-router
 const FrancisRouter = React.lazy(() => import('./routes/FrancisRouter'));
 
+// Pelton Turbine Module
+const PeltonRouter = React.lazy(() => import('./routes/PeltonRouter'));
+
 // Maintenance Module - Extracted to dedicated sub-router
 const MaintenanceRouter = React.lazy(() => import('./routes/MaintenanceRouter.tsx'));
 
@@ -158,6 +162,8 @@ const KnowledgeBaseViewer = React.lazy(() => import('./pages/KnowledgeBaseViewer
 
 // New visual navigation pages
 const HomeHub = React.lazy(() => import('./pages/HomeHub').then(m => ({ default: m.HomeHub })));
+const StrategicDecisionLab = React.lazy(() => import('./components/StrategicDecisionLab.tsx').then(m => ({ default: m.StrategicDecisionLab })));
+const LongTermForecastLab = React.lazy(() => import('./components/LongTermForecastLab.tsx').then(m => ({ default: m.LongTermForecastLab })));
 const DigitalLogbook = React.lazy(() => import('./pages/DigitalLogbook').then(m => ({ default: m.DigitalLogbook })));
 const ProblemDetector = React.lazy(() => import('./pages/ProblemDetector').then(m => ({ default: m.ProblemDetector })));
 const TurbineHub = React.lazy(() => import('./pages/TurbineHub').then(m => ({ default: m.TurbineHub })));
@@ -401,7 +407,7 @@ const AppLayout: React.FC = () => {
                         <DashboardHeader
                             onToggleSidebar={() => setIsSidebarOpen(s => !s)}
                             isSidebarOpen={isSidebarOpen}
-                            title={<span className="text-h-gold">ANOHUB // NC-9.0 NEURAL CORE</span>}
+                            title={<span className="text-slate-200">ANOHUB</span>}
                         />
 
                         <div className={`flex-grow w-full relative z-10 ${isFullPage ? 'flex flex-col' : ''}`}> {/* Renamed main to div so we dont nest mains */}
@@ -431,10 +437,14 @@ const AppLayout: React.FC = () => {
                                                  <Route index element={<HomeHub />} />
                                                  <Route path="logbook" element={<DigitalLogbook />} />
                                                  <Route path="problems" element={<ProblemDetector />} />
+                                                 <Route path="strategic-lab" element={<StrategicDecisionLab />} />
+                                                 <Route path="long-term-forecast" element={<LongTermForecastLab />} />
                                                  <Route path="turbines/*" element={<TurbineHub />} />
                                                  <Route path={ROUTES.DIAGNOSTIC_TWIN} element={<NeuralFlowMap />} />
                                                 {/* Francis Turbine Module - All routes handled by dedicated sub-router */}
                                                 <Route path="/francis/*" element={<FrancisRouter />} />
+                                                {/* Pelton Turbine Module - All routes handled by dedicated sub-router */}
+                                                <Route path="/pelton/*" element={<PeltonRouter />} />
                                                 <Route path="profile" element={<UserProfile />} />
                                                 <Route path="map" element={<GlobalMap />} />
 
@@ -499,6 +509,26 @@ const AppLayout: React.FC = () => {
                                                 <Route path="executive" element={
                                                     <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
                                                         <ExecutiveDashboard />
+                                                    </RoleGuard>
+                                                } />
+                                                <Route path="management-summary" element={
+                                                    <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
+                                                        <ManagementSummary />
+                                                    </RoleGuard>
+                                                } />
+                                                <Route path="strategic-planning" element={
+                                                    <RoleGuard allowedRoles={['ENGINEER', 'MANAGER', 'TECHNICIAN']}>
+                                                        <StrategicPlanningDashboard />
+                                                    </RoleGuard>
+                                                } />
+                                                <Route path="strategic-decision-lab" element={
+                                                    <RoleGuard allowedRoles={['ENGINEER', 'MANAGER', 'TECHNICIAN']}>
+                                                        <StrategicDecisionLab />
+                                                    </RoleGuard>
+                                                } />
+                                                <Route path="long-term-forecast-lab" element={
+                                                    <RoleGuard allowedRoles={['ENGINEER', 'MANAGER', 'TECHNICIAN']}>
+                                                        <LongTermForecastLab />
                                                     </RoleGuard>
                                                 } />
 
@@ -698,10 +728,12 @@ const App: React.FC = () => {
                     ) : (
                         <div className="w-full h-full animate-in fade-in zoom-in duration-300">
                             <ContextAwarenessProvider>
-                                <Routes>
-                                    <Route path="/login" element={<Login />} />
-                                    <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
-                                </Routes>
+                                <ProjectProvider initialState={DEFAULT_TECHNICAL_STATE}>
+                                    <Routes>
+                                        <Route path="/login" element={<Login />} />
+                                        <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
+                                    </Routes>
+                                </ProjectProvider>
                             </ContextAwarenessProvider>
                         </div>
                     )}

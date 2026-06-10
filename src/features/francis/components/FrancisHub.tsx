@@ -4,6 +4,7 @@ import SurgicalDigitalTwin from './SurgicalDigitalTwin';
 import { useAssetContext } from '../../../contexts/AssetContext.tsx';
 import { useTelemetryStore } from '../../telemetry/store/useTelemetryStore';
 import { Shield, LayoutGrid, FileText, CheckCircle } from 'lucide-react';
+import { TRIGGER_FORENSIC_EXPORT } from '../../../components/diagnostics/Sidebar.tsx';
 
 /**
  * Technical Asset Definition for the Surgical Index
