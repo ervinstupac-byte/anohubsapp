@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export interface QuickAccessCardProps {
     id: string;
@@ -27,12 +28,14 @@ export const QuickAccessCard: React.FC<QuickAccessCardProps> = ({
     priority,
     disabled = false 
 }) => {
+    const navigate = useNavigate();
+
     const handleClick = () => {
         if (disabled) return;
         if (onClick) {
             onClick();
         } else if (route) {
-            window.location.href = route;
+            navigate(route);
         }
     };
 

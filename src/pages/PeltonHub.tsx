@@ -11,7 +11,7 @@ export const PeltonHub: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'visualizer' | 'alignment' | 'needle'>('visualizer');
 
     return (
-        <div className="space-y-8 max-w-7xl mx-auto px-4 md:px-8 py-8">
+        <div className="space-y-8 w-full px-4 md:px-8 py-8">
             {/* Header info */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900/30 p-5 rounded border border-slate-700">
                 <div className="space-y-1">
@@ -30,20 +30,26 @@ export const PeltonHub: React.FC = () => {
                         Sinhronizacija mlaznica, proračun aksijalnih i radijalnih sila i akustičko testiranje.
                     </p>
                 </div>
-                
-                <div className="flex gap-2 flex-wrap">
+                <div className="flex flex-col items-end gap-2">
                     <button 
-                        onClick={() => navigate('/pelton/vertical')}
-                        className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 rounded text-xs font-bold uppercase tracking-widest font-mono transition-all flex items-center gap-2"
+                        onClick={() => navigate('/pelton/twin')}
+                        className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 rounded text-xs font-bold uppercase tracking-wider font-mono transition-all flex items-center gap-2"
                     >
-                        Pelton Vertical <ChevronRight className="w-4 h-4" />
+                        Otvori Pelton Twin <ChevronRight className="w-4 h-4" />
                     </button>
-                    <button 
-                        onClick={() => navigate('/pelton/horizontal')}
-                        className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 rounded text-xs font-bold uppercase tracking-widest font-mono transition-all flex items-center gap-2"
-                    >
-                        Pelton Horizontal <ChevronRight className="w-4 h-4" />
-                    </button>
+                    <div className="flex gap-2 flex-wrap">
+                        <button 
+                            onClick={() => navigate('/pelton/vertical')}
+                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 rounded text-xs font-bold uppercase tracking-widest font-mono transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(34,211,238,0.2)] hover:border-cyan-500/50"
+                        >
+                            Pelton Vertical <ChevronRight className="w-4 h-4" />
+                        </button>
+                        <button 
+                            onClick={() => navigate('/pelton/horizontal')}
+                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 rounded text-xs font-bold uppercase tracking-widest font-mono transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(34,211,238,0.2)] hover:border-cyan-500/50"
+                        >
+                            Pelton Horizontal <ChevronRight className="w-4 h-4" />
+                        </button>
                     <button 
                         onClick={() => setActiveTab('visualizer')}
                         className={`px-3.5 py-1.5 rounded text-xs font-bold font-mono transition-all border ${
@@ -68,6 +74,7 @@ export const PeltonHub: React.FC = () => {
                     >
                         Needle Valve Lab
                     </button>
+                </div>
                 </div>
             </div>
 

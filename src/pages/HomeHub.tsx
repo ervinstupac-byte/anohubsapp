@@ -8,6 +8,7 @@ import {
     BookOpen, ChevronRight, Activity, Shield, Zap, 
     BarChart3, Server, Brain
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { MorningReportGenerator, MorningReport } from '../services/MorningReportGenerator';
 import { GlobalHealthDashboard } from '../services/GlobalHealthDashboard';
@@ -15,6 +16,7 @@ import { GlobalHealthDashboard } from '../services/GlobalHealthDashboard';
 export const HomeHub: React.FC = () => {
     const { assets, selectedAsset, selectAsset } = useAssetContext();
     const { user, userRole } = useAuth();
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -25,24 +27,24 @@ export const HomeHub: React.FC = () => {
 
     const shiftInfo = useMemo(() => {
         const hour = currentTime.getHours();
-        let greeting = 'Dobro jutro';
-        let shift = 'Jutarnja smjena';
+        let greeting = t('greeting.morning', 'Good morning');
+        let shift = t('shift.morning', 'Morning Shift');
         let timeRange = '06:00 - 14:00';
 
         if (hour >= 12 && hour < 18) {
-            greeting = 'Dobar dan';
-            shift = 'Poslijepodnevna smjena';
+            greeting = t('greeting.afternoon', 'Good afternoon');
+            shift = t('shift.afternoon', 'Afternoon Shift');
             timeRange = '14:00 - 22:00';
         } else if (hour >= 18 || hour < 6) {
-            greeting = 'Dobro veče';
-            shift = 'Noćna smjena';
+            greeting = t('greeting.evening', 'Good evening');
+            shift = t('shift.night', 'Night Shift');
             timeRange = '22:00 - 06:00';
         }
         return { greeting, shift, timeRange };
-    }, [currentTime]);
+    }, [currentTime, t]);
 
     const formattedDate = useMemo(() => {
-        return currentTime.toLocaleDateString('bs-BA', {
+        return currentTime.toLocaleDateString('en-US', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
@@ -117,14 +119,14 @@ export const HomeHub: React.FC = () => {
     };
 
     const actionCards = [
-        { title: 'Logbook', desc: 'Evidencija smjena', path: '/logbook', icon: <ClipboardList className="w-5 h-5 text-slate-200" />, color: 'from-slate-700/30 to-slate-800/30 hover:border-slate-500/40' },
-        { title: 'Problem Detekcija', desc: 'AI dijagnostika', path: '/problems', icon: <Cpu className="w-5 h-5 text-slate-200" />, color: 'from-slate-700/30 to-slate-800/30 hover:border-slate-500/40' },
-        { title: 'SOP Priručnici', desc: 'Operativni protokoli', path: '/knowledge-base', icon: <BookOpen className="w-5 h-5 text-slate-200" />, color: 'from-slate-700/30 to-slate-800/30 hover:border-slate-500/40' },
-        { title: 'Strategija', desc: 'Strategičke odluke', path: '/strategic-lab', icon: <Brain className="w-5 h-5 text-slate-200" />, color: 'from-slate-700/30 to-slate-800/30 hover:border-slate-500/40' },
-        { title: 'Inžinjerski Alati', desc: 'HPP Builder', path: '/hpp-builder', icon: <Wrench className="w-5 h-5 text-slate-200" />, color: 'from-slate-700/30 to-slate-800/30 hover:border-slate-500/40' },
+        { title: 'Logbook', desc: t('hub.logbookDesc', 'Shift records'), path: '/logbook', icon: <ClipboardList className="w-5 h-5 text-slate-200" />, color: 'from-slate-700/30 to-slate-800/30 hover:border-slate-500/40' },
+        { title: t('hub.problemDetection', 'Problem Detection'), desc: t('hub.aiDiagnostics', 'AI Diagnostics'), path: '/problems', icon: <Cpu className="w-5 h-5 text-slate-200" />, color: 'from-slate-700/30 to-slate-800/30 hover:border-slate-500/40' },
+        { title: t('hub.sopManuals', 'SOP Manuals'), desc: t('hub.operationalProtocols', 'Operational Protocols'), path: '/knowledge-base', icon: <BookOpen className="w-5 h-5 text-slate-200" />, color: 'from-slate-700/30 to-slate-800/30 hover:border-slate-500/40' },
+        { title: t('hub.strategy', 'Strategy'), desc: t('hub.strategicDecisions', 'Strategic Decisions'), path: '/strategic-lab', icon: <Brain className="w-5 h-5 text-slate-200" />, color: 'from-slate-700/30 to-slate-800/30 hover:border-slate-500/40' },
+        { title: t('hub.engineeringTools', 'Engineering Tools'), desc: 'HPP Builder', path: '/hpp-builder', icon: <Wrench className="w-5 h-5 text-slate-200" />, color: 'from-slate-700/30 to-slate-800/30 hover:border-slate-500/40' },
     ];
 
-    const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Korisnik';
+    const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || t('hub.guest', 'User');
     const roleLabel = userRole || 'GUEST';
 
     return (
@@ -160,7 +162,7 @@ export const HomeHub: React.FC = () => {
                         <Clock className="w-5 h-5" />
                     </div>
                     <div className="space-y-1">
-                        <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-mono">SMJENA</div>
+                        <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-mono">{t('hub.shift', 'SHIFT')}</div>
                         <div className="text-sm font-semibold text-slate-100">{shiftInfo.shift}</div>
                         <div className="text-[10px] text-slate-400 font-mono">{shiftInfo.timeRange}</div>
                     </div>
@@ -175,7 +177,7 @@ export const HomeHub: React.FC = () => {
                     <div className="space-y-3">
                         <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono flex items-center gap-2">
                             <Zap className="w-3.5 h-3.5 text-slate-500" />
-                            Brzi pristup
+                            {t('hub.quickAccess', 'Quick Access')}
                         </h2>
                         <div className="grid grid-cols-1 gap-3">
                             {actionCards.map((card, idx) => (
@@ -204,14 +206,14 @@ export const HomeHub: React.FC = () => {
                     <div className="space-y-3">
                         <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono flex items-center gap-2">
                             <Server className="w-3.5 h-3.5 text-slate-500" />
-                            Status agregata
+                            {t('hub.assetStatus', 'Asset Status')}
                         </h2>
                         <GlassCard className="p-5 border-slate-700 bg-slate-900/30">
                             <div className="space-y-4">
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <h3 className="text-sm font-semibold text-slate-100">
-                                            {selectedAsset ? selectedAsset.name : 'Odaberite turbinu'}
+                                            {selectedAsset ? selectedAsset.name : t('hub.selectTurbine', 'Select Turbine')}
                                         </h3>
                                         <p className="text-[10px] text-slate-500 font-mono uppercase">
                                             {selectedAsset ? `${selectedAsset.turbine_type || selectedAsset.type}` : ''}
@@ -229,21 +231,21 @@ export const HomeHub: React.FC = () => {
                                 {selectedAsset && (
                                     <div className="space-y-3 pt-2">
                                         <div className="flex justify-between items-center text-xs border-b border-slate-700 pb-2">
-                                            <span className="text-slate-400">Vibracije</span>
+                                            <span className="text-slate-400">{t('hub.vibration', 'Vibration')}</span>
                                             <span className="font-mono font-semibold text-slate-200 flex items-center gap-1.5">
                                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                                                 2.3 mm/s
                                             </span>
                                         </div>
                                         <div className="flex justify-between items-center text-xs border-b border-slate-700 pb-2">
-                                            <span className="text-slate-400">Temp. ležišta</span>
+                                            <span className="text-slate-400">{t('hub.bearingTemp', 'Bearing Temp.')}</span>
                                             <span className="font-mono font-semibold text-amber-400 flex items-center gap-1.5">
                                                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                                                 62.4°C
                                             </span>
                                         </div>
                                         <div className="flex justify-between items-center text-xs">
-                                            <span className="text-slate-400">Protok</span>
+                                            <span className="text-slate-400">{t('hub.flow', 'Flow')}</span>
                                             <span className="font-mono font-semibold text-slate-200">9.8 m³/s</span>
                                         </div>
                                     </div>
@@ -258,14 +260,14 @@ export const HomeHub: React.FC = () => {
                     <div className="space-y-3">
                         <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono flex items-center gap-2">
                             <BarChart3 className="w-3.5 h-3.5 text-slate-500" />
-                            Analitika
+                            {t('hub.analytics', 'Analytics')}
                         </h2>
                         <GlassCard className="p-5 border-slate-700 bg-slate-900/30">
                             <div className="space-y-4">
                                 <div className="bg-slate-950/60 rounded p-4 border border-slate-700">
                                     <div className="flex justify-between items-center text-[10px] font-mono text-slate-500 mb-2">
-                                        <span>DANAS</span>
-                                        <span className="text-amber-400 font-bold">GUBITAK</span>
+                                        <span>{t('hub.today', 'TODAY')}</span>
+                                        <span className="text-amber-400 font-bold">{t('hub.loss', 'LOSS')}</span>
                                     </div>
                                     <div className="text-xl font-bold text-amber-400 font-mono">
                                         €{morningReportData.metrics.totalMoneyLeakToday.toFixed(2)}
@@ -276,7 +278,7 @@ export const HomeHub: React.FC = () => {
                                     className="w-full py-3 bg-slate-900 border border-slate-700 text-slate-300 hover:text-slate-100 hover:border-slate-600 rounded text-xs font-semibold font-mono transition-colors uppercase tracking-wider flex items-center justify-center gap-2"
                                 >
                                     <AlertTriangle className="w-3.5 h-3.5" />
-                                    Provjeri upozorenja
+                                    {t('hub.checkWarnings', 'Check Warnings')}
                                 </button>
                             </div>
                         </GlassCard>
@@ -288,7 +290,7 @@ export const HomeHub: React.FC = () => {
             <div className="space-y-3 pt-6 border-t border-slate-700/30">
                 <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono flex items-center gap-2">
                     <Activity className="w-3.5 h-3.5 text-slate-500" />
-                    Turbine
+                    {t('hub.turbines', 'Turbines')}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <motion.div 

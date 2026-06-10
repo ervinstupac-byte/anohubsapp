@@ -46,7 +46,7 @@ export const TurbineHub: React.FC = () => {
     const kaplanTurbines = assets.filter(a => String(a.turbine_type || a.type).toUpperCase() === 'KAPLAN');
 
     return (
-        <div className="space-y-8 max-w-7xl mx-auto px-4 md:px-8 py-8">
+        <div className="space-y-8 w-full px-4 md:px-8 py-8">
             
             {/* Tab Navigation header */}
             <div className="flex border-b border-slate-700 space-x-1 pb-px">
@@ -147,13 +147,29 @@ const FrancisHubContent: React.FC<FrancisHubContentProps> = ({ assets, selectedA
                     </p>
                 </div>
 
-                <button
-                    onClick={() => navigate('/francis/hub')}
-                    className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 rounded text-xs font-bold uppercase tracking-wider font-mono transition-all flex items-center gap-2"
-                >
-                    Otvori Francis Twin
-                    <ChevronRight className="w-4 h-4" />
-                </button>
+                <div className="flex flex-col gap-2 items-end">
+                    <button
+                        onClick={() => navigate('/francis/hub')}
+                        className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 rounded text-xs font-bold uppercase tracking-wider font-mono transition-all flex items-center gap-2"
+                    >
+                        Otvori Francis Twin
+                        <ChevronRight className="w-4 h-4" />
+                    </button>
+                    <div className="flex gap-2">
+                        <button 
+                            onClick={() => navigate('/francis/vertical')}
+                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 rounded text-xs font-bold uppercase tracking-widest font-mono transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(34,211,238,0.2)] hover:border-cyan-500/50"
+                        >
+                            Francis Vertical <ChevronRight className="w-4 h-4" />
+                        </button>
+                        <button 
+                            onClick={() => navigate('/francis/horizontal')}
+                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 rounded text-xs font-bold uppercase tracking-widest font-mono transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(34,211,238,0.2)] hover:border-cyan-500/50"
+                        >
+                            Francis Horizontal <ChevronRight className="w-4 h-4" />
+                        </button>
+                    </div>
+                </div>
             </div>
 
             {/* Quick Diagnostic Strip */}

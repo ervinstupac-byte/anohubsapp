@@ -34,7 +34,7 @@ import { Breadcrumbs } from './shared/components/ui/Breadcrumbs';
 import { VoiceAssistant } from './components/VoiceAssistant.tsx';
 import { DashboardHeader } from './components/DashboardHeader.tsx';
 import { WorkflowHeader } from './components/ui/WorkflowHeader'; // NEW: Global health status bar
-import { GlobalFooter } from './components/GlobalFooter.tsx';
+// GlobalFooter imported removed
 import { DataSyncBridge } from './components/DataSyncBridge';
 import { ProjectPhaseGuide } from './components/ProjectPhaseGuide';
 const PrintPreviewModal = React.lazy(() => import('./components/modals/PrintPreviewModal.tsx').then(m => ({ default: m.PrintPreviewModal })));
@@ -145,6 +145,7 @@ const FrancisRouter = React.lazy(() => import('./routes/FrancisRouter'));
 
 // Pelton Turbine Module
 const PeltonRouter = React.lazy(() => import('./routes/PeltonRouter'));
+const KaplanRouter = React.lazy(() => import('./routes/KaplanRouter'));
 
 // Maintenance Module - Extracted to dedicated sub-router
 const MaintenanceRouter = React.lazy(() => import('./routes/MaintenanceRouter.tsx'));
@@ -239,7 +240,7 @@ const AppLayout: React.FC = () => {
     const { state: technicalState } = useCerebro();
 
     const isHub = location.pathname === '/';
-    const isFullPage = isHub || location.pathname === '/map';
+    const isFullPage = true; // User requested all modules to be full page
 
     // RISK CALCULATION LOGIC (detailed badge rendering moved to DashboardHeader)
 
@@ -417,8 +418,7 @@ const AppLayout: React.FC = () => {
                     {/* MAIN AREA */}
                     <div className="row-start-1 col-start-2 min-h-0 h-full flex flex-col relative z-20 overflow-y-auto custom-scrollbar">
 
-                        {/* NEW: Global Workflow Header - Machine Health & Navigation */}
-                        <WorkflowHeader />
+                        {/* Global Workflow Header removed as per user request to save vertical space */}
 
                         <DashboardHeader
                             onToggleSidebar={() => setIsSidebarOpen(s => !s)}
@@ -429,7 +429,7 @@ const AppLayout: React.FC = () => {
                         <div className={`flex-grow w-full relative z-10 ${isFullPage ? 'flex flex-col' : ''}`}> {/* Renamed main to div so we dont nest mains */}
                             <Suspense fallback={<LoadingShimmer />}>
                                 <div className={!isFullPage ? "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12" : "flex-grow w-full"}>
-                                    {!isHub && location.pathname !== '/dashboard' && location.pathname !== '/executive' && <Breadcrumbs />}
+                                    {/* Breadcrumbs removed as requested to avoid double headers */}
                                     <ErrorBoundary fallback={
                                         <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
                                             <div className="p-4 rounded-full bg-red-500/10 border border-red-500/20">
@@ -461,6 +461,8 @@ const AppLayout: React.FC = () => {
                                                 <Route path="/francis/*" element={<FrancisRouter />} />
                                                 {/* Pelton Turbine Module - All routes handled by dedicated sub-router */}
                                                 <Route path="/pelton/*" element={<PeltonRouter />} />
+                                                {/* Kaplan Turbine Module - All routes handled by dedicated sub-router */}
+                                                <Route path="/kaplan/*" element={<KaplanRouter />} />
                                                 <Route path="profile" element={<UserProfile />} />
                                                 <Route path="map" element={<GlobalMap />} />
 
@@ -523,12 +525,12 @@ const AppLayout: React.FC = () => {
 
                                                 {/* EXECUTIVE - RESTRICTED */}
                                                 <Route path="executive" element={
-                                                    <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
+                                                    <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN', 'ENGINEER', 'OWNER']}>
                                                         <ExecutiveDashboard />
                                                     </RoleGuard>
                                                 } />
                                                 <Route path="management-summary" element={
-                                                    <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
+                                                    <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN', 'ENGINEER', 'OWNER']}>
                                                         <ManagementSummary />
                                                     </RoleGuard>
                                                 } />
@@ -653,7 +655,7 @@ const AppLayout: React.FC = () => {
                             </div>
                         </div>
                     )}
-                    <GlobalFooter />
+                    {/* SYSTEM STATUS FOOTER REMOVED AS PER USER REQUEST */}
 
                     <Suspense fallback={null}>
                         <AssetTypeSelector />

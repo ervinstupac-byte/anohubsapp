@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { DigitalPanel } from './diagnostics/DigitalPanel';
 import { AssetPicker } from './AssetPicker';
+import { LanguageSelector } from './LanguageSelector';
 import { ROUTES } from '../routes/paths';
-import { Search, Command, X, ShieldCheck, Activity, Database, ChevronRight, ChevronDown, Settings, BarChart3, Wrench, Zap, Square, Grid } from 'lucide-react';
+import { Search, Command, X, ShieldCheck, Activity, Database, ChevronRight, ChevronDown, Settings, BarChart3, Wrench, Zap, Square, Grid, Home } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useCerebro } from '../contexts/ProjectContext';
 import { useRisk } from '../contexts/RiskContext';
@@ -63,7 +64,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
 
     return (
         <>
-            <header className="sticky top-0 z-30 h-16 border-b border-slate-800 bg-slate-950/95 backdrop-blur flex items-center justify-between px-6 shadow-sm">
+            <header className="sticky top-0 z-30 h-12 border-b border-slate-800 bg-slate-950/95 backdrop-blur flex items-center justify-between px-6 shadow-sm">
 
                 {/* LEFT: Identity & Status */}
                 <div className="flex items-center gap-4">
@@ -74,9 +75,10 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
                     <div className="flex items-center gap-3 text-xs font-mono tracking-wider">
                         {title && (
                             <div 
-                                className="hidden md:block mr-4 cursor-pointer hover:opacity-80 transition-opacity" 
+                                className="hidden md:flex items-center gap-2 mr-4 cursor-pointer hover:opacity-80 transition-opacity" 
                                 onClick={() => navigate('/')}
                             >
+                                <Home className="w-4 h-4 text-cyan-400" />
                                 {title}
                             </div>
                         )}
@@ -173,7 +175,12 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
                             label={t('dashboard.riskStatus.label', 'RISK STATUS')}
                             value={t(`dashboard.riskStatus.${badgeStatus}`, badgeLabel)}
                             status={badgeStatus}
+                            compact={true}
                         />
+                    </div>
+
+                    <div className="scale-90 opacity-80 hover:opacity-100 transition-opacity">
+                        <LanguageSelector />
                     </div>
 
                     {user && (

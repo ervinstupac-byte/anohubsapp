@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { KaplanCamCurveLab } from '../components/KaplanCamCurveLab';
 import { KaplanBladeTrunnionLab } from '../components/KaplanBladeTrunnionLab';
 import { KaplanHubMonitoringLab } from '../components/KaplanHubMonitoringLab';
 import { GlassCard } from '../shared/components/ui/GlassCard';
-import { Settings, Play, ShieldAlert, Award, FileText, Droplets } from 'lucide-react';
+import { Settings, Play, ShieldAlert, Award, FileText, Droplets, ChevronRight } from 'lucide-react';
 
 export const KaplanHub: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'cam' | 'trunnion' | 'hub'>('cam');
+    const navigate = useNavigate();
 
     return (
-        <div className="space-y-8 max-w-7xl mx-auto px-4 md:px-8 py-8">
+        <div className="space-y-8 w-full px-4 md:px-8 py-8">
             {/* Header info */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900/30 p-5 rounded border border-slate-700">
                 <div className="space-y-1">
@@ -29,7 +31,46 @@ export const KaplanHub: React.FC = () => {
                     </p>
                 </div>
                 
-                <div className="flex gap-2">
+                <div className="flex flex-col items-end gap-2">
+                    <button 
+                        onClick={() => navigate('/kaplan/twin')}
+                        className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 rounded text-xs font-bold uppercase tracking-wider font-mono transition-all flex items-center gap-2"
+                    >
+                        Otvori Kaplan Twin <ChevronRight className="w-4 h-4" />
+                    </button>
+                    <div className="flex flex-wrap justify-end gap-2">
+                        <button 
+                            onClick={() => navigate('/kaplan/vertical')}
+                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 rounded text-xs font-bold uppercase tracking-widest font-mono transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(34,211,238,0.2)] hover:border-cyan-500/50"
+                        >
+                            Vertical <ChevronRight className="w-4 h-4" />
+                        </button>
+                        <button 
+                            onClick={() => navigate('/kaplan/bulb')}
+                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 rounded text-xs font-bold uppercase tracking-widest font-mono transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(34,211,238,0.2)] hover:border-cyan-500/50"
+                        >
+                            Bulb <ChevronRight className="w-4 h-4" />
+                        </button>
+                        <button 
+                            onClick={() => navigate('/kaplan/s-type')}
+                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 rounded text-xs font-bold uppercase tracking-widest font-mono transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(34,211,238,0.2)] hover:border-cyan-500/50"
+                        >
+                            S-Type <ChevronRight className="w-4 h-4" />
+                        </button>
+                        <button 
+                            onClick={() => navigate('/kaplan/pit')}
+                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 rounded text-xs font-bold uppercase tracking-widest font-mono transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(34,211,238,0.2)] hover:border-cyan-500/50"
+                        >
+                            Pit <ChevronRight className="w-4 h-4" />
+                        </button>
+                        <button 
+                            onClick={() => navigate('/kaplan/spiral')}
+                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 rounded text-xs font-bold uppercase tracking-widest font-mono transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(34,211,238,0.2)] hover:border-cyan-500/50"
+                        >
+                            Spiral <ChevronRight className="w-4 h-4" />
+                        </button>
+                    </div>
+                    <div className="flex gap-2 mt-2">
                     <button 
                         onClick={() => setActiveTab('cam')}
                         className={`px-3.5 py-1.5 rounded text-xs font-bold font-mono transition-all border ${
@@ -54,6 +95,7 @@ export const KaplanHub: React.FC = () => {
                     >
                         Hub Monitoring Lab
                     </button>
+                </div>
                 </div>
             </div>
 

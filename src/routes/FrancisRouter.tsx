@@ -3,6 +3,8 @@ import { Routes, Route } from 'react-router-dom';
 import { Spinner } from '../shared/components/ui/Spinner';
 
 // Lazy load all Francis components
+const FrancisVertical = React.lazy(() => import('../features/francis/components/FrancisVertical'));
+const FrancisHorizontal = React.lazy(() => import('../features/francis/components/FrancisHorizontal'));
 const FrancisHub = React.lazy(() => import('../features/francis/components/FrancisHub'));
 const HPPBuilder = React.lazy(() => import('../components/HPPBuilder').then(module => ({ default: module.HPPBuilder })));
 const FrancisDiagnostics = React.lazy(() => import('../components/SpecializedDiagnostics').then(module => ({ default: module.SpecializedDiagnostics })));
@@ -58,6 +60,10 @@ const FrancisRouter: React.FC = () => {
     return (
         <Suspense fallback={<LoadingShimmer />}>
             <Routes>
+                {/* Elite Landing Pages */}
+                <Route path="vertical" element={<FrancisVertical />} />
+                <Route path="horizontal" element={<FrancisHorizontal />} />
+                
                 {/* Command Center (Main View) */}
                 <Route path={ROUTES.FRANCIS.COMMAND_CENTER} element={<CommandCenter />} />
 

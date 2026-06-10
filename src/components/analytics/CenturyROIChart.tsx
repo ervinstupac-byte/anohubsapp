@@ -140,10 +140,9 @@ export default function CenturyROIChart({ assetId, pricePerKwh = 0.08 }: { asset
     return () => { cancelled = true; };
   }, [data]);
 
-  if (loading) return <div>Loading Century ROI Chart...</div>;
+  if (loading) return <div className="text-slate-500 font-mono text-xs uppercase tracking-widest text-center py-10 animate-pulse">Running financial simulation...</div>;
   return (
-    <div>
-      <h3>Century ROI Chart (2025–2075)</h3>
+    <div className="w-full flex justify-center">
       <div ref={ref} />
     </div>
   );

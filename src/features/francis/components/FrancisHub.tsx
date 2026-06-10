@@ -3,8 +3,9 @@ import { motion } from 'framer-motion';
 import SurgicalDigitalTwin from './SurgicalDigitalTwin';
 import { useAssetContext } from '../../../contexts/AssetContext.tsx';
 import { useTelemetryStore } from '../../telemetry/store/useTelemetryStore';
-import { Shield, LayoutGrid, FileText, CheckCircle } from 'lucide-react';
+import { Shield, LayoutGrid, FileText, CheckCircle, ChevronRight } from 'lucide-react';
 import { TRIGGER_FORENSIC_EXPORT } from '../../../components/diagnostics/Sidebar.tsx';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Technical Asset Definition for the Surgical Index
@@ -38,6 +39,7 @@ export const FrancisHub: React.FC = () => {
     const [xrayEnabled, setXrayEnabled] = useState(false);
     const { selectedAsset } = useAssetContext();
     const { isCommanderMode } = useTelemetryStore();
+    const navigate = useNavigate();
 
     // Listen for clicks inside the injected SVG (dispatched by SurgicalDigitalTwin)
     useEffect(() => {
@@ -116,6 +118,22 @@ export const FrancisHub: React.FC = () => {
                     >
                         <Shield className={`w-3 h-3 ${isCommanderMode ? 'fill-current' : ''}`} />
                         <span className="font-bold tracking-widest">{isCommanderMode ? 'COMMANDER ACTIVE // NC-9.0' : 'COMMANDER MODE // NC-9.0'}</span>
+                    </button>
+
+                    <div className="opacity-30">|</div>
+
+                    <button 
+                        onClick={() => navigate('/francis/vertical')}
+                        className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 rounded font-bold uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(34,211,238,0.2)] hover:border-cyan-500/50"
+                    >
+                        Francis Vertical <ChevronRight className="w-3 h-3" />
+                    </button>
+                    
+                    <button 
+                        onClick={() => navigate('/francis/horizontal')}
+                        className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 rounded font-bold uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(34,211,238,0.2)] hover:border-cyan-500/50"
+                    >
+                        Francis Horizontal <ChevronRight className="w-3 h-3" />
                     </button>
 
                     <div className="opacity-30">|</div>
