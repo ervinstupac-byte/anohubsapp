@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Command, Smartphone, Box, Zap, FileText, Settings, X, ChevronRight } from 'lucide-react';
+import { Search, Command, Smartphone, Box, Zap, FileText, Settings, X, ChevronRight, Target } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useAssetContext } from '../../contexts/AssetContext';
@@ -9,6 +9,7 @@ import { useDensity } from '../../contexts/DensityContext';
 import { useDrillDown } from '../../contexts/DrillDownContext';
 import { GLASS, RADIUS, TYPOGRAPHY_COMPACT, TYPOGRAPHY, SPACING, SPACING_COMPACT, STATUS_COLORS } from '../../shared/design-tokens';
 import { StatusIndicator } from '../../shared/components/ui/StatusIndicator';
+import { HolographicBridge } from '../../services/HolographicBridge';
 
 interface CommandResult {
     id: string;
@@ -67,6 +68,16 @@ export const CommandPalette = React.memo(() => {
         { id: 'mod-3', label: 'Toolbox', type: 'module', icon: <Smartphone />, action: () => navigate('/'), subtitle: 'Field tools' },
         { id: 'mod-4', label: 'Reports', type: 'module', icon: <FileText />, action: () => navigate('/risk-report'), subtitle: 'Generated PDFs' },
         { id: 'mod-5', label: 'Settings', type: 'module', icon: <Settings />, action: () => navigate('/profile'), subtitle: 'User preferences' },
+        { id: 'act-1', label: 'Init AR Holographic Bridge', type: 'action', icon: <Zap className="text-amber-400" />, action: () => {
+            HolographicBridge.initializeStreaming();
+            HolographicBridge.registerClient('HOLOLENS-01', {} as WebSocket);
+            alert('Holographic Bridge initialized at 50Hz. Awaiting AR headsets.');
+            setIsOpen(false);
+        }, subtitle: 'Sub-20ms telemetry streaming' },
+        { id: 'act-2', label: 'Commence Shaft Alignment', type: 'action', icon: <Target className="text-emerald-400" />, action: () => {
+            window.dispatchEvent(new Event('openAlignmentWizard'));
+            setIsOpen(false);
+        }, subtitle: 'Precision 0.05 mm' },
     ];
 
     // Safe assets access

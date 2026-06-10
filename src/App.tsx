@@ -26,7 +26,8 @@ import { SystemStressTest } from './components/debug/SystemStressTest.tsx'; // D
 
 import { Sidebar } from './components/diagnostics/Sidebar.tsx';
 import { NeuralFlowMap } from './components/diagnostics/NeuralFlowMap.tsx';
-import { AssetRegistrationWizard } from './components/AssetRegistrationWizard.tsx';
+import { AssetOnboardingWizard } from './components/digital-twin/AssetOnboardingWizard.tsx';
+import { AlignmentWizard } from './components/commissioning/AlignmentWizard.tsx';
 import { UnderConstruction } from './components/ui/UnderConstruction.tsx';
 import { LoadingShimmer } from './shared/components/ui/LoadingShimmer';
 import { Breadcrumbs } from './shared/components/ui/Breadcrumbs';
@@ -224,6 +225,13 @@ const AppLayout: React.FC = () => {
     const [showOnboarding, setShowOnboarding] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1024);
     const [isWizardOpen, setIsWizardOpen] = useState(false);
+    const [isAlignmentWizardOpen, setIsAlignmentWizardOpen] = useState(false);
+
+    useEffect(() => {
+        const handleOpenAlignment = () => setIsAlignmentWizardOpen(true);
+        window.addEventListener('openAlignmentWizard', handleOpenAlignment);
+        return () => window.removeEventListener('openAlignmentWizard', handleOpenAlignment);
+    }, []);
     const [isMapOpen, setIsMapOpen] = useState(false); // Map State
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [reconstructing, setReconstructing] = useState(false);
@@ -376,7 +384,15 @@ const AppLayout: React.FC = () => {
                     </div>
 
                     {showOnboarding && <Onboarding onComplete={handleOnboardingComplete} />}
-                    {isWizardOpen && <AssetRegistrationWizard isOpen={isWizardOpen} onClose={() => setIsWizardOpen(false)} />}
+                    {isWizardOpen && <AssetOnboardingWizard isOpen={isWizardOpen} onClose={() => setIsWizardOpen(false)} />}
+                    {isAlignmentWizardOpen && (
+                        <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm overflow-y-auto p-6 flex justify-center">
+                            <div className="relative w-full max-w-5xl">
+                                <button onClick={() => setIsAlignmentWizardOpen(false)} className="absolute -top-4 -right-4 p-2 bg-slate-800 hover:bg-slate-700 rounded-full z-50 text-white">X</button>
+                                <AlignmentWizard sessionId="manual-align" onComplete={() => setIsAlignmentWizardOpen(false)} />
+                            </div>
+                        </div>
+                    )}
 
                     {/* GLOBAL MAP MODAL */}
                     <Suspense fallback={<Spinner />}>

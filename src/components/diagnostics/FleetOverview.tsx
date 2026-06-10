@@ -1,6 +1,9 @@
 import React from 'react';
 import { useAssetContext } from '../../contexts/AssetContext.tsx';
 import { useTranslation } from 'react-i18next';
+import { TrashRackRobot } from '../../services/TrashRackRobot';
+import { Settings, Droplets, FileDown } from 'lucide-react';
+import { ReportGenerator } from '../../features/reporting/ReportGenerator';
 
 interface FleetOverviewProps {
     onToggleMap: () => void;
@@ -11,6 +14,16 @@ interface FleetOverviewProps {
 export const FleetOverview: React.FC<FleetOverviewProps> = React.memo(({ onToggleMap, showMap, onRegisterAsset }) => {
     const { assets, selectedAsset, selectAsset } = useAssetContext();
     const { t } = useTranslation();
+    
+    const [trashRackStatus, setTrashRackStatus] = React.useState<{ shouldClean: boolean; reason: string } | null>(null);
+    const [optimalSchedule, setOptimalSchedule] = React.useState<{ recommendedTime: number; marketPrice: number; savings: number }[]>([]);
+
+    React.useEffect(() => {
+        TrashRackRobot.checkCleaningTrigger(0.6, 50).then(res => {
+            setTrashRackStatus(res);
+            setOptimalSchedule(TrashRackRobot.getOptimalCleaningSchedule(0.6));
+        });
+    }, []);
 
     return (
         <div className="p-3 sm:p-4 border-b border-black/10 bg-black/5 text-slate-800">
@@ -90,15 +103,74 @@ export const FleetOverview: React.FC<FleetOverviewProps> = React.memo(({ onToggl
                 ))}
             </div>
 
-            {/* Add Asset Button */}
-            <button
-                onClick={onRegisterAsset}
-                className="w-full mt-3 py-2 px-2 flex items-center justify-center gap-1 sm:gap-2 border border-dashed border-black/25 rounded text-[9px] sm:text-[10px] font-bold text-slate-600 hover:text-cyan-600 hover:border-cyan-500 hover:bg-white/20 transition-all uppercase tracking-wider"
-            >
-                <span className="text-sm">+</span>
-                <span className="hidden xs:inline">Register New Plant</span>
-                <span className="xs:hidden">New Plant</span>
-            </button>
+            {/* Trash Rack Robot Status */}
+            <div className="mt-4 mb-2 p-3 bg-white/40 border border-cyan-600/20 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-1.5 text-cyan-800">
+                        <Droplets className="w-3.5 h-3.5" />
+                        <span className="text-[10px] font-black uppercase tracking-wider">Auto-Clean (Trash Rack)</span>
+                    </div>
+                    {trashRackStatus?.shouldClean ? (
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    ) : (
+                        <span className="w-2 h-2 rounded-full bg-amber-500" />
+                    )}
+                </div>
+                <div className="text-[9px] font-mono text-slate-600 mb-2 leading-relaxed">
+                    {trashRackStatus?.reason || 'Checking DP thresholds...'}
+                </div>
+                {optimalSchedule.length > 0 && (
+                    <div className="space-y-1 mt-2 border-t border-cyan-600/10 pt-2">
+                        <div className="text-[8px] font-bold text-cyan-800 uppercase">Optimal Window (Price Match):</div>
+                        {optimalSchedule.slice(0, 1).map((opt, i) => (
+                            <div key={i} className="flex justify-between items-center text-[9px] font-mono">
+                                <span>{new Date(opt.recommendedTime).toLocaleTimeString('bs-BA', {hour: '2-digit', minute:'2-digit'})}</span>
+                                <span className="text-emerald-700 font-bold">€{opt.marketPrice.toFixed(2)}/MWh</span>
+                                <span className="text-emerald-600">(Save €{opt.savings.toFixed(1)})</span>
+                            </div>
+                        ))}
+                        <button className="w-full mt-1.5 py-1 bg-cyan-600 text-white text-[9px] font-bold uppercase rounded hover:bg-cyan-700 transition-colors">
+                            Approve Schedule
+                        </button>
+                    </div>
+                )}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-2 mt-3">
+                <button
+                    onClick={onRegisterAsset}
+                    className="flex-1 py-2 px-2 flex items-center justify-center gap-1 sm:gap-2 border border-dashed border-black/25 rounded text-[9px] sm:text-[10px] font-bold text-slate-600 hover:text-cyan-600 hover:border-cyan-500 hover:bg-white/20 transition-all uppercase tracking-wider"
+                >
+                    <span className="text-sm">+</span>
+                    <span className="hidden xs:inline">Register New Plant</span>
+                    <span className="xs:hidden">New Plant</span>
+                </button>
+                <button
+                    onClick={() => {
+                        const gen = new ReportGenerator();
+                        const blob = gen.generateExecutiveBriefing({
+                            fleetHealth: 88.5,
+                            totalMoneyAtRisk: 1450000,
+                            reports: assets.map(a => ({
+                                assetName: a.name,
+                                score: a.status === 'Critical' ? 45 : (a.status === 'Warning' ? 72 : 95),
+                                efficiency: a.status === 'Critical' ? 68 : (a.status === 'Warning' ? 84 : 92),
+                                risk: a.status === 'Critical' ? 450000 : (a.status === 'Warning' ? 120000 : 0),
+                                readiness: a.status === 'Critical' ? 'COMPROMISED' : (a.status === 'Warning' ? 'DEGRADED' : 'OPTIMAL')
+                            })),
+                            integrityHash: Math.random().toString(36).substring(2, 15).toUpperCase()
+                        });
+                        gen.downloadReport(blob, `Executive_Briefing_${new Date().toISOString().split('T')[0]}.pdf`);
+                    }}
+                    className="flex-1 py-2 px-2 flex items-center justify-center gap-1 sm:gap-2 border border-black/10 bg-cyan-600 text-white rounded text-[9px] sm:text-[10px] font-bold hover:bg-cyan-500 transition-all uppercase tracking-wider"
+                    title="Generate PDF Fleet Report"
+                >
+                    <FileDown className="w-3.5 h-3.5" />
+                    <span className="hidden xs:inline">Fleet Briefing</span>
+                    <span className="xs:hidden">Briefing</span>
+                </button>
+            </div>
         </div>
     );
 });

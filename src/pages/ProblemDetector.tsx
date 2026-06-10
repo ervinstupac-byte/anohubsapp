@@ -12,6 +12,10 @@ import {
 } from 'lucide-react';
 import { DiagnosticRCA } from '../components/automation/DiagnosticRCA';
 import { PredictiveProcurementService } from '../services/PredictiveProcurementService';
+import { ReportGenerator } from '../features/reporting/ReportGenerator';
+import { RoboticSwarmCoordinator, MissionProfile } from '../services/RoboticSwarmCoordinator';
+import { InvisibleMonstersDetector, CavitationStatus, ErosionStatus } from '../services/InvisibleMonstersDetector';
+import { FrancisHorizontalEngine } from '../lib/engines/FrancisHorizontalEngine';
 
 export const ProblemDetector: React.FC = () => {
     const { assets, selectedAsset, logActivity } = useAssetContext();
@@ -33,6 +37,13 @@ export const ProblemDetector: React.FC = () => {
     const [isDiagnosing, setIsDiagnosing] = useState(false);
     const [diagnosis, setDiagnosis] = useState<UnifiedDiagnosis | null>(null);
     const [statusMsg, setStatusMsg] = useState<{ type: 'success' | 'error' | null; msg: string }>({ type: null, msg: '' });
+    const [swarmMission, setSwarmMission] = useState<MissionProfile | null>(null);
+    const [monsterReport, setMonsterReport] = useState<{
+        cavitation: CavitationStatus;
+        erosion: ErosionStatus;
+        overallRisk: string;
+        recommendations: string[];
+    } | null>(null);
 
     // Active turbine helper
     const activeTurbine = useMemo(() => {
@@ -277,6 +288,33 @@ export const ProblemDetector: React.FC = () => {
         try {
             const results = await MasterIntelligenceEngine.analyzeAsset(mappedAsset, [historyEntry]);
             setDiagnosis(results);
+            
+            // Check Swarm Triggers
+            const headLossPct = symptoms.efficiency ? 6.2 : 1.0;
+            const operatingHours = 45000;
+            const rulHours = results.rulHours || 1500;
+            const newMission = RoboticSwarmCoordinator.checkTriggers(headLossPct, operatingHours, rulHours);
+            if (newMission) {
+                setSwarmMission(newMission);
+            } else {
+                setSwarmMission(null);
+            }
+
+            // Check Invisible Monsters (Sigma Spy)
+            if (symptoms.acoustic || symptoms.efficiency) {
+                const engine = new FrancisHorizontalEngine();
+                const detector = new InvisibleMonstersDetector(engine);
+                // Mock telemetry based on symptoms for demonstration
+                const mockTelemetry = {
+                    hydraulic: { flow: symptoms.efficiency ? 45.2 : 55.0, head: symptoms.acoustic ? 18.5 : 22.0 },
+                    mechanical: { rpm: 500 }
+                } as any;
+                const report = detector.getFullMonsterReport(mockTelemetry, { sedimentPPM: 350, particleSize: 0.1 });
+                setMonsterReport(report);
+            } else {
+                setMonsterReport(null);
+            }
+
             setStatusMsg({ type: 'success', msg: 'AI dijagnostika uspješno završena. Rezultati su spremni.' });
         } catch (error: any) {
             console.error('MasterIntelligenceEngine analysis failed:', error);
@@ -400,8 +438,24 @@ export const ProblemDetector: React.FC = () => {
         return list.filter((v, i, a) => a.findIndex(t => t.path === v.path) === i);
     }, [symptoms, activeTurbine]);
 
+    const isFrancis = activeTurbine && 
+        (activeTurbine.turbine_type?.toUpperCase() === 'FRANCIS' || activeTurbine.type?.toUpperCase() === 'FRANCIS');
+
     return (
-        <div className="space-y-8 animate-fade-in relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-6">
+        <div className="relative min-h-screen">
+            {/* Conditional Background for Francis Vertical */}
+            {isFrancis && (
+                <div 
+                    className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-30 mix-blend-luminosity"
+                    style={{ backgroundImage: 'url("/assets/pic.s_Background/VerticalFrancis.png")' }}
+                />
+            )}
+            {/* Glassmorphism gradient overlay */}
+            {isFrancis && (
+                <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#0a0a0a]/80 via-[#0a0a0a]/95 to-[#0a0a0a]" />
+            )}
+
+            <div className="space-y-8 animate-fade-in relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-6">
             
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -824,6 +878,74 @@ export const ProblemDetector: React.FC = () => {
                                             <DiagnosticRCA />
                                         </div>
                                     )}
+
+                                    {/* Robotic Swarm Coordinator UI */}
+                                    {swarmMission && (
+                                        <div className="mt-6 p-4 rounded-xl border border-cyan-500/20 bg-cyan-950/20 shadow-[0_0_15px_rgba(6,182,212,0.15)] relative overflow-hidden">
+                                            <div className="absolute right-[-10px] top-[-10px] opacity-10">
+                                                <Cpu className="w-24 h-24 text-cyan-500" />
+                                            </div>
+                                            <h4 className="text-[10px] font-black uppercase tracking-wider text-cyan-400 font-mono flex items-center gap-2 mb-2">
+                                                <div className="w-2 h-2 rounded-full bg-cyan-400 animate-ping absolute" />
+                                                <div className="w-2 h-2 rounded-full bg-cyan-400 relative" />
+                                                Robotic Swarm Deployed
+                                            </h4>
+                                            <div className="text-xs text-white font-mono mb-2">
+                                                Misija: <span className="font-bold text-cyan-300">{swarmMission.missionId}</span>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-slate-400">
+                                                <div>Meta: <span className="text-white font-bold">{swarmMission.targetZone}</span></div>
+                                                <div>Prioritet: <span className={swarmMission.priority === 'EMERGENCY' ? 'text-red-400 font-bold' : 'text-amber-400 font-bold'}>{swarmMission.priority}</span></div>
+                                                <div className="col-span-2 mt-1 italic border-l-2 border-cyan-500/50 pl-2">
+                                                    "{swarmMission.triggerReason}"
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Invisible Monsters (Sigma Spy) UI */}
+                                    {monsterReport && (
+                                        <div className="mt-6 p-4 rounded-xl border border-rose-500/20 bg-rose-950/20 shadow-[0_0_15px_rgba(244,63,94,0.15)] relative overflow-hidden">
+                                            <div className="absolute right-[-10px] top-[-10px] opacity-10">
+                                                <AlertTriangle className="w-24 h-24 text-rose-500" />
+                                            </div>
+                                            <h4 className="text-[10px] font-black uppercase tracking-wider text-rose-400 font-mono flex items-center gap-2 mb-4">
+                                                <Eye className="w-4 h-4 text-rose-400" />
+                                                The Sigma Spy (Cavitation & Erosion Monitor)
+                                            </h4>
+                                            
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div className="bg-black/40 border border-rose-500/10 p-3 rounded-lg">
+                                                    <div className="text-[9px] text-slate-500 font-mono uppercase mb-1">Cavitation (Thoma $\sigma$)</div>
+                                                    <div className="flex items-end gap-2">
+                                                        <div className="text-xl font-black text-rose-300 font-mono">{monsterReport.cavitation.sigma.toFixed(3)}</div>
+                                                        <div className={`text-[8px] px-1.5 py-0.5 rounded font-mono font-bold ${monsterReport.cavitation.riskLevel === 'CRITICAL' ? 'bg-rose-500/20 text-rose-400' : 'bg-amber-500/20 text-amber-400'}`}>
+                                                            {monsterReport.cavitation.riskLevel}
+                                                        </div>
+                                                    </div>
+                                                    <p className="text-[9px] text-slate-400 mt-2 font-mono leading-relaxed">{monsterReport.cavitation.message}</p>
+                                                </div>
+                                                
+                                                <div className="bg-black/40 border border-orange-500/10 p-3 rounded-lg">
+                                                    <div className="text-[9px] text-slate-500 font-mono uppercase mb-1">Erosion Rate</div>
+                                                    <div className="flex items-end gap-2">
+                                                        <div className="text-xl font-black text-orange-300 font-mono">{monsterReport.erosion.estimatedWearRate.toFixed(2)} mm/yr</div>
+                                                        <div className={`text-[8px] px-1.5 py-0.5 rounded font-mono font-bold ${monsterReport.erosion.riskLevel === 'HIGH' || monsterReport.erosion.riskLevel === 'SEVERE' ? 'bg-orange-500/20 text-orange-400' : 'bg-yellow-500/20 text-yellow-400'}`}>
+                                                            {monsterReport.erosion.riskLevel}
+                                                        </div>
+                                                    </div>
+                                                    <p className="text-[9px] text-slate-400 mt-2 font-mono leading-relaxed">{monsterReport.erosion.message}</p>
+                                                </div>
+                                            </div>
+                                            
+                                            {monsterReport.recommendations.length > 0 && (
+                                                <div className="mt-3 text-[9px] text-rose-200 font-mono italic border-l-2 border-rose-500/50 pl-2">
+                                                    <span className="font-bold uppercase mr-1">Action:</span>
+                                                    {monsterReport.recommendations[0]}
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </GlassCard>
 
                                 {/* Service Notes Findings */}
@@ -941,6 +1063,26 @@ export const ProblemDetector: React.FC = () => {
                                         Kreiraj Radni Nalog (Work Order)
                                     </button>
                                     <button
+                                        onClick={() => {
+                                            if (diagnosis && mappedAsset) {
+                                                const gen = new ReportGenerator();
+                                                const blob = gen.generateIncidentReport({
+                                                    assetName: mappedAsset.name,
+                                                    incidentType: 'AI Diagnostic Assessment',
+                                                    deviation: 'Health Score: ' + diagnosis.overallHealthScore,
+                                                    timestamp: new Date().toISOString(),
+                                                    status: diagnosis.criticality
+                                                });
+                                                gen.downloadReport(blob, `Incident_Report_${mappedAsset.id}.pdf`);
+                                            }
+                                        }}
+                                        disabled={!diagnosis}
+                                        className="px-6 py-3.5 bg-rose-600/80 hover:bg-rose-500 border border-rose-500/60 text-white font-bold uppercase tracking-wider font-mono text-xs rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        <AlertTriangle className="w-4 h-4" />
+                                        Eksportuj Incident Report
+                                    </button>
+                                    <button
                                         onClick={() => navigate('/knowledge-base/turbine-friend')}
                                         className="px-6 py-3.5 bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 text-slate-300 hover:text-white font-bold uppercase tracking-wider font-mono text-xs rounded-xl transition-all flex items-center justify-center gap-2"
                                     >
@@ -953,6 +1095,7 @@ export const ProblemDetector: React.FC = () => {
                     </AnimatePresence>
                 </div>
             </div>
+        </div>
         </div>
     );
 };

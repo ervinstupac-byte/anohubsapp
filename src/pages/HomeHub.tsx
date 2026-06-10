@@ -128,7 +128,16 @@ export const HomeHub: React.FC = () => {
     const roleLabel = userRole || 'GUEST';
 
     return (
-        <div className="space-y-8 max-w-7xl mx-auto px-4 md:px-8 py-8">
+        <div className="relative min-h-screen">
+            {/* Dynamic Background Image */}
+            <div 
+                className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-30 mix-blend-luminosity"
+                style={{ backgroundImage: 'url("/assets/pic.s_Background/main dash.jpg")' }}
+            />
+            {/* Glassmorphism gradient overlay */}
+            <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#0a0a0a]/70 via-[#0a0a0a]/90 to-[#0a0a0a]" />
+
+            <div className="space-y-8 relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-8">
             {/* Header Section */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-6 border-b border-slate-700/30">
                 <div className="space-y-2">
@@ -354,6 +363,7 @@ export const HomeHub: React.FC = () => {
                         </div>
                     </motion.div>
                 </div>
+            </div>
             </div>
         </div>
     );

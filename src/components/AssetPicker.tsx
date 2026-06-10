@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
-import { AssetRegistrationWizard } from './AssetRegistrationWizard.tsx';
+import { AssetOnboardingWizard } from './digital-twin/AssetOnboardingWizard.tsx';
 
 // OVO JE JEDINA DEKLARACIJA I EKSPORT KOMPONENTE AssetPicker
 export const AssetPicker: React.FC = () => {
@@ -55,7 +55,7 @@ export const AssetPicker: React.FC = () => {
             </button>
 
             {/* WIZARD MODAL */}
-            <AssetRegistrationWizard
+            <AssetOnboardingWizard
                 isOpen={isWizardOpen}
                 onClose={() => setIsWizardOpen(false)}
             />

@@ -38,9 +38,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
     const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
 
     // Heritage (NC-9.0) Logic
-    const alignment = techState.mechanical.alignment || 0;
-    const water = techState.identity.fluidIntelligence.oilSystem.waterContentPPM || 0;
-    const tan = techState.identity.fluidIntelligence.oilSystem.tan || 0;
+    const alignment = techState?.mechanical?.alignment || 0;
+    const water = techState?.identity?.fluidIntelligence?.oilSystem?.waterContentPPM || 0;
+    const tan = techState?.identity?.fluidIntelligence?.oilSystem?.tan || 0;
     const isHeritageCertified = alignment <= 0.05 && water <= 500 && tan <= 0.5 && tan > 0;
 
 

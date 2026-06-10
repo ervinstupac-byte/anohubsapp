@@ -15,6 +15,7 @@ import { GlassCard } from '../shared/components/ui/GlassCard';
 import { ThresholdResolver } from '../services/ThresholdResolver';
 import { supabase } from '../services/supabaseClient';
 import { AdversarialSimulator } from '../services/AdversarialSimulator';
+import { BlackStartOrchestrator } from '../services/BlackStartOrchestrator';
 
 interface LogbookEntry {
     id: string;
@@ -81,6 +82,9 @@ export const DigitalLogbook: React.FC = () => {
     // Red Team Simulation states
     const [simReport, setSimReport] = useState<string | null>(null);
     const [isSimulating, setIsSimulating] = useState(false);
+
+    // Black Start states
+    const [blackStartStatus, setBlackStartStatus] = useState<{ active: boolean; step: number }>({ active: false, step: 0 });
 
     // Active turbine helper
     const activeTurbine = useMemo(() => {
@@ -388,6 +392,27 @@ export const DigitalLogbook: React.FC = () => {
         console.log = originalLog;
         setSimReport(report);
         setIsSimulating(false);
+    };
+
+    // Trigger Black Start Sequence
+    const handleBlackStart = async () => {
+        if (blackStartStatus.active) return;
+        setBlackStartStatus({ active: true, step: 0 });
+        
+        const pollInterval = setInterval(() => {
+            const status = BlackStartOrchestrator.getStatus();
+            setBlackStartStatus(status);
+            if (!status.active && status.step > 0) {
+                clearInterval(pollInterval);
+            }
+        }, 500);
+
+        try {
+            await BlackStartOrchestrator.initiateBlackStart();
+        } finally {
+            clearInterval(pollInterval);
+            setBlackStartStatus({ active: false, step: 8 });
+        }
     };
 
     return (
@@ -854,6 +879,60 @@ export const DigitalLogbook: React.FC = () => {
                         {simReport && (
                             <div className="mt-4 p-3 bg-black/60 border border-red-500/20 rounded-lg text-[9px] text-red-200 font-mono whitespace-pre-wrap overflow-x-auto max-h-[300px] overflow-y-auto custom-scrollbar">
                                 {simReport}
+                            </div>
+                        )}
+                    </GlassCard>
+
+                    {/* BLACK START ORCHESTRATOR PANEL */}
+                    <GlassCard className="p-5 border-amber-500/20 bg-amber-950/10 mt-6">
+                        <h2 className="text-xs font-black uppercase tracking-widest text-amber-400 font-mono mb-4 flex items-center gap-2">
+                            <Activity className="w-3.5 h-3.5" />
+                            Emergency Protocols (Black Start)
+                        </h2>
+                        <p className="text-[10px] text-slate-400 font-mono mb-4">
+                            Simulacija autonomnog podizanja sistema iz totalnog mraka (Cold Start) koristeći interne DC baterije i H2 ćelije.
+                        </p>
+                        
+                        <button
+                            onClick={handleBlackStart}
+                            disabled={blackStartStatus.active}
+                            className="w-full py-2 bg-amber-600/20 hover:bg-amber-600/40 border border-amber-500/30 text-amber-300 font-bold uppercase tracking-wider font-mono text-xs rounded-lg transition-all flex items-center justify-center gap-2"
+                        >
+                            {blackStartStatus.active ? (
+                                <>
+                                    <div className="w-3.5 h-3.5 border-2 border-amber-300/30 border-t-amber-300 rounded-full animate-spin" />
+                                    Sekvenca U Toku (Korak {blackStartStatus.step}/8)...
+                                </>
+                            ) : (
+                                <>
+                                    <AlertTriangle className="w-3.5 h-3.5" />
+                                    Iniciraj Totalni Blackout
+                                </>
+                            )}
+                        </button>
+
+                        {blackStartStatus.step > 0 && (
+                            <div className="mt-4 p-4 bg-black/60 border border-amber-500/20 rounded-lg">
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="text-[10px] text-amber-400 font-mono uppercase font-bold">Cold Start Sekvenca</span>
+                                    <span className="text-[10px] text-slate-400 font-mono">{Math.round((blackStartStatus.step / 8) * 100)}%</span>
+                                </div>
+                                <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden">
+                                    <div 
+                                        className="h-full bg-amber-500 transition-all duration-500" 
+                                        style={{ width: `${(blackStartStatus.step / 8) * 100}%` }}
+                                    />
+                                </div>
+                                <div className="mt-3 text-[9px] text-slate-400 font-mono">
+                                    {blackStartStatus.step === 1 && '▶ Aktivacija DC baterija (125V)...'}
+                                    {blackStartStatus.step === 2 && '▶ Paljenje H2 Fuel Cell agregata...'}
+                                    {blackStartStatus.step === 3 && '▶ Pokretanje uljnih pumpi...'}
+                                    {blackStartStatus.step === 4 && '▶ Aktivacija rashladnog sistema...'}
+                                    {blackStartStatus.step === 5 && '▶ Energizacija pobudnog sistema...'}
+                                    {blackStartStatus.step === 6 && '▶ Otvaranje sprovodnog aparata (Wicket Gates)...'}
+                                    {blackStartStatus.step === 7 && '▶ Sinhronizacija generatora (50 Hz)...'}
+                                    {blackStartStatus.step === 8 && '✅ BLACK START ZAVRŠEN - Jedinica ONLINE'}
+                                </div>
                             </div>
                         )}
                     </GlassCard>
