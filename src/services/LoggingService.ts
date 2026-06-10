@@ -30,8 +30,12 @@ class LoggingService {
 
             if (error) throw error;
             console.log(`[LoggingService] Event logged: ${log.eventType}`);
-        } catch (err) {
-            console.error('[LoggingService] Failed to log event:', err);
+        } catch (err: any) {
+            if (err?.code !== '42P01' && err?.code !== 'PGRST116') {
+                console.error('[LoggingService] Failed to log event:', err.message || err);
+            } else {
+                console.debug('[LoggingService] Telemetry logging suppressed (table not found)');
+            }
         }
     }
 

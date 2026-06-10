@@ -135,7 +135,7 @@ export const DigitalLogbook: React.FC = () => {
                 setLogs(mapped);
             }
         } catch (err) {
-            console.warn('[Logbook] Supabase fetch suppressed or failed, loading from LocalStorage');
+            console.debug('[Logbook] Supabase fetch suppressed or failed, loading from LocalStorage');
             const localLogs = localStorage.getItem('anohub_local_logbooks');
             if (localLogs) {
                 setLogs(JSON.parse(localLogs));
@@ -270,7 +270,7 @@ export const DigitalLogbook: React.FC = () => {
             loadLogs();
         } catch (err: any) {
             // Fallback: Save locally
-            console.warn('[Logbook] Supabase write failed, falling back to LocalStorage:', err.message || err);
+            console.debug('[Logbook] Supabase write failed, falling back to LocalStorage:', err.message || err);
             
             const newEntry: LogbookEntry = {
                 id: 'local-' + Date.now(),

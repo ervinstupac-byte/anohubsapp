@@ -32,6 +32,8 @@ export const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary, onR
             const numeric = idAdapter.toNumber(selectedAsset.id);
             const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : undefined;
 
+            if (!assetDbId) return;
+
             const { data, error } = await supabase
                 .from('diagnostic_drafts')
                 .select('answers')
@@ -61,6 +63,9 @@ export const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary, onR
             console.log('💾 Saving draft to Supabase...');
             const numeric = idAdapter.toNumber(selectedAsset.id);
             const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : undefined;
+
+            if (!assetDbId) return;
+
             const { error } = await supabase
                 .from('diagnostic_drafts')
                 .upsert({

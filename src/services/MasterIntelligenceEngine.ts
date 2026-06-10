@@ -777,11 +777,11 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                     message: 'High turbidity detected. Prioritizing Sediment Abrasion over Cavitation.',
                     justification: 'As per AnoHUB Article-13: Pelton units are highly vulnerable to abrasion from solid particles like sand and silt.'
                 };
-            } else {
+            } else if (latest.specialized?.erosionPoints && latest.specialized.erosionPoints.length > 0) {
                 const erosionResult = CavitationErosionService.analyzeErosionTrend(
                     asset.id,
                     asset.turbine_family,
-                    latest.specialized?.erosionPoints || [],
+                    latest.specialized.erosionPoints as any,
                     null,
                     0 // operating hours
                 ) as any;

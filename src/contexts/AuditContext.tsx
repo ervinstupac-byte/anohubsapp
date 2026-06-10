@@ -54,7 +54,7 @@ export const AuditProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         };
 
         // 1. Log to Console (Dev)
-        console.log('[AUDIT LOG]', newEntry);
+        console.debug('[AUDIT LOG]', newEntry);
 
         // 2. Update Local State (for UI display if needed)
         setLogs(prev => [newEntry, ...prev]);

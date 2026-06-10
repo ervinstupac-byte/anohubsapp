@@ -51,8 +51,10 @@ export default function CenturyROIChart({ assetId, pricePerKwh = 0.08 }: { asset
         }
 
         if (!cancelled) setData(yearSeries);
-      } catch (e) {
-        console.error('Failed to build century ROI data', e);
+      } catch (e: any) {
+        if (e?.code !== '42P01' && e?.code !== 'PGRST116') {
+            console.error('Failed to build century ROI data', e.message || e);
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }

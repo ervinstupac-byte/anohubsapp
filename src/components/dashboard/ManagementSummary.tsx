@@ -21,8 +21,11 @@ export const ManagementSummary: React.FC = () => {
         const { data, error } = await supabase.from('reports').select('*').eq('asset_id', assetDbId).order('created_at', { ascending: false }).limit(5);
         if (error) throw error;
         setReports(data || []);
-      } catch (e) {
-        console.warn('ManagementSummary fetch failed:', e);
+      } catch (e: any) {
+        if (e?.code !== 'PGRST116' && e?.code !== '42P01') {
+           // Only warn if it's not a 'table not found' error
+           console.debug('[ManagementSummary] Supabase fetch suppressed:', e.message || e);
+        }
         setReports([]);
       } finally {
         setLoading(false);

@@ -492,11 +492,11 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
         // If DB rejects UUID input (common when schema expects UUID but we sent numeric id), retry without asset_id
         if (error) {
             const msg = String((error && (error.message || error)) || error);
-            console.error('Failed to create WO in DB (first attempt):', error);
+            console.debug('[MaintenanceContext] Failed to create WO in DB (first attempt):', error);
             if (msg.includes('invalid input syntax for type uuid') || msg.includes('invalid input syntax for type uuid')) {
                 // remove asset_id and retry as a fallback
                 delete payload.asset_id;
-                console.warn('[MaintenanceContext] Retrying WO insert without asset_id due to UUID column type mismatch.');
+                console.debug('[MaintenanceContext] Retrying WO insert without asset_id due to UUID column type mismatch.');
                 try {
                     const res2 = await supabase.from('work_orders').insert(payload).select().single();
                     data = res2.data; error = res2.error;
@@ -507,7 +507,7 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
         }
 
         if (error) {
-            console.error('Failed to create WO in DB after retries:', error);
+            console.debug('[MaintenanceContext] Failed to create WO in DB after retries:', error);
             return newOrder;
         }
 

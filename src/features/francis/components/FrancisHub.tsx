@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SurgicalDigitalTwin from './SurgicalDigitalTwin';
+import { SpecialMeasurementPanel } from './SpecialMeasurementPanel';
 import { useAssetContext } from '../../../contexts/AssetContext.tsx';
 import { useTelemetryStore } from '../../telemetry/store/useTelemetryStore';
 import { Shield, LayoutGrid, FileText, CheckCircle, ChevronRight } from 'lucide-react';
-import { TRIGGER_FORENSIC_EXPORT } from '../../../components/diagnostics/Sidebar.tsx';
 import { useNavigate } from 'react-router-dom';
+import { EnhancedAsset, TurbineFamily, TurbineVariant } from '../../../models/turbine/types';
 
 /**
  * Technical Asset Definition for the Surgical Index
@@ -40,6 +41,38 @@ export const FrancisHub: React.FC = () => {
     const { selectedAsset } = useAssetContext();
     const { isCommanderMode } = useTelemetryStore();
     const navigate = useNavigate();
+
+    const mappedAsset = useMemo<EnhancedAsset | null>(() => {
+        if (!selectedAsset) return null;
+        const family = (selectedAsset.turbine_type || selectedAsset.type || 'FRANCIS').toUpperCase() as TurbineFamily;
+        const variant = `${family.toLowerCase()}_vertical` as TurbineVariant;
+        const assetId = typeof selectedAsset.id === 'number'
+            ? selectedAsset.id
+            : parseInt(String(selectedAsset.id), 10) || 101;
+
+        return {
+            id: assetId,
+            name: selectedAsset.name,
+            type: 'HPP',
+            location: selectedAsset.location || 'AnoHub Command Center',
+            coordinates: selectedAsset.coordinates || [44.5, 17.5],
+            capacity: selectedAsset.capacity || 10.0,
+            status: selectedAsset.status === 'Critical' ? 'Critical' : 'Operational',
+            turbine_family: family,
+            turbine_variant: variant,
+            turbine_config: {
+                head: selectedAsset.specs?.head || 150.0,
+                flow_max: selectedAsset.specs?.flow_max || 45.0,
+                runner_diameter: selectedAsset.specs?.runner_diameter || 1.2,
+                commissioning_date: selectedAsset.specs?.commissioning_date || '2020-01-01',
+                manufacturer: 'ANOHUBS Precision Systems',
+                serial_number: `SN-UTMS-${selectedAsset.id}`,
+                rated_speed: selectedAsset.specs?.rated_speed || 600,
+                bearing_span: selectedAsset.specs?.bearing_span || 2.2,
+                rotor_weight: selectedAsset.specs?.rotor_weight || 15.0
+            }
+        };
+    }, [selectedAsset]);
 
     // Listen for clicks inside the injected SVG (dispatched by SurgicalDigitalTwin)
     useEffect(() => {
@@ -192,6 +225,16 @@ export const FrancisHub: React.FC = () => {
                                 </button>
                             ))}
                         </nav>
+
+                        {mappedAsset && (
+                            <div className="p-4 border-t border-cyan-900/30">
+                                <SpecialMeasurementPanel
+                                    sessionId={`francis-${mappedAsset.id}`}
+                                    asset={mappedAsset}
+                                    onComplete={() => undefined}
+                                />
+                            </div>
+                        )}
                     </aside>
                 )}
 

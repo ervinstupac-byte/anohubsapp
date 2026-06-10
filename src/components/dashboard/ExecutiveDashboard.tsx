@@ -45,6 +45,7 @@ import SovereignAuditAdapter from '../../services/SovereignAuditAdapter';
 import { Crown, Brain, Target, Settings, ChevronRight, Shield } from 'lucide-react';
 import { ExecutiveSummary } from './ExecutiveSummary';
 import { ManagementSummary } from './ManagementSummary';
+import { ProtocolLaunchpad } from './ProtocolLaunchpad';
 import { FleetOverview } from './FleetOverview';
 import { SovereignPulse } from './SovereignPulse';
 import { HydroForecaster } from './HydroForecaster';
@@ -754,6 +755,10 @@ export const ExecutiveDashboard: React.FC = () => {
                     
                     {/* Management Summary Panel */}
                     <ManagementSummary />
+
+                    <div className="mt-4">
+                        <ProtocolLaunchpad />
+                    </div>
                     
                     {/* Fleet Overview Panel */}
                     <FleetOverview />

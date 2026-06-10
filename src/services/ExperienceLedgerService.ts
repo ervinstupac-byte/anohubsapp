@@ -10,6 +10,73 @@ type LedgerInput = Partial<{
 }>;
 
 export const ExperienceLedgerService = {
+  async list(asset_id?: string, limit = 50) {
+    try {
+      let query = supabase
+        .from('experience_ledger')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(limit);
+
+      if (asset_id) {
+        query = query.eq('asset_id', asset_id);
+      }
+
+      const { data, error } = await query;
+      if (error) return { success: false, error };
+      return { success: true, data };
+    } catch (e) {
+      return { success: false, error: e };
+    }
+  },
+
+  async getById(id: string) {
+    try {
+      const { data, error } = await supabase
+        .from('experience_ledger')
+        .select('*')
+        .eq('id', id)
+        .single();
+      if (error) return { success: false, error };
+      return { success: true, data };
+    } catch (e) {
+      return { success: false, error: e };
+    }
+  },
+
+  async update(id: string, entry: LedgerInput) {
+    const payload = {
+      symptom_observed: entry.symptom_observed,
+      actual_cause: entry.actual_cause,
+      resolution_steps: entry.resolution_steps,
+      asset_id: entry.asset_id ?? null,
+      work_order_id: entry.work_order_id ?? null
+    };
+
+    try {
+      const { data, error } = await supabase
+        .from('experience_ledger')
+        .update(payload)
+        .eq('id', id)
+        .select()
+        .single();
+      if (error) return { success: false, error };
+      return { success: true, data };
+    } catch (e) {
+      return { success: false, error: e };
+    }
+  },
+
+  async delete(id: string) {
+    try {
+      const { error } = await supabase.from('experience_ledger').delete().eq('id', id);
+      if (error) return { success: false, error };
+      return { success: true };
+    } catch (e) {
+      return { success: false, error: e };
+    }
+  },
+
   async record(entry: LedgerInput) {
     const payload = {
       symptom_observed: entry.symptom_observed || 'MANUAL_NOTE',

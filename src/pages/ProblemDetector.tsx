@@ -16,6 +16,7 @@ import { ReportGenerator } from '../features/reporting/ReportGenerator';
 import { RoboticSwarmCoordinator, MissionProfile } from '../services/RoboticSwarmCoordinator';
 import { InvisibleMonstersDetector, CavitationStatus, ErosionStatus } from '../services/InvisibleMonstersDetector';
 import { FrancisHorizontalEngine } from '../lib/engines/FrancisHorizontalEngine';
+import { InstitutionalKnowledgeService, KnowledgeSearchResult } from '../services/InstitutionalKnowledgeService';
 
 export const ProblemDetector: React.FC = () => {
     const { assets, selectedAsset, logActivity } = useAssetContext();
@@ -44,6 +45,7 @@ export const ProblemDetector: React.FC = () => {
         overallRisk: string;
         recommendations: string[];
     } | null>(null);
+    const [knowledgeMatches, setKnowledgeMatches] = useState<KnowledgeSearchResult[]>([]);
 
     // Active turbine helper
     const activeTurbine = useMemo(() => {
@@ -286,6 +288,19 @@ export const ProblemDetector: React.FC = () => {
         };
 
         try {
+            const symptomKeys = Object.entries(symptoms)
+                .filter(([, active]) => active)
+                .map(([key]) => key);
+            if (symptomKeys.length > 0) {
+                const matches = await InstitutionalKnowledgeService.searchBySymptoms(
+                    symptomKeys,
+                    mappedAsset.turbine_family
+                );
+                setKnowledgeMatches(matches);
+            } else {
+                setKnowledgeMatches([]);
+            }
+
             const results = await MasterIntelligenceEngine.analyzeAsset(mappedAsset, [historyEntry]);
             setDiagnosis(results);
             
@@ -787,6 +802,24 @@ export const ProblemDetector: React.FC = () => {
                                         </h4>
 
                                         <div className="space-y-3">
+                                            {knowledgeMatches.length > 0 && (
+                                                <div className="p-3 bg-cyan-500/5 border border-cyan-500/20 rounded-lg space-y-2">
+                                                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-cyan-400">
+                                                        <BookOpen className="w-3.5 h-3.5" />
+                                                        Institutional Knowledge Matches
+                                                    </div>
+                                                    {knowledgeMatches.slice(0, 3).map((match) => (
+                                                        <div key={match.entry.id} className="text-[10px] text-slate-300">
+                                                            <span className="font-bold text-white">{match.entry.incidentPattern}</span>
+                                                            <span className="text-cyan-400 ml-2">
+                                                                {(match.relevanceScore * 100).toFixed(0)}% match
+                                                            </span>
+                                                            <p className="text-slate-500 mt-0.5">{match.entry.rootCause}</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+
                                             {/* Dynamic check for symptoms and rendering related causes */}
                                             {symptoms.vibration && (
                                                 <div className="p-3 bg-red-500/5 border border-red-500/10 rounded-lg">

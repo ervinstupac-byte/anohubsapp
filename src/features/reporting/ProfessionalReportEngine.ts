@@ -242,8 +242,12 @@ export const ProfessionalReportEngine = {
             .lte('period_end', endStr)
             .order('period_start', { ascending: true });
 
-        if (error) throw new Error('Failed to fetch eta_aggregates: ' + JSON.stringify(error));
-        const list = Array.isArray(rows) ? rows : [];
+        let list: any[] = [];
+        if (error) {
+            console.warn('Failed to fetch eta_aggregates: ' + JSON.stringify(error));
+        } else {
+            list = Array.isArray(rows) ? rows : [];
+        }
 
         // Build date-ordered trend
         const byDate = new Map<string, { sum:number; count:number }>();
