@@ -15,8 +15,13 @@ dist-ssr
 .env.*
 coverage
 
-# Local artifacts (diagnostic captures)
+# CI Artifacts
 artifacts/
+*.eslint-report.json
+
+# Archived static HTML (release asset: docs/archive_html.zip)
+docs/archive/
+docs/archive_html.zip
 
 # Editor directories and files
 .vscode/*

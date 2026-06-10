@@ -17,7 +17,8 @@ import { SpecialMeasurementSyncService, FRANCIS_IDEAL_BLUEPRINT } from './Specia
 import { DrTurbineAI } from './DrTurbineAI';
 import { TechnicalProjectState } from '../core/TechnicalSchema';
 import { HydraulicIntegrity } from './HydraulicIntegrity';
-import { persistAuditRecord } from '../lib/supabaseAuditAdapter';
+import { persistAuditRecord as dpPersistAuditRecord } from './engine/DiagnosticPersister';
+import { runGuardians } from './engine/GuardianOrchestrator';
 import ShaftSealGuardian from './ShaftSealGuardian';
 import ThrustBearingMaster from './ThrustBearingMaster';
 import WicketGateKinematics from './WicketGateKinematics';
@@ -463,243 +464,14 @@ export class MasterIntelligenceEngine extends BaseGuardian {
 
             await this.triggerAutomatedActions(asset, diagnosis, history);
 
-            // --- Integrate all Guardian Services ---
+            // --- Run guardians via orchestrator ---
             try {
-                const sm = diagnosis.specialMeasurements || {};
-                const pfail: Record<string, number> = {};
-                const guardianConfidence: Record<string, number> = {};
-
-                // 1. Cooling System Guardian
-                const coolingSamples = sm.coolingTelemetry || [];
-                if (coolingSamples && Array.isArray(coolingSamples) && coolingSamples.length) {
-                    try {
-                        const cg = new CoolingSystemGuardian();
-                        const analysis = cg.analyze(coolingSamples as any);
-                        pfail['cooling'] = analysis.p_fail;
-                        guardianConfidence['cooling'] = cg.getConfidenceScore(coolingSamples as any);
-
-                        if (analysis.foulingDetected) {
-                            diagnosis.serviceNotes?.push({
-                                service: 'Cooling System',
-                                severity: 'WARNING',
-                                message: `Cooling fouling detected (U dropped ${analysis.foulingDropPct?.toFixed(1)}%).`,
-                                recommendation: 'Schedule heat exchanger cleaning.',
-                                sourceFiles: [{ filename: 'docs/CoolingSystemGuardian.md', justification: 'Expert cooling maintenance protocol' }]
-                            });
-                        }
-                        if (analysis.pumpIssues.cavitation || analysis.pumpIssues.suctionBlock) {
-                            diagnosis.serviceNotes?.push({
-                                service: 'Cooling System',
-                                severity: 'CRITICAL',
-                                message: 'Pump issues detected (cavitation or suction block).',
-                                recommendation: 'Inspect pump immediately.',
-                                sourceFiles: [{ filename: 'docs/CoolingSystemGuardian.md', justification: 'Pump troubleshooting guide' }]
-                            });
-                        }
-                        if (analysis.rotationDue) {
-                            diagnosis.serviceNotes?.push({
-                                service: 'Cooling System',
-                                severity: 'INFO',
-                                message: 'Cooling pump rotation due.',
-                                recommendation: 'Switch to backup pump.'
-                            });
-                        }
-
-                        const last = coolingSamples[coolingSamples.length - 1] as any;
-                        const backupStarted = last && typeof last.backupPumpStarted === 'boolean' ? last.backupPumpStarted : null;
-                        if (analysis.foulingDetected && backupStarted === false) {
-                            diagnosis.automatedActions.push({ type: 'IMMEDIATE', action: 'LOAD_REDUCTION', priority: 'CRITICAL', message: 'Cooling fouling detected and backup pump not started.' });
-                        }
-                    } catch {
-                        pfail['cooling'] = 0.1;
-                    }
-                } else {
-                    pfail['cooling'] = 0.05;
-                }
-
-                // 2. Shaft Seal Guardian
-                const shaftSealSamples = sm.shaftSealTelemetry || [];
-                if (shaftSealSamples && Array.isArray(shaftSealSamples) && shaftSealSamples.length) {
-                    try {
-                        const ssg = new ShaftSealGuardian();
-                        let lastAction = { action: 'NO_ACTION' } as any;
-                        for (const sample of shaftSealSamples) {
-                            lastAction = ssg.addMeasurement(sample as any);
-                        }
-                        pfail['shaftSeal'] = lastAction.probability || 0.02;
-                        guardianConfidence['shaftSeal'] = ssg.getConfidenceScore(shaftSealSamples as any);
-
-                        if (lastAction.action === 'PROBABILISTIC_WARNING') {
-                            diagnosis.serviceNotes?.push({
-                                service: 'Shaft Seal',
-                                severity: 'WARNING',
-                                message: `Shaft seal risk ${(lastAction.probability * 100).toFixed(1)}%.`,
-                                recommendation: `Derate by ${lastAction.recommendedDerateMw} MW and inspect.`,
-                                sourceFiles: [{ filename: 'docs/ShaftSealGuardian.md', justification: 'Shaft seal maintenance protocol' }]
-                            });
-                        }
-                        if (lastAction.action === 'HARD_TRIP') {
-                            diagnosis.serviceNotes?.push({
-                                service: 'Shaft Seal',
-                                severity: 'CRITICAL',
-                                message: 'Shaft seal critical failure risk!',
-                                recommendation: 'Shut down immediately!',
-                                sourceFiles: [{ filename: 'docs/ShaftSealGuardian.md', justification: 'Emergency shaft seal protocol' }]
-                            });
-                            diagnosis.automatedActions.push({ type: 'IMMEDIATE', action: 'EMERGENCY_SHUTDOWN', priority: 'CRITICAL', message: 'Shaft seal critical failure risk.' });
-                        }
-                    } catch {
-                        pfail['shaftSeal'] = 0.1;
-                    }
-                } else {
-                    pfail['shaftSeal'] = 0.05;
-                }
-
-                // 3. Thrust Bearing Master
-                const thrustBearingSamples = sm.thrustBearingTelemetry || [];
-                if (thrustBearingSamples && Array.isArray(thrustBearingSamples) && thrustBearingSamples.length) {
-                    try {
-                        const tbm = new ThrustBearingMaster();
-                        let lastAction = { action: 'NO_ACTION' } as any;
-                        for (const sample of thrustBearingSamples) {
-                            lastAction = tbm.addMeasurement(sample as any);
-                        }
-                        const healthImpact = tbm.getHealthImpactForAction(lastAction);
-                        pfail['thrustBearing'] = healthImpact.overallDelta ? Math.abs(healthImpact.overallDelta) / 100 : 0.02;
-                        guardianConfidence['thrustBearing'] = tbm.getConfidenceScore(thrustBearingSamples as any);
-
-                        if (lastAction.action !== 'NO_ACTION') {
-                            diagnosis.serviceNotes?.push({
-                                service: 'Thrust Bearing',
-                                severity: lastAction.action === 'SOVEREIGN_TRIP' || lastAction.action === 'BLOCK_START' ? 'CRITICAL' : 'WARNING',
-                                message: lastAction.reason,
-                                recommendation: lastAction.action === 'SOVEREIGN_TRIP' ? 'Shut down immediately!' : 'Inspect thrust bearings.',
-                                sourceFiles: [{ filename: 'docs/ThrustBearingMaster.md', justification: 'Thrust bearing maintenance protocol' }]
-                            });
-                            if (lastAction.action === 'SOVEREIGN_TRIP') {
-                                diagnosis.automatedActions.push({ type: 'IMMEDIATE', action: 'EMERGENCY_SHUTDOWN', priority: 'CRITICAL', message: 'Thrust bearing critical failure risk.' });
-                            }
-                        }
-                    } catch {
-                        pfail['thrustBearing'] = 0.1;
-                    }
-                } else {
-                    pfail['thrustBearing'] = 0.05;
-                }
-
-                // 4. Generator Air Gap Sentinel
-                const generatorAirGapSamples = sm.generatorAirGapTelemetry || [];
-                if (generatorAirGapSamples && Array.isArray(generatorAirGapSamples) && generatorAirGapSamples.length) {
-                    try {
-                        const gag = new GeneratorAirGapSentinel();
-                        for (const sample of generatorAirGapSamples) {
-                            gag.addMeasurement?.(sample as any);
-                        }
-                        pfail['generatorAirGap'] = 0.05;
-                        guardianConfidence['generatorAirGap'] = 80;
-                    } catch {
-                        pfail['generatorAirGap'] = 0.1;
-                    }
-                } else {
-                    pfail['generatorAirGap'] = 0.05;
-                }
-
-                // 5. Governor HPU Guardian
-                const governorHPUSamples = sm.governorHPUTelemetry || [];
-                if (governorHPUSamples && Array.isArray(governorHPUSamples) && governorHPUSamples.length) {
-                    try {
-                        const ghg = new GovernorHPUGuardian();
-                        for (const sample of governorHPUSamples) {
-                            ghg.addMeasurement?.(sample as any);
-                        }
-                        pfail['governorHPU'] = 0.05;
-                        guardianConfidence['governorHPU'] = 80;
-                    } catch {
-                        pfail['governorHPU'] = 0.1;
-                    }
-                } else {
-                    pfail['governorHPU'] = 0.05;
-                }
-
-                // 6. Stator Insulation Guardian
-                const statorInsulationSamples = sm.statorInsulationTelemetry || [];
-                if (statorInsulationSamples && Array.isArray(statorInsulationSamples) && statorInsulationSamples.length) {
-                    try {
-                        const sig = new StatorInsulationGuardian();
-                        for (const sample of statorInsulationSamples) {
-                            sig.addMeasurement?.(sample as any);
-                        }
-                        pfail['statorInsulation'] = 0.05;
-                        guardianConfidence['statorInsulation'] = 80;
-                    } catch {
-                        pfail['statorInsulation'] = 0.1;
-                    }
-                } else {
-                    pfail['statorInsulation'] = 0.05;
-                }
-
-                // 7. Transformer Oil Guardian
-                const transformerOilSamples = sm.transformerOilTelemetry || [];
-                if (transformerOilSamples && Array.isArray(transformerOilSamples) && transformerOilSamples.length) {
-                    try {
-                        const tog = new TransformerOilGuardian();
-                        for (const sample of transformerOilSamples) {
-                            tog.addMeasurement?.(sample as any);
-                        }
-                        pfail['transformerOil'] = 0.05;
-                        guardianConfidence['transformerOil'] = 80;
-                    } catch {
-                        pfail['transformerOil'] = 0.1;
-                    }
-                } else {
-                    pfail['transformerOil'] = 0.05;
-                }
-
-                // 8. Wicket Gate Kinematics
-                const wicketGateSamples = sm.wicketGateTelemetry || [];
-                if (wicketGateSamples && Array.isArray(wicketGateSamples) && wicketGateSamples.length) {
-                    try {
-                        const wgk = new WicketGateKinematics();
-                        for (const sample of wicketGateSamples) {
-                            wgk.addMeasurement?.(sample as any);
-                        }
-                        pfail['wicketGate'] = 0.05;
-                        guardianConfidence['wicketGate'] = 80;
-                    } catch {
-                        pfail['wicketGate'] = 0.1;
-                    }
-                } else {
-                    pfail['wicketGate'] = 0.05;
-                }
-
+                const { pfail, guardianConfidence, recommendedMaintenance, bequest } = await runGuardians(diagnosis, latest, history as any[]);
                 diagnosis.guardianConfidence = guardianConfidence;
-
-                // --- Outage Optimizer integration ---
-                // Now pass all our pfail values to OutageOptimizer
-
-                // For MarketOracle: try to fetch a priceForecast if provided in diagnosis (fallback to flat)
-                const priceForecast = diagnosis.marketForecast?.hourly || [];
-
-                const opt = OutageOptimizer.findOptimalOutageWindow(pfail, priceForecast as any);
-                diagnosis.recommendedMaintenance = {
-                    outageWindow: opt.optimalWindow ? { start: new Date(opt.optimalWindow.start), end: new Date(opt.optimalWindow.end) } : { start: new Date(), end: new Date() },
-                    bundles: opt.bundles,
-                    calculatedAt: new Date(opt.calculatedAt)
-                };
-
-                // Add a concise automated action to surface on the executive dashboard
-                if (opt && opt.optimalWindow) {
-                    const startDate = new Date(opt.optimalWindow.start).toISOString();
-                    diagnosis.automatedActions.push({ type: 'RECOMMENDATION', action: 'SCHEDULE_OUTAGE', timeframe: `Start: ${startDate}`, priority: 'HIGH' });
-                }
-
-                // Maintenance bequest economic report
-                const bequest = MaintenanceBequestReport.generate(pfail, priceForecast as any);
-                diagnosis.maintenanceBequest = bequest;
-
+                if (recommendedMaintenance) diagnosis.recommendedMaintenance = recommendedMaintenance as any;
+                if (bequest) diagnosis.maintenanceBequest = bequest as any;
             } catch (e) {
-                // Do not fail main analysis for optimizer errors
-                console.warn('Outage optimizer error', e);
+                console.warn('Guardian orchestrator failed', e);
             }
 
             // Generate a WisdomReport, annotate confidence, and persist for forensic trail (Phase 55.0)
@@ -1057,7 +829,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                     status: action.status || 'PENDING',
                     source: 'MasterIntelligenceEngine'
                 };
-                const res = await persistAuditRecord(audit);
+                const res = await dpPersistAuditRecord(audit);
                 if ((res as { inserted?: boolean }).inserted) {
                     console.log('✅ Persisted audit record for action', action.action);
                 } else {
@@ -1080,7 +852,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
             try {
                 const numeric = idAdapter.toNumber(asset.id);
                 const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : (asset.id || 'unknown');
-                const res = await persistAuditRecord({
+                const res = await dpPersistAuditRecord({
                     asset_id: assetDbId,
                     action_type: notifyAction.action,
                     payload: notifyAction,
@@ -1111,7 +883,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
             try {
                 const numeric = idAdapter.toNumber(asset.id);
                 const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : (asset.id || 'unknown');
-                const res = await persistAuditRecord({
+                const res = await dpPersistAuditRecord({
                     asset_id: assetDbId,
                     action_type: lockAction.action,
                     payload: lockAction,
@@ -1158,7 +930,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                 try {
                     const numeric = idAdapter.toNumber(asset.id);
                     const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : (asset.id || 'unknown');
-                    await persistAuditRecord({
+                    await dpPersistAuditRecord({
                         asset_id: assetDbId,
                         action_type: 'SHAFT_SEAL_GUARD_DECISION',
                         payload: { lastAction, impact },
@@ -1223,7 +995,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                     try {
                         const numeric = idAdapter.toNumber(asset.id);
                         const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : (asset.id || 'unknown');
-                        await persistAuditRecord({
+                        await dpPersistAuditRecord({
                             asset_id: assetDbId,
                             action_type: 'THRUST_BEARING_DECISION',
                             payload: { lastAction, impact },
@@ -1323,7 +1095,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                     try {
                         const numeric = idAdapter.toNumber(asset.id);
                         const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : (asset.id || 'unknown');
-                        await persistAuditRecord({
+                        await dpPersistAuditRecord({
                             asset_id: assetDbId,
                             action_type: 'WICKET_KINEMATICS_DECISION',
                             payload: { lastAction, impact },
@@ -1382,7 +1154,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                     try {
                         const numeric = idAdapter.toNumber(asset.id);
                         const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : (asset.id || 'unknown');
-                        await persistAuditRecord({
+                        await dpPersistAuditRecord({
                             asset_id: assetDbId,
                             action_type: 'GOVERNOR_HPU_DECISION',
                             payload: { lastAction, impact },
@@ -1441,7 +1213,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                     try {
                         const numeric = idAdapter.toNumber(asset.id);
                         const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : (asset.id || 'unknown');
-                        await persistAuditRecord({
+                        await dpPersistAuditRecord({
                             asset_id: assetDbId,
                             action_type: 'GENERATOR_AIRGAP_DECISION',
                             payload: { lastAction, impact },
@@ -1496,7 +1268,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                     try {
                         const numeric = idAdapter.toNumber(asset.id);
                         const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : (asset.id || 'unknown');
-                        await persistAuditRecord({
+                        await dpPersistAuditRecord({
                             asset_id: assetDbId,
                             action_type: 'STATOR_INSULATION_DECISION',
                             payload: { lastAction, impact },
@@ -1550,7 +1322,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                     try {
                         const numeric = idAdapter.toNumber(asset.id);
                         const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : (asset.id || 'unknown');
-                        await persistAuditRecord({
+                        await dpPersistAuditRecord({
                             asset_id: assetDbId,
                             action_type: 'TRANSFORMER_OIL_DECISION',
                             payload: { lastAction, impact },

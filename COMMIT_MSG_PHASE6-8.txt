@@ -1,0 +1,29 @@
+chore(refactor): cleanup artifacts, extract router, begin engine façade
+
+Phase 6 — Cleanup
+- Add `.gitignore` entry for `docs/archive_html.zip`
+- Remove `api/` and selected `backend/` Python files
+- Delete `unused-files.json`
+
+Phase 7 — Routing extraction
+- Extract router to `src/routes/AppRouter.tsx` and consolidate layout there
+- Update `src/App.tsx` to act as provider-only wrapper and route to `AppRouter`
+- Add route re-exports:
+  - `src/routes/FrancisRoutes.tsx`
+  - `src/routes/PeltonRoutes.tsx`
+  - `src/routes/KaplanRoutes.tsx`
+  - `src/routes/CoreRoutes.tsx`
+
+Phase 8 — Engine decomposition (initial)
+- Add `src/services/engine/DiagnosticPersister.ts` for centralized persistence
+- Add `src/services/engine/GuardianOrchestrator.ts` to host guardian loops
+- Refactor `src/services/MasterIntelligenceEngine.ts` to call the orchestrator and use the persister (façade pattern)
+
+Verification
+- Ran `tsc --noEmit` and `vitest run` — type-check and all tests passed.
+
+Notes
+- Removed duplicate `AppLayout` from `src/App.tsx`; layout now lives in `src/routes/AppRouter.tsx`.
+- Remaining work: migrate individual guardian action logic from `MasterIntelligenceEngine.ts` into `GuardianOrchestrator` iteratively and stabilize the façade.
+
+Signed-off-by: AnoHubs Team

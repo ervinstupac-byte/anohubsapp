@@ -1,8 +1,16 @@
 import { vi } from 'vitest';
-import { render, screen, act } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { ForensicDashboard } from '../ForensicDashboard';
 import { useForensics } from '../../../hooks/useForensics';
+
+const renderDashboard = () =>
+    render(
+        <MemoryRouter>
+            <ForensicDashboard />
+        </MemoryRouter>
+    );
 
 // Mock dependencies
 vi.mock('react-i18next', () => ({
@@ -33,9 +41,8 @@ describe('ForensicDashboard (War Game)', () => {
             currentLatency: 45
         });
 
-        render(<ForensicDashboard />);
+        renderDashboard();
 
-        // The mock returns the key.
         expect(screen.getByText('forensics.title')).toBeInTheDocument();
         expect(screen.queryByText(/forensics.critical_alert/)).not.toBeInTheDocument();
     });
@@ -50,10 +57,8 @@ describe('ForensicDashboard (War Game)', () => {
             currentLatency: 2000
         });
 
-        render(<ForensicDashboard />);
+        renderDashboard();
 
-        // The mock returns the key.
-        // Also note that the component might render children or other structure, but getByText should find the text node.
         expect(screen.getByText(/forensics.critical_alert/)).toBeInTheDocument();
         expect(screen.getAllByText(/2000/)).toHaveLength(2); // Latency check - "2000 ms" appears in multiple places
     });

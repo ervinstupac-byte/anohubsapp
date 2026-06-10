@@ -278,7 +278,8 @@ export const ShaftOrbitPlot = React.memo(forwardRef<ShaftOrbitPlotHandle, ShaftO
             });
         }
 
-    }, [vibrationX, vibrationY, size, onAnalysis, analysis, radius]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [vibrationX, vibrationY, size, analysis, radius]);
 
     return (
         <div className="relative group">
