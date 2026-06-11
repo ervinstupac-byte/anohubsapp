@@ -22,7 +22,7 @@ ALTER TABLE public.logbook_entries
 
 -- Sync existing attachments data into photos (one-time backfill)
 UPDATE public.logbook_entries
-  SET photos = attachments
+  SET photos = to_jsonb(attachments)
   WHERE photos IS NULL AND attachments IS NOT NULL;
 
 -- FIX 3: RLS — audit_logs INSERT for authenticated users (401 error)
