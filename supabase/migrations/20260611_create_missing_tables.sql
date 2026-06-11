@@ -65,7 +65,7 @@ CREATE POLICY "update_hydrology_context" ON public.hydrology_context FOR UPDATE 
 CREATE TABLE IF NOT EXISTS public.turbine_designs (
     id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id      uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-    asset_id     bigint REFERENCES public.assets(id) ON DELETE SET NULL,
+    asset_id     uuid REFERENCES public.assets(id) ON DELETE SET NULL,
     design_name  text NOT NULL DEFAULT 'Untitled Design',
     parameters   jsonb NOT NULL DEFAULT '{}',
     created_at   timestamptz NOT NULL DEFAULT now()
@@ -108,7 +108,7 @@ CREATE POLICY "update_turbine_bids" ON public.turbine_bids FOR UPDATE TO authent
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.dynamic_sensor_data (
     id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    asset_id      bigint NOT NULL REFERENCES public.assets(id) ON DELETE CASCADE,
+    asset_id      uuid NOT NULL REFERENCES public.assets(id) ON DELETE CASCADE,
     timestamp     timestamptz NOT NULL DEFAULT now(),
     efficiency    numeric(6, 4),
     output_power  numeric(12, 4),
@@ -135,7 +135,7 @@ CREATE POLICY "insert_dynamic_sensor_data" ON public.dynamic_sensor_data FOR INS
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.telemetry_logs (
     id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    asset_id    bigint NOT NULL REFERENCES public.assets(id) ON DELETE CASCADE,
+    asset_id    uuid NOT NULL REFERENCES public.assets(id) ON DELETE CASCADE,
     event_type  text,
     severity    text CHECK (severity IN ('info','warning','critical','error')),
     details     jsonb,
@@ -176,7 +176,7 @@ CREATE TABLE IF NOT EXISTS public.experience_ledger (
     symptom_observed  text NOT NULL DEFAULT 'MANUAL_NOTE',
     actual_cause      text,
     resolution_steps  text,
-    asset_id          bigint REFERENCES public.assets(id) ON DELETE SET NULL,
+    asset_id          uuid REFERENCES public.assets(id) ON DELETE SET NULL,
     work_order_id     uuid REFERENCES public.work_orders(id) ON DELETE SET NULL,
     created_at        timestamptz NOT NULL DEFAULT now()
 );
@@ -197,7 +197,7 @@ CREATE POLICY "delete_experience_ledger" ON public.experience_ledger FOR DELETE 
 CREATE TABLE IF NOT EXISTS public.expert_knowledge_base (
     id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     symptom_key       text NOT NULL,
-    asset_id          bigint REFERENCES public.assets(id) ON DELETE SET NULL,
+    asset_id          uuid REFERENCES public.assets(id) ON DELETE SET NULL,
     turbine_family    text,
     probable_cause    text,
     severity          text CHECK (severity IN ('low','medium','high','critical')),
@@ -279,7 +279,7 @@ CREATE POLICY "insert_component_encyclopedia" ON public.component_encyclopedia F
 CREATE TABLE IF NOT EXISTS public.logbook_entries (
     id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     entry_type   text NOT NULL DEFAULT 'operational',
-    turbine_id   bigint REFERENCES public.assets(id) ON DELETE SET NULL,
+    turbine_id   uuid REFERENCES public.assets(id) ON DELETE SET NULL,
     timestamp    timestamptz NOT NULL DEFAULT now(),
     shift        text,
     operator     text,
@@ -323,7 +323,7 @@ CREATE POLICY "insert_operator_feedback" ON public.operator_feedback FOR INSERT 
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.reports (
     id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    asset_id     bigint REFERENCES public.assets(id) ON DELETE SET NULL,
+    asset_id     uuid REFERENCES public.assets(id) ON DELETE SET NULL,
     report_type  text NOT NULL DEFAULT 'management_summary',
     title        text,
     content      jsonb,
@@ -345,7 +345,7 @@ CREATE POLICY "insert_reports" ON public.reports FOR INSERT TO authenticated WIT
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.century_plans (
     id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    asset_id    bigint REFERENCES public.assets(id) ON DELETE SET NULL,
+    asset_id    uuid REFERENCES public.assets(id) ON DELETE SET NULL,
     name        text NOT NULL DEFAULT 'Century Plan',
     input_json  jsonb NOT NULL DEFAULT '{}',
     projections jsonb NOT NULL DEFAULT '[]',
@@ -365,7 +365,7 @@ CREATE POLICY "insert_century_plans" ON public.century_plans FOR INSERT TO authe
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.asset_financials_with_eta (
     id                 uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    asset_id           bigint REFERENCES public.assets(id) ON DELETE CASCADE,
+    asset_id           uuid REFERENCES public.assets(id) ON DELETE CASCADE,
     period_start       date NOT NULL,
     period_end         date NOT NULL,
     computed_loss_cost numeric(18, 2) NOT NULL DEFAULT 0,
