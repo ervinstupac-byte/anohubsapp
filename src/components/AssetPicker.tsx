@@ -11,7 +11,6 @@ export const AssetPicker: React.FC = () => {
     const [isWizardOpen, setIsWizardOpen] = useState(false);
     const [showQuickAdd, setShowQuickAdd] = useState(false);
     const [quickName, setQuickName] = useState('');
-    const [quickTurbineId, setQuickTurbineId] = useState('');
     const [quickType, setQuickType] = useState<'FRANCIS'|'PELTON'|'KAPLAN'>('FRANCIS');
     const [quickCapacity, setQuickCapacity] = useState<number | string>('');
     const [quickTelemetry, setQuickTelemetry] = useState(false);
@@ -75,11 +74,6 @@ export const AssetPicker: React.FC = () => {
                             <input value={quickName} onChange={(e) => setQuickName(e.target.value)} className="w-full mt-1 p-2 rounded bg-slate-800 text-white text-xs" placeholder={t('assetPicker.quickAdd.plantNamePlaceholder','e.g. Upper River HPP')} />
                         </div>
 
-                        <div>
-                            <label className="text-[11px] text-slate-400">{t('assetPicker.quickAdd.turbineId','Turbine name / ID')}</label>
-                            <input value={quickTurbineId} onChange={(e) => setQuickTurbineId(e.target.value)} className="w-full mt-1 p-2 rounded bg-slate-800 text-white text-xs" placeholder={t('assetPicker.quickAdd.turbineIdPlaceholder','e.g. Unit-01')} />
-                        </div>
-
                         <div className="grid grid-cols-2 gap-2">
                             <div>
                                 <label className="text-[11px] text-slate-400">{t('assetPicker.quickAdd.type','Turbine type')}</label>
@@ -104,7 +98,7 @@ export const AssetPicker: React.FC = () => {
                             <div className="flex gap-2">
                                 <button onClick={() => { setShowQuickAdd(false); setIsWizardOpen(true); }} className="px-3 py-1 text-xs bg-slate-800 border border-slate-700 rounded text-slate-300 hover:bg-slate-700">{t('assetPicker.quickAdd.advanced','Advanced')}</button>
                                 <button onClick={async () => {
-                                    if (!quickName || !quickTurbineId) return alert('Please enter a name and turbine id');
+                                    if (!quickName) return alert(t('assetPicker.quickAdd.enterName', 'Please enter a name'));
                                     setIsAddingQuick(true);
                                     try {
                                         await addAsset({
@@ -118,7 +112,7 @@ export const AssetPicker: React.FC = () => {
                                             specs: { telemetry: { enabled: quickTelemetry } }
                                         });
                                         setShowQuickAdd(false);
-                                        setQuickName(''); setQuickTurbineId(''); setQuickCapacity(''); setQuickTelemetry(false);
+                                        setQuickName(''); setQuickCapacity(''); setQuickTelemetry(false);
                                     } catch (err) {
                                         console.error('Quick add failed', err);
                                         alert('Failed to add asset');

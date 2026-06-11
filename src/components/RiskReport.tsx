@@ -21,7 +21,7 @@ import { QUESTIONS } from '../constants.ts';
 
 export const RiskReport: React.FC = () => {
     const { selectedAsset } = useAssetContext();
-    const { user } = useAuth();
+    const { user, isGuest } = useAuth();
     const { navigateTo } = useNavigation();
     const { t } = useTranslation();
     const { showToast } = useToast();
@@ -114,12 +114,21 @@ export const RiskReport: React.FC = () => {
                 return;
             }
 
+            const numeric = selectedAsset ? idAdapter.toNumber(selectedAsset.id) : null;
+            const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : undefined;
+            const isUuid = (id: any): boolean =>
+                typeof id === 'string' &&
+                /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+
+            if (isGuest || !assetDbId || !isUuid(assetDbId)) {
+                setCloudRiskData(null);
+                setCloudDesignData(null);
+                return;
+            }
+
             setLoading(true);
             try {
                 // Fetch latest Risk Assessment
-                const numeric = selectedAsset ? idAdapter.toNumber(selectedAsset.id) : null;
-                const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : undefined;
-
                 const { data: risk } = await supabase
                     .from('risk_assessments')
                     .select('*')
@@ -201,6 +210,10 @@ export const RiskReport: React.FC = () => {
     // --- 3. HANDLER: UPLOAD TO CLOUD (LOGIKA OSTAJE SKORO ISTA, koristi createMasterDossierBlob) ---
     const handleUploadToHQ = async () => {
         if (!selectedAsset || !user) return;
+        if (isGuest || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(user.id)) {
+            showToast(t('riskReport.archiveGuestWarning', 'Guest users cannot archive dossiers to HQ Cloud. Access is simulated.'), 'warning');
+            return;
+        }
         setUploading(true);
 
         // Provjeri da li postoji bilo kakav podatak za upload

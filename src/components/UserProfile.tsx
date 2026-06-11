@@ -10,7 +10,7 @@ import { ModernButton } from '../shared/components/ui/ModernButton';
 
 // OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const UserProfile: React.FC = () => {
-    const { user, isGuest } = useAuth();
+    const { user, isGuest, updateUserMetadata } = useAuth();
     const { showToast } = useToast();
     const { t } = useTranslation();
 
@@ -29,11 +29,29 @@ export const UserProfile: React.FC = () => {
             try {
                 if (!user) return;
 
-                // Use user_metadata for guest mode
+                // Use user_metadata/localStorage for guest mode
                 if (isGuest) {
-                    setFullName(user.user_metadata?.full_name || 'Guest Engineer');
-                    setRole('Guest');
-                    setCompany('Demo Mode');
+                    const savedProfileRaw = localStorage.getItem('guest_profile');
+                    if (savedProfileRaw) {
+                        try {
+                            const savedProfile = JSON.parse(savedProfileRaw);
+                            setFullName(savedProfile.full_name || user.user_metadata?.full_name || 'Guest Engineer');
+                            setRole(savedProfile.role || user.user_metadata?.role || 'Guest');
+                            setCompany(savedProfile.company || user.user_metadata?.company || 'Demo Mode');
+                            setAvatarUrl(savedProfile.avatar_url || user.user_metadata?.avatar_url || '');
+                        } catch (e) {
+                            console.error('Error parsing guest profile', e);
+                            setFullName(user.user_metadata?.full_name || 'Guest Engineer');
+                            setRole(user.user_metadata?.role || 'Guest');
+                            setCompany(user.user_metadata?.company || 'Demo Mode');
+                            setAvatarUrl(user.user_metadata?.avatar_url || '');
+                        }
+                    } else {
+                        setFullName(user.user_metadata?.full_name || 'Guest Engineer');
+                        setRole(user.user_metadata?.role || 'Guest');
+                        setCompany(user.user_metadata?.company || 'Demo Mode');
+                        setAvatarUrl(user.user_metadata?.avatar_url || '');
+                    }
                     setLoading(false);
                     return;
                 }
@@ -68,9 +86,25 @@ export const UserProfile: React.FC = () => {
             setSaving(true);
             if (!user) throw new Error(t('profile.noUser'));
 
-            // Don't save if guest mode
+            // Save locally in guest mode
             if (isGuest) {
-                showToast(t('profile.guestSaveWarning'), 'warning');
+                const guestProfile = {
+                    full_name: fullName,
+                    role,
+                    company,
+                    avatar_url: avatarUrl,
+                    updated_at: new Date().toISOString(),
+                };
+                localStorage.setItem('guest_profile', JSON.stringify(guestProfile));
+                if (updateUserMetadata) {
+                    updateUserMetadata({
+                        full_name: fullName,
+                        role,
+                        company,
+                        avatar_url: avatarUrl
+                    });
+                }
+                showToast(t('profile.updateSuccess'), 'success');
                 return;
             }
 
@@ -101,12 +135,32 @@ export const UserProfile: React.FC = () => {
                 throw new Error(t('profile.uploadError'));
             }
 
+            const file = event.target.files[0];
+
+            // Simulate avatar upload via reader in Guest Mode
             if (isGuest) {
-                showToast(t('profile.guestSaveWarning'), 'warning');
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const base64data = reader.result as string;
+                    setAvatarUrl(base64data);
+                    
+                    const savedProfileRaw = localStorage.getItem('guest_profile');
+                    let savedProfile: any = {};
+                    if (savedProfileRaw) {
+                        try { savedProfile = JSON.parse(savedProfileRaw); } catch(e){}
+                    }
+                    savedProfile.avatar_url = base64data;
+                    localStorage.setItem('guest_profile', JSON.stringify(savedProfile));
+                    
+                    if (updateUserMetadata) {
+                        updateUserMetadata({ avatar_url: base64data });
+                    }
+                    showToast(t('profile.avatarSuccess'), 'success');
+                };
+                reader.readAsDataURL(file);
                 return;
             }
 
-            const file = event.target.files[0];
             const fileExt = file.name.split('.').pop();
             const fileName = `${user?.id}-${Math.random()}.${fileExt}`;
             const filePath = `${fileName}`;
@@ -189,7 +243,7 @@ export const UserProfile: React.FC = () => {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                                     </svg>
-                                    <input type="file" accept="image/*" onChange={uploadAvatar} className="hidden" disabled={saving || isGuest} />
+                                    <input type="file" accept="image/*" onChange={uploadAvatar} className="hidden" disabled={saving} />
                                 </label>
                             </div>
 

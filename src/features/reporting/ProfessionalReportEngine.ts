@@ -231,8 +231,8 @@ export const ProfessionalReportEngine = {
         const end = new Date();
         const start = new Date();
         start.setDate(end.getDate() - 30);
-        const startStr = start.toISOString().slice(0,10);
-        const endStr = end.toISOString().slice(0,10);
+        const startStr = start.toISOString().slice(0, 10);
+        const endStr = end.toISOString().slice(0, 10);
 
         // Fetch eta_aggregates for period
         const { data: rows, error } = await supabase
@@ -250,7 +250,7 @@ export const ProfessionalReportEngine = {
         }
 
         // Build date-ordered trend
-        const byDate = new Map<string, { sum:number; count:number }>();
+        const byDate = new Map<string, { sum: number; count: number }>();
         for (const r of list) {
             const d = String(r.period_start);
             const cur = byDate.get(d) || { sum: 0, count: 0 };
@@ -261,7 +261,8 @@ export const ProfessionalReportEngine = {
         const trend = Array.from(byDate.entries()).map(([date, v]) => ({ date, avg_eta: v.count ? v.sum / v.count : 0, samples: v.count }));
 
         // Fetch threshold configs for assets present
-        const assetIds = Array.from(new Set(list.map(r => String(r.asset_id)).filter(Boolean)));
+        const isUuid = (val: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val);
+        const assetIds = Array.from(new Set(list.map(r => String(r.asset_id)).filter(isUuid)));
         const thresholdsMap: Record<string, number> = {};
         if (assetIds.length > 0) {
             const { data: tcfgs } = await supabase.from('threshold_configs').select('asset_id, vibration_mm_s').in('asset_id', assetIds);
@@ -280,7 +281,7 @@ export const ProfessionalReportEngine = {
             if (meta.sensor_vibration !== undefined) vibCandidates.push(Number(meta.sensor_vibration));
             if (meta.francis && meta.francis.max_vibration !== undefined) vibCandidates.push(Number(meta.francis.max_vibration));
 
-            const maxVib = vibCandidates.filter(n => !Number.isNaN(n)).reduce((a,b) => Math.max(a,b), 0);
+            const maxVib = vibCandidates.filter(n => !Number.isNaN(n)).reduce((a, b) => Math.max(a, b), 0);
             const thresh = thresholdsMap[String(r.asset_id)] || VIBRATION_THRESHOLD_DEFAULT;
             if (maxVib > thresh) {
                 alerts.push({ id: r.id, asset_id: r.asset_id, period_start: r.period_start, max_vibration: maxVib, threshold: thresh });
@@ -319,14 +320,14 @@ export const ProfessionalReportEngine = {
         const yMin = 0.6, yMax = 1.0;
         // Points
         const points = trend.map(t => t.avg_eta);
-        for (let i=0;i<points.length;i++) {
-            const x = chartX + (i / Math.max(1, points.length-1)) * chartW;
+        for (let i = 0; i < points.length; i++) {
+            const x = chartX + (i / Math.max(1, points.length - 1)) * chartW;
             const y = chartY + chartH - ((points[i] - yMin) / (yMax - yMin)) * chartH;
-            doc.setFillColor(33,33,33);
+            doc.setFillColor(33, 33, 33);
             doc.circle(x, y, 0.8, 'F');
-            if (i>0) {
-                const prev = trend[i-1].avg_eta;
-                const px = chartX + ((i-1) / Math.max(1, points.length-1)) * chartW;
+            if (i > 0) {
+                const prev = trend[i - 1].avg_eta;
+                const px = chartX + ((i - 1) / Math.max(1, points.length - 1)) * chartW;
                 const py = chartY + chartH - ((prev - yMin) / (yMax - yMin)) * chartH;
                 doc.setDrawColor(45, 212, 191);
                 doc.line(px, py, x, y);
@@ -334,10 +335,10 @@ export const ProfessionalReportEngine = {
         }
         // Expert curve (92%) horizontal line
         const expertEta = 0.92;
-        const ey = chartY + chartH - ((expertEta - yMin)/(yMax - yMin))*chartH;
-        doc.setDrawColor(220,38,38);
+        const ey = chartY + chartH - ((expertEta - yMin) / (yMax - yMin)) * chartH;
+        doc.setDrawColor(220, 38, 38);
         doc.setLineWidth(0.7);
-        doc.line(chartX, ey, chartX+chartW, ey);
+        doc.line(chartX, ey, chartX + chartW, ey);
         doc.setFontSize(9);
         doc.text('Expert Curve (92%)', chartX + chartW - 40, ey - 2);
 
@@ -353,7 +354,7 @@ export const ProfessionalReportEngine = {
         for (const t of trend) {
             if (ty > 280) { doc.addPage(); ty = 20; }
             doc.text(t.date, 20, ty);
-            doc.text((t.avg_eta*100).toFixed(2) + '%', 70, ty);
+            doc.text((t.avg_eta * 100).toFixed(2) + '%', 70, ty);
             doc.text('92.00%', 110, ty);
             doc.text(String(t.samples), 150, ty);
             ty += 6;

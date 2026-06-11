@@ -20,6 +20,9 @@ export async function fetchForecastForAsset(selectedAsset: any) {
 
     try {
         const dbId = idAdapter.toDb(numeric);
+        if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(dbId)) {
+            return result;
+        }
         const { data: cacheRes } = await supabase.from('telemetry_history_cache').select('history').eq('asset_id', dbId).single();
         const hist = cacheRes?.history || [];
         const histCount = Array.isArray(hist) ? hist.length : 0;
@@ -111,6 +114,15 @@ export function lazyHydratePhysicsSnapshots(delayMs = 2000, maxAssets = 3) {
     try {
         setTimeout(async () => {
             try {
+                // Verify there is an active authenticated session to avoid 401 console logs for guests
+                let hasSession = false;
+                try {
+                    const { data } = await supabase.auth.getSession();
+                    hasSession = !!data.session;
+                } catch (e) {}
+
+                if (!hasSession) return;
+
                 const { data: assets } = await supabase.from('assets').select('id,name').limit(maxAssets);
                 if (!assets || !assets.length) return;
                 for (const a of assets) {

@@ -28,12 +28,39 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
         const fetchAssets = async () => {
             try {
-                // FALLBACK ONLY: Check for guest assets in local storage first
+                // Check for guest assets in local storage first
                 let localAssets: Asset[] = [];
                 try {
                     localAssets = loadFromStorage<Asset[]>('guest_assets') || [];
                 } catch (e) {
                     localAssets = [];
+                }
+
+                // If guest mode, load local assets immediately and return
+                if (isGuest) {
+                    console.log('[AssetContext] Guest mode active, loading guest assets');
+                    if (localAssets.length > 0) {
+                        setAssets(localAssets);
+                    } else {
+                        // DEFAULT GUEST ASSETS
+                        const defaultAssets: Asset[] = [
+                            {
+                                id: 1,
+                                name: 'Unit-1 (Fallback)',
+                                type: 'HPP',
+                                location: 'Bihac',
+                                coordinates: [44.81, 15.87],
+                                capacity: 12.5,
+                                status: 'Operational',
+                                turbine_type: 'FRANCIS',
+                                specs: {}
+                            }
+                        ];
+                        setAssets(defaultAssets);
+                        saveToStorage('guest_assets', defaultAssets);
+                    }
+                    setLoading(false);
+                    return;
                 }
 
                 // NC-76.3: Strict 1.5s timeout for Supabase assets
@@ -43,10 +70,6 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 );
 
                 console.log('[AssetContext] Step 1: Fetching assets...');
-
-                // NC-76.4: Verify connection first
-                // If verifyConnection fails quickly, we skip the fetch to save time
-                // But since verifyConnection might take time, we just race everything
 
                 try {
                     const { data, error } = await Promise.race([
@@ -217,6 +240,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     coordinates: [dbPayload.lat, dbPayload.lng],
                     capacity: dbPayload.power_output,
                     status: dbPayload.status as Asset['status'],
+                    turbine_type: newAssetData.turbine_type || 'FRANCIS',
                     specs: dbPayload.specs,
                     turbineProfile: dbPayload.specs?.turbineProfile
                 };

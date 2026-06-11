@@ -123,6 +123,18 @@ class AIPredictionService {
     async loadHistoricalIncidents() {
         if (!supabase) return;
         try {
+            // Verify there is an active authenticated session to avoid 401 console logs for guests
+            let hasSession = false;
+            try {
+                const { data } = await supabase.auth.getSession();
+                hasSession = !!data.session;
+            } catch (e) {}
+
+            if (!hasSession) {
+                console.debug('[AIPredictionService] No active session, using local default incidents.');
+                return;
+            }
+
             const { data, error } = await supabase
                 .from('incident_library')
                 .select('*');

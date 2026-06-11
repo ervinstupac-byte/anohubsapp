@@ -37,7 +37,7 @@ export default function AdminHealth() {
       setBackfillMessage(`Backfill completed: ${Array.isArray(data) ? data.length : 'unknown'} rows processed.`);
 
       // for each unique asset, persist century plan based on latest aggregate
-      const assetIds = Array.from(new Set((data || []).map((r: any) => r.asset_id).filter((id: any) => id)));
+      const assetIds = Array.from(new Set((data || []).map((r: any) => r.asset_id).filter((id: any) => id))) as string[];
       for (const aid of assetIds) {
         try {
           // fetch latest aggregate for asset
@@ -54,7 +54,8 @@ export default function AdminHealth() {
             telemetryWindow: []
           };
           const aidNum = Number(aid);
-          await persistCenturyPlanForAsset(aidNum, input, `Backfill Plan ${startStr}→${endStr}`);
+          const passId = isNaN(aidNum) ? aid : aidNum;
+          await persistCenturyPlanForAsset(passId, input, `Backfill Plan ${startStr}→${endStr}`);
         } catch (e) { console.warn('Century plan persist failed for asset', aid, e); }
       }
 

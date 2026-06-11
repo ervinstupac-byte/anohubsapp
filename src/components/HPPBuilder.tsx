@@ -54,7 +54,7 @@ export const HPPBuilder: React.FC = () => {
     const navigate = useNavigate();
     const { navigateToTurbineDetail } = useNavigation();
     const { showToast } = useToast();
-    const { user } = useAuth();
+    const { user, isGuest } = useAuth();
     const { selectedAsset, updateAsset, logActivity } = useAssetContext();
     const { telemetry } = useTelemetry();
     const { t } = useTranslation();
@@ -317,8 +317,12 @@ export const HPPBuilder: React.FC = () => {
                 recommended_turbine: bestTurbine,
                 asset_id: assetDbId
             };
-            const { error } = await supabase.from('turbine_designs').insert([payload]);
-            if (error) throw error;
+            if (isGuest || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(user?.id || '')) {
+                console.debug('[HPPBuilder] Guest user: skipping cloud design persistence.');
+            } else {
+                const { error } = await supabase.from('turbine_designs').insert([payload]);
+                if (error) throw error;
+            }
 
             // --- CENTRALIZED ASSET UPDATE & LOGGING ---
             const oldSpecs = selectedAsset.specs || {};
@@ -380,7 +384,7 @@ export const HPPBuilder: React.FC = () => {
     };
 
     const fetchCloudConfigs = async () => {
-        if (!user) return;
+        if (!user || isGuest || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(user.id)) return;
         setIsLoading(true);
         // use idAdapter to coerce numeric asset id at DB boundary
         const { idAdapter } = await import('../utils/idAdapter');
@@ -402,7 +406,7 @@ export const HPPBuilder: React.FC = () => {
     };
 
     const autoLoadLatestConfig = async () => {
-        if (!user || !selectedAsset) return;
+        if (!user || isGuest || !selectedAsset || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(user.id)) return;
         const { idAdapter } = await import('../utils/idAdapter');
         const numeric = idAdapter.toNumber(selectedAsset.id);
         const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : undefined;

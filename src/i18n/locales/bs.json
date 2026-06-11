@@ -505,5 +505,31 @@
                 }
             }
         }
-    }
+    },
+  "profile": {
+    "loading": "[BS] Loading Enterprise Profile...",
+    "title": "Inženjerski Profil",
+    "subtitle": "Upravljajte svojim identitetom i nivoima pristupa.",
+    "changePhoto": "[BS] CHANGE PHOTO",
+    "unassignedRole": "Nedodijeljena Uloga",
+    "fullName": "Puno Ime",
+    "role": "Pozicija / Uloga",
+    "rolePlaceholder": "npr. Glavni Inženjer",
+    "fullNamePlaceholder": "npr. Ivan Horvat",
+    "company": "Organizacija",
+    "companyPlaceholder": "npr. Global Hydropower Inc.",
+    "saveButton": "Sačuvaj Promjene",
+    "saving": "[BS] Saving...",
+    "uploadError": "Morate odabrati sliku za slanje.",
+    "updateSuccess": "Profil uspješno ažuriran",
+    "avatarSuccess": "Avatar poslan!",
+    "noUser": "Korisnik nije pronađen",
+    "back": "Nazad",
+    "guestSaveWarning": "Gostujući profili se ne mogu sačuvati",
+    "guestUploadWarning": "Gostujući profili ne mogu slati avatare",
+    "developerTools": "Razvojni Alati",
+    "resetData": "Resetuj Demo Podatke",
+    "resetDataDesc": "Resetuj demo podatke da vratiš podrazumijevane radne naloge, zdravlje komponenti i radne sate. Ovo će ponovo učitati aplikaciju.",
+    "resetDataConfirm": "Resetovati sve demo podatke? Ovo će očistiti localStorage i ponovo učitati stranicu."
+  }
 }

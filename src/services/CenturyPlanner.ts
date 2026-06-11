@@ -71,11 +71,20 @@ export function centuryPlan(input: CenturyPlanInput, horizons = [10,20,50]) {
     return { baselineAnnualRevenue: baselineAnnualRevenue.toNumber(), degradationRatePerYear: degr.toNumber(), projections: results };
 }
 
-export async function persistCenturyPlanForAsset(assetId: number, input: CenturyPlanInput, name = 'Auto Century Plan') {
+export async function persistCenturyPlanForAsset(assetId: number | string, input: CenturyPlanInput, name = 'Auto Century Plan') {
     // run centuryPlan and persist into century_plans
     const result = centuryPlan(input);
     try {
-        const { error } = await supabase.from('century_plans').insert([{ asset_id: assetId, name, input_json: input, projections: result, created_at: new Date().toISOString() }]);
+        const { idAdapter } = await import('../utils/idAdapter');
+        const numeric = idAdapter.toNumber(assetId);
+        const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : String(assetId);
+
+        if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(assetDbId)) {
+            console.debug('[CenturyPlanner] Skipping DB persistence for non-UUID asset ID:', assetDbId);
+            return result;
+        }
+
+        const { error } = await supabase.from('century_plans').insert([{ asset_id: assetDbId, name, input_json: input, projections: result, created_at: new Date().toISOString() }]);
         if (error) throw error;
         return result;
     } catch (e) {

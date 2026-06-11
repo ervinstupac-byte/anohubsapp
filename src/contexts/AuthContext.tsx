@@ -12,6 +12,7 @@ interface AuthContextType {
     signInAsGuest: (role: 'MANAGER' | 'OWNER' | 'TECHNICIAN' | 'ENGINEER') => Promise<void>; // <--- NOVO: Accept role parameter
     signOut: () => Promise<void>;
     loading: boolean;
+    updateUserMetadata?: (metadata: { full_name?: string; role?: string; company?: string; avatar_url?: string }) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,6 +31,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             const autoGuest = localStorage.getItem('ANOHUB_AUTO_GUEST') === 'true';
             if (autoGuest) {
+                const savedProfileRaw = localStorage.getItem('guest_profile');
+                let savedProfile: any = {};
+                if (savedProfileRaw) {
+                    try {
+                        savedProfile = JSON.parse(savedProfileRaw);
+                    } catch (e) {
+                        console.error('Failed to parse guest_profile', e);
+                    }
+                }
                 const guestUser = {
                     id: 'guest-auto-1',
                     aud: 'authenticated',
@@ -40,13 +50,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     confirmed_at: new Date().toISOString(),
                     last_sign_in_at: new Date().toISOString(),
                     app_metadata: { provider: 'email', providers: ['email'] },
-                    user_metadata: { full_name: 'Auto Guest', role: 'ENGINEER' },
+                    user_metadata: {
+                        full_name: savedProfile.full_name || 'Auto Guest',
+                        role: savedProfile.role || 'ENGINEER',
+                        company: savedProfile.company || 'Demo Mode',
+                        avatar_url: savedProfile.avatar_url || ''
+                    },
                     identities: [],
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString(),
                 } as User;
                 setIsGuest(true);
-                setUserRole('ENGINEER');
+                setUserRole((savedProfile.role || 'ENGINEER') as any);
                 setUser(guestUser);
                 setLoading(false);
                 try { window.location.hash = '#/'; } catch(e) { /* noop */ }
@@ -99,7 +114,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // 2. GUEST LOGIN (Lažiramo korisnika)
     const signInAsGuest = async (role: 'MANAGER' | 'OWNER' | 'TECHNICIAN' | 'ENGINEER') => {
         setIsGuest(true);
-        setUserRole(role); // <--- NOVO: Set the user role
+        
+        const savedProfileRaw = localStorage.getItem('guest_profile');
+        let savedProfile: any = {};
+        if (savedProfileRaw) {
+            try {
+                savedProfile = JSON.parse(savedProfileRaw);
+            } catch (e) {
+                console.error('Failed to parse guest_profile from localStorage', e);
+            }
+        }
+
+        setUserRole(savedProfile.role || role); // <--- NOVO: Set the user role
         // Kreiramo lažni User objekt da zavaramo TypeScript i UI
         const guestUser = {
             id: 'guest-123',
@@ -111,7 +137,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             confirmed_at: new Date().toISOString(),
             last_sign_in_at: new Date().toISOString(),
             app_metadata: { provider: 'email', providers: ['email'] },
-            user_metadata: { full_name: 'Guest Engineer', role }, // <--- NOVO: Include role in metadata
+            user_metadata: { 
+                full_name: savedProfile.full_name || 'Guest Engineer', 
+                role: savedProfile.role || role,
+                company: savedProfile.company || 'Demo Mode',
+                avatar_url: savedProfile.avatar_url || ''
+            },
             identities: [],
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
@@ -119,7 +150,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         setUser(guestUser);
         setLoading(false); // CRITICAL: Allow AuthProvider to render children
-        logAction('AUTH_LOGIN', 'Guest System', 'SUCCESS', { user: 'guest', role });
+        logAction('AUTH_LOGIN', 'Guest System', 'SUCCESS', { user: 'guest', role: savedProfile.role || role });
     };
 
     // 3. LOGOUT (Pokriva i Guest i Pravi logout)
@@ -139,6 +170,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
+    const updateUserMetadata = (metadata: { full_name?: string; role?: string; company?: string; avatar_url?: string }) => {
+        if (user) {
+            const updatedUser = {
+                ...user,
+                user_metadata: {
+                    ...user.user_metadata,
+                    ...metadata,
+                }
+            } as User;
+            setUser(updatedUser);
+            if (metadata.role) {
+                setUserRole(metadata.role as any);
+            }
+        }
+    };
+
     const value = {
         session,
         user,
@@ -147,7 +194,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         signIn,
         signInAsGuest, // Exportamo novu funkciju
         signOut,
-        loading
+        loading,
+        updateUserMetadata
     };
 
     return (

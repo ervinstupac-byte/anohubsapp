@@ -675,6 +675,31 @@
         "approved": "SYSTEM_NOMINAL_NC102",
         "signed": "[Your Name / Forensic Consultant]"
     }
-}
-
+},
+  "profile": {
+    "loading": "Loading Enterprise Profile...",
+    "title": "Engineer Profile",
+    "subtitle": "Manage your identity and AnoHub credentials.",
+    "changePhoto": "CHANGE PHOTO",
+    "unassignedRole": "Unassigned Role",
+    "fullName": "Full Name",
+    "role": "Role / Title",
+    "rolePlaceholder": "e.g. Senior Mechanical Lead",
+    "fullNamePlaceholder": "e.g. John Doe",
+    "company": "Company / Organization",
+    "companyPlaceholder": "e.g. AnoHub Enterprise Solutions",
+    "saveButton": "Save Profile Changes",
+    "saving": "Saving...",
+    "uploadError": "You must select an image to upload.",
+    "updateSuccess": "Profile updated successfully!",
+    "avatarSuccess": "Avatar uploaded!",
+    "noUser": "No user logged in!",
+    "back": "Back to Dashboard",
+    "guestSaveWarning": "[EN] Gostujući profili se ne mogu sačuvati",
+    "guestUploadWarning": "[EN] Gostujući profili ne mogu slati avatare",
+    "developerTools": "[EN] Razvojni Alati",
+    "resetData": "[EN] Resetuj Demo Podatke",
+    "resetDataDesc": "[EN] Resetuj demo podatke da vratiš podrazumijevane radne naloge, zdravlje komponenti i radne sate. Ovo će ponovo učitati aplikaciju.",
+    "resetDataConfirm": "[EN] Resetovati sve demo podatke? Ovo će očistiti localStorage i ponovo učitati stranicu."
+  }
 }

@@ -125,13 +125,16 @@ export const DiagnosticProvider: React.FC<{ children: React.ReactNode }> = ({ ch
             const results: CorrelationResult[] = [];
 
             // 1. Check for Telemetry Alarms and Vibration Thresholds
-            const assetIds = Object.keys(telemetry).map(id => Number(id)).filter(n => !Number.isNaN(n));
+            const isUuid = (val: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val);
+            const databaseAssetIds = Object.keys(telemetry).filter(isUuid);
             const thresholdsMap: Record<string, number> = {};
-            try {
-                const { data: tcfgs } = await supabase.from('threshold_configs').select('asset_id, vibration_mm_s').in('asset_id', assetIds);
-                (tcfgs || []).forEach((t: any) => { thresholdsMap[String(t.asset_id)] = Number(t.vibration_mm_s || 4.5); });
-            } catch (e) {
-                // ignore, fall back to defaults
+            if (databaseAssetIds.length > 0) {
+                try {
+                    const { data: tcfgs } = await supabase.from('threshold_configs').select('asset_id, vibration_mm_s').in('asset_id', databaseAssetIds);
+                    (tcfgs || []).forEach((t: any) => { thresholdsMap[String(t.asset_id)] = Number(t.vibration_mm_s || 4.5); });
+                } catch (e) {
+                    // ignore, fall back to defaults
+                }
             }
 
             Object.entries(telemetry).forEach(([assetId, t]) => {

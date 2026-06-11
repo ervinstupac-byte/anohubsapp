@@ -62,6 +62,23 @@ export const AuditProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         // 3. Persist to Supabase (if configured)
         // 3. Persist to Supabase (if configured)
         if (isSupabaseConfigured) {
+            // Verify there is an active authenticated session to avoid 401 console logs for guests
+            let hasSession = false;
+            try {
+                const { data } = await supabase.auth.getSession();
+                hasSession = !!data.session;
+            } catch (e) {}
+
+            if (!hasSession) {
+                console.debug('[AuditContext] Guest user: using local storage for audit logs.');
+                try {
+                    const existing = JSON.parse(sessionStorage.getItem('local_audit_logs') || '[]');
+                    existing.push(newEntry);
+                    sessionStorage.setItem('local_audit_logs', JSON.stringify(existing));
+                } catch (storeErr) {}
+                return;
+            }
+
             // NC-76.3: Strict 1s timeout to prevent blocking application boot
             const timeoutPromise = new Promise((_, reject) =>
                 setTimeout(() => reject(new Error('Supabase Timeout')), 1000)

@@ -26,6 +26,15 @@ export const FrancisHorizontal5MW: React.FC = () => {
 
     useEffect(() => {
         if (!assetId) return;
+        const isUuid = (id: any): boolean =>
+            typeof id === 'string' &&
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+
+        if (!isUuid(assetId)) {
+            setLoading(false);
+            return;
+        }
+
         let mounted = true;
         setLoading(true);
         (async () => {
@@ -76,6 +85,11 @@ export const FrancisHorizontal5MW: React.FC = () => {
 
     const fetchLatestTelemetry = async () => {
         if (!assetId) return;
+        const isUuid = (id: any): boolean =>
+            typeof id === 'string' &&
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+        if (!isUuid(assetId)) return;
+
         try {
             const { data: latest } = await supabase
                 .from('dynamic_sensor_data')
@@ -134,6 +148,11 @@ export const FrancisHorizontal5MW: React.FC = () => {
         let mounted = true;
         async function loadDiagnostics() {
             if (!assetId || !selectedHotspot) return;
+            const isUuid = (id: any): boolean =>
+                typeof id === 'string' &&
+                /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+            if (!isUuid(assetId)) return;
+
             const mapped = hotspots[selectedHotspot];
             try {
                 // fetch recent logs that reference this part/hotspot
@@ -167,7 +186,7 @@ export const FrancisHorizontal5MW: React.FC = () => {
                 // fetch hydrology_context for asset's plant (if available)
                 try {
                     const plantId = (selectedAsset as any)?.specs?.plant_id || (selectedAsset as any)?.plantId || (selectedAsset as any)?.plant_id;
-                    if (plantId) {
+                    if (plantId && isUuid(plantId)) {
                         const { data: hc } = await supabase.from('hydrology_context').select('*').eq('plant_id', plantId).single();
                         if (mounted) setHydrologyContext(hc || null);
                     }
