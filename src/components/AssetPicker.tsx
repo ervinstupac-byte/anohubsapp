@@ -5,7 +5,7 @@ import { AssetOnboardingWizard } from './digital-twin/AssetOnboardingWizard.tsx'
 
 // OVO JE JEDINA DEKLARACIJA I EKSPORT KOMPONENTE AssetPicker
 export const AssetPicker: React.FC = () => {
-    const { assets, selectedAsset, selectAsset, loading } = useAssetContext();
+    const { assets, selectedAsset, selectAsset, loading, addAsset } = useAssetContext();
     const { t } = useTranslation();
 
     const [isWizardOpen, setIsWizardOpen] = useState(false);

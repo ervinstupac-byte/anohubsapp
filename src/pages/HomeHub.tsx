@@ -127,7 +127,7 @@ export const HomeHub: React.FC = () => {
         } else if (family === 'KAPLAN') {
             navigate('/kaplan/twin');
         } else {
-            navigate(`/turbines/${family.toLowerCase()}`);
+            navigate(`/turbines/${(family as string).toLowerCase()}`);
         }
     };
 

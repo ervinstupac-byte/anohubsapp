@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- temporary: mechanical pass; will replace with proper types in Phase B */
 import { aiPredictionService, SynergeticRisk, RULEstimate, IncidentPattern, PrescriptiveAction } from './AIPredictionService';
+import { supabase } from './supabaseClient';
 import { AcousticFingerprintingService } from './AcousticFingerprintingService';
 import { SpecialMeasurementsService, CorrelationResult } from './SpecialMeasurementsService';
 import { TurbinePhysics } from './DynamicToleranceCalculator';
@@ -503,6 +504,40 @@ export class MasterIntelligenceEngine extends BaseGuardian {
             }
 
             console.log(`✅ Analysis complete.Health score: ${diagnosis.overallHealthScore}/100`);
+
+            // NC-55.0: Persist the UnifiedDiagnosis snapshot to database
+            try {
+                const dbAssetId = typeof asset.id === 'number' ? idAdapter.toDb(asset.id) : String(asset.id);
+                const snapshotRow = {
+                    asset_id: dbAssetId,
+                    health_score: diagnosis.overallHealthScore,
+                    criticality: diagnosis.criticality,
+                    p_fail: diagnosis.aiPrediction?.forecast?.pf !== undefined ? diagnosis.aiPrediction.forecast.pf / 100 : null,
+                    vibration_zone: diagnosis.vibrationZone || null,
+                    rul_hours: diagnosis.rulHours || null,
+                    turbine_class: diagnosis.turbineClass || null,
+                    operating_zone: diagnosis.operatingZone || null,
+                    service_notes: diagnosis.serviceNotes || null,
+                    automated_acts: diagnosis.automatedActions || null,
+                    cavitation_data: diagnosis.turbineCavitation || null,
+                    guardian_conf: diagnosis.guardianConfidence || null,
+                    baseline_devs: diagnosis.baselineDeviations || null,
+                    trend_projections: diagnosis.trendProjections || null,
+                    wisdom_report_id: diagnosis.wisdomReport?.id || null,
+                    created_at: new Date().toISOString()
+                };
+
+                supabase.from('ai_diagnosis_snapshots').insert([snapshotRow]).then(({ error }) => {
+                    if (error) {
+                        console.debug('[MasterIntelligenceEngine] Failed to save diagnosis snapshot:', error.message);
+                    } else {
+                        console.log('[MasterIntelligenceEngine] Successfully saved diagnosis snapshot to Supabase.');
+                    }
+                });
+            } catch (err) {
+                console.warn('[MasterIntelligenceEngine] Error preparing diagnosis snapshot:', err);
+            }
+
             return diagnosis;
 
         } catch (error) {
@@ -622,25 +657,20 @@ export class MasterIntelligenceEngine extends BaseGuardian {
             foundationDisplacement: latest.specialized?.geodeticData?.settlement || 0
         };
 
-        const numericId = idAdapter.toNumber(asset.id);
-        if (numericId === null) {
-            return {
-                synergeticRisks: [],
-                rulEstimates: [],
-                incidentPatterns: [],
-                prescriptiveActions: []
-            };
-        }
+        const dbId = asset.id;
 
-        const synergeticRisks = aiPredictionService.detectSynergeticRisk(numericId, mockTelemetry);
-        const incidentPatterns = aiPredictionService.matchHistoricalPattern(numericId, mockTelemetry);
+        const synergeticRisks = aiPredictionService.detectSynergeticRisk(dbId, mockTelemetry);
+        const incidentPatterns = aiPredictionService.matchHistoricalPattern(dbId, mockTelemetry);
 
         // Forecast using persisted telemetry (async)
-        const forecast = await aiPredictionService.forecastEtaBreakEven(numericId);
+        const forecast = await aiPredictionService.forecastEtaBreakEven(dbId);
+
+        // Compute and persist component RUL estimates
+        const rulEstimates = await aiPredictionService.calculateAndPersistRUL(dbId, mockTelemetry);
 
         return {
             synergeticRisks: synergeticRisks ? [synergeticRisks] : [],
-            rulEstimates: [],
+            rulEstimates: rulEstimates || [],
             incidentPatterns: incidentPatterns ? [incidentPatterns] : [],
             prescriptiveActions: [],
             forecast

@@ -90,7 +90,7 @@ interface HistoricalIncident {
 }
 
 // Simulated incident database (in production, this would come from Supabase)
-const HISTORICAL_INCIDENTS: HistoricalIncident[] = [
+let HISTORICAL_INCIDENTS: HistoricalIncident[] = [
     {
         id: '2024-KM-HC-001',
         type: 'HYDRAULIC_RUNAWAY',
@@ -112,11 +112,86 @@ const HISTORICAL_INCIDENTS: HistoricalIncident[] = [
 // --- AI PREDICTION SERVICE ---
 
 class AIPredictionService {
+    constructor() {
+        // Asynchronously load historical incidents from database on boot
+        this.loadHistoricalIncidents().catch(() => {});
+    }
+
+    /**
+     * Fetch historical incidents from Supabase to update the local pattern library
+     */
+    async loadHistoricalIncidents() {
+        if (!supabase) return;
+        try {
+            const { data, error } = await supabase
+                .from('incident_library')
+                .select('*');
+            if (error) throw error;
+            if (data && data.length > 0) {
+                HISTORICAL_INCIDENTS = data.map((item: any) => ({
+                    id: item.incident_code,
+                    type: item.incident_type as HistoricalIncident['type'],
+                    description: item.description,
+                    pressureSignature: item.pressure_sig ? (Array.isArray(item.pressure_sig) ? item.pressure_sig : JSON.parse(JSON.stringify(item.pressure_sig))) : undefined,
+                    hoseTensionSignature: item.tension_sig ? (Array.isArray(item.tension_sig) ? item.tension_sig : JSON.parse(JSON.stringify(item.tension_sig))) : undefined,
+                    temperatureSignature: item.temp_sig ? (Array.isArray(item.temp_sig) ? item.temp_sig : JSON.parse(JSON.stringify(item.temp_sig))) : undefined,
+                    vibrationSignature: item.vibration_sig ? (Array.isArray(item.vibration_sig) ? item.vibration_sig : JSON.parse(JSON.stringify(item.vibration_sig))) : undefined,
+                    triggerCondition: item.trigger_cond || {}
+                }));
+                console.debug(`[AIPredictionService] Loaded ${HISTORICAL_INCIDENTS.length} incidents from Supabase.`);
+            }
+        } catch (err) {
+            console.warn('[AIPredictionService] Failed to load historical incidents from Supabase, using local defaults.', err);
+        }
+    }
+
+    /**
+     * Calculates RUL for all critical components and attempts to persist them to Supabase
+     */
+    async calculateAndPersistRUL(
+        assetId: number | string,
+        telemetry: TelemetryData,
+        operatingHours: number = 1000
+    ): Promise<RULEstimate[]> {
+        const componentTypes: Array<'bearing' | 'seal' | 'hose' | 'wicket_gate'> = ['bearing', 'seal', 'hose', 'wicket_gate'];
+        const estimates = componentTypes.map(c => this.calculateRUL(c, operatingHours, telemetry));
+
+        // Attempt database persistence (fire-and-forget/non-blocking)
+        if (supabase) {
+            try {
+                const dbId = typeof assetId === 'number' ? idAdapter.toDb(assetId) : String(assetId);
+                const rows = estimates.map(est => ({
+                    asset_id: dbId,
+                    component_type: est.componentType,
+                    component_id: est.componentId,
+                    hours_remaining: est.hoursRemaining,
+                    stress_factors: est.stressFactors,
+                    confidence: est.confidence,
+                    critical_threshold: est.criticalThreshold,
+                    computed_at: new Date().toISOString()
+                }));
+
+                // Run insert in background
+                supabase.from('rul_estimates').insert(rows).then(({ error }) => {
+                    if (error) {
+                        console.debug('[AIPredictionService] Failed to persist RUL estimates:', error.message);
+                    } else {
+                        console.log(`[AIPredictionService] Successfully persisted ${estimates.length} RUL estimates to Supabase.`);
+                    }
+                });
+            } catch (err) {
+                // Ignore
+            }
+        }
+
+        return estimates;
+    }
+
     /**
      * MULTI-SENSOR CORRELATION (Spider Logic)
      * Detects synergetic risk when all 3 parameters oscillate simultaneously
      */
-    detectSynergeticRisk(assetId: number, telemetry: TelemetryData): SynergeticRisk {
+    detectSynergeticRisk(assetId: number | string, telemetry: TelemetryData): SynergeticRisk {
         if (!telemetry) {
             return {
                 detected: false,
@@ -192,7 +267,7 @@ class AIPredictionService {
      * Forecast eta break-even week using linear regression on historical efficiency (%)
      * Returns number of weeks until eta crosses `threshold` (default 90%) and confidence
      */
-    async forecastEtaBreakEven(assetId: number, threshold: number = 90): Promise<{ weeksUntil: number | null; predictedTimestamp: number | null; confidence: number; slope?: number; intercept?: number; tStatistic?: number; sampleCount?: number; residualStd?: number; pf?: number; suggestedWorkOrder?: SuggestedWorkOrder }> {
+    async forecastEtaBreakEven(assetId: number | string, threshold: number = 90): Promise<{ weeksUntil: number | null; predictedTimestamp: number | null; confidence: number; slope?: number; intercept?: number; tStatistic?: number; sampleCount?: number; residualStd?: number; pf?: number; suggestedWorkOrder?: SuggestedWorkOrder }> {
         // Prioritize any in-memory telemetry (useful for tests and live short-term buffers)
         const memHistory = telemetryHistory.get(String(assetId));
         if (memHistory && memHistory.length > 0) {
@@ -337,7 +412,7 @@ class AIPredictionService {
     }
 
     /** Compute forecast excluding given ISO dates (YYYY-MM-DD) present in cached history or telemetry_logs */
-    async forecastExcludingDates(assetId: number, excludeDates: string[], threshold: number = 90) {
+    async forecastExcludingDates(assetId: number | string, excludeDates: string[], threshold: number = 90) {
         try {
             const numeric = idAdapter.toNumber(assetId);
             const dbId = numeric !== null ? idAdapter.toDb(numeric) : String(assetId);
@@ -494,7 +569,7 @@ class AIPredictionService {
      * INCIDENT GHOST SIMULATOR
      * Pattern matching with historical incidents using Dynamic Time Warping
      */
-    matchHistoricalPattern(assetId: number, telemetry: TelemetryData): IncidentPattern | null {
+    matchHistoricalPattern(assetId: number | string, telemetry: TelemetryData): IncidentPattern | null {
         if (!telemetry) {
             return null;
         }
@@ -709,14 +784,14 @@ class AIPredictionService {
     /**
      * Clear history for asset (useful for testing or after maintenance)
      */
-    clearHistory(assetId: number): void {
+    clearHistory(assetId: number | string): void {
         telemetryHistory.delete(String(assetId));
     }
 
     /**
      * Get history size for debugging
      */
-    getHistorySize(assetId: number): number {
+    getHistorySize(assetId: number | string): number {
         return telemetryHistory.get(String(assetId))?.length || 0;
     }
 
@@ -814,7 +889,7 @@ class AIPredictionService {
     /** Bearing Thermal Drift Predictor
      * Uses recent telemetry history to linear-regress bearing temperature and estimate Time-To-Threshold (hours)
      */
-    predictBearingThermalTTT(assetId: number, telemetry: TelemetryData, criticalTemp: number = 75, projectState?: TechnicalProjectState): PredictionReport {
+    predictBearingThermalTTT(assetId: number | string, telemetry: TelemetryData, criticalTemp: number = 75, projectState?: TechnicalProjectState): PredictionReport {
         if (!telemetry) {
             return {
                 probability: 0,
@@ -880,7 +955,7 @@ class AIPredictionService {
     /** Efficiency Decay Prediction
      * Monitors eta change over a sliding window and flags potential runner erosion or seal wear
      */
-    predictEfficiencyDecay(assetId: number, lookbackHours: number = 72): PredictionReport {
+    predictEfficiencyDecay(assetId: number | string, lookbackHours: number = 72): PredictionReport {
         if (lookbackHours <= 0) {
             return {
                 probability: 0,
