@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS public.rul_estimates (
   confidence         numeric(4,3) CHECK (confidence BETWEEN 0 AND 1),
   critical_threshold numeric(10,2),
   computed_at        timestamptz NOT NULL DEFAULT now(),
-  expires_at         timestamptz GENERATED ALWAYS AS (computed_at + INTERVAL '24 hours') STORED
+  expires_at         timestamptz NOT NULL DEFAULT (now() + INTERVAL '24 hours')
 );
 
 ALTER TABLE public.rul_estimates ENABLE ROW LEVEL SECURITY;
