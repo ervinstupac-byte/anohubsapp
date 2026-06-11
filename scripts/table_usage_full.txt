@@ -1,0 +1,796 @@
+﻿
+============================================================
+TABLE: asset_financials_with_eta  (2 usage(s))
+============================================================
+
+File: components\analytics\CenturyROIChart.tsx  Line 19
+---
+      try {
+        const { data: cp } = await supabase.from('century_plans').select('asset_id, input_json, projections').limit(10);
+        const { data: af } = await supabase.from('asset_financials_with_eta').select('*');
+
+        // Try to build year-series from century_plans projections if available
+        let yearSeries: any[] = [];
+        if (cp && cp.length > 0) {
+          // Prefer plan matching assetId
+          const plan = assetId ? cp.find((p: any) => String(p.asset_id) === String(assetId)) : cp[0];
+          if (plan && plan.projections) {
+            // Assume projections is an array of { year, cumulative_profit, asset_book_value, total_investment, net_position }
+
+File: features\reporting\ProfessionalReportEngine.ts  Line 293
+---
+        let totalLoss = list.reduce((acc, r) => acc + Number(r.computed_loss_cost || 0), 0);
+        try {
+            const { data: finRows, error: finErr } = await supabase.from('asset_financials_with_eta')
+                .select('computed_loss_cost, period_start, period_end')
+                .gte('period_start', startStr)
+                .lte('period_end', endStr);
+            if (!finErr && Array.isArray(finRows) && finRows.length > 0) {
+                const sumFin = finRows.reduce((acc: number, fr: any) => acc + Number(fr.computed_loss_cost || 0), 0);
+                // prefer the financial view's computed loss if it's non-zero
+                if (sumFin > 0) totalLoss = sumFin;
+            }
+
+============================================================
+TABLE: avatars  (2 usage(s))
+============================================================
+
+File: components\UserProfile.tsx  Line 115
+---
+
+            const { error: uploadError } = await supabase.storage
+                .from('avatars')
+                .upload(filePath, file);
+
+            if (uploadError) throw uploadError;
+
+            const { data } = supabase.storage.from('avatars').getPublicUrl(filePath);
+
+            setAvatarUrl(data.publicUrl);
+
+
+File: components\UserProfile.tsx  Line 120
+---
+            if (uploadError) throw uploadError;
+
+            const { data } = supabase.storage.from('avatars').getPublicUrl(filePath);
+
+            setAvatarUrl(data.publicUrl);
+
+            const { error: updateError } = await supabase.from('profiles').upsert({
+                id: user?.id,
+                avatar_url: data.publicUrl,
+                updated_at: new Date().toISOString()
+            });
+
+============================================================
+TABLE: century_plans  (2 usage(s))
+============================================================
+
+File: components\analytics\CenturyROIChart.tsx  Line 18
+---
+      // Fetch century_plans and asset_financials_with_eta
+      try {
+        const { data: cp } = await supabase.from('century_plans').select('asset_id, input_json, projections').limit(10);
+        const { data: af } = await supabase.from('asset_financials_with_eta').select('*');
+
+        // Try to build year-series from century_plans projections if available
+        let yearSeries: any[] = [];
+        if (cp && cp.length > 0) {
+          // Prefer plan matching assetId
+          const plan = assetId ? cp.find((p: any) => String(p.asset_id) === String(assetId)) : cp[0];
+          if (plan && plan.projections) {
+
+File: services\CenturyPlanner.ts  Line 78
+---
+    const result = centuryPlan(input);
+    try {
+        const { error } = await supabase.from('century_plans').insert([{ asset_id: assetId, name, input_json: input, projections: result, created_at: new Date().toISOString() }]);
+        if (error) throw error;
+        return result;
+    } catch (e) {
+        console.error('persistCenturyPlanForAsset error', e);
+        throw e;
+    }
+}
+
+
+============================================================
+TABLE: component_encyclopedia  (3 usage(s))
+============================================================
+
+File: components\diagnostics\ComponentInfoPanel.tsx  Line 21
+---
+  const fetchByName = useCallback(async (name: string) => {
+    setLoading(true);
+    const { data, error } = await supabase.from('component_encyclopedia').select('*').eq('component_name', name).maybeSingle();
+    setLoading(false);
+    if (error) {
+      console.error('fetchByName', error);
+      return null;
+    }
+    return data as Entry | null;
+  }, []);
+
+
+File: components\diagnostics\ComponentInfoPanel.tsx  Line 33
+---
+    setLoading(true);
+    const qlike = `%${q}%`;
+    const { data: a, error: e1 } = await supabase.from('component_encyclopedia').select('*').ilike('component_name', qlike).limit(30);
+    const { data: b, error: e2 } = await supabase.from('component_encyclopedia').select('*').ilike('description', qlike).limit(30);
+    setLoading(false);
+    if (e1 && e2) {
+      console.error('fuzzySearch errors', e1, e2);
+      return [];
+    }
+    const combined = [] as Entry[];
+    if (Array.isArray(a)) combined.push(...a as Entry[]);
+
+File: components\diagnostics\ComponentInfoPanel.tsx  Line 34
+---
+    const qlike = `%${q}%`;
+    const { data: a, error: e1 } = await supabase.from('component_encyclopedia').select('*').ilike('component_name', qlike).limit(30);
+    const { data: b, error: e2 } = await supabase.from('component_encyclopedia').select('*').ilike('description', qlike).limit(30);
+    setLoading(false);
+    if (e1 && e2) {
+      console.error('fuzzySearch errors', e1, e2);
+      return [];
+    }
+    const combined = [] as Entry[];
+    if (Array.isArray(a)) combined.push(...a as Entry[]);
+    if (Array.isArray(b)) combined.push(...b as Entry[]);
+
+============================================================
+TABLE: dynamic_sensor_data  (3 usage(s))
+============================================================
+
+File: components\hydroschool\HydroschoolSimulator.tsx  Line 70
+---
+            // pull dynamic sensor data
+            const { data: sensorData } = await supabase
+                .from('dynamic_sensor_data')
+                .select('*')
+                .eq('asset_id', assetId)
+                .order('timestamp', { ascending: false })
+                .limit(60);
+
+            // also pull recent telemetry_logs and map `details` JSONB into telemetry-like samples
+            const { data: logRows } = await supabase
+                .from('telemetry_logs')
+
+File: features\francis\components\FrancisHorizontal5MW.tsx  Line 81
+---
+        try {
+            const { data: latest } = await supabase
+                .from('dynamic_sensor_data')
+                .select('*')
+                .eq('asset_id', idAdapter.toDb(assetId))
+                .order('timestamp', { ascending: false })
+                .limit(1)
+                .single();
+            setLatestTelemetry(latest || null);
+        } catch (e) {
+            console.error('Failed to fetch telemetry:', e);
+
+File: features\francis\components\FrancisHorizontal5MW.tsx  Line 152
+---
+                // fetch recent sensor telemetry to form a telemetry window
+                const { data: sensorSamples } = await supabase
+                    .from('dynamic_sensor_data')
+                    .select('*')
+                    .eq('asset_id', assetId)
+                    .order('timestamp', { ascending: false })
+                    .limit(200);
+                const telemetryWindow = (sensorSamples || []).map((s: any) => ({
+                    eta: s.efficiency ?? undefined,
+                    output_power: s.output_power,
+                    francis_data: s.francis_data
+
+============================================================
+TABLE: experience_ledger  (7 usage(s))
+============================================================
+
+File: contexts\DiagnosticContext.tsx  Line 299
+---
+            // fallback to direct insert if service fails
+            try {
+                await supabase.from('experience_ledger').insert({
+                    symptom_observed: lesson.symptom,
+                    actual_cause: lesson.cause,
+                    resolution_steps: lesson.resolution
+                });
+                showToast('Experience Ledger updated (fallback)', 'success');
+            } catch (err) {
+                console.warn('Failed to record lesson learned', err);
+                showToast('Failed to update Experience Ledger', 'error');
+
+File: services\ExperienceLedgerService.ts  Line 16
+---
+    try {
+      let query = supabase
+        .from('experience_ledger')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(limit);
+
+      if (asset_id) {
+        query = query.eq('asset_id', asset_id);
+      }
+
+
+File: services\ExperienceLedgerService.ts  Line 36
+---
+    try {
+      const { data, error } = await supabase
+        .from('experience_ledger')
+        .select('*')
+        .eq('id', id)
+        .single();
+      if (error) return { success: false, error };
+      return { success: true, data };
+    } catch (e) {
+      return { success: false, error: e };
+    }
+
+File: services\ExperienceLedgerService.ts  Line 58
+---
+    try {
+      const { data, error } = await supabase
+        .from('experience_ledger')
+        .update(payload)
+        .eq('id', id)
+        .select()
+        .single();
+      if (error) return { success: false, error };
+      return { success: true, data };
+    } catch (e) {
+      return { success: false, error: e };
+
+File: services\ExperienceLedgerService.ts  Line 72
+---
+  async delete(id: string) {
+    try {
+      const { error } = await supabase.from('experience_ledger').delete().eq('id', id);
+      if (error) return { success: false, error };
+      return { success: true };
+    } catch (e) {
+      return { success: false, error: e };
+    }
+  },
+
+  async record(entry: LedgerInput) {
+
+File: services\ExperienceLedgerService.ts  Line 95
+---
+      // still attempt to insert, but log the validation error
+      try {
+        await supabase.from('experience_ledger').insert(payload);
+      } catch (e) {
+        console.warn('ExperienceLedgerService.record failed insert with invalid payload', e, parsed.error);
+      }
+      return { success: false, error: parsed.error };
+    }
+
+    const { data, error } = await supabase.from('experience_ledger').insert(parsed.data).select().single();
+    if (error) return { success: false, error };
+
+File: services\ExperienceLedgerService.ts  Line 102
+---
+    }
+
+    const { data, error } = await supabase.from('experience_ledger').insert(parsed.data).select().single();
+    if (error) return { success: false, error };
+    return { success: true, data };
+  }
+  ,
+  async lookupDiagnosis(symptom_key: string, asset_id?: string) {
+    try {
+      let query = supabase
+        .from('expert_knowledge_base')
+
+============================================================
+TABLE: expert_efficiency_curves  (2 usage(s))
+============================================================
+
+File: services\AgingEstimator.ts  Line 40
+---
+    try {
+        if (variant) {
+            const { data: vdata } = await supabase.from('expert_efficiency_curves').select('id, curve_json, created_at').eq('turbine_variant', variant).order('created_at', { ascending: false }).limit(1).single();
+            if (vdata) return vdata.curve_json || null;
+        }
+        if (family) {
+            const { data: fdata } = await supabase.from('expert_efficiency_curves').select('id, curve_json, created_at').eq('asset_family', family).order('created_at', { ascending: false }).limit(1).single();
+            if (fdata) return fdata.curve_json || null;
+        }
+        return null;
+    } catch (e) {
+
+File: services\AgingEstimator.ts  Line 44
+---
+        }
+        if (family) {
+            const { data: fdata } = await supabase.from('expert_efficiency_curves').select('id, curve_json, created_at').eq('asset_family', family).order('created_at', { ascending: false }).limit(1).single();
+            if (fdata) return fdata.curve_json || null;
+        }
+        return null;
+    } catch (e) {
+        console.error('fetchExpertCurve error', e);
+        return null;
+    }
+}
+
+============================================================
+TABLE: expert_knowledge_base  (3 usage(s))
+============================================================
+
+File: contexts\DiagnosticContext.tsx  Line 182
+---
+                try {
+                    const { data: ekb } = await supabase
+                        .from('expert_knowledge_base')
+                        .select('*')
+                        .eq('symptom_key', r.symptom)
+                        .single();
+
+                    finalResults.push({ ...r, diagnosis: ekb || undefined });
+                } catch (e) {
+                    finalResults.push(r);
+                }
+
+File: contexts\DiagnosticContext.tsx  Line 281
+---
+    const getTroubleshootingAdvice = async (symptomKey: string) => {
+        const { data } = await supabase
+            .from('expert_knowledge_base')
+            .select('*')
+            .eq('symptom_key', symptomKey)
+            .single();
+        return data as Diagnosis;
+    };
+
+    const recordLessonLearned = async (lesson: { symptom: string; cause: string; resolution: string }) => {
+        try {
+
+File: services\ExperienceLedgerService.ts  Line 110
+---
+    try {
+      let query = supabase
+        .from('expert_knowledge_base')
+        .select('*')
+        .ilike('symptom_key', `%${symptom_key}%`)
+        .limit(25);
+
+      if (asset_id) {
+        query = query.eq('asset_id', asset_id as any);
+      }
+
+
+============================================================
+TABLE: hydrology_context  (4 usage(s))
+============================================================
+
+File: components\hydroschool\HydroschoolSimulator.tsx  Line 39
+---
+                const plantId = (selectedAsset as any)?.specs?.plant_id || (selectedAsset as any)?.plantId || (selectedAsset as any)?.plant_id;
+                if (plantId) {
+                    const { data: hc } = await supabase.from('hydrology_context').select('*').eq('plant_id', plantId).single();
+                    if (mounted) setHydroContext(hc || null);
+                }
+
+                const { data: design } = await supabase
+                    .from('turbine_designs')
+                    .select("parameters->>family as family, parameters->>variant as variant, parameters->'design_points' as design_points")
+                    .eq('asset_id', idAdapter.toDb(assetId))
+                    .order('created_at', { ascending: false })
+
+File: components\infrastructure\HydrologyLab.tsx  Line 40
+---
+    const fetchHydrology = async (plantId: string) => {
+        setIsLoading(true);
+        const { data } = await supabase.from('hydrology_context').select('*').eq('plant_id', plantId).single();
+        if (data) setHydrology(data);
+        else {
+            // Create default if not exists
+            setHydrology({
+                plant_id: plantId,
+                design_head: 100,
+                design_flow: 10.5,
+                ecological_flow: 1.2,
+
+File: components\infrastructure\HydrologyLab.tsx  Line 100
+---
+    const handleSave = async () => {
+        setIsLoading(true);
+        const { error } = await supabase.from('hydrology_context').upsert(hydrology, { onConflict: 'plant_id' });
+        if (error) showToast("Hydrology sync failed", "error");
+        else showToast("Hydrology parameters etched to database", "success");
+        setIsLoading(false);
+    };
+
+    return (
+        <div className="space-y-8 animate-fade-in">
+            <div className="flex justify-between items-center">
+
+File: features\francis\components\FrancisHorizontal5MW.tsx  Line 171
+---
+                    const plantId = (selectedAsset as any)?.specs?.plant_id || (selectedAsset as any)?.plantId || (selectedAsset as any)?.plant_id;
+                    if (plantId) {
+                        const { data: hc } = await supabase.from('hydrology_context').select('*').eq('plant_id', plantId).single();
+                        if (mounted) setHydrologyContext(hc || null);
+                    }
+                } catch (e) { console.warn('Failed to load hydrology_context', e); }
+
+                setExpertCurveState(expertCurve || null);
+
+                const result = evaluateAging(telemetryWindow, (design as any)?.design_points?.design_eta, { design_flow_cms: (design as any)?.specs?.design_flow_cms, gross_head_m: (design as any)?.specs?.gross_head_m }, expertCurve);
+                if (!mounted) return;
+
+============================================================
+TABLE: logbook_entries  (2 usage(s))
+============================================================
+
+File: pages\DigitalLogbook.tsx  Line 112
+---
+            // Try Supabase first
+            const { data, error } = await supabase
+                .from('logbook_entries')
+                .select('*')
+                .order('timestamp', { ascending: false });
+
+            if (error) throw error;
+
+            if (data) {
+                const mapped: LogbookEntry[] = data.map((item: any) => {
+                    const match = assets.find(a => String(a.id) === String(item.turbine_id));
+
+File: pages\DigitalLogbook.tsx  Line 254
+---
+            // Attempt Supabase insert
+            const { data, error } = await supabase
+                .from('logbook_entries')
+                .insert([{
+                    entry_type: payload.entry_type,
+                    turbine_id: payload.turbine_id,
+                    timestamp: payload.timestamp,
+                    shift: payload.shift,
+                    operator: payload.operator,
+                    measurements: payload.measurements,
+                    notes: payload.notes,
+
+============================================================
+TABLE: operator_feedback  (1 usage(s))
+============================================================
+
+File: components\dashboard\VetoControl.tsx  Line 53
+---
+        // Use props to notify parent, but write here or in service. Let's write here for "Direct" requirement.
+        try {
+            await supabase.from('operator_feedback').insert({
+                action_id: `ACT-${Date.now()}`, // Simple ID generation
+                reason: reason,
+                context: { action: actionDescription }
+            });
+            onVeto(reason); // Notify parent to cancel logic
+        } catch (e) {
+            console.error('Failed to log veto', e);
+            onVeto(reason); // Cancel anyway
+
+============================================================
+TABLE: plants  (3 usage(s))
+============================================================
+
+File: components\infrastructure\HydrologyLab.tsx  Line 28
+---
+
+    const fetchPlants = async () => {
+        const { data } = await supabase.from('plants').select('id, name');
+        if (data) {
+            setPlants(data);
+            if (data.length > 0) {
+                setSelectedPlantId(data[0].id);
+                fetchHydrology(data[0].id);
+            }
+        }
+    };
+
+File: components\infrastructure\PlantMaster.tsx  Line 24
+---
+    const fetchPlants = async () => {
+        setIsLoading(true);
+        const { data, error } = await supabase.from('plants').select('*');
+        if (data) {
+            setPlants(data);
+            if (data.length > 0 && !selectedPlant) setSelectedPlant(data[0]);
+        }
+        setIsLoading(false);
+    };
+
+    const handleLocationChange = (lat: number, lng: number) => {
+
+File: components\infrastructure\PlantMaster.tsx  Line 45
+---
+        setIsLoading(true);
+        const { error } = await supabase
+            .from('plants')
+            .update({
+                location_name: selectedPlant.location_name,
+                gps_lat: selectedPlant.gps_lat,
+                gps_lng: selectedPlant.gps_lng,
+                elevation_masl: selectedPlant.elevation_masl,
+                ambient_temp_avg: selectedPlant.ambient_temp_avg,
+                humidity_avg: selectedPlant.humidity_avg
+            })
+
+============================================================
+TABLE: reports  (4 usage(s))
+============================================================
+
+File: components\dashboard\ManagementSummary.tsx  Line 21
+---
+        const numeric = idAdapter.toNumber(selectedAsset.id);
+        const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : idAdapter.toDb(selectedAsset.id);
+        const { data, error } = await supabase.from('reports').select('*').eq('asset_id', assetDbId).order('created_at', { ascending: false }).limit(5);
+        if (error) throw error;
+        setReports(data || []);
+      } catch (e: any) {
+        if (e?.code !== 'PGRST116' && e?.code !== '42P01') {
+           // Only warn if it's not a 'table not found' error
+           console.debug('[ManagementSummary] Supabase fetch suppressed:', e.message || e);
+        }
+        setReports([]);
+
+File: components\RiskReport.tsx  Line 229
+---
+
+            const { error: uploadError } = await supabase.storage
+                .from('reports')
+                .upload(filePath, pdfBlob, { contentType: 'application/pdf', upsert: false });
+
+            if (uploadError) throw uploadError;
+
+            showToast(t('riskReport.archiveSuccess', 'Dossier successfully archived to HQ Cloud.'), 'success');
+        } catch (error: any) {
+            console.error('Upload failed:', error);
+            showToast(t('riskReport.archiveError', { defaultValue: `Archiving failed: ${error.message}`, error: error.message }), 'error');
+
+File: pages\analytics\management-summary.tsx  Line 36
+---
+        try {
+          const remotePath = `management/management_summary_30d_${startStr}_to_${endStr}.pdf`;
+          const g = supabase.storage.from('reports').getPublicUrl(remotePath as any);
+          const publicUrlCandidate = (g as any)?.publicURL || (g as any)?.publicUrl || (g as any)?.data?.publicUrl;
+          if (publicUrlCandidate) {
+            setPdfUrl(publicUrlCandidate);
+            return;
+          }
+          const base = (import.meta as any).env?.VITE_SUPABASE_URL;
+          if (base) {
+            const constructed = `${base.replace(/\/$/, '')}/storage/v1/object/public/reports/management/management_summary_30d_${startStr}_to_${endStr}.pdf`;
+
+File: services\reportService.ts  Line 55
+---
+    // Some environments (build/noop client) do not support chained .insert().select().single().
+    // Use a robust await of insert result instead.
+    const queryTarget: any = client.from('reports');
+    let insertResult: any;
+    try {
+      // If insert is a function returning a promise/result, await it.
+      const maybe = queryTarget.insert(payload);
+      insertResult = await maybe;
+    } catch (innerErr) {
+      // Last-resort: try calling as async function
+      try {
+
+============================================================
+TABLE: telemetry_logs  (4 usage(s))
+============================================================
+
+File: components\hydroschool\HydroschoolSimulator.tsx  Line 78
+---
+            // also pull recent telemetry_logs and map `details` JSONB into telemetry-like samples
+            const { data: logRows } = await supabase
+                .from('telemetry_logs')
+                .select('*')
+                .eq('asset_id', assetId)
+                .order('created_at', { ascending: false })
+                .limit(60);
+
+            const sensorSamples = (sensorData || []).map((s: any) => ({ timestamp: s.timestamp, output_power: s.output_power, francis_data: s.francis_data, efficiency: s.efficiency }));
+            const logSamples = (logRows || []).map((r: any) => {
+                const d = r.details || {};
+
+File: features\francis\components\FrancisHorizontal5MW.tsx  Line 141
+---
+                // fetch recent logs that reference this part/hotspot
+                const { data: logs } = await supabase
+                    .from('telemetry_logs')
+                    .select('*')
+                    .eq('asset_id', assetId)
+                    .or(`details->>part_id.eq.${mapped}, details->>hotspot_key.eq.${selectedHotspot}`)
+                    .order('created_at', { ascending: false })
+                    .limit(20);
+                if (!mounted) return;
+                setHotspotLogs(logs || []);
+
+
+File: services\AIPredictionService.ts  Line 234
+---
+
+            const { data, error } = await supabase
+                .from('telemetry_logs')
+                .select('details, created_at')
+                .eq('asset_id', dbId)
+                .order('created_at', { ascending: true })
+                .limit(HISTORY_WINDOW_SIZE * 5);
+
+            if (!error && Array.isArray(data) && data.length > 0) {
+                const points = data
+                    .map((r: unknown) => {
+
+File: services\LoggingService.ts  Line 23
+---
+            const dbAssetId = numeric !== null ? idAdapter.toDb(numeric) : log.assetId;
+            const { error } = await supabase
+                .from('telemetry_logs')
+                .insert({
+                    asset_id: dbAssetId,
+                    event_type: log.eventType,
+                    severity: log.severity,
+                    details: log.details
+                });
+
+            if (error) throw error;
+
+============================================================
+TABLE: telemetry_samples  (2 usage(s))
+============================================================
+
+File: services\ForensicReportService.ts  Line 99
+---
+                            (async () => {
+                                try {
+                                    await supabase.from('telemetry_samples').insert([{ kind: 'worker_error', component: 'forensicPdfWorker', message: String(m.error || 'worker error'), created_at: new Date().toISOString() }]);
+                                } catch { /* ignore telemetry write failures */ }
+                            })();
+                        } catch { /* ignore */ }
+                        clearTimeout(timeout); worker.terminate(); reject(new Error(m.error || 'worker error'));
+                    }
+                };
+                worker.onerror = (err: ErrorEvent) => {
+                    try {
+
+File: services\ForensicReportService.ts  Line 111
+---
+                        (async () => {
+                            try {
+                                await supabase.from('telemetry_samples').insert([{ kind: 'worker_onerror', component: 'forensicPdfWorker', message: String(err.message || err.filename || 'worker onerror'), created_at: new Date().toISOString() }]);
+                            } catch { /* ignore */ }
+                        })();
+                    } catch { /* ignore */ }
+                    clearTimeout(timeout); worker.terminate(); reject(err);
+                };
+            } catch (e) { reject(e); }
+        });
+    }
+
+============================================================
+TABLE: turbine_bids  (2 usage(s))
+============================================================
+
+File: components\infrastructure\BidEvaluator.tsx  Line 26
+---
+
+    const fetchBids = async () => {
+        const { data } = await supabase.from('turbine_bids').select('*').order('created_at', { ascending: false });
+        if (data) setBids(data);
+    };
+
+    const runAnalysis = () => {
+        const type = selectedBid.proposed_turbine_type as 'FRANCIS' | 'PELTON' | 'KAPLAN';
+        const evaluation = HydraulicIntegrity.validateBidEfficiency(selectedBid.promised_efficiency, type);
+
+        setSelectedBid({
+
+File: components\infrastructure\BidEvaluator.tsx  Line 43
+---
+    const saveBid = async () => {
+        setIsLoading(true);
+        const { error } = await supabase.from('turbine_bids').insert([selectedBid]);
+        if (error) showToast("Error saving bid", "error");
+        else {
+            showToast("Bid evaluation stored in genesis ledger", "success");
+            fetchBids();
+        }
+        setIsLoading(false);
+    };
+
+
+============================================================
+TABLE: turbine_designs  (6 usage(s))
+============================================================
+
+File: components\HPPBuilder.tsx  Line 320
+---
+                asset_id: assetDbId
+            };
+            const { error } = await supabase.from('turbine_designs').insert([payload]);
+            if (error) throw error;
+
+            // --- CENTRALIZED ASSET UPDATE & LOGGING ---
+            const oldSpecs = selectedAsset.specs || {};
+
+            // DESIGN-TO-FIELD TRANSLATION LOGIC
+            // Derive engineering constraints from the physical design parameters
+            const isHighHead = settings.head > 200;
+
+File: components\HPPBuilder.tsx  Line 387
+---
+        // use idAdapter to coerce numeric asset id at DB boundary
+        const { idAdapter } = await import('../utils/idAdapter');
+        let query = supabase.from('turbine_designs').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
+        if (selectedAsset) {
+            const numeric = idAdapter.toNumber(selectedAsset.id);
+            if (numeric !== null) query = query.eq('asset_id', idAdapter.toDb(numeric));
+        }
+        const { data } = await query;
+        if (data) setSavedConfigs(data.map((d: any) => ({
+            id: String(d.id),
+            name: d.design_name,
+
+File: components\HPPBuilder.tsx  Line 409
+---
+        const numeric = idAdapter.toNumber(selectedAsset.id);
+        const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : undefined;
+        const { data } = await supabase.from('turbine_designs').select('*').eq('user_id', user.id).eq('asset_id', assetDbId).order('created_at', { ascending: false }).limit(1).single();
+        if (data) setSettings(data.parameters);
+    };
+
+    const handleTurbineSelect = (type: string) => {
+        // Defensive Guard: Check if Context/State exists before execution
+        if (!state || !state.identity) {
+            console.warn("CEREBRO: Attempted click on uninitialized Asset Identity.");
+            return;
+
+File: components\hydroschool\HydroschoolSimulator.tsx  Line 44
+---
+
+                const { data: design } = await supabase
+                    .from('turbine_designs')
+                    .select("parameters->>family as family, parameters->>variant as variant, parameters->'design_points' as design_points")
+                    .eq('asset_id', idAdapter.toDb(assetId))
+                    .order('created_at', { ascending: false })
+                    .limit(1)
+                    .single();
+                if (mounted && design) {
+                    let dp = (design as any).design_points;
+                    try {
+
+File: components\RiskReport.tsx  Line 133
+---
+                // Fetch latest Design
+                const { data: design } = await supabase
+                    .from('turbine_designs')
+                    .select('*')
+                    .eq('asset_id', assetDbId)
+                    .order('created_at', { ascending: false })
+                    .limit(1)
+                    .single();
+
+                setCloudRiskData(risk);
+                setCloudDesignData(design);
+
+File: features\francis\components\FrancisHorizontal5MW.tsx  Line 34
+---
+            try {
+                const { data } = await supabase
+                    .from('turbine_designs')
+                    .select("parameters->>family as family, parameters->>variant as variant, parameters->'design_points' as design_points, parameters->'hotspot_map' as hotspot_map, parameters->'specs' as specs")
+                    .eq('asset_id', assetId)
+                    .order('created_at', { ascending: false })
+                    .limit(1)
+                    .single();
+                if (!mounted) return;
+                // Parse nested JSON fields that may arrive as strings
+                const parsed: any = {};
