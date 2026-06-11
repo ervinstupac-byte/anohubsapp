@@ -15,13 +15,17 @@ if (!connectionString) {
   process.exit(2);
 }
 
-// Ensure sslmode=require is present for Supabase
+// pg v8+ treats sslmode=require as verify-full; use libpq compat for Supabase pooler/direct.
 if (!/[?&]sslmode=/.test(connectionString)) {
-  connectionString += (connectionString.includes('?') ? '&' : '?') + 'sslmode=require';
+  const sep = connectionString.includes('?') ? '&' : '?';
+  connectionString += `${sep}uselibpqcompat=true&sslmode=require`;
 }
 
 (async () => {
-  const client = new Client({ connectionString, ssl: { rejectUnauthorized: false } });
+  const client = new Client({
+    connectionString,
+    ssl: { rejectUnauthorized: false },
+  });
   try {
     await client.connect();
     console.log('[test_rls_sql] Connected to database. Beginning transaction (will ROLLBACK).');

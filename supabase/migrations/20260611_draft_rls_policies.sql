@@ -381,13 +381,16 @@ BEGIN
   IF to_regclass('public.audit_logs') IS NOT NULL THEN
     ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
     BEGIN
-      CREATE POLICY "update_safety_interlock_for_consultant_or_admin" ON public.safety_interlock_ledger
-        FOR UPDATE TO authenticated USING ((lower(auth.jwt() ->> 'role') = 'consultant') OR (lower(auth.jwt() ->> 'role') = 'admin'));
-    EXCEPTION WHEN duplicate_object THEN NULL; END;
-      CREATE POLICY "insert_audit_logs" ON public.audit_logs FOR INSERT TO authenticated WITH CHECK (true);
+      CREATE POLICY "select_audit_logs" ON public.audit_logs
+        FOR SELECT TO authenticated USING (true);
     EXCEPTION WHEN duplicate_object THEN NULL; END;
     BEGIN
-      CREATE POLICY "delete_audit_logs_admin_only" ON public.audit_logs FOR DELETE TO authenticated USING ((auth.jwt() ->> 'role') = 'admin');
+      CREATE POLICY "insert_audit_logs" ON public.audit_logs
+        FOR INSERT TO authenticated WITH CHECK (true);
+    EXCEPTION WHEN duplicate_object THEN NULL; END;
+    BEGIN
+      CREATE POLICY "delete_audit_logs_admin_only" ON public.audit_logs
+        FOR DELETE TO authenticated USING ((auth.jwt() ->> 'role') = 'admin');
     EXCEPTION WHEN duplicate_object THEN NULL; END;
   END IF;
 END $$;

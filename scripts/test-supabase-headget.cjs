@@ -1,8 +1,13 @@
 #!/usr/bin/env node
 const fetch = global.fetch || require('node-fetch');
 (async () => {
-  const url = 'https://nehxtecejxklqknscbgf.supabase.co/rest/v1/risk_assessments?select=*';
-  const key = process.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A';
+  const base = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+  const key = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!base || !key) {
+    console.error('Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY (or SUPABASE_URL / SUPABASE_ANON_KEY)');
+    process.exit(1);
+  }
+  const url = `${base.replace(/\/+$/, '')}/rest/v1/risk_assessments?select=*`;
   const headers = {
     'apikey': key,
     'Authorization': 'Bearer ' + key,

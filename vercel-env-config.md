@@ -1,11 +1,11 @@
 Vercel Environment Variables Checklist
 
 Required (client build):
-- VITE_SUPABASE_URL = https://nehxtecejxklqknscbgf.supabase.co
+- VITE_SUPABASE_URL = https://cplfoowmdakqzoljuwcf.supabase.co
 - VITE_SUPABASE_ANON_KEY = <anon-public-key>
 
 Required (server-only / secure):
-- SUPABASE_URL = https://nehxtecejxklqknscbgf.supabase.co
+- SUPABASE_URL = https://cplfoowmdakqzoljuwcf.supabase.co
 - SUPABASE_KEY = <service-role-key>  # MUST be set as a secret and never exposed to client builds or committed to repo
 - SUPABASE_SERVICE_ROLE_KEY = <service-role-key>  # alias used by some scripts; store as a protected secret
 

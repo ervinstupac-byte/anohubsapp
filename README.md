@@ -22,6 +22,79 @@
   - `VITE_SUPABASE_ANON_KEY` — Supabase anon key for public reads (if used).  
 
 - Note: For CI integration and automated writes, use a service role key with controlled access; do not publish the service role key in client-side code or public repos.
+- **No hardcoded keys:** `src/services/supabaseClient.ts` reads credentials only from `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` (or `SUPABASE_URL` / `SUPABASE_ANON_KEY`). Missing vars fall back to a noop client for offline/CI builds.
+
+## Security Hardening — RLS & Key Rotation
+
+Ordered checklist for staging/production hardening. See also [docs/ROTATION.md](docs/ROTATION.md).
+
+### 1. RLS dry-run (local, no writes)
+
+Canonical Supabase project: `cplfoowmdakqzoljuwcf` (legacy `nehxtecejxklqknscbgf` removed from repo).
+
+Obtain `DATABASE_URL` from Supabase → **Connect** → **Session pooler** (port 5432, IPv4-compatible).
+
+The direct host `db.cplfoowmdakqzoljuwcf.supabase.co` is **IPv6-only** and often fails locally (`ENOTFOUND` / `ENETUNREACH`). Prefer the pooler URI, e.g.:
+
+`postgresql://postgres.cplfoowmdakqzoljuwcf:[PASSWORD]@aws-1-eu-central-1.pooler.supabase.com:5432/postgres`
+
+Use the **database password** from Settings → Database (not your Supabase account login). Add to `.env.local` (never commit).
+
+**PowerShell:**
+
+```powershell
+$env:DATABASE_URL = '<postgresql://...>'
+node scripts/test_rls_sql.cjs
+```
+
+**Bash:**
+
+```bash
+export DATABASE_URL='<postgresql://...>'
+node scripts/test_rls_sql.cjs
+```
+
+The script runs `supabase/migrations/20260611_draft_rls_policies.sql` inside a transaction and **ROLLBACK**s — zero schema changes.
+
+### 2. Apply RLS to staging
+
+After a clean dry-run, apply the same SQL file in the **staging** project (Supabase SQL Editor or `psql`). Review role claims (`auth.jwt() ->> 'role'`) and ownership columns before production.
+
+### 3. Remove hardcoded keys (code)
+
+Ensure no JWT or project URL literals remain in `src/` or `scripts/`. Client uses env vars only; server scripts require explicit env.
+
+### 4. Rotate `SUPABASE_SERVICE_ROLE_KEY`
+
+After any admin operation that exposed the service role key:
+
+1. Supabase Console → Settings → API → Regenerate service_role key.
+2. Update `.env.local`, GitHub Actions secrets, and Vercel env vars.
+3. Revoke old key (automatic on regenerate).
+4. Record rotation date and operator in your change log.
+
+### 5. OAuth / PKCE verification
+
+Confirm redirect URIs in Supabase Auth settings match deployed callback URLs, then:
+
+```bash
+node scripts/open_authorize_pkce.mjs <google_client_id>
+```
+
+Open the printed authorize URL; complete sign-in; verify callback receives `code`. Verifier is saved to `.tmp_pkce_verifier`.
+
+### 6. UI & forensic PDF smoke test
+
+```bash
+npm run dev          # http://localhost:3000 — exercise key pages/modals
+node scripts/generate_forensic_pdf.js <asset_id>
+```
+
+Confirm a row appears in `forensic_reports` and the PDF lands in the `forensic-reports` storage bucket.
+
+### 7. Commit & release notes
+
+Commit code changes; update [RELEASE_NOTES.md](RELEASE_NOTES.md) with security items applied and any staging/production caveats.
 
 ## Engineering Core — Formulas & Heuristics
 - Efficiency (used in performance guards):

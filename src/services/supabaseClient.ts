@@ -1,7 +1,7 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 // ============================================================================
-// SUPABASE CLIENT (NC-76.4 - Hardcoded Credentials + Connection Verification)
+// SUPABASE CLIENT — credentials from environment only (no hardcoded fallbacks)
 // ============================================================================
 
 // Cross-environment variable access (Vite vs Node)
@@ -15,9 +15,8 @@ const getEnv = (key: string) => {
     return undefined;
 };
 
-// Use environment variables FIRST, then fall back to hardcoded (if needed)
-const supabaseUrl = getEnv('VITE_SUPABASE_URL') || getEnv('SUPABASE_URL') || 'https://nehxtecejxklqknscbgf.supabase.co';
-const supabaseAnonKey = getEnv('VITE_SUPABASE_ANON_KEY') || getEnv('SUPABASE_ANON_KEY') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A';
+const supabaseUrl = getEnv('VITE_SUPABASE_URL') || getEnv('SUPABASE_URL');
+const supabaseAnonKey = getEnv('VITE_SUPABASE_ANON_KEY') || getEnv('SUPABASE_ANON_KEY');
 
 // ============================================================================
 // CONNECTION STATE

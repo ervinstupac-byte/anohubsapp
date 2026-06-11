@@ -4,6 +4,16 @@
 
 ---
 
+## Security (2026-06-11 — staging hardening, in progress)
+
+- **RLS draft:** `supabase/migrations/20260611_draft_rls_policies.sql` — dry-run via `node scripts/test_rls_sql.cjs` (transaction rollback).
+- **Credentials:** Removed hardcoded Supabase URL/anon key from `src/services/supabaseClient.ts`; env-only with noop fallback.
+- **Key rotation:** See [docs/ROTATION.md](docs/ROTATION.md) for anon and service_role procedures.
+- **OAuth:** PKCE smoke test via `scripts/open_authorize_pkce.mjs`.
+- **Forensic PDF:** `scripts/generate_forensic_pdf.js` — verify `forensic_reports` row after generation.
+
+---
+
 ## **EXECUTIVE SUMMARY**
 AnoHUB v2.4.0 marks a strategic pivot from a "Concept Scada Simulator" to a **"Professional Engineering Utility"**. We have successfully purged all "fake" elements (simulation loops, random data generators, AI hallucination risks) to focus purely on **Deterministic Logic** and **User-Generated Data**.
 

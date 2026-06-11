@@ -3,6 +3,20 @@ const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer-core');
 
+function loadEnvLocal() {
+  try {
+    const txt = fs.readFileSync(path.resolve(__dirname, '../.env.local'), 'utf8');
+    for (const ln of txt.split(/\r?\n/)) {
+      const m = ln.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/);
+      if (!m || ln.trimStart().startsWith('#')) continue;
+      if (!process.env[m[1]]) process.env[m[1]] = m[2];
+    }
+  } catch (_) { /* optional */ }
+}
+loadEnvLocal();
+
+const supabaseBase = (process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '').replace(/\/+$/, '');
+
 (async () => {
   const outDir = path.resolve(__dirname, '../artifacts');
   if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
@@ -89,8 +103,13 @@ const puppeteer = require('puppeteer-core');
   if (appFrame) {
     console.log('Found app frame; performing in-frame fetch for diagnostic');
     try {
-      const res = await appFrame.evaluate(async () => {
-        const url = 'https://nehxtecejxklqknscbgf.supabase.co/rest/v1/risk_assessments?select=*';
+      const probeUrl = supabaseBase
+        ? `${supabaseBase}/rest/v1/risk_assessments?select=*`
+        : null;
+      if (!probeUrl) {
+        console.warn('Skipping in-frame fetch: set VITE_SUPABASE_URL or SUPABASE_URL in .env.local');
+      } else {
+      const res = await appFrame.evaluate(async (url) => {
         try {
           const r = await fetch(url, { method: 'GET' });
           const txt = await r.text();
@@ -98,9 +117,10 @@ const puppeteer = require('puppeteer-core');
         } catch (e) {
           return { error: e.message };
         }
-      });
+      }, probeUrl);
       records.inFrameFetch = res;
       console.log('IN_FRAME_FETCH', res);
+      }
     } catch (e) {
       console.error('appFrame evaluate failed', e && e.message);
     }
