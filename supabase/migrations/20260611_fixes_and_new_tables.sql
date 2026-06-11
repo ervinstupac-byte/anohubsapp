@@ -27,34 +27,34 @@ UPDATE public.logbook_entries
 
 -- FIX 3: RLS — audit_logs INSERT for authenticated users (401 error)
 -- The app LoggingService inserts rows here on every action
-CREATE POLICY IF NOT EXISTS "audit_logs_insert_authenticated"
+CREATE POLICY "audit_logs_insert_authenticated"
   ON public.audit_logs
   FOR INSERT TO authenticated
   WITH CHECK (true);
 
-CREATE POLICY IF NOT EXISTS "audit_logs_select_authenticated"
+CREATE POLICY "audit_logs_select_authenticated"
   ON public.audit_logs
   FOR SELECT TO authenticated
   USING (true);
 
 -- FIX 4: RLS — experience_ledger SELECT for authenticated users (401 error)
-CREATE POLICY IF NOT EXISTS "experience_ledger_select_authenticated"
+CREATE POLICY "experience_ledger_select_authenticated"
   ON public.experience_ledger
   FOR SELECT TO authenticated
   USING (true);
 
-CREATE POLICY IF NOT EXISTS "experience_ledger_insert_authenticated"
+CREATE POLICY "experience_ledger_insert_authenticated"
   ON public.experience_ledger
   FOR INSERT TO authenticated
   WITH CHECK (true);
 
 -- FIX 5: RLS — logbook_entries (the 400 is schema, but also ensure RLS is open)
-CREATE POLICY IF NOT EXISTS "logbook_entries_select_authenticated"
+CREATE POLICY "logbook_entries_select_authenticated"
   ON public.logbook_entries
   FOR SELECT TO authenticated
   USING (true);
 
-CREATE POLICY IF NOT EXISTS "logbook_entries_insert_authenticated"
+CREATE POLICY "logbook_entries_insert_authenticated"
   ON public.logbook_entries
   FOR INSERT TO authenticated
   WITH CHECK (true);
@@ -62,17 +62,17 @@ CREATE POLICY IF NOT EXISTS "logbook_entries_insert_authenticated"
 -- FIX 6: turbine_designs — guest-123 is not a valid UUID, protect query
 -- Add RLS that lets authenticated users see only their own designs
 -- (the guest query fails because 'guest-123' is not a UUID — handled in code, but ensure RLS doesn't block real users)
-CREATE POLICY IF NOT EXISTS "turbine_designs_select_own"
+CREATE POLICY "turbine_designs_select_own"
   ON public.turbine_designs
   FOR SELECT TO authenticated
   USING (user_id = auth.uid()::text OR user_id = auth.uid()::uuid::text);
 
-CREATE POLICY IF NOT EXISTS "turbine_designs_insert_own"
+CREATE POLICY "turbine_designs_insert_own"
   ON public.turbine_designs
   FOR INSERT TO authenticated
   WITH CHECK (user_id = auth.uid()::text OR user_id = auth.uid()::uuid::text);
 
-CREATE POLICY IF NOT EXISTS "turbine_designs_update_own"
+CREATE POLICY "turbine_designs_update_own"
   ON public.turbine_designs
   FOR UPDATE TO authenticated
   USING (user_id = auth.uid()::text);
@@ -259,81 +259,81 @@ CREATE INDEX IF NOT EXISTS idx_alignment_asset_performed
 -- ============================================================
 
 -- assets — ensure read access for authenticated
-CREATE POLICY IF NOT EXISTS "assets_select_authenticated"
+CREATE POLICY "assets_select_authenticated"
   ON public.assets FOR SELECT TO authenticated USING (true);
 
 -- profiles — users can read all, update own
-CREATE POLICY IF NOT EXISTS "profiles_select_authenticated"
+CREATE POLICY "profiles_select_authenticated"
   ON public.profiles FOR SELECT TO authenticated USING (true);
-CREATE POLICY IF NOT EXISTS "profiles_update_own"
+CREATE POLICY "profiles_update_own"
   ON public.profiles FOR UPDATE TO authenticated USING (id = auth.uid());
 
 -- sensor_registry — read for authenticated
-CREATE POLICY IF NOT EXISTS "sensor_registry_select_authenticated"
+CREATE POLICY "sensor_registry_select_authenticated"
   ON public.sensor_registry FOR SELECT TO authenticated USING (true);
 
 -- plants — read for authenticated
-CREATE POLICY IF NOT EXISTS "plants_select_authenticated"
+CREATE POLICY "plants_select_authenticated"
   ON public.plants FOR SELECT TO authenticated USING (true);
 
 -- maintenance_logs — read/insert for authenticated
-CREATE POLICY IF NOT EXISTS "maintenance_logs_select_authenticated"
+CREATE POLICY "maintenance_logs_select_authenticated"
   ON public.maintenance_logs FOR SELECT TO authenticated USING (true);
-CREATE POLICY IF NOT EXISTS "maintenance_logs_insert_authenticated"
+CREATE POLICY "maintenance_logs_insert_authenticated"
   ON public.maintenance_logs FOR INSERT TO authenticated WITH CHECK (true);
 
 -- work_orders — full CRUD for authenticated
-CREATE POLICY IF NOT EXISTS "work_orders_select_authenticated"
+CREATE POLICY "work_orders_select_authenticated"
   ON public.work_orders FOR SELECT TO authenticated USING (true);
-CREATE POLICY IF NOT EXISTS "work_orders_insert_authenticated"
+CREATE POLICY "work_orders_insert_authenticated"
   ON public.work_orders FOR INSERT TO authenticated WITH CHECK (true);
-CREATE POLICY IF NOT EXISTS "work_orders_update_authenticated"
+CREATE POLICY "work_orders_update_authenticated"
   ON public.work_orders FOR UPDATE TO authenticated USING (true);
 
 -- risk_assessments — read/insert for authenticated
-CREATE POLICY IF NOT EXISTS "risk_assessments_select_authenticated"
+CREATE POLICY "risk_assessments_select_authenticated"
   ON public.risk_assessments FOR SELECT TO authenticated USING (true);
-CREATE POLICY IF NOT EXISTS "risk_assessments_insert_authenticated"
+CREATE POLICY "risk_assessments_insert_authenticated"
   ON public.risk_assessments FOR INSERT TO authenticated WITH CHECK (true);
 
 -- eta_aggregates — read for authenticated, insert for service role
-CREATE POLICY IF NOT EXISTS "eta_aggregates_select_authenticated"
+CREATE POLICY "eta_aggregates_select_authenticated"
   ON public.eta_aggregates FOR SELECT TO authenticated USING (true);
-CREATE POLICY IF NOT EXISTS "eta_aggregates_insert_authenticated"
+CREATE POLICY "eta_aggregates_insert_authenticated"
   ON public.eta_aggregates FOR INSERT TO authenticated WITH CHECK (true);
-CREATE POLICY IF NOT EXISTS "eta_aggregates_update_authenticated"
+CREATE POLICY "eta_aggregates_update_authenticated"
   ON public.eta_aggregates FOR UPDATE TO authenticated USING (true);
 
 -- telemetry_logs — insert for authenticated (LoggingService writes here)
-CREATE POLICY IF NOT EXISTS "telemetry_logs_select_authenticated"
+CREATE POLICY "telemetry_logs_select_authenticated"
   ON public.telemetry_logs FOR SELECT TO authenticated USING (true);
-CREATE POLICY IF NOT EXISTS "telemetry_logs_insert_authenticated"
+CREATE POLICY "telemetry_logs_insert_authenticated"
   ON public.telemetry_logs FOR INSERT TO authenticated WITH CHECK (true);
 
 -- dynamic_sensor_data
-CREATE POLICY IF NOT EXISTS "dynamic_sensor_data_select_authenticated"
+CREATE POLICY "dynamic_sensor_data_select_authenticated"
   ON public.dynamic_sensor_data FOR SELECT TO authenticated USING (true);
-CREATE POLICY IF NOT EXISTS "dynamic_sensor_data_insert_authenticated"
+CREATE POLICY "dynamic_sensor_data_insert_authenticated"
   ON public.dynamic_sensor_data FOR INSERT TO authenticated WITH CHECK (true);
 
 -- expert_knowledge_base
-CREATE POLICY IF NOT EXISTS "expert_kb_select_authenticated"
+CREATE POLICY "expert_kb_select_authenticated"
   ON public.expert_knowledge_base FOR SELECT TO authenticated USING (true);
 
 -- hpp_status
-CREATE POLICY IF NOT EXISTS "hpp_status_select_authenticated"
+CREATE POLICY "hpp_status_select_authenticated"
   ON public.hpp_status FOR SELECT TO authenticated USING (true);
-CREATE POLICY IF NOT EXISTS "hpp_status_insert_authenticated"
+CREATE POLICY "hpp_status_insert_authenticated"
   ON public.hpp_status FOR INSERT TO authenticated WITH CHECK (true);
-CREATE POLICY IF NOT EXISTS "hpp_status_update_authenticated"
+CREATE POLICY "hpp_status_update_authenticated"
   ON public.hpp_status FOR UPDATE TO authenticated USING (true);
 
 -- diagnostic_snapshots
-CREATE POLICY IF NOT EXISTS "diagnostic_snapshots_select_authenticated"
+CREATE POLICY "diagnostic_snapshots_select_authenticated"
   ON public.diagnostic_snapshots FOR SELECT TO authenticated USING (true);
-CREATE POLICY IF NOT EXISTS "diagnostic_snapshots_insert_authenticated"
+CREATE POLICY "diagnostic_snapshots_insert_authenticated"
   ON public.diagnostic_snapshots FOR INSERT TO authenticated WITH CHECK (true);
 
 -- reports
-CREATE POLICY IF NOT EXISTS "reports_select_authenticated"
+CREATE POLICY "reports_select_authenticated"
   ON public.reports FOR SELECT TO authenticated USING (true);
