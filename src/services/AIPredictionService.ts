@@ -160,6 +160,10 @@ class AIPredictionService {
         if (supabase) {
             try {
                 const dbId = typeof assetId === 'number' ? idAdapter.toDb(assetId) : String(assetId);
+                if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(dbId)) {
+                    console.debug('[AIPredictionService] Skipping DB persistence for non-UUID asset ID:', dbId);
+                    return estimates;
+                }
                 const rows = estimates.map(est => ({
                     asset_id: dbId,
                     component_type: est.componentType,

@@ -508,6 +508,10 @@ export class MasterIntelligenceEngine extends BaseGuardian {
             // NC-55.0: Persist the UnifiedDiagnosis snapshot to database
             try {
                 const dbAssetId = typeof asset.id === 'number' ? idAdapter.toDb(asset.id) : String(asset.id);
+                if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(dbAssetId)) {
+                    console.debug('[MasterIntelligenceEngine] Skipping DB persistence for non-UUID asset ID:', dbAssetId);
+                    return diagnosis;
+                }
                 const snapshotRow = {
                     asset_id: dbAssetId,
                     health_score: diagnosis.overallHealthScore,
