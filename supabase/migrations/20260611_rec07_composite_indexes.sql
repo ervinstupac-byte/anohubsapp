@@ -15,29 +15,29 @@ CREATE INDEX IF NOT EXISTS idx_risk_assessments_asset_created
 CREATE INDEX IF NOT EXISTS idx_work_orders_asset_created
   ON public.work_orders (asset_id, created_at DESC);
 
--- event_journal — live event stream per asset
-CREATE INDEX IF NOT EXISTS idx_event_journal_asset_created
-  ON public.event_journal (asset_id, created_at DESC);
+-- event_journal — live event stream per asset (uses occurred_at)
+CREATE INDEX IF NOT EXISTS idx_event_journal_asset_occurred
+  ON public.event_journal (asset_id, occurred_at DESC);
 
 -- audit_logs — compliance queries by time
 CREATE INDEX IF NOT EXISTS idx_audit_logs_created
   ON public.audit_logs (created_at DESC);
 
--- purchase_orders — financial queries by time
-CREATE INDEX IF NOT EXISTS idx_purchase_orders_created
-  ON public.purchase_orders (created_at DESC);
+-- purchase_orders — financial queries by time (uses ordered_at)
+CREATE INDEX IF NOT EXISTS idx_purchase_orders_ordered
+  ON public.purchase_orders (ordered_at DESC);
 
 -- diagnostic_snapshots — latest snapshot per asset
 CREATE INDEX IF NOT EXISTS idx_diagnostic_snapshots_asset_created
   ON public.diagnostic_snapshots (asset_id, created_at DESC);
 
--- installation_audits — per asset
-CREATE INDEX IF NOT EXISTS idx_installation_audits_asset_created
-  ON public.installation_audits (asset_id, created_at DESC);
+-- installation_audits — per asset (uses audited_at)
+CREATE INDEX IF NOT EXISTS idx_installation_audits_asset_audited
+  ON public.installation_audits (asset_id, audited_at DESC);
 
--- process_instability_events — per asset alerts
-CREATE INDEX IF NOT EXISTS idx_process_instability_asset_created
-  ON public.process_instability_events (asset_id, created_at DESC);
+-- process_instability_events — per asset alerts (uses occurred_at)
+CREATE INDEX IF NOT EXISTS idx_process_instability_asset_occurred
+  ON public.process_instability_events (asset_id, occurred_at DESC);
 
 -- hpp_improvements — per asset
 CREATE INDEX IF NOT EXISTS idx_hpp_improvements_asset_created
@@ -70,6 +70,9 @@ CREATE INDEX IF NOT EXISTS idx_logbook_entries_turbine_created
 CREATE INDEX IF NOT EXISTS idx_asset_financials_asset_period
   ON public.asset_financials_with_eta (asset_id, period_start DESC, period_end DESC);
 
--- eta_aggregates — per asset
-CREATE INDEX IF NOT EXISTS idx_eta_aggregates_asset_created
-  ON public.eta_aggregates (asset_id, created_at DESC);
+-- eta_aggregates — per asset (uses computed_at, period_start)
+CREATE INDEX IF NOT EXISTS idx_eta_aggregates_asset_computed
+  ON public.eta_aggregates (asset_id, computed_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_eta_aggregates_asset_period
+  ON public.eta_aggregates (asset_id, period_start DESC, period_end DESC);
