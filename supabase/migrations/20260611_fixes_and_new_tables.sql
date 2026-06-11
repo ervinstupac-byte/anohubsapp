@@ -65,17 +65,17 @@ CREATE POLICY "logbook_entries_insert_authenticated"
 CREATE POLICY "turbine_designs_select_own"
   ON public.turbine_designs
   FOR SELECT TO authenticated
-  USING (user_id = auth.uid()::text OR user_id = auth.uid()::uuid::text);
+  USING (user_id::text = auth.uid()::text);
 
 CREATE POLICY "turbine_designs_insert_own"
   ON public.turbine_designs
   FOR INSERT TO authenticated
-  WITH CHECK (user_id = auth.uid()::text OR user_id = auth.uid()::uuid::text);
+  WITH CHECK (user_id::text = auth.uid()::text);
 
 CREATE POLICY "turbine_designs_update_own"
   ON public.turbine_designs
   FOR UPDATE TO authenticated
-  USING (user_id = auth.uid()::text);
+  USING (user_id::text = auth.uid()::text);
 
 -- ============================================================
 -- PART 2: NEW CRITICAL TABLES
