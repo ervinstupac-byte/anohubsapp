@@ -21,8 +21,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { logAction } = useAudit(); // HOOK NA VRHU
     const [session, setSession] = useState<Session | null>(null);
     const [user, setUser] = useState<User | null>(null);
-    const [isGuest, setIsGuest] = useState(false); // <--- NOVO STANJE
-    const [userRole, setUserRole] = useState<'MANAGER' | 'OWNER' | 'TECHNICIAN' | 'ENGINEER' | null>(null); // <--- NOVO: Role-based routing
+    const [isGuest, setIsGuest] = useState(() => {
+        try {
+            return localStorage.getItem('anohub_is_guest') === 'true';
+        } catch {
+            return false;
+        }
+    });
+    const [userRole, setUserRole] = useState<'MANAGER' | 'OWNER' | 'TECHNICIAN' | 'ENGINEER' | null>(() => {
+        try {
+            return localStorage.getItem('anohub_guest_role') as any || null;
+        } catch {
+            return null;
+        }
+    });
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -61,6 +73,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     updated_at: new Date().toISOString(),
                 } as User;
                 setIsGuest(true);
+                try {
+                    localStorage.setItem('anohub_is_guest', 'true');
+                    localStorage.setItem('anohub_guest_role', savedProfile.role || 'ENGINEER');
+                } catch (err) {}
                 setUserRole((savedProfile.role || 'ENGINEER') as any);
                 setUser(guestUser);
                 setLoading(false);
@@ -69,6 +85,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 return;
             }
         } catch (e) { /* ignore */ }
+
+        if (isGuest) {
+            const savedProfileRaw = localStorage.getItem('guest_profile');
+            let savedProfile: any = {};
+            if (savedProfileRaw) {
+                try {
+                    savedProfile = JSON.parse(savedProfileRaw);
+                } catch (e) {
+                    console.error('Failed to parse guest_profile', e);
+                }
+            }
+            const guestUser = {
+                id: 'guest-123',
+                aud: 'authenticated',
+                role: 'authenticated',
+                email: 'guest@anohub.com',
+                email_confirmed_at: new Date().toISOString(),
+                phone: '',
+                confirmed_at: new Date().toISOString(),
+                last_sign_in_at: new Date().toISOString(),
+                app_metadata: { provider: 'email', providers: ['email'] },
+                user_metadata: {
+                    full_name: savedProfile.full_name || 'Guest Engineer',
+                    role: savedProfile.role || userRole || 'ENGINEER',
+                    company: savedProfile.company || 'Demo Mode',
+                    avatar_url: savedProfile.avatar_url || ''
+                },
+                identities: [],
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+            } as User;
+            setUser(guestUser);
+            setLoading(false);
+            return;
+        }
+
         if (!isGuest) {
             // Safety Timeout: if Supabase doesn't respond in 5s, continue as anonymous
             const timeout = setTimeout(() => {
@@ -103,17 +155,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         });
 
         return () => { try { subscription.unsubscribe(); } catch (e) { } };
-    }, [isGuest]);
+    }, [isGuest, userRole]);
 
     // 1. STANDARDNI LOGIN
     const signIn = async (email: string, password: string) => {
         setIsGuest(false);
+        try {
+            localStorage.removeItem('anohub_is_guest');
+            localStorage.removeItem('anohub_guest_role');
+        } catch (err) {}
         return await supabase.auth.signInWithPassword({ email, password });
     };
 
     // 2. GUEST LOGIN (Lažiramo korisnika)
     const signInAsGuest = async (role: 'MANAGER' | 'OWNER' | 'TECHNICIAN' | 'ENGINEER') => {
         setIsGuest(true);
+        try {
+            localStorage.setItem('anohub_is_guest', 'true');
+            localStorage.setItem('anohub_guest_role', role);
+        } catch (err) {}
         
         const savedProfileRaw = localStorage.getItem('guest_profile');
         let savedProfile: any = {};
@@ -159,6 +219,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         if (isGuest) {
             setIsGuest(false);
+            try {
+                localStorage.removeItem('anohub_is_guest');
+                localStorage.removeItem('anohub_guest_role');
+            } catch (err) {}
             setUser(null);
             setSession(null);
             setUserRole(null); // <--- NOVO: Reset user role on logout
@@ -182,6 +246,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setUser(updatedUser);
             if (metadata.role) {
                 setUserRole(metadata.role as any);
+                if (isGuest) {
+                    try {
+                        localStorage.setItem('anohub_guest_role', metadata.role);
+                    } catch (err) {}
+                }
+            }
+            if (isGuest) {
+                try {
+                    const savedProfileRaw = localStorage.getItem('guest_profile');
+                    let savedProfile: any = {};
+                    if (savedProfileRaw) {
+                        try {
+                            savedProfile = JSON.parse(savedProfileRaw);
+                        } catch (e) {}
+                    }
+                    const newProfile = { ...savedProfile, ...metadata };
+                    localStorage.setItem('guest_profile', JSON.stringify(newProfile));
+                } catch (err) {}
             }
         }
     };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 /**
@@ -9,6 +9,7 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
     const [progress, setProgress] = useState(0);
     const [messageIndex, setMessageIndex] = useState(0);
     const [isVisible, setIsVisible] = useState(true);
+    const onCompleteRef = useRef(onComplete);
 
     const technicalMessages = [
         "NEURAL CORE INITIALIZATION...",
@@ -17,6 +18,10 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
         "SECURITY PROTOCOLS ACTIVE.",
         "SYSTEM OPTIMAL."
     ];
+
+    useEffect(() => {
+        onCompleteRef.current = onComplete;
+    }, [onComplete]);
 
     useEffect(() => {
         const duration = 2500; // 2.5 seconds boot sequence for readability
@@ -30,7 +35,7 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
                     clearInterval(timer);
                     setTimeout(() => {
                         setIsVisible(false);
-                        if (onComplete) onComplete();
+                        if (onCompleteRef.current) onCompleteRef.current();
                     }, 500);
                     return 100;
                 }
@@ -47,7 +52,7 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
             clearInterval(timer);
             clearInterval(messageInterval);
         };
-    }, [onComplete]);
+    }, []);
 
     return (
         <AnimatePresence>
@@ -113,7 +118,7 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
                                 transition={{ delay: 3 }} // Show after 3 seconds
                                 onClick={() => {
                                     console.warn('[SystemBoot] User initiated manual bypass.');
-                                    if (onComplete) onComplete();
+                                    if (onCompleteRef.current) onCompleteRef.current();
                                 }}
                                 className="text-[9px] text-red-500/50 hover:text-red-400 border border-red-900/30 hover:border-red-500/50 px-3 py-1 bg-red-900/10 rounded cursor-pointer transition-colors uppercase tracking-widest mt-4"
                             >

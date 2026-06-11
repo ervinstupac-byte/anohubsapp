@@ -53,7 +53,7 @@ export const SOPViewer: React.FC = () => {
                     </div>
 
                     <a
-                        href={`/francis-docs/${activeDoc}.html`}
+                        href={`/assets/docs/active_sop/${activeDoc}.html`}
                         target="_blank"
                         rel="noreferrer"
                         className="flex items-center gap-3 px-6 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-xl shadow-cyan-900/20 italic"
@@ -68,7 +68,7 @@ export const SOPViewer: React.FC = () => {
             <div className="flex-grow bg-white relative group">
                 <div className="absolute inset-0 bg-black/5 pointer-events-none group-hover:opacity-0 transition-opacity duration-1000" />
                 <iframe
-                    src={`/francis-docs/${activeDoc}.html`}
+                    src={`/assets/docs/active_sop/${activeDoc}.html`}
                     className="w-full h-full border-none shadow-inner"
                     title="SOP Viewer"
                     // Allow same-origin so the SOP pages can operate normally inside the iframe

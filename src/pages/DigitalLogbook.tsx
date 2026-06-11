@@ -48,7 +48,7 @@ interface LogbookEntry {
 
 export const DigitalLogbook: React.FC = () => {
     const { assets, selectedAsset } = useAssetContext();
-    const { user } = useAuth();
+    const { user, isGuest } = useAuth();
 
     // Form states
     const [entryType, setEntryType] = useState<LogbookEntry['entry_type']>('Mjerenje');
@@ -106,6 +106,17 @@ export const DigitalLogbook: React.FC = () => {
     }, []);
 
     const loadLogs = async () => {
+        if (isGuest) {
+            console.log('[Logbook] Guest mode active, loading from LocalStorage');
+            const localLogs = localStorage.getItem('anohub_local_logbooks');
+            if (localLogs) {
+                setLogs(JSON.parse(localLogs));
+            } else {
+                setLogs([]);
+            }
+            return;
+        }
+
         try {
             // Try Supabase first
             const { data, error } = await supabase
@@ -140,7 +151,6 @@ export const DigitalLogbook: React.FC = () => {
             if (localLogs) {
                 setLogs(JSON.parse(localLogs));
             } else {
-                // Seed mock data for demonstration
                 const seedLogs: LogbookEntry[] = [
                     {
                         id: 'seed-1',
@@ -247,6 +257,37 @@ export const DigitalLogbook: React.FC = () => {
             notes,
             photos: []
         };
+
+        if (isGuest) {
+            const newEntry: LogbookEntry = {
+                id: 'local-' + Date.now(),
+                ...payload
+            };
+
+            const updatedLogs = [newEntry, ...logs];
+            setLogs(updatedLogs);
+            localStorage.setItem('anohub_local_logbooks', JSON.stringify(updatedLogs));
+            setSaveStatus({ type: 'success', msg: 'Zapis sačuvan lokalno (Guest Mode).' });
+            
+            // Reset inputs
+            setNotes('');
+            setVibration('');
+            setAxialPlay('');
+            setBearingTemp('');
+            setOilPressure('');
+            setVoltage('');
+            setCurrent('');
+            setWindingTemp('');
+            setPowerFactor('');
+            setFlowRate('');
+            setReservoirLevel('');
+            setPressureDrop('');
+            setCavitationNoise('');
+            setActivePower('');
+            setReactivePower('');
+            setTimeout(() => setSaveStatus({ type: null, msg: '' }), 5000);
+            return;
+        }
 
         try {
             // Attempt Supabase insert
