@@ -1,15 +1,4 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-
-let supabase: SupabaseClient | null = null;
-
-function getSupabaseClient(): SupabaseClient | null {
-  if (supabase) return supabase;
-  const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-  const key = process.env.SUPABASE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
-  if (!url || !key) return null;
-  supabase = createClient(url, key);
-  return supabase;
-}
+import { supabase, getSafeClient } from '../services/supabaseClient';
 
 export async function persistAuditRecord(record: any) {
   const integration = (process.env.INTEGRATION_MODE || 'false').toLowerCase() === 'true';
@@ -45,7 +34,7 @@ export async function persistAuditRecord(record: any) {
     }
   }
 
-  const client = getSupabaseClient();
+  const client = getSafeClient() || supabase;
   if (!client) {
     return { inserted: false, error: 'Supabase credentials not provided in env' };
   }

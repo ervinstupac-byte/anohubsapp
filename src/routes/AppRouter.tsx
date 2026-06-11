@@ -190,8 +190,23 @@ const AppLayout: React.FC = () => {
     const { user, signInAsGuest } = useAuth();
 
     const [isFeedbackVisible, setIsFeedbackVisible] = useState(false);
-    const [showOnboarding, setShowOnboarding] = useState(false);
-    const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1024);
+    const [showOnboarding, setShowOnboarding] = useState(() => {
+        try {
+            const hasCompleted = localStorage.getItem('hasCompletedOnboarding') === 'true';
+            const overlaysDisabled = typeof document !== 'undefined' && document.body?.getAttribute('data-anohub-overlays-disabled') === 'true';
+            return !hasCompleted && !overlaysDisabled;
+        } catch (e) {
+            return false;
+        }
+    });
+    const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+        try {
+            const overlaysDisabled = typeof document !== 'undefined' && document.body?.getAttribute('data-anohub-overlays-disabled') === 'true';
+            return !overlaysDisabled && window.innerWidth >= 1024;
+        } catch (e) {
+            return window.innerWidth >= 1024;
+        }
+    });
     const [isWizardOpen, setIsWizardOpen] = useState(false);
     const [isAlignmentWizardOpen, setIsAlignmentWizardOpen] = useState(false);
 

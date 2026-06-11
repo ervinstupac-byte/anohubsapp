@@ -1,5 +1,17 @@
 [
   {
+    "target": "☰",
+    "success": true,
+    "dialogs": 0,
+    "modalSteps": []
+  },
+  {
+    "target": "FleetView",
+    "success": true,
+    "dialogs": 0,
+    "modalSteps": []
+  },
+  {
     "target": "🇬🇧\nEN",
     "skipped": true,
     "reason": "not-visible-or-disabled",
@@ -7,17 +19,56 @@
     "enabled": false
   },
   {
-    "target": "Authenticate",
+    "target": "SIGNOUT",
+    "skipped": true,
+    "reason": "blacklist"
+  },
+  {
+    "target": "Logbook\n\nLogbookDesc",
+    "skipped": true,
+    "reason": "not-visible-or-disabled",
+    "visible": false,
+    "enabled": false
+  },
+  {
+    "target": "ProblemDetection\n\nAiDiagnostics",
+    "skipped": true,
+    "reason": "not-visible-or-disabled",
+    "visible": false,
+    "enabled": false
+  },
+  {
+    "target": "SopManuals\n\nOperationalProtocols",
+    "skipped": true,
+    "reason": "not-visible-or-disabled",
+    "visible": false,
+    "enabled": false
+  },
+  {
+    "target": "Strategy\n\nStrategicDecisions",
+    "skipped": true,
+    "reason": "not-visible-or-disabled",
+    "visible": false,
+    "enabled": false
+  },
+  {
+    "target": "EngineeringTools\n\nHPP Builder",
+    "skipped": true,
+    "reason": "not-visible-or-disabled",
+    "visible": false,
+    "enabled": false
+  },
+  {
+    "target": "CHECKWARNINGS",
     "success": true,
     "dialogs": 0,
     "modalSteps": []
   },
   {
-    "target": "👤\nContinue as Guest",
-    "skipped": true,
-    "reason": "not-visible-or-disabled",
-    "visible": false,
-    "enabled": false
+    "target": "🎙️",
+    "success": true,
+    "dialogs": 0,
+    "modalSteps": []
   },
   {
     "flow": "Asset Onboarding",
@@ -36,8 +87,8 @@
   },
   {
     "flow": "Logbook",
-    "triggered": false,
-    "reason": "not-found"
+    "triggered": true,
+    "dialogs": 0
   },
   {
     "flow": "ProblemDetection",
@@ -61,13 +112,13 @@
   },
   {
     "flow": "FleetView",
-    "triggered": false,
-    "reason": "not-found"
+    "triggered": true,
+    "dialogs": 0
   },
   {
     "flow": "Maintenance Logbook",
-    "triggered": false,
-    "reason": "not-found"
+    "triggered": true,
+    "dialogs": 0
   },
   {
     "flow": "Register New Asset",

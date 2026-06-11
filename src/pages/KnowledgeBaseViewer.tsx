@@ -128,11 +128,25 @@ export const KnowledgeBaseViewer: React.FC = () => {
                 )}
                 <iframe
                     key={activeSection}
+                    id="knowledge-iframe"
                     src={current.path}
                     title={current.label}
                     className="w-full h-full border-0"
-                    onLoad={() => setIsLoading(false)}
-                    sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+                    onLoad={() => {
+                        setIsLoading(false);
+                        try {
+                            // Try to patch the iframe so internal links do not escape
+                            // eslint-disable-next-line @typescript-eslint/no-var-requires
+                            const { patchIframe } = require('../utils/iframeUtils');
+                            const iframeEl = document.getElementById('knowledge-iframe');
+                            if (iframeEl) patchIframe(iframeEl as HTMLIFrameElement);
+                        } catch (e) {
+                            // ignore
+                        }
+                    }}
+                    // Allow same-origin so embedded site JS can access its own resources (fixes missing modal content)
+                    sandbox="allow-scripts allow-forms allow-same-origin"
+                    referrerPolicy="no-referrer"
                 />
             </div>
         </div>

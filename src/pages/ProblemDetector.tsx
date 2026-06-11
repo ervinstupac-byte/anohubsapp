@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useAssetContext } from '../contexts/AssetContext';
 import { MasterIntelligenceEngine, UnifiedDiagnosis } from '../services/MasterIntelligenceEngine';
 import { EnhancedAsset, CompleteSensorData, TurbineFamily, TurbineVariant } from '../models/turbine/types';
@@ -21,7 +22,7 @@ import { InstitutionalKnowledgeService, KnowledgeSearchResult } from '../service
 export const ProblemDetector: React.FC = () => {
     const { assets, selectedAsset, logActivity } = useAssetContext();
     const navigate = useNavigate();
-
+    const { t } = useTranslation();
     // Active turbine selection
     const [turbineId, setTurbineId] = useState<string>('');
 
@@ -38,6 +39,7 @@ export const ProblemDetector: React.FC = () => {
     const [isDiagnosing, setIsDiagnosing] = useState(false);
     const [diagnosis, setDiagnosis] = useState<UnifiedDiagnosis | null>(null);
     const [statusMsg, setStatusMsg] = useState<{ type: 'success' | 'error' | null; msg: string }>({ type: null, msg: '' });
+    const [showRawOutput, setShowRawOutput] = useState(false);
     const [swarmMission, setSwarmMission] = useState<MissionProfile | null>(null);
     const [monsterReport, setMonsterReport] = useState<{
         cavitation: CavitationStatus;
@@ -477,10 +479,10 @@ export const ProblemDetector: React.FC = () => {
                 <div>
                     <h1 className="text-3xl font-black text-white tracking-tight uppercase flex items-center gap-3">
                         <Cpu className="w-8 h-8 text-cyan-400" />
-                        AI Detekcija & Dijagnostika Problema
+                        {t('problemDetector.title', 'AI Detection & Diagnostic')}
                     </h1>
                     <p className="text-slate-400 text-sm">
-                        Orkestracija Master Intelligence Engine i ekspertnih pravila za otkrivanje kvarova i optimizaciju održavanja.
+                        {t('problemDetector.subtitle', 'Master Intelligence orchestration for fault detection and maintenance optimization.')}
                     </p>
                 </div>
                 {diagnosis && (
@@ -511,13 +513,13 @@ export const ProblemDetector: React.FC = () => {
                     <GlassCard className="p-6 border-white/5 bg-slate-900/30">
                         <h2 className="text-sm font-black uppercase tracking-wider text-white mb-6 flex items-center gap-2">
                             <Activity className="w-4 h-4 text-cyan-500" />
-                            Odaberite uočene simptome
+                            {t('problemDetector.selectSymptoms', 'Select observed symptoms')}
                         </h2>
 
                         <div className="space-y-4">
                             {/* Turbine Unit Select */}
                             <div className="space-y-1.5">
-                                <label className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Odaberite jedinicu</label>
+                                <label className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">{t('problemDetector.selectUnit','Select unit')}</label>
                                 <select
                                     value={turbineId}
                                     onChange={(e) => {
@@ -526,7 +528,7 @@ export const ProblemDetector: React.FC = () => {
                                     }}
                                     className="w-full bg-slate-950/60 border border-slate-800 text-white rounded-lg p-2.5 text-xs outline-none focus:border-cyan-500/40"
                                 >
-                                    <option value="">-- Odaberi agregat --</option>
+                                    <option value="">{t('problemDetector.chooseUnitPlaceholder','-- Choose unit --')}</option>
                                     {assets.map(a => (
                                         <option key={a.id} value={a.id}>{a.name} ({a.turbine_type || a.type})</option>
                                     ))}
@@ -549,7 +551,7 @@ export const ProblemDetector: React.FC = () => {
                             <div className="space-y-1.5">
                                 <label className="text-[10px] font-mono text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                                     <Eye className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-                                    Live Telemetry Oscilloscope
+                                    {t('problemDetector.liveTelemetry','Live Telemetry Oscilloscope')}
                                 </label>
                                 <div className="relative w-full h-[100px] bg-slate-950/80 border border-slate-800 rounded-xl overflow-hidden shadow-inner">
                                     <canvas ref={canvasRef} className="w-full h-full block" />
@@ -654,16 +656,33 @@ export const ProblemDetector: React.FC = () => {
                             {isDiagnosing ? (
                                 <>
                                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                    Pokretanje AI Dijagnostike...
+                                    {t('problemDetector.diagnosing','Running AI diagnosis...')}
                                 </>
                             ) : (
                                 <>
                                     <Play className="w-4 h-4" />
-                                    Dijagnosticiraj stanje
+                                    {t('problemDetector.diagnoseButton','Diagnose')}
                                 </>
                             )}
                         </button>
                     </GlassCard>
+
+                    {diagnosis && (
+                        <div className="flex justify-end">
+                            <button
+                                onClick={() => setShowRawOutput((s) => !s)}
+                                className="text-xs text-slate-400 hover:text-white px-3 py-1 rounded"
+                            >
+                                {showRawOutput ? t('problemDetector.hideRaw','Hide raw AI output') : t('problemDetector.showRaw','Show raw AI output')}
+                            </button>
+                        </div>
+                    )}
+
+                    {showRawOutput && diagnosis && (
+                        <GlassCard className="p-3 bg-slate-900/20 border-white/5">
+                            <pre className="text-[11px] font-mono text-slate-200 overflow-auto max-h-64 whitespace-pre-wrap">{JSON.stringify(diagnosis, null, 2)}</pre>
+                        </GlassCard>
+                    )}
                 </div>
 
                 {/* RESULTS DIAGNOSIS PANEL (7 Cols) */}

@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ROUTES, FRANCIS_PATHS } from '../routes/paths.ts';
 import { MorningReportGenerator, MorningReport } from '../services/MorningReportGenerator';
 import { GlobalHealthDashboard } from '../services/GlobalHealthDashboard';
 
@@ -112,8 +113,20 @@ export const HomeHub: React.FC = () => {
 
     const handleSelectFamily = (family: 'FRANCIS' | 'PELTON' | 'KAPLAN') => {
         const familyAssets = assets.filter(a => String(a.turbine_type || a.type).toUpperCase() === family);
+
+        // If we have assets for this family, select the first one
         if (familyAssets.length > 0) {
             selectAsset(familyAssets[0].id);
+        }
+
+        // Always navigate to the family's twin route so the card is clickable
+        if (family === 'FRANCIS') {
+            navigate(FRANCIS_PATHS.HUB);
+        } else if (family === 'PELTON') {
+            navigate('/pelton/twin');
+        } else if (family === 'KAPLAN') {
+            navigate('/kaplan/twin');
+        } else {
             navigate(`/turbines/${family.toLowerCase()}`);
         }
     };
@@ -311,8 +324,13 @@ export const HomeHub: React.FC = () => {
                             </div>
                             <h3 className="text-lg font-bold text-slate-100 uppercase tracking-wider">Francis</h3>
                             <div className="flex items-center gap-1 text-[10px] text-slate-400 font-mono font-semibold">
-                                <span>Otvori</span>
-                                <ChevronRight className="w-3 h-3" />
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); handleSelectFamily('FRANCIS'); }}
+                                    className="flex items-center gap-1 text-[10px] text-slate-400 hover:text-slate-100"
+                                >
+                                    <span>Otvori</span>
+                                    <ChevronRight className="w-3 h-3" />
+                                </button>
                             </div>
                         </div>
                     </motion.div>
@@ -335,8 +353,13 @@ export const HomeHub: React.FC = () => {
                             </div>
                             <h3 className="text-lg font-bold text-slate-100 uppercase tracking-wider">Pelton</h3>
                             <div className="flex items-center gap-1 text-[10px] text-slate-400 font-mono font-semibold">
-                                <span>Otvori</span>
-                                <ChevronRight className="w-3 h-3" />
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); handleSelectFamily('PELTON'); }}
+                                    className="flex items-center gap-1 text-[10px] text-slate-400 hover:text-slate-100"
+                                >
+                                    <span>Otvori</span>
+                                    <ChevronRight className="w-3 h-3" />
+                                </button>
                             </div>
                         </div>
                     </motion.div>
@@ -359,8 +382,13 @@ export const HomeHub: React.FC = () => {
                             </div>
                             <h3 className="text-lg font-bold text-slate-100 uppercase tracking-wider">Kaplan</h3>
                             <div className="flex items-center gap-1 text-[10px] text-slate-400 font-mono font-semibold">
-                                <span>Otvori</span>
-                                <ChevronRight className="w-3 h-3" />
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); handleSelectFamily('KAPLAN'); }}
+                                    className="flex items-center gap-1 text-[10px] text-slate-400 hover:text-slate-100"
+                                >
+                                    <span>Otvori</span>
+                                    <ChevronRight className="w-3 h-3" />
+                                </button>
                             </div>
                         </div>
                     </motion.div>

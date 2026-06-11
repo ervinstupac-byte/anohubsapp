@@ -6,6 +6,7 @@
   "homepage": "https://anohubs.com",
   "scripts": {
     "dev": "npm run i18n:sync && vite",
+    "generate:forensic": "node scripts/generate_forensic_pdf.js",
     "lint": "eslint \"src/**/*.{ts,tsx,js,jsx}\" --ext .ts,.tsx,.js,.jsx --fix",
     "type-check": "tsc --noEmit",
     "build:verify": "npx tsx scripts/verify_env.ts",
@@ -40,6 +41,7 @@
     "jspdf-autotable": "^3.8.2",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.330.0",
+    "pg": "^8.21.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^14.0.5",

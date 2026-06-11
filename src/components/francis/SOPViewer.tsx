@@ -71,6 +71,10 @@ export const SOPViewer: React.FC = () => {
                     src={`/francis-docs/${activeDoc}.html`}
                     className="w-full h-full border-none shadow-inner"
                     title="SOP Viewer"
+                    // Allow same-origin so the SOP pages can operate normally inside the iframe
+                    // Still do NOT allow top-navigation or popups-to-escape-sandbox to protect the SPA
+                    sandbox="allow-scripts allow-forms allow-same-origin"
+                    referrerPolicy="no-referrer"
                 />
 
                 {/* Visual Overlay for Aesthetic depth */}

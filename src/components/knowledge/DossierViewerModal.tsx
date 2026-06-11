@@ -202,6 +202,16 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
                                     src={activePath}
                                     className="w-full h-full border-none"
                                     title="Engineering Dossier Content"
+                                    sandbox="allow-scripts allow-forms allow-same-origin"
+                                    referrerPolicy="no-referrer"
+                                    onLoad={(e: React.SyntheticEvent<HTMLIFrameElement>) => {
+                                        try {
+                                            // eslint-disable-next-line @typescript-eslint/no-var-requires
+                                            const { patchIframe } = require('../../utils/iframeUtils');
+                                            const el = e.currentTarget as HTMLIFrameElement;
+                                            if (el) patchIframe(el);
+                                        } catch (err) { }
+                                    }}
                                 />
                             )}
 

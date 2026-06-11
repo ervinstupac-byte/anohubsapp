@@ -5,9 +5,33 @@ import { createClient } from '@supabase/supabase-js';
 
 const MIGRATIONS_DIR = path.resolve(process.cwd(), 'supabase', 'migrations');
 
+async function loadEnvFile(filePath = '.env.local') {
+  const out = {};
+  try {
+    const txt = await fs.readFile(path.resolve(process.cwd(), filePath), 'utf8');
+    for (const ln of txt.split(/\r?\n/)) {
+      const m = ln.match(/^\s*([A-Za-z_0-9]+)\s*=\s*(.*)\s*$/);
+      if (!m) continue;
+      let val = m[2] || '';
+      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+        val = val.slice(1, -1);
+      }
+      // expand simple ${VAR} references from already-read file or process.env
+      val = val.replace(/\$\{([^}]+)\}/g, (_, k) => out[k] || process.env[k] || '');
+      out[m[1]] = val;
+    }
+  } catch (e) {
+    // ignore missing file
+  }
+  return out;
+}
+
 async function main() {
-  const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-  const key = process.env.SUPABASE_KEY || process.env.SUPABASE_SERVICE_ROLE || process.env.VITE_SUPABASE_SERVICE_ROLE;
+  const fileEnv = await loadEnvFile('.env.local');
+  const env = { ...process.env, ...fileEnv };
+
+  const url = env.SUPABASE_URL || env.VITE_SUPABASE_URL;
+  const key = env.SUPABASE_KEY || env.SUPABASE_SERVICE_ROLE || env.SUPABASE_SERVICE_ROLE_KEY || env.VITE_SUPABASE_SERVICE_ROLE || env.VITE_SUPABASE_SERVICE_ROLE_KEY;
 
   if (!url || !key) {
     console.error('SUPABASE_URL or SUPABASE_KEY (service role) not provided. Aborting.');

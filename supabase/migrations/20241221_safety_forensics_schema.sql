@@ -216,7 +216,7 @@ ALTER TABLE public.expert_knowledge ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Enable read for all" ON public.expert_knowledge FOR SELECT USING (true);
 CREATE POLICY "Enable insert for authenticated" ON public.expert_knowledge FOR INSERT TO authenticated WITH CHECK (true);
 CREATE POLICY "Enable update for author" ON public.expert_knowledge FOR UPDATE TO authenticated 
-    USING (reported_by = auth.uid());
+    USING ((reported_by::text = auth.uid()::text) OR (auth.jwt() ->> 'role') = 'admin');
 
 ALTER TABLE public.engineer_notes ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Enable read for all" ON public.engineer_notes FOR SELECT USING (true);
