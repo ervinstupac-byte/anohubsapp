@@ -19,7 +19,9 @@ export default function ManagementSummary() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await ProfessionalReportEngine.generateManagementDashboard({ projectID: 'ANOHUB-MGMT' });
+        // NOTE: We call generateManagementDashboard with dataOnly=true to avoid
+        // triggering an automatic browser PDF download on page load.
+        const res = await ProfessionalReportEngine.generateManagementDashboard({ projectID: 'ANOHUB-MGMT', dataOnly: true });
         setTrend(res.trend || []);
         setAlerts(res.alerts || []);
         setTotalLoss(res.totalLoss || 0);
@@ -31,31 +33,65 @@ export default function ManagementSummary() {
         const endStr = end.toISOString().slice(0,10);
         const filename = `/artifacts/management_summary_30d_${startStr}_to_${endStr}.pdf`;
         
-        try {
-          const remotePath = `management/management_summary_30d_${startStr}_to_${endStr}.pdf`;
-          const g = supabase.storage.from('reports').getPublicUrl(remotePath as any);
-          const publicUrlCandidate = (g as any)?.publicURL || (g as any)?.publicUrl || (g as any)?.data?.publicUrl;
-          if (publicUrlCandidate) {
-            setPdfUrl(publicUrlCandidate);
-            return;
-          }
-          const base = (import.meta as any).env?.VITE_SUPABASE_URL;
-          if (base) {
-            const constructed = `${base.replace(/\/$/, '')}/storage/v1/object/public/reports/management/management_summary_30d_${startStr}_to_${endStr}.pdf`;
-            setPdfUrl(constructed);
-            return;
-          }
-        } catch (e) {}
-
+        // First, check if the local report is present (e.g. populated via seed script)
         fetch(filename, { method: 'HEAD' }).then(hres => {
-          if (hres.ok) setPdfUrl(filename);
-        }).catch(() => {});
+          if (hres.ok) {
+            setPdfUrl(filename);
+          } else {
+            // Fallback to Supabase public URL candidate
+            try {
+              const remotePath = `management/management_summary_30d_${startStr}_to_${endStr}.pdf`;
+              const g = supabase.storage.from('reports').getPublicUrl(remotePath as any);
+              const publicUrlCandidate = (g as any)?.publicURL || (g as any)?.publicUrl || (g as any)?.data?.publicUrl;
+              if (publicUrlCandidate) {
+                setPdfUrl(publicUrlCandidate);
+                return;
+              }
+              const base = (import.meta as any).env?.VITE_SUPABASE_URL;
+              if (base) {
+                const constructed = `${base.replace(/\/$/, '')}/storage/v1/object/public/reports/management/management_summary_30d_${startStr}_to_${endStr}.pdf`;
+                setPdfUrl(constructed);
+              }
+            } catch (e) {}
+          }
+        }).catch(() => {
+          // Fallback if HEAD request fails
+          try {
+            const remotePath = `management/management_summary_30d_${startStr}_to_${endStr}.pdf`;
+            const g = supabase.storage.from('reports').getPublicUrl(remotePath as any);
+            const publicUrlCandidate = (g as any)?.publicURL || (g as any)?.publicUrl || (g as any)?.data?.publicUrl;
+            if (publicUrlCandidate) {
+              setPdfUrl(publicUrlCandidate);
+            }
+          } catch (e) {}
+        });
 
         const jsonFilename = `/artifacts/management_summary_30d_${startStr}_to_${endStr}.json`;
         fetch(jsonFilename).then(r => r.ok ? r.json() : null).then((j:any|null) => {
           if (!j) return;
+          
+          // If the direct Supabase DB call didn't yield any trend data, populate from static JSON report
+          setTrend(prev => {
+            if (prev.length === 0) {
+              return j.trend || [];
+            }
+            return prev;
+          });
+          setAlerts(prev => {
+            if (prev.length === 0) {
+              return j.alerts || [];
+            }
+            return prev;
+          });
+          setTotalLoss(prev => {
+            if (prev === 0) {
+              return j.totalLoss || 0;
+            }
+            return prev;
+          });
+
           const rows = j.rows || j.trend || [];
-          const parsed = rows.map((r: any) => ({ date: r.period_start || r.date, loss: Number(r.computed_loss_cost || r.loss || 0) }));
+          const parsed = rows.map((r: any) => ({ date: r.period_start || r.date, loss: Number(r.computed_loss_cost || r.loss || r.computed_loss || 0) }));
           parsed.sort((a:any,b:any)=>b.loss - a.loss);
           setTopLossDays(parsed.slice(0,5));
         }).catch(()=>{});

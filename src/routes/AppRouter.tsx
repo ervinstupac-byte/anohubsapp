@@ -145,6 +145,7 @@ const KnowledgeBaseViewer = React.lazy(() => import('../pages/KnowledgeBaseViewe
 
 const HomeHub = React.lazy(() => import('../pages/HomeHub').then(m => ({ default: m.HomeHub })));
 const StrategicDecisionLab = React.lazy(() => import('../components/StrategicDecisionLab.tsx').then(m => ({ default: m.StrategicDecisionLab })));
+const SwarmDashboard = React.lazy(() => import('../components/SwarmDashboard.tsx').then(m => ({ default: m.SwarmDashboard })));
 const LongTermForecastLab = React.lazy(() => import('../components/LongTermForecastLab.tsx').then(m => ({ default: m.LongTermForecastLab })));
 const DigitalLogbook = React.lazy(() => import('../pages/DigitalLogbook').then(m => ({ default: m.DigitalLogbook })));
 const ProblemDetector = React.lazy(() => import('../pages/ProblemDetector').then(m => ({ default: m.ProblemDetector })));
@@ -408,8 +409,7 @@ const AppLayout: React.FC = () => {
                                                  <Route index element={<HomeHub />} />
                                                  <Route path="logbook" element={<DigitalLogbook />} />
                                                  <Route path="problems" element={<ProblemDetector />} />
-                                                 <Route path="strategic-lab" element={<StrategicDecisionLab />} />
-                                                 <Route path="long-term-forecast" element={<LongTermForecastLab />} />
+                                                 <Route path="swarm-lab" element={<SwarmDashboard />} />
                                                  <Route path="turbines/*" element={<TurbineHub />} />
                                                  <Route path={ROUTES.DIAGNOSTIC_TWIN} element={<NeuralFlowMap />} />
                                                 <Route path="/francis/*" element={<FrancisRouter />} />
@@ -518,7 +518,51 @@ const AppLayout: React.FC = () => {
 
                                                 <Route path="predictive-intelligence" element={<PredictiveIntelligenceCenter />} />
 
-                                                {/* Predictive Intelligence Labs - many routes omitted for brevity, preserved in original file */}
+                                                {/* Predictive Intelligence Labs - Mechanical Forensics */}
+                                                <Route path="lab/shaft-plumbness" element={<ShaftPlumbnessLab />} />
+                                                <Route path="lab/coupling-bolt-tensioning" element={<CouplingBoltTensioningLab />} />
+                                                <Route path="lab/guide-bearing-clearance" element={<GuideBearingClearanceLab />} />
+                                                <Route path="lab/head-cover-deflection" element={<HeadCoverDeflectionLab />} />
+                                                <Route path="lab/jacking-oil-system" element={<JackingOilSystemLab />} />
+                                                <Route path="lab/kaplan-blade-trunnion" element={<KaplanBladeTrunnionLab />} />
+                                                <Route path="lab/mechanical-brake-wear" element={<MechanicalBrakeWearLab />} />
+                                                <Route path="lab/runner-labyrinth-seal" element={<RunnerLabyrinthSealLab />} />
+                                                <Route path="lab/shear-pin-fatigue" element={<ShearPinFatigueLab />} />
+                                                <Route path="lab/thrust-bearing-load" element={<ThrustBearingLoadDistributionLab />} />
+                                                <Route path="lab/stay-vane-crack" element={<StayVaneCrackLab />} />
+
+                                                {/* Predictive Intelligence Labs - Electrical Diagnostics */}
+                                                <Route path="lab/generator-airgap" element={<GeneratorAirGapLab />} />
+                                                <Route path="lab/excitation-heat" element={<ExcitationHeatDissipationLab />} />
+                                                <Route path="lab/partial-discharge" element={<PartialDischargeLab />} />
+                                                <Route path="lab/rotor-pole-impedance" element={<RotorPoleImpedanceLab />} />
+                                                <Route path="lab/stator-core-clamping" element={<StatorCoreClampingLab />} />
+                                                <Route path="lab/stator-winding-thermal" element={<StatorWindingThermalLab />} />
+                                                <Route path="lab/transformer-gas" element={<TransformerDissolvedGasLab />} />
+
+                                                {/* Predictive Intelligence Labs - Hydraulic Analytics */}
+                                                <Route path="lab/draft-tube-air" element={<DraftTubeAirAdmissionLab />} />
+                                                <Route path="lab/draft-tube-surge" element={<DraftTubeSurgeLab />} />
+                                                <Route path="lab/francis-cavitation" element={<FrancisCavitationProfilingLab />} />
+                                                <Route path="lab/kaplan-cam-curve" element={<KaplanCamCurveLab />} />
+                                                <Route path="lab/miv-bypass" element={<MainInletValveBypassLab />} />
+                                                <Route path="lab/oil-cooler" element={<OilCoolerThermalEfficiencyLab />} />
+                                                <Route path="lab/pelton-injector" element={<PeltonInjectorAlignmentLab />} />
+                                                <Route path="lab/pelton-needle" element={<PeltonNeedleValveLab />} />
+                                                <Route path="lab/penstock-hammer" element={<PenstockWaterHammerLab />} />
+                                                <Route path="lab/spiral-case" element={<SpiralCasePressureLossLab />} />
+                                                <Route path="lab/trash-rack" element={<TrashRackHeadLossLab />} />
+
+                                                {/* Predictive Intelligence Labs - Operational Scenarios */}
+                                                <Route path="lab/black-start" element={<BlackStartCapabilityLab />} />
+                                                <Route path="lab/governor-deadband" element={<GovernorDeadbandLab />} />
+                                                <Route path="lab/index-testing" element={<IndexTestingEfficiencyLab />} />
+                                                <Route path="lab/load-rejection" element={<LoadRejectionOverspeedLab />} />
+                                                <Route path="lab/oil-degradation" element={<LubricatingOilDegradationLab />} />
+                                                <Route path="lab/rough-zone" element={<RoughZoneOperationLab />} />
+                                                <Route path="lab/runup-vibration" element={<RunUpVibrationLab />} />
+                                                <Route path="lab/startup-sequence" element={<UnitStartupSequenceLab />} />
+                                                <Route path="lab/bearing-cooling" element={<BearingCoolingWaterFlowLab />} />
 
                                                 <Route path="/access-denied" element={<AccessDenied />} />
 

@@ -16,6 +16,7 @@ export const ROUTES = {
         HORIZONTAL: 'horizontal',
     },
     PREDICTIVE_INTELLIGENCE: 'predictive-intelligence',
+    SWARM_LAB: 'swarm-lab',
     LABS: {
         ROOT: 'lab',
         // Mechanical Forensics

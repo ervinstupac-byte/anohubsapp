@@ -227,7 +227,7 @@ export const ProfessionalReportEngine = {
         doc.save(filename);
     }
     ,
-    generateManagementDashboard: async (opts?: { projectID?: string, assetId?: string | number }) => {
+    generateManagementDashboard: async (opts?: { projectID?: string, assetId?: string | number, dataOnly?: boolean }) => {
         const end = new Date();
         const start = new Date();
         start.setDate(end.getDate() - 30);
@@ -302,6 +302,11 @@ export const ProfessionalReportEngine = {
             }
         } catch {
             // ignore and keep totalLoss from aggregates
+        }
+
+        // Early return for data-only mode (no PDF generation)
+        if (opts?.dataOnly) {
+            return { trend, alerts, totalLoss };
         }
 
         // Create PDF summary (in-client download or Node buffer write)

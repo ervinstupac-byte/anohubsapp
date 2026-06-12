@@ -56,4 +56,39 @@ export class VibrationBaseline {
             }
         };
     }
+
+    /**
+     * CHECK DEVIATION
+     * Compares current vibration levels against baseline values.
+     */
+    static checkDeviation(
+        currentVibration: number,
+        bearingTemp: number,
+        hoursSinceService: number,
+        loadPercent: number
+    ) {
+        const baselineValue = 1.8 + (loadPercent / 100) * 0.4 + (bearingTemp > 70 ? (bearingTemp - 70) * 0.02 : 0) + (hoursSinceService / 10000) * 0.3;
+        const deviationPercent = ((currentVibration - baselineValue) / baselineValue) * 100;
+        
+        let status: 'NOMINAL' | 'WARNING' | 'CRITICAL' = 'NOMINAL';
+        let action = '';
+
+        if (currentVibration > 4.5 || deviationPercent > 50) {
+            status = 'CRITICAL';
+            action = 'Critical vibration levels detected. Recommended immediate inspection. Check bearing alignment and tightness of coupling bolts. Reduce turbine load immediately.';
+        } else if (currentVibration > 3.0 || deviationPercent > 20) {
+            status = 'WARNING';
+            action = 'Vibration deviation detected. Increase monitoring frequency. Schedule standard bearing lubrication and alignment check.';
+        } else {
+            status = 'NOMINAL';
+            action = 'System is operating within the nominal baseline range. No action required.';
+        }
+
+        return {
+            status,
+            deviationPercent,
+            baselineValue,
+            action
+        };
+    }
 }

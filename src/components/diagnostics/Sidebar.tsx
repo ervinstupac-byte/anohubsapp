@@ -7,7 +7,7 @@ import {
     ChevronDown, ChevronRight, Plus, Search, X,
     FileText, Shield, Settings, Zap, BookOpen, Target,
     AlertTriangle, Cpu, Gauge, Map, ChevronLeft,
-    Home, ClipboardList, Wrench, User, Activity
+    Home, ClipboardList, Wrench, User, Activity, Network
 } from 'lucide-react';
 import { FleetOverview } from './FleetOverview.tsx';
 import { ErrorBoundary } from '../ErrorBoundary.tsx';
@@ -347,7 +347,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                         <span>Management Summary</span>
                                     </button>
                                 )}
-                                {/* Strategic Planning Dashboard */}
+                                {/* Strategic Planning */}
                                 {isVisible('home') && (
                                     <button
                                         onClick={() => handleNavigate('/strategic-planning', 'Strategic Planning')}
@@ -452,6 +452,25 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                         )}
                                     </div>
                                 )}
+
+                                {/* Maintenance Hub */}
+                                <button
+                                    onClick={() => handleNavigate('/maintenance', 'Maintenance Hub')}
+                                    className={`w-full text-left px-4 py-2.5 rounded text-[10px] font-mono font-semibold uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname.startsWith('/maintenance') ? 'bg-slate-800 text-slate-50 border border-slate-700' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'}`}
+                                >
+                                    <Settings className="w-4 h-4 text-slate-400" />
+                                    <span>Maintenance Hub</span>
+                                </button>
+
+                                {/* Swarm Intelligence Lab */}
+                                <button
+                                    onClick={() => handleNavigate('/swarm-lab', 'Swarm Intelligence Lab')}
+                                    className={`w-full text-left px-4 py-2.5 rounded text-[10px] font-mono font-semibold uppercase tracking-widest flex items-center gap-3 transition-all ${location.pathname === '/swarm-lab' ? 'bg-cyan-900/40 text-cyan-400 border border-cyan-700/40' : 'text-slate-400 hover:text-cyan-300 hover:bg-cyan-900/20'}`}
+                                >
+                                    <Network className="w-4 h-4 text-cyan-500" />
+                                    <span>Swarm Lab</span>
+                                    <span className="ml-auto text-[8px] bg-cyan-500/20 text-cyan-400 px-1.5 py-0.5 rounded font-bold tracking-wider">NEW</span>
+                                </button>
 
                                 {/* Inžinjerski alati */}
                                 {isVisible('tools') && (

@@ -135,9 +135,11 @@ export const HomeHub: React.FC = () => {
         { title: 'Logbook', desc: t('hub.logbookDesc', 'Shift records'), path: '/logbook', icon: <ClipboardList className="w-5 h-5 text-slate-200" />, color: 'from-slate-700/30 to-slate-800/30 hover:border-slate-500/40' },
         { title: t('hub.problemDetection', 'Problem Detection'), desc: t('hub.aiDiagnostics', 'AI Diagnostics'), path: '/problems', icon: <Cpu className="w-5 h-5 text-slate-200" />, color: 'from-slate-700/30 to-slate-800/30 hover:border-slate-500/40' },
         { title: t('hub.sopManuals', 'SOP Manuals'), desc: t('hub.operationalProtocols', 'Operational Protocols'), path: '/knowledge-base', icon: <BookOpen className="w-5 h-5 text-slate-200" />, color: 'from-slate-700/30 to-slate-800/30 hover:border-slate-500/40' },
-        { title: t('hub.strategy', 'Strategy'), desc: t('hub.strategicDecisions', 'Strategic Decisions'), path: '/strategic-lab', icon: <Brain className="w-5 h-5 text-slate-200" />, color: 'from-slate-700/30 to-slate-800/30 hover:border-slate-500/40' },
+        { title: t('hub.strategy', 'Strategy'), desc: t('hub.strategicDecisions', 'Strategic Decisions'), path: '/strategic-decision-lab', icon: <Brain className="w-5 h-5 text-slate-200" />, color: 'from-slate-700/30 to-slate-800/30 hover:border-slate-500/40' },
+        { title: 'Swarm Intelligence', desc: 'Multi-Agent Nash Equilibrium', path: '/swarm-lab', icon: <Activity className="w-5 h-5 text-cyan-400" />, color: 'from-cyan-900/20 to-slate-800/30 hover:border-cyan-500/40' },
         { title: t('hub.engineeringTools', 'Engineering Tools'), desc: 'HPP Builder', path: '/hpp-builder', icon: <Wrench className="w-5 h-5 text-slate-200" />, color: 'from-slate-700/30 to-slate-800/30 hover:border-slate-500/40' },
     ];
+
 
     const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || t('hub.guest', 'User');
     const roleLabel = userRole || 'GUEST';
