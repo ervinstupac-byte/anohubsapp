@@ -2481,7 +2481,7 @@
       "software": "Softver:",
       "softDesc": "Pristup HMI-ju Regulatora (zaštićeno lozinkom).",
       "monitor": "Monitoring:",
-      "monDesc": "SCADA sistem sa trendovima brzine, snage i pozicije lopatica.",
+      "monDesc": "Telemetrijski sistem sa trendovima brzine, snage i pozicije lopatica.",
       "docs": "Dokumentacija:",
       "docDesc": "Softver za snimanje odziva, dnevnik jedinice.",
       "mechTools": "Mehanički Alati:",

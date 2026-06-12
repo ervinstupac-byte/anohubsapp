@@ -214,7 +214,7 @@
         "sectors": {
             "critical_ops": "Critical Ops",
             "mechanical": "Mechanical",
-            "electrical": "Electrical / SCADA",
+            "electrical": "Electrical / Automation",
             "risk": "Risk & Forensics",
             "knowledge": "Knowledge"
         },

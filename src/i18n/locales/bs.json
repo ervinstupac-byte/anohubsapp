@@ -152,7 +152,7 @@
         "sectors": {
             "critical_ops": "Kritične Operacije",
             "mechanical": "Mehanika",
-            "electrical": "Elektro / SCADA",
+            "electrical": "Elektro / Automatika",
             "risk": "Rizik i Forenzika",
             "knowledge": "Baza Znanja"
         },

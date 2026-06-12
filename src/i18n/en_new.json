@@ -2476,7 +2476,7 @@
       "software": "Software:",
       "softDesc": "Access to Governor HMI (password protected).",
       "monitor": "Monitoring:",
-      "monDesc": "SCADA system with speed, power, and gate position trends.",
+      "monDesc": "Telemetry system with speed, power, and gate position trends.",
       "docs": "Documentation:",
       "docDesc": "Response recording software, unit log.",
       "mechTools": "Mechanical Tools:",
