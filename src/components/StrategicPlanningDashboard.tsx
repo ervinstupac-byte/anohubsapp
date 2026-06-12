@@ -22,6 +22,11 @@ const THEME = {
 import { ComponentTree } from './cerebro/ComponentTree';
 import { MechanicalPanel } from './cerebro/panels/MechanicalPanel';
 import { HydraulicsPanel } from './cerebro/panels/HydraulicsPanel';
+import { ValvesPanel } from './cerebro/panels/ValvesPanel';
+import { TurbinePanel } from './cerebro/panels/TurbinePanel';
+import { ShaftPanel } from './cerebro/panels/ShaftPanel';
+import { GeneratorPanel } from './cerebro/panels/GeneratorPanel';
+import { AutomationPanel } from './cerebro/panels/AutomationPanel';
 import { LiveMathSync, SystemHealth } from '../services/LiveMathSync'; // Engine
 import { LiveHUD } from './cerebro/LiveHUD'; // HUD
 
@@ -159,6 +164,21 @@ export const StrategicPlanningDashboard: React.FC = () => {
                                 </motion.div>
                             )}
 
+                            {/* VALVES */}
+                            {activeTab === 'VALVES' && (
+                                <motion.div
+                                    key="VALVES"
+                                    initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }}
+                                    className="h-full"
+                                >
+                                    <div className="mb-4">
+                                        <h2 className="text-xl font-bold text-white uppercase tracking-tight">Valves & Transients</h2>
+                                        <p className="text-sm text-slate-400">Control inlet valves and manage dynamic hydraulic surge.</p>
+                                    </div>
+                                    <ValvesPanel />
+                                </motion.div>
+                            )}
+
                             {/* MECHANICAL / BOLTS  */}
                             {(activeTab === 'MECHANICAL' || activeTab === 'BOLTS') && (
                                 <motion.div
@@ -173,8 +193,68 @@ export const StrategicPlanningDashboard: React.FC = () => {
                                 </motion.div>
                             )}
 
+                            {/* TURBINE */}
+                            {activeTab === 'TURBINE' && (
+                                <motion.div
+                                    key="TURBINE"
+                                    initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }}
+                                    className="h-full"
+                                >
+                                    <div className="mb-4">
+                                        <h2 className="text-xl font-bold text-white uppercase tracking-tight">Turbine Diagnostics</h2>
+                                        <p className="text-sm text-slate-400">Monitor runner wear, cavitation, and wicket gate synchronization.</p>
+                                    </div>
+                                    <TurbinePanel />
+                                </motion.div>
+                            )}
+
+                            {/* SHAFT */}
+                            {activeTab === 'SHAFT' && (
+                                <motion.div
+                                    key="SHAFT"
+                                    initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }}
+                                    className="h-full"
+                                >
+                                    <div className="mb-4">
+                                        <h2 className="text-xl font-bold text-white uppercase tracking-tight">Shaft Line & Bearings</h2>
+                                        <p className="text-sm text-slate-400">Analyze shaft radial alignment, runout, and Babbitt temperatures.</p>
+                                    </div>
+                                    <ShaftPanel />
+                                </motion.div>
+                            )}
+
+                            {/* GENERATOR */}
+                            {activeTab === 'GENERATOR' && (
+                                <motion.div
+                                    key="GENERATOR"
+                                    initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }}
+                                    className="h-full"
+                                >
+                                    <div className="mb-4">
+                                        <h2 className="text-xl font-bold text-white uppercase tracking-tight">Generator Integrity</h2>
+                                        <p className="text-sm text-slate-400">Evaluate insulation resistance, air gap, and partial discharge metrics.</p>
+                                    </div>
+                                    <GeneratorPanel />
+                                </motion.div>
+                            )}
+
+                            {/* AUTOMATION */}
+                            {activeTab === 'AUTOMATION' && (
+                                <motion.div
+                                    key="AUTOMATION"
+                                    initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }}
+                                    className="h-full"
+                                >
+                                    <div className="mb-4">
+                                        <h2 className="text-xl font-bold text-white uppercase tracking-tight">Automation System</h2>
+                                        <p className="text-sm text-slate-400">Monitor PLC response loops, communication latency, and safety overrides.</p>
+                                    </div>
+                                    <AutomationPanel />
+                                </motion.div>
+                            )}
+
                             {/* DEFAULT EMPTY STATE */}
-                            {!['HYDRAULICS', 'PENSTOCK', 'MECHANICAL', 'BOLTS'].includes(activeTab) && (
+                            {!['HYDRAULICS', 'PENSTOCK', 'VALVES', 'MECHANICAL', 'BOLTS', 'TURBINE', 'SHAFT', 'GENERATOR', 'AUTOMATION'].includes(activeTab) && (
                                 <motion.div
                                     key="EMPTY_STATE"
                                     initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }}

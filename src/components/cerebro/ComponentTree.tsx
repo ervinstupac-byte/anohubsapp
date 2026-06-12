@@ -164,7 +164,7 @@ export const ComponentTree: React.FC<ComponentTreeProps> = ({ selectedId, onSele
         {
             id: 'ELECTRO', label: 'Electro', icon: 'zap', children: [
                 { id: 'GENERATOR', label: 'Generator', icon: 'zap' },
-                { id: 'SCADA', label: 'SCADA', icon: 'zap' }
+                { id: 'AUTOMATION', label: 'Automation', icon: 'zap' }
             ]
         }
     ];
